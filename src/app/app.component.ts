@@ -25,7 +25,6 @@ export class AppComponent {
   }
 
   
-
   LoadViewer(){
     var viewer = new Cesium.Viewer('cesiumContainer');
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
