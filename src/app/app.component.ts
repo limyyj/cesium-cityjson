@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })  
 export class AppComponent {  
   gs_dummy_data: any='https://raw.githubusercontent.com/wandererwillow/urbanenvironment/master/Data/Neighborhood%20Boundary%20Map_4326.json';
-
+  fullscreenContainer: HTMLCollectionOf<Element>;
   ngOnInit() {
     this.LoadViewer();
   }
@@ -27,7 +27,10 @@ export class AppComponent {
   
 
   LoadViewer(){
-    var viewer = new Cesium.Viewer('cesiumContainer');  
+    var viewer = new Cesium.Viewer('cesiumContainer');
+    document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+    document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
+    document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
     var promise= viewer.dataSources.add(Cesium.GeoJsonDataSource.load(this.gs_dummy_data, {//'https://raw.githubusercontent.com/wandererwillow/urbanenvironment/master/Data/Neighborhood%20Boundary%20Map_4326.json', {
       stroke: Cesium.Color.HOTPINK,
       fill: Cesium.Color.PINK.withAlpha(0.5),
@@ -37,9 +40,13 @@ export class AppComponent {
   }
 
   LoadData(gs_dummy_data){
-    var cesiumviewer=document.getElementsByClassName('cesium-viewer');
-    cesiumviewer[0].remove();
+    document.getElementsByClassName('cesium-viewer')[0].remove();
     var viewer = new Cesium.Viewer('cesiumContainer');  
+    document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+    document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
+    document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
+
+    //document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
     /*var promise= viewer.dataSources.add(Cesium.GeoJsonDataSource.load(gs_dummy_data, {
       stroke: Cesium.Color.HOTPINK,
       fill: Cesium.Color.PINK.withAlpha(0.5),
@@ -85,7 +92,6 @@ export class AppComponent {
     promise.then(function(dataSource) {
       viewer.dataSources.add(dataSource);
       var entities = dataSource.entities.values;
-      console.log(entities);
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];                               
         entity.polygon.extrudedHeight = entity.properties.height;
