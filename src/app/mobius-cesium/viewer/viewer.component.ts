@@ -102,6 +102,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     show : true
     });
     city.style = defaultStyle;*/
+    
     var promise = Cesium.GeoJsonDataSource.load(this.data);
     promise.then(function(dataSource) {
       viewer.dataSources.add(dataSource);
