@@ -1,3 +1,6 @@
+#cesiumContainer{
+ height: 100%; 
+}
 #loadfile{
   position: absolute;
   width: 300px; 
@@ -27,6 +30,7 @@
   user-select: none;
 }
 #toolbar{
+  z-index:99;
   margin: 5px;
   padding: 2px 5px;
   position: absolute;
