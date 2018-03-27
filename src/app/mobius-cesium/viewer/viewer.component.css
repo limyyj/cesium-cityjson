@@ -9,3 +9,25 @@
   flex-direction: row; 
   justify-content: space-between;
 }
+.cesium-button {
+  display: inline-block;
+  position: relative;
+  background: #303336;
+  border: 1px solid #444;
+  color: #edffff;
+  fill: #edffff;
+  border-radius: 4px;
+  padding: 5px 12px;
+  margin: 2px 3px;
+  cursor: pointer;
+  overflow: hidden;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+#toolbar{
+  margin: 5px;
+  padding: 2px 5px;
+  position: absolute;
+}

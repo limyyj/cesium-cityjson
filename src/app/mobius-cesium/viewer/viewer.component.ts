@@ -7,9 +7,8 @@ import {DataSubscriber} from "../data/DataSubscriber";
   templateUrl: './viewer.component.html',
   styleUrls: ['./viewer.component.css']
 })
-export class ViewerComponent extends DataSubscriber implements OnInit {
-  //gs_dummy_data: any='https://raw.githubusercontent.com/wandererwillow/urbanenvironment/master/Data/Neighborhood%20Boundary%20Map_4326.json';
-  data:any;
+export class ViewerComponent extends DataSubscriber {
+  data:JSON;
   myElement;
   fullscreenContainer: HTMLCollectionOf<Element>;
 
@@ -19,43 +18,25 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
   }
 
   ngOnInit() {
+
   }
+
   notify(message: string): void{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
-      this.LoadData(this.data);
+      try{
+      	this.LoadData(this.data);
+      }
+      catch(ex){
+      	console.log(ex);
+      }
     }
   }
 
-  /*handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-    let fr = new FileReader();
-    let self = this;
-    fr.onload = function(text){ 
-      let js_data = JSON.parse(text.target["result"]);
-      self.gs_dummy_data = js_data;
-      self.LoadData(self.gs_dummy_data);
-    };
-    fr.readAsText(files[0]);
-  }
-*/
-  
-  /*LoadViewer(){
-  	console.log(this.data);
-    var viewer = new Cesium.Viewer('cesiumContainer');
-    document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
-    document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
-    document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
-    var promise= viewer.dataSources.add(Cesium.GeoJsonDataSource.load(this.data, {//'https://raw.githubusercontent.com/wandererwillow/urbanenvironment/master/Data/Neighborhood%20Boundary%20Map_4326.json', {
-      stroke: Cesium.Color.HOTPINK,
-      fill: Cesium.Color.PINK.withAlpha(0.5),
-      strokeWidth: 3
-    }));
-    viewer.flyTo(promise);
-  }*/
-
   LoadData(data){
-    document.getElementsByClassName('cesium-viewer')[0].remove();
+  	if(document.getElementsByClassName('cesium-viewer').length!==0){
+      document.getElementsByClassName('cesium-viewer')[0].remove();
+	}	
     var viewer = new Cesium.Viewer('cesiumContainer');  
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
@@ -102,7 +83,7 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
     show : true
     });
     city.style = defaultStyle;*/
-    
+
     var promise = Cesium.GeoJsonDataSource.load(this.data);
     promise.then(function(dataSource) {
       viewer.dataSources.add(dataSource);
@@ -110,8 +91,19 @@ export class ViewerComponent extends DataSubscriber implements OnInit {
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];                               
         entity.polygon.extrudedHeight = entity.properties.height;
-        entity.polygon.material= Cesium.Color.WHITE.withAlpha(0.8);//Cesium.Color.fromCssColorString(color);//
-        entity.polygon.outlineColor= Cesium.Color.BLACK;
+        entity.polygon.material=Cesium.Color.WHITE.withAlpha(1);
+        if(entity.properties.propertyNames.length!==0){
+          for(var j=0;j<entity.properties.propertyNames.length;j++){
+          	if(entity.properties.propertyNames[j]==="roofColor"){
+          	  entity.polygon.material=Cesium.Color.fromCssColorString(entity.properties.roofColor._value).withAlpha(1);//entity.properties.roofColor._value);
+          	}
+          }
+        }
+        /*if(entity.properties.roofColor._value!==null){
+        	console.log(entity.properties.roofColor._value)
+          //entity.polygon.fill=Cesium.Color.fromCssColorString(entity.properties.roofColor._value); 
+        }*/     //entity.polygon.material= Cesium.Color.WHITE.withAlpha(0.8);//Cesium.Color.fromCssColorString(color);//
+        //entity.polygon.outlineColor= Cesium.Color.BLACK;
       }
     });
     viewer.zoomTo(promise);
