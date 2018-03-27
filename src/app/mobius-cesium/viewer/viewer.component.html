@@ -4,10 +4,10 @@
 	    <input type="file" id="files" name="files[]" style="font-family:sans-serif;color:white;" (change)="handleFileSelect($event)" />
 	</div> -->
 	<div id="toolbar">
-		<select class="cesium-button">
-			<option value="undefined">Color By Height</option>
-			<option value="undefined">Color By Area</option>
-			<option value="undefined">Color By Distance</option>
+		<select class="cesium-button" (change)="onChange($event.target.value)">
+			<option value="Area">Color By Area</option>
+			<option value="Height">Color By Height</option>
+			<option value="Distance">Color By Distance</option>
 		</select>
 	</div>
 </div>
