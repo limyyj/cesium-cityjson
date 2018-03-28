@@ -6,7 +6,7 @@
   "apps": [
     {
       "root": "src",
-      "outDir": "dist",
+      "outDir": "docs",
       "assets": [
         { "glob": "**/*", "input": "../node_modules/cesium/Build/Cesium", "output": "./assets/cesium" } 
       ],
