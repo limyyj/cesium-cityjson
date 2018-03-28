@@ -7,6 +7,6 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
-window['CESIUM_BASE_URL'] = '/assets/cesium';
+window['CESIUM_BASE_URL'] = './docs/assets/cesium';
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
