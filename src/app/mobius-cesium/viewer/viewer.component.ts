@@ -78,7 +78,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        entity.polygon.material=null; 
 	    if(entity.properties.HB_LIMIT>=100) entity.polygon.material=Cesium.Color.GREEN.withAlpha(1);
 	    else if(entity.properties.HB_LIMIT>=80) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
 	    else if(entity.properties.HB_LIMIT>=60) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
