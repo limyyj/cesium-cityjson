@@ -6,6 +6,8 @@ import {Subject} from 'rxjs/Subject';
 export class DataService {
   private _jsonModel: JSON;
   private subject = new Subject<any>();
+  ColorValue:string;
+  HeightValue:string;
 
   sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -33,6 +35,13 @@ export class DataService {
       var viewer = new Cesium.Viewer(document.createElement("div"));
     }
     this.sendMessage("model_update");
+  }
+
+  getColorValue(ColorValue):void{
+    this.ColorValue=ColorValue;
+  }
+  getHeightValue(HeightValue):void{
+    this.HeightValue=HeightValue;
   }
 
 }
