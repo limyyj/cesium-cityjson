@@ -16,22 +16,36 @@
   display: inline-block;
   position: relative;
   background: #303336;
-  border: 1px solid #444;
+  border: 0px solid #444;
   color: #edffff;
   fill: #edffff;
-  border-radius: 4px;
-  padding: 5px 12px;
-  margin: 2px 3px;
+  border-radius: 0px;
+  padding: 5px 0px;
+  margin: 0px 0px;
   cursor: pointer;
   overflow: hidden;
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  width: 100%;
+  font-family:sans-serif !important;
+}
+
+#ColorandHeight{
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 98;
+  height: 80px;
+  display:inline-block;
 }
 #toolbar{
   z-index:99;
   margin: 5px;
+  width: 100%;
   padding: 2px 5px;
   position: absolute;
+  display:inline-block;
 }
+

@@ -1,22 +1,67 @@
 <div id="cesiumContainer">
-  	<!-- <div id="loadfile">
-	    <div class="version" style="font-family:sans-serif;color:white;"> v0.0.1</div>
-	    <input type="file" id="files" name="files[]" style="font-family:sans-serif;color:white;" (change)="handleFileSelect($event)" />
-	</div> -->
-	<div id="toolbar">
-		<select class="cesium-button" (change)="onChangeColor($event.target.value)">
-			<option value="Status_Cat">Color By Status_Cat</option>
-			<option value="DIST_EWL">Color By DIST_EWL</option>
-			<option value="DIST_TRUNK">Color By DIST_TRUNK</option>
-			<option value="AVAILABLE">Color By AVAILABLE</option>
-			<option value="AGG_POT">Color By AGG_POT</option>
-			<option value="GPR">Color By GPR</option>
-			<option value="HB_LIMIT">Color By HB_LIMIT</option>
-		</select>
-		<select class="cesium-button" (change)="onChangeHeight($event.target.value)">
-			<option value="HB_LIMIT">Height By HB_LIMIT</option>
-			<option value="GPR">Height By GPR</option>
-			<option value="DEFAULT">Height By DEFAULT</option>
-		</select>
+	<div id="ColorandHeight">
+		<div id="toolbar">
+		<div style="width: 10%;display:inline-block;height:80px">
+			<table>
+				<tr>
+          		<th><div>
+				<select class="cesium-button" (change)="onChangeColor($event.target.value)">
+					<option value="Status_Cat">Status_Cat</option>
+					<option value="DIST_EWL">DIST_EWL</option>
+					<option value="DIST_TRUNK">DIST_TRUNK</option>
+					<option value="AVAILABLE">AVAILABLE</option>
+					<option value="AGG_POT">AGG_POT</option>
+					<option value="GPR">GPR</option>
+					<option value="HB_LIMIT">HB_LIMIT</option>
+				</select>
+				</div></th>
+				</tr>
+			</table>
+			<!-- <table>
+				<tr>
+          		<th><div>&nbsp;&nbsp;&nbsp;</div>
+          		</th>
+          	</tr>
+          </table> -->
+		</div>
+		<div id="color" style="width:60%;display:inline-block;position: relative;height:80px;margin-right: 7%">
+			<table style="width: 100%">
+				<tr >
+          		<th *ngFor="let Color of Colors"><div [ngStyle]="{ 'background-color': Color}">&nbsp;&nbsp;&nbsp;</div></th>
+          		</tr>
+          		<tr >
+          		<th *ngFor="let text of texts"><div style="color:white;text-shadow: 0px 0px 3px black;">&nbsp;&nbsp;{{text}}&nbsp;&nbsp;</div></th>
+          		</tr>
+			</table>
+		</div> 
+		<!-- <div style="width: 5%;display:inline-block;position: relative;height:80px"> &nbsp;&nbsp;&nbsp;</div> -->
+		<div style="width: 10%;display:inline-block;position: relative;height:80px">
+			<table>
+				<tr>
+	          	<th><div >
+				<select class="cesium-button" (change)="onChangeHeight($event.target.value)">
+					<option value="Status_Cat">Status_Cat</option>
+					<option value="DIST_EWL">DIST_EWL</option>
+					<option value="DIST_TRUNK">DIST_TRUNK</option>
+					<option value="AVAILABLE">AVAILABLE</option>
+					<option value="AGG_POT">AGG_POT</option>
+					<option value="GPR">GPR</option>
+					<option value="HB_LIMIT">HB_LIMIT</option>
+				</select>
+				</div>
+				</th>
+				</tr>
+			</table>
+		</div>
+		<div style="width: 10%;display:inline-block;position: relative;color:white;height:80px">
+			<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;;">
+			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Min</div></th>
+			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Max</div></th></tr>
+			</table>
+			<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;">
+			<tr ><th style="width:50px;"><div style="width:100%;color:white;text-shadow: 0px 0px 3px black;">{{Minimum}}</div></th>
+			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">{{Maximum}}</div></th></tr>
+			</table>
+		</div>
 	</div>
 </div>
