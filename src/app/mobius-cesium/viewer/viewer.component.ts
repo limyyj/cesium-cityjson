@@ -154,7 +154,7 @@ export class ViewerComponent extends DataSubscriber {
 
   colorByDIST_TRUNK(promise,viewer) {
   	this.Colors=["DARKCYAN","MEDIUMTURQUOISE","KHAKI","GOLD","CORAL","LIGHTSLATEGRAY"];
-    this.texts=[">=239","238-151","150-96","95-61","<=60","0 OR NULL"];
+    this.texts=[">= 239","238 - 151","150 - 96","95 - 61","<= 60","0 OR NULL"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
@@ -177,7 +177,7 @@ export class ViewerComponent extends DataSubscriber {
 
   colorByDIST_EWL(promise,viewer) {
   	this.Colors=["DARKCYAN","MEDIUMTURQUOISE","KHAKI","GOLD","CORAL","LIGHTSLATEGRAY"];
-    this.texts=[">=715","714-451","450-286","285-181","<=180","0 OR NULL"];
+    this.texts=[">= 715","714 - 451","450 - 286","285 - 181","<= 180","0 OR NULL"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
@@ -220,7 +220,7 @@ export class ViewerComponent extends DataSubscriber {
 
   colorByAGG_POT(promise,viewer) {
   	this.Colors=["CORAL","GOLD","KHAKI","MEDIUMTURQUOISE","DARKCYAN","LIGHTSLATEGRAY"];
-    this.texts=[">=0.79","0.789-0.67","0.669-0.56","0.559-0.38","<=0.379","0 OR NULL"];
+    this.texts=[">= 0.79","0.789 - 0.67","0.669 - 0.56","0.559 - 0.38","<= 0.379","0 OR NULL"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
@@ -243,7 +243,7 @@ export class ViewerComponent extends DataSubscriber {
 
   colorByGPR(promise,viewer) {
   	this.Colors=["LIGHTSLATEGRAY","YELLOW","DARKORANGE","RED","LIGHTSLATEGRAY"];
-    this.texts=["0 OR NULL","0.9,1.0,1.4,1.7","2.0,2.1,2.3,2.5,2.8","23.0,3.2,3.5","Others"];
+    this.texts=["0 OR NULL","0.9 - 1.7","2.0 - 2.8","23.0 - 3.5","Others"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
@@ -270,7 +270,7 @@ export class ViewerComponent extends DataSubscriber {
 
   colorByHB_LIMIT(promise,viewer) {
   	this.Colors=["RED","ORANGERED","DARKORANGE","YELLOW","LIGHTSLATEGRAY"];
-    this.texts=[">=93","92-86","85-77","76-63","<=62"];
+    this.texts=[">= 93","92 - 86","85 - 77","76 - 63","<= 62"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
@@ -344,7 +344,7 @@ export class ViewerComponent extends DataSubscriber {
         if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.DIST_FEED!==undefined){
 		    if(entity.properties.DIST_EWL>=715) entity.polygon.extrudedHeight = 5;
-		    else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 120;
+		    else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 20;
 		    else if(entity.properties.DIST_EWL>=286) entity.polygon.extrudedHeight = 50;
 		    else if(entity.properties.DIST_EWL>=181) entity.polygon.extrudedHeight = 80;
 		    else if(entity.properties.DIST_EWL===0||null) entity.polygon.extrudedHeight = 5;
