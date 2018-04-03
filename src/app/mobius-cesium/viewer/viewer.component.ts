@@ -28,8 +28,6 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   ngOnInit() {
-  	//this.ColorValue="Status_Cat";
-  	//this.HeightValue="HB_LIMIT";
   	if(this.ColorValue == undefined) {
         this.ColorValue = "Status_Cat";
     } else {
@@ -59,35 +57,7 @@ export class ViewerComponent extends DataSubscriber {
   	if(document.getElementsByClassName('cesium-viewer').length!==0){
       document.getElementsByClassName('cesium-viewer')[0].remove();
 	}	
-    var viewer = new Cesium.Viewer('cesiumContainer');//http://localhost:4200/assets/cesium/Widgets/Images/ImageryProviders/stamenToner.png
-    /*var providerViewModels = [];
-  providerViewModels.push(new Cesium.ProviderViewModel({
-    name : 'Stamen Toner',
-    iconUrl : Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/stamenToner.png'),
-    tooltip : 'A high contrast black and white map \nhttp://maps.stamen.com',//'Bing Maps aerial imagery \nhttp://www.bing.com/maps',
-    creationFunction : function() {
-        return new Cesium.BingMapsImageryProvider({
-            url : '//dev.virtualearth.net',
-            mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
-        });
-    }
-  }));
-
-  providerViewModels.push(new Cesium.ProviderViewModel({
-    name : 'Bing Maps Aerial with Labels',
-    iconUrl : Cesium.buildModuleUrl('Widgets/Images/ImageryProviders/bingAerialLabels.png'),
-    tooltip : 'Bing Maps aerial imagery with label overlays \nhttp://www.bing.com/maps',
-    creationFunction : function() {
-        return new Cesium.BingMapsImageryProvider({
-            url : '//dev.virtualearth.net',
-            mapStyle : Cesium.BingMapsStyle.AERIAL_WITH_LABELS
-        });
-    }
-  }));
-    var viewer = new Cesium.Viewer('cesiumContainer', {
-	  imageryProviderViewModels : providerViewModels,
-	  selectedImageryProviderViewModel : providerViewModels[0]
-	});*/
+    var viewer = new Cesium.Viewer('cesiumContainer');
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
@@ -248,21 +218,18 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
-	      if(entity.properties.GPR!==undefined){
-	      	if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-			else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value==="1"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1
-				||entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4||entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) 
-				entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
-			else if(entity.properties.GPR._value==="2"||entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
-				entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3||entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5||
-				entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
-			else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value==="3"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
-				entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-			else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-		  }
-		/*}else{
-		}*/
+	    if(entity.properties.GPR!==undefined){
+	      if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+		  else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value==="1"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1
+			||entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4||entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) 
+			entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
+		  else if(entity.properties.GPR._value==="2"||entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
+			entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3||entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5||
+			entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
+		  else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value==="3"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
+			entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
+		  else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+		}
       }
     });
   }
@@ -292,7 +259,7 @@ export class ViewerComponent extends DataSubscriber {
 
   onChangeHeight(HeightValue){
   	this.HeightValue=HeightValue;
-  	if(this.HeightValue==="Status_Cat"){
+  	if(this.HeightValue==="Status_Cat"||undefined){
   	  this.HeightByStatus_Cat(this.cesiumpromise,this.cesiumviewer);
   	}else if(this.HeightValue==="DIST_EWL"){
   	  this.HeightByDIST_EWL(this.cesiumpromise,this.cesiumviewer);
@@ -429,31 +396,26 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //console.log(entity.properties.GPR);
-        //if(entity.properties.TRANSPAREN._value===1){
-	      if(entity.properties.GPR!==undefined){
-	      	if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===null||entity.properties.GPR._value===0||entity.properties.GPR._value==="0") 
-	      		entity.polygon.extrudedHeight = 5;
-	      	else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9) entity.polygon.extrudedHeight = 9;
-		    else if(entity.properties.GPR._value==="1.0"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1||entity.properties.GPR._value==="1") 
-		    	entity.polygon.extrudedHeight = 10;
-		    else if(entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4) entity.polygon.extrudedHeight = 15;
-		    else if(entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) entity.polygon.extrudedHeight = 30;
-		    else if(entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2") 
-		    	entity.polygon.extrudedHeight = 60;
-		    else if(entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1) entity.polygon.extrudedHeight = 70;
-		    else if(entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3) entity.polygon.extrudedHeight = 85;
-		    else if(entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5) entity.polygon.extrudedHeight = 90;
-		    else if(entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.extrudedHeight = 95;
-		    else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3") 
-		    	entity.polygon.extrudedHeight = 105;
-		    else if(entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2) entity.polygon.extrudedHeight = 110;
-		    else if(entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.extrudedHeight = 120
-		    else{entity.polygon.extrudedHeight = 30;}
-		  }else{entity.polygon.extrudedHeight = 5;}
-		/*}else{
-		  entity.polygon.extrudedHeight = 5;
-		}*/
+	    if(entity.properties.GPR!==undefined){
+	      if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===null||entity.properties.GPR._value===0||entity.properties.GPR._value==="0") 
+	      	entity.polygon.extrudedHeight = 5;
+	      else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9) entity.polygon.extrudedHeight = 9;
+		  else if(entity.properties.GPR._value==="1.0"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1||entity.properties.GPR._value==="1") 
+		    entity.polygon.extrudedHeight = 10;
+		  else if(entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4) entity.polygon.extrudedHeight = 15;
+		  else if(entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) entity.polygon.extrudedHeight = 30;
+		  else if(entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2") 
+		    entity.polygon.extrudedHeight = 60;
+		  else if(entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1) entity.polygon.extrudedHeight = 70;
+		  else if(entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3) entity.polygon.extrudedHeight = 85;
+		  else if(entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5) entity.polygon.extrudedHeight = 90;
+		  else if(entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.extrudedHeight = 95;
+		  else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3") 
+		    entity.polygon.extrudedHeight = 105;
+		  else if(entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2) entity.polygon.extrudedHeight = 110;
+		  else if(entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.extrudedHeight = 120
+		  else{entity.polygon.extrudedHeight = 30;}
+		}else{entity.polygon.extrudedHeight = 5;}
       }
     });
   }  
@@ -480,7 +442,5 @@ export class ViewerComponent extends DataSubscriber {
     });
     this.Maximum=Math.max(...height);
   }
-
-
 
 }
