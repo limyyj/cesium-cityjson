@@ -28,6 +28,8 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   ngOnInit() {
+  	//this.ColorValue="Status_Cat";
+  	//this.HeightValue="HB_LIMIT";
   	if(this.ColorValue == undefined) {
         this.ColorValue = "Status_Cat";
     } else {
@@ -57,7 +59,11 @@ export class ViewerComponent extends DataSubscriber {
   	if(document.getElementsByClassName('cesium-viewer').length!==0){
       document.getElementsByClassName('cesium-viewer')[0].remove();
 	}	
-    var viewer = new Cesium.Viewer('cesiumContainer');
+    var viewer = new Cesium.Viewer('cesiumContainer' , {
+      imageryProvider : Cesium.createOpenStreetMapImageryProvider({ 
+     	url : 'https://stamen-tiles.a.ssl.fastly.net/toner/', 
+      })
+    });
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
@@ -259,7 +265,7 @@ export class ViewerComponent extends DataSubscriber {
 
   onChangeHeight(HeightValue){
   	this.HeightValue=HeightValue;
-  	if(this.HeightValue==="Status_Cat"||undefined){
+  	if(this.HeightValue==="Status_Cat"){
   	  this.HeightByStatus_Cat(this.cesiumpromise,this.cesiumviewer);
   	}else if(this.HeightValue==="DIST_EWL"){
   	  this.HeightByDIST_EWL(this.cesiumpromise,this.cesiumviewer);
@@ -442,5 +448,7 @@ export class ViewerComponent extends DataSubscriber {
     });
     this.Maximum=Math.max(...height);
   }
+
+
 
 }
