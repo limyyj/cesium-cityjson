@@ -243,27 +243,26 @@ export class ViewerComponent extends DataSubscriber {
 
   colorByGPR(promise,viewer) {
   	this.Colors=["LIGHTSLATEGRAY","YELLOW","DARKORANGE","RED","LIGHTSLATEGRAY"];
-    this.texts=["0 OR NULL","0.9 - 1.7","2.0 - 2.8","23.0 - 3.5","Others"];
+    this.texts=["0 OR NULL","0.9 - 1.7","2.0 - 2.8","3.0 - 3.5","Others"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.GPR!==undefined){
-	      	if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-			else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value===1.0
+	      	if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+			else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value==="1"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1
 				||entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4||entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) 
 				entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
-			else if(entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
+			else if(entity.properties.GPR._value==="2"||entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
 				entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3||entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5||
 				entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
-			else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value===3.0||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
+			else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value==="3"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
 				entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
 			else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
 		  }
-		}else{
-		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}
+		/*}else{
+		}*/
       }
     });
   }
@@ -430,50 +429,36 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //console.log(entity.properties.GPR);
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.GPR!==undefined){
-	      	if(entity.properties.GPR._value==="0.0"||null) entity.polygon.extrudedHeight = 5;
-	      	else if(entity.properties.GPR._value==="0.9") entity.polygon.extrudedHeight = 9;
-		    else if(entity.properties.GPR._value==="1.0") entity.polygon.extrudedHeight = 10;
-		    else if(entity.properties.GPR._value==="1.4") entity.polygon.extrudedHeight = 15;
-		    else if(entity.properties.GPR._value==="1.7") entity.polygon.extrudedHeight = 30;
-		    else if(entity.properties.GPR._value==="2.0") entity.polygon.extrudedHeight = 60;
-		    else if(entity.properties.GPR._value==="2.1") entity.polygon.extrudedHeight = 70;
-		    else if(entity.properties.GPR._value==="2.3") entity.polygon.extrudedHeight = 85;
-		    else if(entity.properties.GPR._value==="2.5") entity.polygon.extrudedHeight = 90;
-		    else if(entity.properties.GPR._value==="2.8") entity.polygon.extrudedHeight = 95;
-		    else if(entity.properties.GPR._value==="3.0") entity.polygon.extrudedHeight = 105;
-		    else if(entity.properties.GPR._value==="3.2") entity.polygon.extrudedHeight = 110;
-		    else if(entity.properties.GPR._value==="3.5") entity.polygon.extrudedHeight = 120;
+	      	if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===null||entity.properties.GPR._value===0||entity.properties.GPR._value==="0") 
+	      		entity.polygon.extrudedHeight = 5;
+	      	else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9) entity.polygon.extrudedHeight = 9;
+		    else if(entity.properties.GPR._value==="1.0"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1||entity.properties.GPR._value==="1") 
+		    	entity.polygon.extrudedHeight = 10;
+		    else if(entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4) entity.polygon.extrudedHeight = 15;
+		    else if(entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) entity.polygon.extrudedHeight = 30;
+		    else if(entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2") 
+		    	entity.polygon.extrudedHeight = 60;
+		    else if(entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1) entity.polygon.extrudedHeight = 70;
+		    else if(entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3) entity.polygon.extrudedHeight = 85;
+		    else if(entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5) entity.polygon.extrudedHeight = 90;
+		    else if(entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.extrudedHeight = 95;
+		    else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3") 
+		    	entity.polygon.extrudedHeight = 105;
+		    else if(entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2) entity.polygon.extrudedHeight = 110;
+		    else if(entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.extrudedHeight = 120
 		    else{entity.polygon.extrudedHeight = 30;}
 		  }else{entity.polygon.extrudedHeight = 5;}
-		}else{
+		/*}else{
 		  entity.polygon.extrudedHeight = 5;
-		}
+		}*/
       }
     });
   }  
 
 
-  /*HeightByHB_LIMIT(promise,viewer) {
-  	this.Maximum=0;
-  	this.Minimum=0;
-  	promise.then(function(dataSource) {
-      var entities = dataSource.entities.values;
-      for (var i = 0; i < entities.length; i++) {
-        var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
-	      if(entity.properties.HB_LIMIT!==undefined){
-		    entity.polygon.extrudedHeight = entity.properties.HB_LIMIT*5;
-		    console.log(entity.properties.HB_LIMIT._value);
-		    if(entity.polygon.extrudedHeight>this.Maximum) {console.log(entity.properties.HB_LIMIT);this.Maximum=entity.properties.HB_LIMIT._value;}
-		  }else{entity.polygon.extrudedHeight =0;}
-		}else{
-		  entity.polygon.extrudedHeight = 0;
-		}  
-      }
-    });
-  }*/
   HeightByHB_LIMIT(promise,viewer) {
   	var height:Array<any>=[];
   	this.Maximum=0;
