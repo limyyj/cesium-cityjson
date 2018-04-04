@@ -3,6 +3,8 @@ html, body {
   margin: 0px !important;
   padding: 0px !important;
   overflow: hidden;
+  font-size: 14px;
+  transform: scale(1.25);
 }
 #loadfile{
   position: absolute;
