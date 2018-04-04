@@ -67,6 +67,7 @@ export class ViewerComponent extends DataSubscriber {
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
+    document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
 	this.data=data;
     var promise = Cesium.GeoJsonDataSource.load(this.data);
     promise.then(function(dataSource) {

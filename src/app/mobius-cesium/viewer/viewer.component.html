@@ -1,6 +1,7 @@
 <div id="cesiumContainer">
 	<div id="ColorandHeight">
 		<div id="toolbar">
+		<div style="width: 74%;display:inline-block;">
 		<div style="width: 10%;display:inline-block;height:80px">
 			<table>
 				<tr>
@@ -17,25 +18,20 @@
 				</div></th>
 				</tr>
 			</table>
-			<!-- <table>
-				<tr>
-          		<th><div>&nbsp;&nbsp;&nbsp;</div>
-          		</th>
-          	</tr>
-          </table> -->
 		</div>
-		<div id="color" style="width:60%;display:inline-block;position: relative;height:80px;margin-right: 7%">
+		<div id="color" style="width:85%;display:inline-block;position: relative;height:80px;">
 			<table style="width: 100%">
 				<tr >
-          		<th *ngFor="let Color of Colors"><div [ngStyle]="{ 'background-color': Color}">&nbsp;&nbsp;&nbsp;</div></th>
+          		<th *ngFor="let Color of Colors" style="width: 10%"><div [ngStyle]="{ 'background-color': Color}" >&nbsp;&nbsp;&nbsp;</div></th>
           		</tr>
           		<tr >
-          		<th *ngFor="let text of texts"><div style="color:white;text-shadow: 0px 0px 3px black;">&nbsp;&nbsp;{{text}}&nbsp;&nbsp;</div></th>
+          		<th *ngFor="let text of texts" style="width: 10%"><div style="color:white;text-shadow: 0px 0px 3px black;">&nbsp;{{text}}&nbsp;</div></th>
           		</tr>
 			</table>
 		</div> 
-		<!-- <div style="width: 5%;display:inline-block;position: relative;height:80px"> &nbsp;&nbsp;&nbsp;</div> -->
-		<div style="width: 10%;display:inline-block;position: relative;height:80px">
+		</div>
+		<div style="width: 23%;display:inline-block;">
+		<div style="width: 40%;display:inline-block;position: relative;height:80px">
 			<table>
 				<tr>
 	          	<th><div >
@@ -53,15 +49,16 @@
 				</tr>
 			</table>
 		</div>
-		<div style="width: 10%;display:inline-block;position: relative;color:white;height:80px">
+		<div style="width: 50%;display:inline-block;position: relative;color:white;height:80px">
 			<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;;">
 			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Min</div></th>
 			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Max</div></th></tr>
 			</table>
-			<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;">
+			<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;border-top: none !important;">
 			<tr ><th style="width:50px;"><div style="width:100%;color:white;text-shadow: 0px 0px 3px black;">{{Minimum}}</div></th>
 			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">{{Maximum}}</div></th></tr>
 			</table>
 		</div>
+	</div>
 	</div>
 </div>

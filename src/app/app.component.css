@@ -1,14 +1,3 @@
-/*#loadfile{
-  position: absolute;
-  width: 300px; 
-  left: calc(50% - 150px);
-  top: 15px;
-  z-index: 100;
-  font-family:sans-serif;
-  display: flex; 
-  flex-direction: row; 
-  justify-content: space-between;
-}*/
 html, body {
   font-family: 'Open Sans', sans-serif;
   margin: 0px !important;

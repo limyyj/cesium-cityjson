@@ -1,5 +1,8 @@
 #cesiumContainer{
  height: 100%; 
+ font-family: sans-serif !important;
+ margin: 0px !important;
+ padding: 0px !important;
 }
 #loadfile{
   position: absolute;
@@ -30,6 +33,10 @@
   user-select: none;
   width: 100%;
   font-family:sans-serif !important;
+}
+
+.cesium-infoBox-iframe{
+  font-family: sans-serif !important;
 }
 
 #ColorandHeight{
