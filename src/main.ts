@@ -7,6 +7,6 @@ import { environment } from './environments/environment';
 if (environment.production) {
   enableProdMode();
 }
-window['CESIUM_BASE_URL'] = 'https://github.com/SUNHuiyao/Mobius_Cesium/tree/master/docs/assets/cesium';
+window['CESIUM_BASE_URL'] = './cesium';
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));
