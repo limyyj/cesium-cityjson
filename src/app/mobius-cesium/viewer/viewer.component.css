@@ -6,17 +6,6 @@
  padding: 0px !important;
  font-size: 14px;
 }
-#loadfile{
-  position: absolute;
-  width: 300px; 
-  left: calc(50% - 150px);
-  top: 15px;
-  z-index: 100;
-  font-family:sans-serif;
-  display: flex; 
-  flex-direction: row; 
-  justify-content: space-between;
-}
 .cesium-button {
   display: inline-block;
   position: relative;
