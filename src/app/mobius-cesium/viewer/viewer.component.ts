@@ -481,7 +481,7 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   checkHide(){
-  	if(this.CheckHide===false){
+  	if(this.CheckHide===true){
   	  this.Hide();
 	}else{
 	  this.onChangeHeight(this.HeightValue);
