@@ -22,6 +22,8 @@ export class ViewerComponent extends DataSubscriber {
   Minimum:Number;
   centers:Array<number>;
   CheckHide:boolean;
+  viewer:any;
+  selectEntity:any=null;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -75,8 +77,19 @@ export class ViewerComponent extends DataSubscriber {
     document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
-    document.getElementsByClassName("cesium-infoBox-title")[0]["style"].backgroundColor="#395D73";
-    //document.getElementsByClassName("cesium-infoBox-iframe")[0]["style"].backgroundColor="#395D73";
+    document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth="270px";
+   /* document.getElementsByClassName("cesium-infoBox-iframe")[0]["style"].height="650px";*/
+	/*console.log(document.getElementsByTagName('link'));
+	var frame = viewer.infoBox.frame;
+    frame.addEventListener('load', function () {
+	    var cssLink = frame.contentDocument.createElement('link');
+	    cssLink.href = Cesium.buildModuleUrl('./frame.css');
+	    cssLink.rel = 'stylesheet';
+	    cssLink.type = 'text/html';
+	    frame.contentDocument.head.appendChild(cssLink);
+	}, false);
+	console.log(frame);*/
+	this.viewer=viewer;
 	this.data=data;
     var promise = Cesium.GeoJsonDataSource.load(this.data);
     promise.then(function(dataSource) {
@@ -124,7 +137,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.Status_Cat!==undefined){
 			if(entity.properties.Status_Cat._value==="Available") entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);
 			else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
@@ -133,9 +145,6 @@ export class ViewerComponent extends DataSubscriber {
 			else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 			else {entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
 		  }
-		/*}else{
-		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}*/
       }
     });
     
@@ -149,7 +158,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.DIST_TRUNK!==undefined){
 		    if(entity.properties.DIST_TRUNK>=239) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
 		    else if(entity.properties.DIST_TRUNK>=151) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
@@ -157,10 +165,7 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_TRUNK>=61) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
 		    else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-		  }
-		/*}else{
-		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		} */   
+		  }   
       }
     });
   }
@@ -172,7 +177,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.DIST_EWL!==undefined){
 		    if(entity.properties.DIST_EWL>=715) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
 		    else if(entity.properties.DIST_EWL>=451) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
@@ -181,9 +185,6 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_EWL===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
 		  }
-		/*}else{
-		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}*/  
       }
     });
   }
@@ -195,15 +196,11 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AVAILABLE!==undefined){
 		    if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
 			else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);
 			else if(entity.properties.AVAILABLE._value==="OCCUPIED") entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		  }
-		/*}else{
-		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		} */ 
       }
     });
   }
@@ -215,7 +212,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AGG_POT!==undefined){
 		    if(entity.properties.AGG_POT>=0.79) entity.polygon.material=Cesium.Color.CORAL .withAlpha(1);
 		    else if(entity.properties.AGG_POT>=0.67) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
@@ -224,9 +220,6 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.AGG_POT===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.DARKCYAN.withAlpha(1);
 		  }
-		/*}else{
-		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		} */  
       }
     });
   }
@@ -261,7 +254,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.HB_LIMIT!==undefined){
 		    if(entity.properties.HB_LIMIT>=93) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
 		    else if(entity.properties.HB_LIMIT>=86) entity.polygon.material=Cesium.Color.ORANGERED.withAlpha(1);
@@ -270,9 +262,6 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.HB_LIMIT===0||null) entity.polygon.material=Cesium.Color.WHITE.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		  }
-		/*}else{
-		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}*/
       }
     });
   }
@@ -303,7 +292,6 @@ export class ViewerComponent extends DataSubscriber {
   HeightByStatus_Cat(promise,viewer) {
   	this.Maximum=500;
   	this.Minimum=25;
-  	//this.centers=[];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
@@ -344,7 +332,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.DIST_EWL!==undefined){
 		    if(entity.properties.DIST_EWL>=715) entity.polygon.extrudedHeight = 5*5;
 		    else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 20*5;
@@ -353,9 +340,6 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_EWL===0||null) entity.polygon.extrudedHeight = 5*5;
 		    else entity.polygon.extrudedHeight = 100*5;
 		  }
-		/*}else{
-		  entity.polygon.extrudedHeight = 5;
-		} */ 
       }
     });
   }
@@ -367,7 +351,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.DIST_TRUNK!==undefined){
 		    if(entity.properties.DIST_TRUNK>=239) entity.polygon.extrudedHeight = 5*5;
 		    else if(entity.properties.DIST_TRUNK>=151) entity.polygon.extrudedHeight = 20*5;
@@ -375,10 +358,7 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_TRUNK>=61) entity.polygon.extrudedHeight = 80*5;
 		    else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.extrudedHeight = 5*5;
 		    else entity.polygon.extrudedHeight = 100*5;
-		  }
-		/*}else{
-		  entity.polygon.extrudedHeight = 5;
-		} */   
+		  } 
       }
     });
   }
@@ -390,15 +370,11 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AVAILABLE!==undefined){
 		    if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.extrudedHeight = 100*5;
 			else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.extrudedHeight = 50*5;
 			else{entity.polygon.extrudedHeight = 5*5;}
 		  }
-		/*}else{
-		  entity.polygon.extrudedHeight = 5;
-		}*/  
       }
     });
   }
@@ -410,7 +386,6 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AGG_POT!==undefined){
 		    if(entity.properties.AGG_POT>=0.79) entity.polygon.extrudedHeight = 100*5;
 		    else if(entity.properties.AGG_POT>=0.67) entity.polygon.extrudedHeight = 80*5;
@@ -418,10 +393,7 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.AGG_POT>=0.38) entity.polygon.extrudedHeight = 20*5;
 		    else if(entity.properties.AGG_POT===0||null) entity.polygon.extrudedHeight = 5*5;
 		    else {entity.polygon.extrudedHeight = 5*5;}
-		  }
-		/*}else{
-		  entity.polygon.extrudedHeight = 5;
-		}*/   
+		  }  
       }
     });
   }
@@ -467,14 +439,10 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.HB_LIMIT!==undefined){
 		    entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
 		    height.push(Number(entity.properties.HB_LIMIT._value));
 		  }else{entity.polygon.extrudedHeight =0;}
-		/*}else{
-		  entity.polygon.extrudedHeight = 0;
-		}*/  
       }
     });
     this.Maximum=Math.max(...height);
@@ -506,5 +474,17 @@ export class ViewerComponent extends DataSubscriber {
 	  }
 	});
   }
-
+  select(){
+  	var viewer=this.viewer;
+  	if(this.selectEntity!==null) {this.selectEntity.polygon.outline=false;this.selectEntity.polygon.material.color._value.alpha=1;}
+  	if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
+  	  if(viewer.selectedEntity.polygon.outlineColor._value!==Cesium.Color.SPRINGGREEN){
+  	  	viewer.selectedEntity.polygon.material.color._value.alpha=0.5;
+  		viewer.selectedEntity.polygon.outline=true;
+  		viewer.selectedEntity.polygon.outlineColor=Cesium.Color.SPRINGGREEN;
+  		viewer.selectedEntity.polygon.outlineWidth=new Cesium.ConstantProperty(100);
+  		this.selectEntity=viewer.selectedEntity;
+  	  }
+  	}
+  }
 }
