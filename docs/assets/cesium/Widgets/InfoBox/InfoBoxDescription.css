@@ -12,9 +12,9 @@
   position: relative;
   background: #303336;
   border: 1px solid #444;
-  color: white;
+  color: #edffff;
   fill: #edffff;
-  border-radius: 0px;
+  border-radius: 4px;
   padding: 5px 12px;
   margin: 2px 3px;
   cursor: pointer;
@@ -126,23 +126,23 @@ body {
   font-size: 10px;
   padding: 4px 10px;
   margin-right: 4px;
-  color: white;
+  color: #edffff;
 }
 
 .cesium-infoBox-description a:link,
 .cesium-infoBox-description a:visited,
 .cesium-infoBox-description a:hover,
 .cesium-infoBox-description a:active {
-  color: #edffff;
+  color: white;
 }
 
 .cesium-infoBox-description table {
-  color: #edffff;
+  color: white;
 }
 
 .cesium-infoBox-defaultTable {
   width: 100%;
-  color: #edffff;
+  color: white;
 }
 
 .cesium-infoBox-defaultTable tr:nth-child(odd) {
@@ -187,15 +187,15 @@ body {
 }
 
 .cesium-infoBox-defaultTable-lighter tr:nth-child(odd) {
-  background-color: rgba(179, 179, 179, 0.8);
+  background-color: #395D73;
 }
 
 .cesium-infoBox-defaultTable-lighter tr:nth-child(even) {
-  background-color: rgba(179, 179, 179, 0.25);
+  background-color: #395D73;
 }
 
 .cesium-infoBox-loadingContainer {
-  margin: 3px;
+  margin: 5px;
   text-align: center;
 }
 
