@@ -27,7 +27,7 @@ module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  ma
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<!-- <body> -->\n<!-- <div id=\"cesiumContainer\"></div>\n<div> -->\n  <!-- <div id=\"cesiumContainer\">\n  \t<div id=\"loadfile\">\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n\t</div>\n  </div> -->\n<!-- </div> -->\n<!-- </body> -->\n\n<div>\n\t<div id=\"loadfile\">\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.2&nbsp;&nbsp;</div>\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n  </div>\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<!-- <body> -->\n<!-- <div id=\"cesiumContainer\"></div>\n<div> -->\n  <!-- <div id=\"cesiumContainer\">\n  \t<div id=\"loadfile\">\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n\t</div>\n  </div> -->\n<!-- </div> -->\n<!-- </body> -->\n\n<div>\n\t<div id=\"loadfile\">\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.3&nbsp;&nbsp;</div>\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n  </div>\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\n</div>"
 
 /***/ }),
 
@@ -336,14 +336,14 @@ var MobiusCesium = /** @class */ (function () {
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  background: #303336;\r\n  border: 0px solid #444;\r\n  color: #edffff;\r\n  fill: #edffff;\r\n  border-radius: 0px;\r\n  padding: 5px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 100%;\r\n  font-family:sans-serif !important;\r\n}\r\n.cesium-infoBox-iframe{\r\n  font-family: sans-serif !important;\r\n}\r\n.cesium-infoBox-title{\r\n  font-family: sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n.cesium-infoBox-defaultTable{\r\n  font-family: sans-serif !important;\r\n  font-size: 10px !important;\r\n}\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 0;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 80px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n}\r\n\r\n"
+module.exports = "#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: white;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #395D73;\r\n}\r\n.cesium-option,.Hide{\r\n  background-color: #395D73;\r\n  color: white;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n.Hide{\r\n  margin: auto;\r\n  width:80px;\r\n  height: 20px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  font-family:sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n/*.cesium-infoBox{\r\n  background-color: #395D73;\r\n}\r\n\r\n.cesium-infoBox-iframe{\r\n  font-family: sans-serif !important;\r\n}\r\n.cesium-infoBox-title{\r\n  font-family: sans-serif !important;\r\n  font-size: 14px !important;\r\n  background-color: #395D73;\r\n}\r\n.cesium-infoBox-defaultTable td{\r\n  font-family: sans-serif !important;\r\n  font-size: 10px !important;\r\n}\r\n.cesium-infoBox-description table{\r\n  color:white;\r\n}*/\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 10px;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 60px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 1px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.colorkey{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n.table_text{\r\n  margin: auto;\r\n  width:40px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  text-shadow: 0px 0px 3px black;\r\n}\r\n.cesium-infoBox-description, body, html { color: #000000; background-color: #FFF; }\r\n.cesium-infoBox-description * { max-width:100%; word-wrap: break-word; word-break: break-word; }\r\n.cesium-infoBox-defaultTable-lighter tr, .cesium-infoBox-defaultTable-lighter td { max-width:100%; }\r\n"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"cesiumContainer\">\r\n\t<div id=\"ColorandHeight\">\r\n\t\t<div id=\"toolbar\">\r\n\t\t<div style=\"width: 74%;display:inline-block;\">\r\n\t\t<div style=\"width: 10%;display:inline-block;height:80px\">\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n          \t\t<th><div>\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n\t\t\t\t\t<option value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option value=\"HB_LIMIT\">HB_LIMIT</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t</div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div id=\"color\" style=\"width:85%;display:inline-block;position: relative;height:80px;\">\r\n\t\t\t<table style=\"width: 100%\">\r\n\t\t\t\t<tr >\r\n          \t\t<th *ngFor=\"let Color of Colors\" style=\"width: 10%\"><div [ngStyle]=\"{ 'background-color': Color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n          \t\t</tr>\r\n          \t\t<tr >\r\n          \t\t<th *ngFor=\"let text of texts\" style=\"width: 10%\"><div style=\"color:white;text-shadow: 0px 0px 3px black;\">&nbsp;{{text}}&nbsp;</div></th>\r\n          \t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div> \r\n\t\t</div>\r\n\t\t<div style=\"width: 23%;display:inline-block;\">\r\n\t\t<div style=\"width: 40%;display:inline-block;position: relative;height:80px\">\r\n\t\t\t<table>\r\n\t\t\t\t<tr>\r\n\t          \t<th><div >\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n\t\t\t\t\t<option value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option value=\"HB_LIMIT\">HB_LIMIT</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t</div>\r\n\t\t\t\t</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: 50%;display:inline-block;position: relative;color:white;height:80px\">\r\n\t\t\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;;\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;\">Min</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;\">Max</div></th></tr>\r\n\t\t\t</table>\r\n\t\t\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;border-top: none !important;\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width:100%;color:white;text-shadow: 0px 0px 3px black;\">{{Minimum}}</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;\">{{Maximum}}</div></th></tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t</div>\r\n\t</div>\r\n</div>"
+module.exports = "<div id=\"cesiumContainer\">\r\n\t<div id=\"ColorandHeight\">\r\n\t\t<div id=\"toolbar\">\r\n\t\t<div id=\"Hidediv\" style=\"width: 80px;height:63px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t\t<table><tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\">Hide<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckHide\" (click)=\"checkHide();changeHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: 70%;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;height:60px;word-wrap:break-word;\">\r\n\t\t\t<table>\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: center;\">Color</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n          \t\t<th><div>\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t</div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div id=\"color\" style=\"width:88%;display:inline-block;position: relative;height:60px;word-wrap:break-word;\">\r\n\t\t\t<table style=\"width: 100%\">\r\n\t\t\t\t<tr >\r\n          \t\t<td *ngFor=\"let Color of Colors\" style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Color}\" >&nbsp;&nbsp;&nbsp;</div></td>\r\n          \t\t</tr>\r\n          \t\t<tr >\r\n          \t\t<td class=\"colorkey\" *ngFor=\"let text of texts\" style=\"width: 40px;\"><div class=\"table_text\">{{text}}</div></td>\r\n          \t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div> \r\n\t\t</div>\r\n\t\t<div style=\"width: 200px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;position: relative;height:60px;word-wrap:break-word;\">\r\n\t\t\t<table>\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: center;\">Height</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t<tr>\r\n\t          \t<th><div >\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option>\r\n\t\t\t\t</select>\r\n\t\t\t\t</div>\r\n\t\t\t\t</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: 100px;display:inline-block;position: relative;color:white;height:60px\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 30px\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;\">Min</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width:100%;color:white;text-shadow: 0px 0px 3px black;\">{{Minimum}}</div></th></tr>\t\r\n\t\t\t</table>\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 30px\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;\">Max</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;\">{{Maximum}}</div></th></tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t</div>\r\n\t</div>\r\n</div>"
 
 /***/ }),
 
@@ -398,6 +398,12 @@ var ViewerComponent = /** @class */ (function (_super) {
         else {
             this.HeightValue = this.dataService.HeightValue;
         }
+        if (this.CheckHide == undefined) {
+            this.CheckHide = false;
+        }
+        else {
+            this.CheckHide = this.dataService.CheckHide;
+        }
     };
     ViewerComponent.prototype.notify = function (message) {
         if (message == "model_update") {
@@ -423,6 +429,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
         document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
         document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
+        document.getElementsByClassName("cesium-infoBox-title")[0]["style"].backgroundColor = "#395D73";
+        //document.getElementsByClassName("cesium-infoBox-iframe")[0]["style"].backgroundColor="#395D73";
         this.data = data;
         var promise = Cesium.GeoJsonDataSource.load(this.data);
         promise.then(function (dataSource) {
@@ -461,6 +469,9 @@ var ViewerComponent = /** @class */ (function (_super) {
         }
         else if (this.ColorValue === "HB_LIMIT") {
             this.colorByHB_LIMIT(this.cesiumpromise, this.cesiumviewer);
+        }
+        if (this.CheckHide === true) {
+            this.Hide();
         }
         this.dataService.getColorValue(this.ColorValue);
     };
@@ -677,11 +688,14 @@ var ViewerComponent = /** @class */ (function (_super) {
         else if (this.HeightValue === "HB_LIMIT") {
             this.HeightByHB_LIMIT(this.cesiumpromise, this.cesiumviewer);
         }
+        if (this.CheckHide === true) {
+            this.Hide();
+        }
         this.dataService.getHeightValue(this.HeightValue);
     };
     ViewerComponent.prototype.HeightByStatus_Cat = function (promise, viewer) {
-        this.Maximum = 100;
-        this.Minimum = 5;
+        this.Maximum = 500;
+        this.Minimum = 25;
         //this.centers=[];
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
@@ -690,17 +704,17 @@ var ViewerComponent = /** @class */ (function (_super) {
                 //if(entity.properties.TRANSPAREN._value===1){
                 if (entity.properties.Status_Cat !== undefined) {
                     if (entity.properties.Status_Cat._value === "Available")
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                     else if (entity.properties.Status_Cat._value === "Prime")
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                     else if (entity.properties.Status_Cat._value === "Remnant")
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                     else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                     else if (entity.properties.Status_Cat._value === "0" || null)
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     else {
-                        entity.polygon.extrudedHeight = 50;
+                        entity.polygon.extrudedHeight = 50 * 5;
                     }
                     /*var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
                     center=Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
@@ -721,14 +735,10 @@ var ViewerComponent = /** @class */ (function (_super) {
                 }
             }
         });
-        /*console.log(Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] );
-        Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] = function(coordinates){
-        return coordinates;
-        };*/
     };
     ViewerComponent.prototype.HeightByDIST_EWL = function (promise, viewer) {
-        this.Maximum = 120;
-        this.Minimum = 5;
+        this.Maximum = 1500;
+        this.Minimum = 25;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
@@ -736,17 +746,17 @@ var ViewerComponent = /** @class */ (function (_super) {
                 //if(entity.properties.TRANSPAREN._value===1){
                 if (entity.properties.DIST_EWL !== undefined) {
                     if (entity.properties.DIST_EWL >= 715)
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     else if (entity.properties.DIST_EWL >= 451)
-                        entity.polygon.extrudedHeight = 20;
+                        entity.polygon.extrudedHeight = 20 * 5;
                     else if (entity.properties.DIST_EWL >= 286)
-                        entity.polygon.extrudedHeight = 50;
+                        entity.polygon.extrudedHeight = 50 * 5;
                     else if (entity.properties.DIST_EWL >= 181)
-                        entity.polygon.extrudedHeight = 80;
+                        entity.polygon.extrudedHeight = 80 * 5;
                     else if (entity.properties.DIST_EWL === 0 || null)
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     else
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                 }
                 /*}else{
                   entity.polygon.extrudedHeight = 5;
@@ -755,8 +765,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         });
     };
     ViewerComponent.prototype.HeightByDIST_TRUNK = function (promise, viewer) {
-        this.Maximum = 100;
-        this.Minimum = 5;
+        this.Maximum = 500;
+        this.Minimum = 25;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
@@ -764,17 +774,17 @@ var ViewerComponent = /** @class */ (function (_super) {
                 //if(entity.properties.TRANSPAREN._value===1){
                 if (entity.properties.DIST_TRUNK !== undefined) {
                     if (entity.properties.DIST_TRUNK >= 239)
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     else if (entity.properties.DIST_TRUNK >= 151)
-                        entity.polygon.extrudedHeight = 20;
+                        entity.polygon.extrudedHeight = 20 * 5;
                     else if (entity.properties.DIST_TRUNK >= 96)
-                        entity.polygon.extrudedHeight = 50;
+                        entity.polygon.extrudedHeight = 50 * 5;
                     else if (entity.properties.DIST_TRUNK >= 61)
-                        entity.polygon.extrudedHeight = 80;
+                        entity.polygon.extrudedHeight = 80 * 5;
                     else if (entity.properties.DIST_TRUNK === 0 || null)
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     else
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                 }
                 /*}else{
                   entity.polygon.extrudedHeight = 5;
@@ -783,8 +793,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         });
     };
     ViewerComponent.prototype.HeightByAVAILABLE = function (promise, viewer) {
-        this.Maximum = 100;
-        this.Minimum = 5;
+        this.Maximum = 500;
+        this.Minimum = 25;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
@@ -792,11 +802,11 @@ var ViewerComponent = /** @class */ (function (_super) {
                 //if(entity.properties.TRANSPAREN._value===1){
                 if (entity.properties.AVAILABLE !== undefined) {
                     if (entity.properties.AVAILABLE._value === "AVAILABLE")
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                     else if (entity.properties.AVAILABLE._value === "COMMITTED")
-                        entity.polygon.extrudedHeight = 50;
+                        entity.polygon.extrudedHeight = 50 * 5;
                     else {
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     }
                 }
                 /*}else{
@@ -806,8 +816,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         });
     };
     ViewerComponent.prototype.HeightByAGG_POT = function (promise, viewer) {
-        this.Maximum = 100;
-        this.Minimum = 5;
+        this.Maximum = 500;
+        this.Minimum = 25;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
@@ -815,17 +825,17 @@ var ViewerComponent = /** @class */ (function (_super) {
                 //if(entity.properties.TRANSPAREN._value===1){
                 if (entity.properties.AGG_POT !== undefined) {
                     if (entity.properties.AGG_POT >= 0.79)
-                        entity.polygon.extrudedHeight = 100;
+                        entity.polygon.extrudedHeight = 100 * 5;
                     else if (entity.properties.AGG_POT >= 0.67)
-                        entity.polygon.extrudedHeight = 80;
+                        entity.polygon.extrudedHeight = 80 * 5;
                     else if (entity.properties.AGG_POT >= 0.56)
-                        entity.polygon.extrudedHeight = 50;
+                        entity.polygon.extrudedHeight = 50 * 5;
                     else if (entity.properties.AGG_POT >= 0.38)
-                        entity.polygon.extrudedHeight = 20;
+                        entity.polygon.extrudedHeight = 20 * 5;
                     else if (entity.properties.AGG_POT === 0 || null)
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     else {
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     }
                 }
                 /*}else{
@@ -835,45 +845,45 @@ var ViewerComponent = /** @class */ (function (_super) {
         });
     };
     ViewerComponent.prototype.HeightByGPR = function (promise, viewer) {
-        this.Maximum = 120;
-        this.Minimum = 5;
+        this.Maximum = 600;
+        this.Minimum = 25;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
                 if (entity.properties.GPR !== undefined) {
                     if (entity.properties.GPR._value === "0.0" || entity.properties.GPR._value === null || entity.properties.GPR._value === 0 || entity.properties.GPR._value === "0")
-                        entity.polygon.extrudedHeight = 5;
+                        entity.polygon.extrudedHeight = 5 * 5;
                     else if (entity.properties.GPR._value === "0.9" || entity.properties.GPR._value === 0.9)
-                        entity.polygon.extrudedHeight = 9;
+                        entity.polygon.extrudedHeight = 9 * 5;
                     else if (entity.properties.GPR._value === "1.0" || entity.properties.GPR._value === 1.0 || entity.properties.GPR._value === 1 || entity.properties.GPR._value === "1")
-                        entity.polygon.extrudedHeight = 10;
+                        entity.polygon.extrudedHeight = 10 * 5;
                     else if (entity.properties.GPR._value === "1.4" || entity.properties.GPR._value === 1.4)
-                        entity.polygon.extrudedHeight = 15;
+                        entity.polygon.extrudedHeight = 15 * 5;
                     else if (entity.properties.GPR._value === "1.7" || entity.properties.GPR._value === 1.7)
-                        entity.polygon.extrudedHeight = 30;
+                        entity.polygon.extrudedHeight = 30 * 5;
                     else if (entity.properties.GPR._value === "2.0" || entity.properties.GPR._value === 2.0 || entity.properties.GPR._value === 2 || entity.properties.GPR._value === "2")
-                        entity.polygon.extrudedHeight = 60;
+                        entity.polygon.extrudedHeight = 60 * 5;
                     else if (entity.properties.GPR._value === "2.1" || entity.properties.GPR._value === 2.1)
-                        entity.polygon.extrudedHeight = 70;
+                        entity.polygon.extrudedHeight = 70 * 5;
                     else if (entity.properties.GPR._value === "2.3" || entity.properties.GPR._value === 2.3)
-                        entity.polygon.extrudedHeight = 85;
+                        entity.polygon.extrudedHeight = 85 * 5;
                     else if (entity.properties.GPR._value === "2.5" || entity.properties.GPR._value === 2.5)
-                        entity.polygon.extrudedHeight = 90;
+                        entity.polygon.extrudedHeight = 90 * 5;
                     else if (entity.properties.GPR._value === "2.8" || entity.properties.GPR._value === 2.8)
-                        entity.polygon.extrudedHeight = 95;
+                        entity.polygon.extrudedHeight = 95 * 5;
                     else if (entity.properties.GPR._value === "3.0" || entity.properties.GPR._value === 3.0 || entity.properties.GPR._value === 3 || entity.properties.GPR._value === "3")
-                        entity.polygon.extrudedHeight = 105;
+                        entity.polygon.extrudedHeight = 105 * 5;
                     else if (entity.properties.GPR._value === "3.2" || entity.properties.GPR._value === 3.2)
-                        entity.polygon.extrudedHeight = 110;
+                        entity.polygon.extrudedHeight = 110 * 5;
                     else if (entity.properties.GPR._value === "3.5" || entity.properties.GPR._value === 3.5)
-                        entity.polygon.extrudedHeight = 120;
+                        entity.polygon.extrudedHeight = 120 * 5;
                     else {
-                        entity.polygon.extrudedHeight = 30;
+                        entity.polygon.extrudedHeight = 30 * 5;
                     }
                 }
                 else {
-                    entity.polygon.extrudedHeight = 5;
+                    entity.polygon.extrudedHeight = 5 * 5;
                 }
             }
         });
@@ -901,6 +911,32 @@ var ViewerComponent = /** @class */ (function (_super) {
             }
         });
         this.Maximum = Math.max.apply(Math, height);
+    };
+    ViewerComponent.prototype.checkHide = function () {
+        if (this.CheckHide === false) {
+            this.Hide();
+        }
+        else {
+            this.onChangeHeight(this.HeightValue);
+            this.onChangeColor(this.ColorValue);
+        }
+        this.dataService.CheckHide = this.CheckHide;
+    };
+    ViewerComponent.prototype.changeHide = function () {
+        this.CheckHide = !this.CheckHide;
+        this.dataService.CheckHide = this.CheckHide;
+    };
+    ViewerComponent.prototype.Hide = function () {
+        this.cesiumpromise.then(function (dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+                var entity = entities[i];
+                if (entity.properties.HIDE._value !== undefined && entity.properties.HIDE._value === 1) {
+                    entity.polygon.extrudedHeight = 0;
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+            }
+        });
     };
     ViewerComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
