@@ -27,7 +27,7 @@ module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  ma
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<!-- <body> -->\n<!-- <div id=\"cesiumContainer\"></div>\n<div> -->\n  <!-- <div id=\"cesiumContainer\">\n  \t<div id=\"loadfile\">\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n\t</div>\n  </div> -->\n<!-- </div> -->\n<!-- </body> -->\n\n<div>\n\t<div id=\"loadfile\">\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.1&nbsp;&nbsp;</div>\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n  </div>\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<!-- <body> -->\n<!-- <div id=\"cesiumContainer\"></div>\n<div> -->\n  <!-- <div id=\"cesiumContainer\">\n  \t<div id=\"loadfile\">\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n\t</div>\n  </div> -->\n<!-- </div> -->\n<!-- </body> -->\n\n<div>\n\t<div id=\"loadfile\">\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.2&nbsp;&nbsp;</div>\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n  </div>\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\n</div>"
 
 /***/ }),
 
@@ -336,7 +336,7 @@ var MobiusCesium = /** @class */ (function () {
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n#loadfile{\r\n  position: absolute;\r\n  width: 300px; \r\n  left: calc(50% - 150px);\r\n  top: 15px;\r\n  z-index: 100;\r\n  font-family:sans-serif;\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex; \r\n  -webkit-box-orient: horizontal; \r\n  -webkit-box-direction: normal; \r\n      -ms-flex-direction: row; \r\n          flex-direction: row; \r\n  -webkit-box-pack: justify; \r\n      -ms-flex-pack: justify; \r\n          justify-content: space-between;\r\n}\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  background: #303336;\r\n  border: 0px solid #444;\r\n  color: #edffff;\r\n  fill: #edffff;\r\n  border-radius: 0px;\r\n  padding: 5px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 100%;\r\n  font-family:sans-serif !important;\r\n}\r\n.cesium-infoBox-iframe{\r\n  font-family: sans-serif !important;\r\n}\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 0;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 80px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n}\r\n\r\n"
+module.exports = "#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  background: #303336;\r\n  border: 0px solid #444;\r\n  color: #edffff;\r\n  fill: #edffff;\r\n  border-radius: 0px;\r\n  padding: 5px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 100%;\r\n  font-family:sans-serif !important;\r\n}\r\n.cesium-infoBox-iframe{\r\n  font-family: sans-serif !important;\r\n}\r\n.cesium-infoBox-title{\r\n  font-family: sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n.cesium-infoBox-defaultTable{\r\n  font-family: sans-serif !important;\r\n  font-size: 10px !important;\r\n}\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 0;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 80px;\r\n  display:inline-block;\r\n}\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n}\r\n\r\n"
 
 /***/ }),
 
@@ -471,26 +471,25 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.Status_Cat !== undefined) {
-                        if (entity.properties.Status_Cat._value === "Available")
-                            entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
-                        else if (entity.properties.Status_Cat._value === "Prime")
-                            entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                        else if (entity.properties.Status_Cat._value === "Remnant")
-                            entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                        else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
-                            entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                        else if (entity.properties.Status_Cat._value === "0" || null)
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                        else {
-                            entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
-                        }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.Status_Cat !== undefined) {
+                    if (entity.properties.Status_Cat._value === "Available")
+                        entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
+                    else if (entity.properties.Status_Cat._value === "Prime")
+                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
+                    else if (entity.properties.Status_Cat._value === "Remnant")
+                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
+                    else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
+                        entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
+                    else if (entity.properties.Status_Cat._value === "0" || null)
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    else {
+                        entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
                     }
                 }
-                else {
-                    entity.polygon.material = Cesium.Color.GREY.withAlpha(1);
-                }
+                /*}else{
+                  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
+                }*/
             }
         });
     };
@@ -501,25 +500,24 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.DIST_FEED !== undefined) {
-                        if (entity.properties.DIST_TRUNK >= 239)
-                            entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                        else if (entity.properties.DIST_TRUNK >= 151)
-                            entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                        else if (entity.properties.DIST_TRUNK >= 96)
-                            entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                        else if (entity.properties.DIST_TRUNK >= 61)
-                            entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                        else if (entity.properties.DIST_TRUNK === 0 || null)
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                        else
-                            entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.DIST_TRUNK !== undefined) {
+                    if (entity.properties.DIST_TRUNK >= 239)
+                        entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
+                    else if (entity.properties.DIST_TRUNK >= 151)
+                        entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+                    else if (entity.properties.DIST_TRUNK >= 96)
+                        entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
+                    else if (entity.properties.DIST_TRUNK >= 61)
+                        entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
+                    else if (entity.properties.DIST_TRUNK === 0 || null)
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    else
+                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
                 }
-                else {
-                    entity.polygon.material = Cesium.Color.GREY.withAlpha(1);
-                }
+                /*}else{
+                  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
+                } */
             }
         });
     };
@@ -530,49 +528,46 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.DIST_FEED !== undefined) {
-                        if (entity.properties.DIST_EWL >= 715)
-                            entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                        else if (entity.properties.DIST_EWL >= 451)
-                            entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                        else if (entity.properties.DIST_EWL >= 286)
-                            entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                        else if (entity.properties.DIST_EWL >= 181)
-                            entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                        else if (entity.properties.DIST_EWL === 0 || null)
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                        else
-                            entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.DIST_EWL !== undefined) {
+                    if (entity.properties.DIST_EWL >= 715)
+                        entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
+                    else if (entity.properties.DIST_EWL >= 451)
+                        entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+                    else if (entity.properties.DIST_EWL >= 286)
+                        entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
+                    else if (entity.properties.DIST_EWL >= 181)
+                        entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
+                    else if (entity.properties.DIST_EWL === 0 || null)
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    else
+                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
                 }
-                else {
-                    entity.polygon.material = Cesium.Color.GREY.withAlpha(1);
-                }
+                /*}else{
+                  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
+                }*/
             }
         });
     };
     ViewerComponent.prototype.colorByAVAILABLE = function (promise, viewer) {
         this.Colors = ["RED", "ROYALBLUE", "LIGHTSLATEGRAY"];
-        this.texts = ["AVAILABLE", "COMMITTED", "0 OR NULL"];
+        this.texts = ["AVAILABLE", "COMMITTED", "OCCUPIED"];
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.AVAILABLE !== undefined) {
-                        if (entity.properties.AVAILABLE._value === "AVAILABLE")
-                            entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                        else if (entity.properties.AVAILABLE._value === "COMMITTED")
-                            entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
-                        else {
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                        }
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.AVAILABLE !== undefined) {
+                    if (entity.properties.AVAILABLE._value === "AVAILABLE")
+                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
+                    else if (entity.properties.AVAILABLE._value === "COMMITTED")
+                        entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
+                    else if (entity.properties.AVAILABLE._value === "OCCUPIED")
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
                 }
-                else {
-                    entity.polygon.material = Cesium.Color.GREY.withAlpha(1);
-                }
+                /*}else{
+                  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
+                } */
             }
         });
     };
@@ -583,25 +578,24 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.AGG_POT !== undefined) {
-                        if (entity.properties.AGG_POT >= 0.79)
-                            entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                        else if (entity.properties.AGG_POT >= 0.67)
-                            entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                        else if (entity.properties.AGG_POT >= 0.56)
-                            entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                        else if (entity.properties.AGG_POT >= 0.38)
-                            entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                        else if (entity.properties.AGG_POT === 0 || null)
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                        else
-                            entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.AGG_POT !== undefined) {
+                    if (entity.properties.AGG_POT >= 0.79)
+                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
+                    else if (entity.properties.AGG_POT >= 0.67)
+                        entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
+                    else if (entity.properties.AGG_POT >= 0.56)
+                        entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
+                    else if (entity.properties.AGG_POT >= 0.38)
+                        entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+                    else if (entity.properties.AGG_POT === 0 || null)
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    else
+                        entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
                 }
-                else {
-                    entity.polygon.material = Cesium.Color.GREY.withAlpha(1);
-                }
+                /*}else{
+                  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
+                } */
             }
         });
     };
@@ -639,25 +633,24 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.HB_LIMIT !== undefined) {
-                        if (entity.properties.HB_LIMIT >= 93)
-                            entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                        else if (entity.properties.HB_LIMIT >= 86)
-                            entity.polygon.material = Cesium.Color.ORANGERED.withAlpha(1);
-                        else if (entity.properties.HB_LIMIT >= 77)
-                            entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
-                        else if (entity.properties.HB_LIMIT >= 63)
-                            entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
-                        else if (entity.properties.HB_LIMIT === 0 || null)
-                            entity.polygon.material = Cesium.Color.WHITE.withAlpha(1);
-                        else
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.HB_LIMIT !== undefined) {
+                    if (entity.properties.HB_LIMIT >= 93)
+                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
+                    else if (entity.properties.HB_LIMIT >= 86)
+                        entity.polygon.material = Cesium.Color.ORANGERED.withAlpha(1);
+                    else if (entity.properties.HB_LIMIT >= 77)
+                        entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
+                    else if (entity.properties.HB_LIMIT >= 63)
+                        entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
+                    else if (entity.properties.HB_LIMIT === 0 || null)
+                        entity.polygon.material = Cesium.Color.WHITE.withAlpha(1);
+                    else
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
                 }
-                else {
-                    entity.polygon.material = Cesium.Color.GREY.withAlpha(1);
-                }
+                /*}else{
+                  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
+                }*/
             }
         });
     };
@@ -689,32 +682,49 @@ var ViewerComponent = /** @class */ (function (_super) {
     ViewerComponent.prototype.HeightByStatus_Cat = function (promise, viewer) {
         this.Maximum = 100;
         this.Minimum = 5;
+        //this.centers=[];
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.Status_Cat !== undefined) {
-                        if (entity.properties.Status_Cat._value === "Available")
-                            entity.polygon.extrudedHeight = 100;
-                        else if (entity.properties.Status_Cat._value === "Prime")
-                            entity.polygon.extrudedHeight = 100;
-                        else if (entity.properties.Status_Cat._value === "Remnant")
-                            entity.polygon.extrudedHeight = 100;
-                        else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
-                            entity.polygon.extrudedHeight = 100;
-                        else if (entity.properties.Status_Cat._value === "0" || null)
-                            entity.polygon.extrudedHeight = 5;
-                        else {
-                            entity.polygon.extrudedHeight = 50;
-                        }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.Status_Cat !== undefined) {
+                    if (entity.properties.Status_Cat._value === "Available")
+                        entity.polygon.extrudedHeight = 100;
+                    else if (entity.properties.Status_Cat._value === "Prime")
+                        entity.polygon.extrudedHeight = 100;
+                    else if (entity.properties.Status_Cat._value === "Remnant")
+                        entity.polygon.extrudedHeight = 100;
+                    else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
+                        entity.polygon.extrudedHeight = 100;
+                    else if (entity.properties.Status_Cat._value === "0" || null)
+                        entity.polygon.extrudedHeight = 5;
+                    else {
+                        entity.polygon.extrudedHeight = 50;
                     }
-                }
-                else {
-                    entity.polygon.extrudedHeight = 5;
+                    /*var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+                    center=Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
+                    viewer.entities.add({
+                        name : 'Glowing blue line on the surface',
+                        polyline : {
+                            positions : Cesium.Cartesian3.fromDegreesArrayHeights([103.63626290332934,1.3333570541789537,0,
+                                                                            103.63660236586097,1.33303363743232,1000]),
+        
+                            width : 10,
+                            material : new Cesium.PolylineGlowMaterialProperty({
+                                glowPower : 0.2,
+                                color : Cesium.Color.BLUE
+                            })
+                        }
+                    });
+                    viewer.zoomTo(viewer.entities);*/
                 }
             }
         });
+        /*console.log(Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] );
+        Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] = function(coordinates){
+        return coordinates;
+        };*/
     };
     ViewerComponent.prototype.HeightByDIST_EWL = function (promise, viewer) {
         this.Maximum = 120;
@@ -723,25 +733,24 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.DIST_FEED !== undefined) {
-                        if (entity.properties.DIST_EWL >= 715)
-                            entity.polygon.extrudedHeight = 5;
-                        else if (entity.properties.DIST_EWL >= 451)
-                            entity.polygon.extrudedHeight = 20;
-                        else if (entity.properties.DIST_EWL >= 286)
-                            entity.polygon.extrudedHeight = 50;
-                        else if (entity.properties.DIST_EWL >= 181)
-                            entity.polygon.extrudedHeight = 80;
-                        else if (entity.properties.DIST_EWL === 0 || null)
-                            entity.polygon.extrudedHeight = 5;
-                        else
-                            entity.polygon.extrudedHeight = 100;
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.DIST_EWL !== undefined) {
+                    if (entity.properties.DIST_EWL >= 715)
+                        entity.polygon.extrudedHeight = 5;
+                    else if (entity.properties.DIST_EWL >= 451)
+                        entity.polygon.extrudedHeight = 20;
+                    else if (entity.properties.DIST_EWL >= 286)
+                        entity.polygon.extrudedHeight = 50;
+                    else if (entity.properties.DIST_EWL >= 181)
+                        entity.polygon.extrudedHeight = 80;
+                    else if (entity.properties.DIST_EWL === 0 || null)
+                        entity.polygon.extrudedHeight = 5;
+                    else
+                        entity.polygon.extrudedHeight = 100;
                 }
-                else {
-                    entity.polygon.extrudedHeight = 5;
-                }
+                /*}else{
+                  entity.polygon.extrudedHeight = 5;
+                } */
             }
         });
     };
@@ -752,25 +761,24 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.DIST_FEED !== undefined) {
-                        if (entity.properties.DIST_TRUNK >= 239)
-                            entity.polygon.extrudedHeight = 5;
-                        else if (entity.properties.DIST_TRUNK >= 151)
-                            entity.polygon.extrudedHeight = 20;
-                        else if (entity.properties.DIST_TRUNK >= 96)
-                            entity.polygon.extrudedHeight = 50;
-                        else if (entity.properties.DIST_TRUNK >= 61)
-                            entity.polygon.extrudedHeight = 80;
-                        else if (entity.properties.DIST_TRUNK === 0 || null)
-                            entity.polygon.extrudedHeight = 5;
-                        else
-                            entity.polygon.extrudedHeight = 100;
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.DIST_TRUNK !== undefined) {
+                    if (entity.properties.DIST_TRUNK >= 239)
+                        entity.polygon.extrudedHeight = 5;
+                    else if (entity.properties.DIST_TRUNK >= 151)
+                        entity.polygon.extrudedHeight = 20;
+                    else if (entity.properties.DIST_TRUNK >= 96)
+                        entity.polygon.extrudedHeight = 50;
+                    else if (entity.properties.DIST_TRUNK >= 61)
+                        entity.polygon.extrudedHeight = 80;
+                    else if (entity.properties.DIST_TRUNK === 0 || null)
+                        entity.polygon.extrudedHeight = 5;
+                    else
+                        entity.polygon.extrudedHeight = 100;
                 }
-                else {
-                    entity.polygon.extrudedHeight = 5;
-                }
+                /*}else{
+                  entity.polygon.extrudedHeight = 5;
+                } */
             }
         });
     };
@@ -781,20 +789,19 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.AVAILABLE !== undefined) {
-                        if (entity.properties.AVAILABLE._value === "AVAILABLE")
-                            entity.polygon.extrudedHeight = 100;
-                        else if (entity.properties.AVAILABLE._value === "COMMITTED")
-                            entity.polygon.extrudedHeight = 50;
-                        else {
-                            entity.polygon.extrudedHeight = 5;
-                        }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.AVAILABLE !== undefined) {
+                    if (entity.properties.AVAILABLE._value === "AVAILABLE")
+                        entity.polygon.extrudedHeight = 100;
+                    else if (entity.properties.AVAILABLE._value === "COMMITTED")
+                        entity.polygon.extrudedHeight = 50;
+                    else {
+                        entity.polygon.extrudedHeight = 5;
                     }
                 }
-                else {
-                    entity.polygon.extrudedHeight = 5;
-                }
+                /*}else{
+                  entity.polygon.extrudedHeight = 5;
+                }*/
             }
         });
     };
@@ -805,26 +812,25 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.AGG_POT !== undefined) {
-                        if (entity.properties.AGG_POT >= 0.79)
-                            entity.polygon.extrudedHeight = 100;
-                        else if (entity.properties.AGG_POT >= 0.67)
-                            entity.polygon.extrudedHeight = 80;
-                        else if (entity.properties.AGG_POT >= 0.56)
-                            entity.polygon.extrudedHeight = 50;
-                        else if (entity.properties.AGG_POT >= 0.38)
-                            entity.polygon.extrudedHeight = 20;
-                        else if (entity.properties.AGG_POT === 0 || null)
-                            entity.polygon.extrudedHeight = 5;
-                        else {
-                            entity.polygon.extrudedHeight = 5;
-                        }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.AGG_POT !== undefined) {
+                    if (entity.properties.AGG_POT >= 0.79)
+                        entity.polygon.extrudedHeight = 100;
+                    else if (entity.properties.AGG_POT >= 0.67)
+                        entity.polygon.extrudedHeight = 80;
+                    else if (entity.properties.AGG_POT >= 0.56)
+                        entity.polygon.extrudedHeight = 50;
+                    else if (entity.properties.AGG_POT >= 0.38)
+                        entity.polygon.extrudedHeight = 20;
+                    else if (entity.properties.AGG_POT === 0 || null)
+                        entity.polygon.extrudedHeight = 5;
+                    else {
+                        entity.polygon.extrudedHeight = 5;
                     }
                 }
-                else {
-                    entity.polygon.extrudedHeight = 5;
-                }
+                /*}else{
+                  entity.polygon.extrudedHeight = 5;
+                }*/
             }
         });
     };
@@ -881,18 +887,17 @@ var ViewerComponent = /** @class */ (function (_super) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties.TRANSPAREN._value === 1) {
-                    if (entity.properties.HB_LIMIT !== undefined) {
-                        entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
-                        height.push(Number(entity.properties.HB_LIMIT._value));
-                    }
-                    else {
-                        entity.polygon.extrudedHeight = 0;
-                    }
+                //if(entity.properties.TRANSPAREN._value===1){
+                if (entity.properties.HB_LIMIT !== undefined) {
+                    entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
+                    height.push(Number(entity.properties.HB_LIMIT._value));
                 }
                 else {
                     entity.polygon.extrudedHeight = 0;
                 }
+                /*}else{
+                  entity.polygon.extrudedHeight = 0;
+                }*/
             }
         });
         this.Maximum = Math.max.apply(Math, height);
