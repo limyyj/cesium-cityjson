@@ -21,6 +21,7 @@ export class ViewerComponent extends DataSubscriber {
   Maximum:Number;
   Minimum:Number;
   centers:Array<number>;
+  CheckHide:boolean;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -40,6 +41,11 @@ export class ViewerComponent extends DataSubscriber {
         this.HeightValue = "Status_Cat";
     } else {
       this.HeightValue=this.dataService.HeightValue;
+    }
+    if(this.CheckHide == undefined) {
+        this.CheckHide = false;
+    } else {
+      this.CheckHide=this.dataService.CheckHide;
     }
 
   }
@@ -69,6 +75,8 @@ export class ViewerComponent extends DataSubscriber {
     document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
+    document.getElementsByClassName("cesium-infoBox-title")[0]["style"].backgroundColor="#395D73";
+    //document.getElementsByClassName("cesium-infoBox-iframe")[0]["style"].backgroundColor="#395D73";
 	this.data=data;
     var promise = Cesium.GeoJsonDataSource.load(this.data);
     promise.then(function(dataSource) {
@@ -103,6 +111,9 @@ export class ViewerComponent extends DataSubscriber {
   	}else if(this.ColorValue==="HB_LIMIT"){
   	  this.colorByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
   	}
+  	if(this.CheckHide===true){
+  	  this.Hide();
+  	}
   	this.dataService.getColorValue(this.ColorValue);
   }
 
@@ -127,6 +138,7 @@ export class ViewerComponent extends DataSubscriber {
 		}*/
       }
     });
+    
     
   }
 
@@ -282,12 +294,15 @@ export class ViewerComponent extends DataSubscriber {
   	}else if(this.HeightValue==="HB_LIMIT"){
 	  this.HeightByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
   	}
+  	if(this.CheckHide===true){
+  	  this.Hide();
+  	}
   	this.dataService.getHeightValue(this.HeightValue);
   }
 
   HeightByStatus_Cat(promise,viewer) {
-  	this.Maximum=100;
-  	this.Minimum=5;
+  	this.Maximum=500;
+  	this.Minimum=25;
   	//this.centers=[];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
@@ -295,12 +310,12 @@ export class ViewerComponent extends DataSubscriber {
         var entity = entities[i];
         //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.Status_Cat!==undefined){
-	      	if(entity.properties.Status_Cat._value==="Available") entity.polygon.extrudedHeight = 100;
-			else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.extrudedHeight = 100;
-			else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.extrudedHeight = 100;
-	        else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.extrudedHeight = 100;
-			else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.extrudedHeight = 5;
-			else{entity.polygon.extrudedHeight = 50;}
+	      	if(entity.properties.Status_Cat._value==="Available") entity.polygon.extrudedHeight = 100*5;
+			else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.extrudedHeight = 100*5;
+			else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.extrudedHeight = 100*5;
+	        else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.extrudedHeight = 100*5;
+			else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.extrudedHeight = 5*5;
+			else{entity.polygon.extrudedHeight = 50*5;}
     		/*var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
     		center=Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
 			viewer.entities.add({
@@ -320,27 +335,23 @@ export class ViewerComponent extends DataSubscriber {
 		  }  
       }
     });
-    /*console.log(Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] );
-    Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] = function(coordinates){
-    return coordinates;
-	};*/
   }
 
   HeightByDIST_EWL(promise,viewer) {
-  	this.Maximum=120;
-  	this.Minimum=5;
+  	this.Maximum=1500;
+  	this.Minimum=25;
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
         //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.DIST_EWL!==undefined){
-		    if(entity.properties.DIST_EWL>=715) entity.polygon.extrudedHeight = 5;
-		    else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 20;
-		    else if(entity.properties.DIST_EWL>=286) entity.polygon.extrudedHeight = 50;
-		    else if(entity.properties.DIST_EWL>=181) entity.polygon.extrudedHeight = 80;
-		    else if(entity.properties.DIST_EWL===0||null) entity.polygon.extrudedHeight = 5;
-		    else entity.polygon.extrudedHeight = 100;
+		    if(entity.properties.DIST_EWL>=715) entity.polygon.extrudedHeight = 5*5;
+		    else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 20*5;
+		    else if(entity.properties.DIST_EWL>=286) entity.polygon.extrudedHeight = 50*5;
+		    else if(entity.properties.DIST_EWL>=181) entity.polygon.extrudedHeight = 80*5;
+		    else if(entity.properties.DIST_EWL===0||null) entity.polygon.extrudedHeight = 5*5;
+		    else entity.polygon.extrudedHeight = 100*5;
 		  }
 		/*}else{
 		  entity.polygon.extrudedHeight = 5;
@@ -350,20 +361,20 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   HeightByDIST_TRUNK(promise,viewer) {
-  	this.Maximum=100;
-  	this.Minimum=5;
+  	this.Maximum=500;
+  	this.Minimum=25;
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
         //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.DIST_TRUNK!==undefined){
-		    if(entity.properties.DIST_TRUNK>=239) entity.polygon.extrudedHeight = 5;
-		    else if(entity.properties.DIST_TRUNK>=151) entity.polygon.extrudedHeight = 20;
-		    else if(entity.properties.DIST_TRUNK>=96) entity.polygon.extrudedHeight = 50;
-		    else if(entity.properties.DIST_TRUNK>=61) entity.polygon.extrudedHeight = 80;
-		    else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.extrudedHeight = 5;
-		    else entity.polygon.extrudedHeight = 100;
+		    if(entity.properties.DIST_TRUNK>=239) entity.polygon.extrudedHeight = 5*5;
+		    else if(entity.properties.DIST_TRUNK>=151) entity.polygon.extrudedHeight = 20*5;
+		    else if(entity.properties.DIST_TRUNK>=96) entity.polygon.extrudedHeight = 50*5;
+		    else if(entity.properties.DIST_TRUNK>=61) entity.polygon.extrudedHeight = 80*5;
+		    else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.extrudedHeight = 5*5;
+		    else entity.polygon.extrudedHeight = 100*5;
 		  }
 		/*}else{
 		  entity.polygon.extrudedHeight = 5;
@@ -373,17 +384,17 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   HeightByAVAILABLE(promise,viewer) {
-  	this.Maximum=100;
-  	this.Minimum=5;
+  	this.Maximum=500;
+  	this.Minimum=25;
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
         //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AVAILABLE!==undefined){
-		    if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.extrudedHeight = 100;
-			else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.extrudedHeight = 50;
-			else{entity.polygon.extrudedHeight = 5;}
+		    if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.extrudedHeight = 100*5;
+			else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.extrudedHeight = 50*5;
+			else{entity.polygon.extrudedHeight = 5*5;}
 		  }
 		/*}else{
 		  entity.polygon.extrudedHeight = 5;
@@ -393,20 +404,20 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   HeightByAGG_POT(promise,viewer) {
-  	this.Maximum=100;
-  	this.Minimum=5;
+  	this.Maximum=500;
+  	this.Minimum=25;
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
         //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AGG_POT!==undefined){
-		    if(entity.properties.AGG_POT>=0.79) entity.polygon.extrudedHeight = 100;
-		    else if(entity.properties.AGG_POT>=0.67) entity.polygon.extrudedHeight = 80;
-		    else if(entity.properties.AGG_POT>=0.56) entity.polygon.extrudedHeight = 50;
-		    else if(entity.properties.AGG_POT>=0.38) entity.polygon.extrudedHeight = 20;
-		    else if(entity.properties.AGG_POT===0||null) entity.polygon.extrudedHeight = 5;
-		    else {entity.polygon.extrudedHeight = 5;}
+		    if(entity.properties.AGG_POT>=0.79) entity.polygon.extrudedHeight = 100*5;
+		    else if(entity.properties.AGG_POT>=0.67) entity.polygon.extrudedHeight = 80*5;
+		    else if(entity.properties.AGG_POT>=0.56) entity.polygon.extrudedHeight = 50*5;
+		    else if(entity.properties.AGG_POT>=0.38) entity.polygon.extrudedHeight = 20*5;
+		    else if(entity.properties.AGG_POT===0||null) entity.polygon.extrudedHeight = 5*5;
+		    else {entity.polygon.extrudedHeight = 5*5;}
 		  }
 		/*}else{
 		  entity.polygon.extrudedHeight = 5;
@@ -416,32 +427,32 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   HeightByGPR(promise,viewer) {
-  	this.Maximum=120;
-  	this.Minimum=5;
+  	this.Maximum=600;
+  	this.Minimum=25;
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
 	    if(entity.properties.GPR!==undefined){
 	      if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===null||entity.properties.GPR._value===0||entity.properties.GPR._value==="0") 
-	      	entity.polygon.extrudedHeight = 5;
-	      else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9) entity.polygon.extrudedHeight = 9;
+	      	entity.polygon.extrudedHeight = 5*5;
+	      else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9) entity.polygon.extrudedHeight = 9*5;
 		  else if(entity.properties.GPR._value==="1.0"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1||entity.properties.GPR._value==="1") 
-		    entity.polygon.extrudedHeight = 10;
-		  else if(entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4) entity.polygon.extrudedHeight = 15;
-		  else if(entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) entity.polygon.extrudedHeight = 30;
+		    entity.polygon.extrudedHeight = 10*5;
+		  else if(entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4) entity.polygon.extrudedHeight = 15*5;
+		  else if(entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) entity.polygon.extrudedHeight = 30*5;
 		  else if(entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2") 
-		    entity.polygon.extrudedHeight = 60;
-		  else if(entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1) entity.polygon.extrudedHeight = 70;
-		  else if(entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3) entity.polygon.extrudedHeight = 85;
-		  else if(entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5) entity.polygon.extrudedHeight = 90;
-		  else if(entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.extrudedHeight = 95;
+		    entity.polygon.extrudedHeight = 60*5;
+		  else if(entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1) entity.polygon.extrudedHeight = 70*5;
+		  else if(entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3) entity.polygon.extrudedHeight = 85*5;
+		  else if(entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5) entity.polygon.extrudedHeight = 90*5;
+		  else if(entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.extrudedHeight = 95*5;
 		  else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3") 
-		    entity.polygon.extrudedHeight = 105;
-		  else if(entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2) entity.polygon.extrudedHeight = 110;
-		  else if(entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.extrudedHeight = 120
-		  else{entity.polygon.extrudedHeight = 30;}
-		}else{entity.polygon.extrudedHeight = 5;}
+		    entity.polygon.extrudedHeight = 105*5;
+		  else if(entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2) entity.polygon.extrudedHeight = 110*5;
+		  else if(entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.extrudedHeight = 120*5;
+		  else{entity.polygon.extrudedHeight = 30*5;}
+		}else{entity.polygon.extrudedHeight = 5*5;}
       }
     });
   }  
@@ -469,6 +480,31 @@ export class ViewerComponent extends DataSubscriber {
     this.Maximum=Math.max(...height);
   }
 
+  checkHide(){
+  	if(this.CheckHide===false){
+  	  this.Hide();
+	}else{
+	  this.onChangeHeight(this.HeightValue);
+	  this.onChangeColor(this.ColorValue);
+	}
+	this.dataService.CheckHide=this.CheckHide;
+  }
+  changeHide(){
+  	this.CheckHide=!this.CheckHide;
+  	this.dataService.CheckHide=this.CheckHide;
+  }
 
+  Hide(){
+  	this.cesiumpromise.then(function(dataSource) {
+	  var entities = dataSource.entities.values;
+	  for (var i = 0; i < entities.length; i++) {
+	    var entity = entities[i];
+		if(entity.properties.HIDE._value!==undefined&&entity.properties.HIDE._value===1){
+	      entity.polygon.extrudedHeight = 0;
+		  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+		}
+	  }
+	});
+  }
 
 }

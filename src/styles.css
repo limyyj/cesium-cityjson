@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
- 
+@import "../node_modules/cesium/Build/Cesium/Widgets/InfoBox/InfoBoxDescription.css";
+
 html, body, #cesiumContainer {  
     width: 100%;  
     height: 100%;  
@@ -7,3 +8,22 @@ html, body, #cesiumContainer {
     padding: 0;  
     overflow: hidden;  
 } 
+.cesium-infoBox-description{
+  background-color: #395D73 !important;
+}
+
+.cesium-infoBox-iframe{
+  font-family: sans-serif !important;
+}
+.cesium-infoBox-title{
+  font-family: sans-serif !important;
+  font-size: 14px !important;
+  background-color: #395D73 !important;
+}
+.cesium-infoBox-defaultTable td{
+  font-family: sans-serif !important;
+  font-size: 10px !important;
+}
+.cesium-infoBox-description table{
+  color:white !important;
+}

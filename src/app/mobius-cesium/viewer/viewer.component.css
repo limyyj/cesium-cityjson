@@ -9,12 +9,11 @@
 .cesium-button {
   display: inline-block;
   position: relative;
-  background: #303336;
-  border: 0px solid #444;
-  color: #edffff;
-  fill: #edffff;
+  border: 1px solid #8AA8C0;
+  color: white;
+  fill: #395D73;
   border-radius: 0px;
-  padding: 5px 0px;
+  padding: 3px 0px;
   margin: 0px 0px;
   cursor: pointer;
   overflow: hidden;
@@ -22,8 +21,27 @@
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  width: 100%;
+  width: 80px;
   font-family:sans-serif !important;
+  background: #395D73;
+}
+.cesium-option,.Hide{
+  background-color: #395D73;
+  color: white;
+  border: 1px solid #8AA8C0;
+}
+.Hide{
+  margin: auto;
+  width:80px;
+  height: 20px;
+  word-wrap:break-word;
+  font-weight: normal;
+  color:white;
+  font-family:sans-serif !important;
+  font-size: 14px !important;
+}
+/*.cesium-infoBox{
+  background-color: #395D73;
 }
 
 .cesium-infoBox-iframe{
@@ -32,19 +50,22 @@
 .cesium-infoBox-title{
   font-family: sans-serif !important;
   font-size: 14px !important;
+  background-color: #395D73;
 }
-.cesium-infoBox-defaultTable{
+.cesium-infoBox-defaultTable td{
   font-family: sans-serif !important;
   font-size: 10px !important;
 }
-
+.cesium-infoBox-description table{
+  color:white;
+}*/
 
 #ColorandHeight{
   position: absolute;
-  bottom: 0;
+  bottom: 10px;
   width: 100%;
   z-index: 98;
-  height: 80px;
+  height: 60px;
   display:inline-block;
 }
 #toolbar{
@@ -54,5 +75,27 @@
   padding: 2px 5px;
   position: absolute;
   display:inline-block;
+  bottom: 1px;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  table-layout:fixed !important;
+  white-space: nowrap !important;
+}
+.colorkey{
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  table-layout:fixed !important;
+  white-space: nowrap !important;
+}
+.table_text{
+  margin: auto;
+  width:40px;
+  word-wrap:break-word;
+  font-weight: normal;
+  color:white;
+  text-shadow: 0px 0px 3px black;
 }
 
+.cesium-infoBox-description, body, html { color: #000000; background-color: #FFF; }
+.cesium-infoBox-description * { max-width:100%; word-wrap: break-word; word-break: break-word; }
+.cesium-infoBox-defaultTable-lighter tr, .cesium-infoBox-defaultTable-lighter td { max-width:100%; }

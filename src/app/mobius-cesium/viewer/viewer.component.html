@@ -1,61 +1,74 @@
 <div id="cesiumContainer">
 	<div id="ColorandHeight">
 		<div id="toolbar">
-		<div style="width: 74%;display:inline-block;">
-		<div style="width: 10%;display:inline-block;height:80px">
+		<div id="Hidediv" style="width: 80px;height:63px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
+			<table><tr>
+					<th class="colorkey" style="width: 100%"><div class="Hide">Hide<input type="checkbox" id="CheckHide" [checked]="CheckHide" (click)="checkHide();changeHide()"></div></th>
+				</tr>
+			</table>
+		</div>
+		<div style="width: 70%;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
+		<div style="width: 80px;display:inline-block;height:60px;word-wrap:break-word;">
 			<table>
+				<tr >
+          		<td ><div class="Hide" style="text-align: center;">Color</div></td>
+          		</tr>
 				<tr>
           		<th><div>
 				<select class="cesium-button" (change)="onChangeColor($event.target.value)">
-					<option value="Status_Cat">Status_Cat</option>
-					<option value="DIST_EWL">DIST_EWL</option>
-					<option value="DIST_TRUNK">DIST_TRUNK</option>
-					<option value="AVAILABLE">AVAILABLE</option>
-					<option value="AGG_POT">AGG_POT</option>
-					<option value="GPR">GPR</option>
-					<option value="HB_LIMIT">HB_LIMIT</option>
+					<option class="cesium-option" value="Status_Cat">Status_Cat</option>
+					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
+					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
+					<option class="cesium-option" value="AVAILABLE">AVAILABLE</option>
+					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
+					<option class="cesium-option" value="GPR">GPR</option>
+					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option>
 				</select>
 				</div></th>
 				</tr>
 			</table>
 		</div>
-		<div id="color" style="width:85%;display:inline-block;position: relative;height:80px;">
+		<div id="color" style="width:88%;display:inline-block;position: relative;height:60px;word-wrap:break-word;">
 			<table style="width: 100%">
 				<tr >
-          		<th *ngFor="let Color of Colors" style="width: 10%"><div [ngStyle]="{ 'background-color': Color}" >&nbsp;&nbsp;&nbsp;</div></th>
+          		<td *ngFor="let Color of Colors" style="width: 40px;"><div [ngStyle]="{ 'background-color': Color}" >&nbsp;&nbsp;&nbsp;</div></td>
           		</tr>
           		<tr >
-          		<th *ngFor="let text of texts" style="width: 10%"><div style="color:white;text-shadow: 0px 0px 3px black;">&nbsp;{{text}}&nbsp;</div></th>
+          		<td class="colorkey" *ngFor="let text of texts" style="width: 40px;"><div class="table_text">{{text}}</div></td>
           		</tr>
 			</table>
 		</div> 
 		</div>
-		<div style="width: 23%;display:inline-block;">
-		<div style="width: 40%;display:inline-block;position: relative;height:80px">
+		<div style="width: 200px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
+		<div style="width: 80px;display:inline-block;position: relative;height:60px;word-wrap:break-word;">
 			<table>
+				<tr >
+          		<td ><div class="Hide" style="text-align: center;">Height</div></td>
+          		</tr>
+				<tr>
 				<tr>
 	          	<th><div >
 				<select class="cesium-button" (change)="onChangeHeight($event.target.value)">
-					<option value="Status_Cat">Status_Cat</option>
-					<option value="DIST_EWL">DIST_EWL</option>
-					<option value="DIST_TRUNK">DIST_TRUNK</option>
-					<option value="AVAILABLE">AVAILABLE</option>
-					<option value="AGG_POT">AGG_POT</option>
-					<option value="GPR">GPR</option>
-					<option value="HB_LIMIT">HB_LIMIT</option>
+					<option class="cesium-option" value="Status_Cat">Status_Cat</option>
+					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
+					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
+					<option class="cesium-option" value="AVAILABLE">AVAILABLE</option>
+					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
+					<option class="cesium-option" value="GPR">GPR</option>
+					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option>
 				</select>
 				</div>
 				</th>
 				</tr>
 			</table>
 		</div>
-		<div style="width: 50%;display:inline-block;position: relative;color:white;height:80px">
-			<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;;">
+		<div style="width: 100px;display:inline-block;position: relative;color:white;height:60px">
+			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 30px">
 			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Min</div></th>
-			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Max</div></th></tr>
+			<th style="width:50px;"><div style="width:100%;color:white;text-shadow: 0px 0px 3px black;">{{Minimum}}</div></th></tr>	
 			</table>
-			<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;border-top: none !important;">
-			<tr ><th style="width:50px;"><div style="width:100%;color:white;text-shadow: 0px 0px 3px black;">{{Minimum}}</div></th>
+			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 30px">
+			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Max</div></th>
 			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">{{Maximum}}</div></th></tr>
 			</table>
 		</div>
