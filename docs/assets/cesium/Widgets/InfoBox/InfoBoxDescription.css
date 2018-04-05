@@ -53,7 +53,7 @@
 .cesium-button-disabled:focus,
 .cesium-button-disabled:hover,
 .cesium-button-disabled:active {
-  background: #303336;
+  background: #F1F1F1;
   border-color: #444;
   color: #646464;
   fill: #646464;
@@ -97,7 +97,7 @@
 }
 
 .cesium-performanceDisplay {
-  background-color: rgba(40, 40, 40, 0.7);
+  background-color:#F1F1F1;
   padding: 7px;
   border-radius: 5px;
   border: 1px solid #444;
@@ -133,24 +133,25 @@ body {
 .cesium-infoBox-description a:visited,
 .cesium-infoBox-description a:hover,
 .cesium-infoBox-description a:active {
-  color: white;
+  color: #395D73;
 }
 
 .cesium-infoBox-description table {
-  color: white;
+  color: #395D73;
+  font-size:10px;
 }
 
 .cesium-infoBox-defaultTable {
   width: 100%;
-  color: white;
+  color: #395D73;
 }
 
 .cesium-infoBox-defaultTable tr:nth-child(odd) {
-  background-color: #395D73;
+  background-color: #F1F1F1;
 }
 
 .cesium-infoBox-defaultTable tr:nth-child(even) {
-  background-color: #395D73;
+  background-color: #F1F1F1;
 }
 
 .cesium-infoBox-defaultTable th {
@@ -187,11 +188,11 @@ body {
 }
 
 .cesium-infoBox-defaultTable-lighter tr:nth-child(odd) {
-  background-color: #395D73;
+  background-color: #F1F1F1;
 }
 
 .cesium-infoBox-defaultTable-lighter tr:nth-child(even) {
-  background-color: #395D73;
+  background-color: #F1F1F1;
 }
 
 .cesium-infoBox-loadingContainer {
