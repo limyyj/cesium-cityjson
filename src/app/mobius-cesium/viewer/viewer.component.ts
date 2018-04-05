@@ -20,6 +20,7 @@ export class ViewerComponent extends DataSubscriber {
   texts:Array<string>;
   Maximum:Number;
   Minimum:Number;
+  centers:Array<number>;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -112,7 +113,7 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.Status_Cat!==undefined){
 			if(entity.properties.Status_Cat._value==="Available") entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);
 			else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
@@ -121,9 +122,9 @@ export class ViewerComponent extends DataSubscriber {
 			else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 			else {entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}
+		}*/
       }
     });
     
@@ -136,8 +137,8 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
-	      if(entity.properties.DIST_FEED!==undefined){
+        //if(entity.properties.TRANSPAREN._value===1){
+	      if(entity.properties.DIST_TRUNK!==undefined){
 		    if(entity.properties.DIST_TRUNK>=239) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
 		    else if(entity.properties.DIST_TRUNK>=151) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
 		    else if(entity.properties.DIST_TRUNK>=96) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
@@ -145,9 +146,9 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}    
+		} */   
       }
     });
   }
@@ -159,8 +160,8 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
-	      if(entity.properties.DIST_FEED!==undefined){
+        //if(entity.properties.TRANSPAREN._value===1){
+	      if(entity.properties.DIST_EWL!==undefined){
 		    if(entity.properties.DIST_EWL>=715) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
 		    else if(entity.properties.DIST_EWL>=451) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
 		    else if(entity.properties.DIST_EWL>=286) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
@@ -168,29 +169,29 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_EWL===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}  
+		}*/  
       }
     });
   }
 
   colorByAVAILABLE(promise,viewer) {
   	this.Colors=["RED","ROYALBLUE","LIGHTSLATEGRAY"];
-    this.texts=["AVAILABLE","COMMITTED","0 OR NULL"];
+    this.texts=["AVAILABLE","COMMITTED","OCCUPIED"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AVAILABLE!==undefined){
 		    if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
 			else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);
-			else{entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+			else if(entity.properties.AVAILABLE._value==="OCCUPIED") entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}  
+		} */ 
       }
     });
   }
@@ -202,7 +203,7 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AGG_POT!==undefined){
 		    if(entity.properties.AGG_POT>=0.79) entity.polygon.material=Cesium.Color.CORAL .withAlpha(1);
 		    else if(entity.properties.AGG_POT>=0.67) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
@@ -211,9 +212,9 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.AGG_POT===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.DARKCYAN.withAlpha(1);
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}   
+		} */  
       }
     });
   }
@@ -248,7 +249,7 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.HB_LIMIT!==undefined){
 		    if(entity.properties.HB_LIMIT>=93) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
 		    else if(entity.properties.HB_LIMIT>=86) entity.polygon.material=Cesium.Color.ORANGERED.withAlpha(1);
@@ -257,9 +258,9 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.HB_LIMIT===0||null) entity.polygon.material=Cesium.Color.WHITE.withAlpha(1);
 		    else entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.material=Cesium.Color.GREY.withAlpha(1);
-		}
+		}*/
       }
     });
   }
@@ -287,11 +288,12 @@ export class ViewerComponent extends DataSubscriber {
   HeightByStatus_Cat(promise,viewer) {
   	this.Maximum=100;
   	this.Minimum=5;
+  	//this.centers=[];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.Status_Cat!==undefined){
 	      	if(entity.properties.Status_Cat._value==="Available") entity.polygon.extrudedHeight = 100;
 			else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.extrudedHeight = 100;
@@ -299,12 +301,29 @@ export class ViewerComponent extends DataSubscriber {
 	        else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.extrudedHeight = 100;
 			else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.extrudedHeight = 5;
 			else{entity.polygon.extrudedHeight = 50;}
-		  }
-		}else{
-		  entity.polygon.extrudedHeight = 5;
-		}  
+    		/*var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+    		center=Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
+			viewer.entities.add({
+			    name : 'Glowing blue line on the surface',
+			    polyline : {
+			        positions : Cesium.Cartesian3.fromDegreesArrayHeights([103.63626290332934,1.3333570541789537,0,
+			                                                        103.63660236586097,1.33303363743232,1000]),
+
+			        width : 10,
+			        material : new Cesium.PolylineGlowMaterialProperty({
+			            glowPower : 0.2,
+			            color : Cesium.Color.BLUE
+			        })
+			    }
+			});
+			viewer.zoomTo(viewer.entities);*/
+		  }  
       }
     });
+    /*console.log(Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] );
+    Cesium.GeoJsonDataSource.crsNames['EPSG:4326'] = function(coordinates){
+    return coordinates;
+	};*/
   }
 
   HeightByDIST_EWL(promise,viewer) {
@@ -314,8 +333,8 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
-	      if(entity.properties.DIST_FEED!==undefined){
+        //if(entity.properties.TRANSPAREN._value===1){
+	      if(entity.properties.DIST_EWL!==undefined){
 		    if(entity.properties.DIST_EWL>=715) entity.polygon.extrudedHeight = 5;
 		    else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 20;
 		    else if(entity.properties.DIST_EWL>=286) entity.polygon.extrudedHeight = 50;
@@ -323,9 +342,9 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_EWL===0||null) entity.polygon.extrudedHeight = 5;
 		    else entity.polygon.extrudedHeight = 100;
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.extrudedHeight = 5;
-		}  
+		} */ 
       }
     });
   }
@@ -337,8 +356,8 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
-	      if(entity.properties.DIST_FEED!==undefined){
+        //if(entity.properties.TRANSPAREN._value===1){
+	      if(entity.properties.DIST_TRUNK!==undefined){
 		    if(entity.properties.DIST_TRUNK>=239) entity.polygon.extrudedHeight = 5;
 		    else if(entity.properties.DIST_TRUNK>=151) entity.polygon.extrudedHeight = 20;
 		    else if(entity.properties.DIST_TRUNK>=96) entity.polygon.extrudedHeight = 50;
@@ -346,9 +365,9 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.extrudedHeight = 5;
 		    else entity.polygon.extrudedHeight = 100;
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.extrudedHeight = 5;
-		}    
+		} */   
       }
     });
   }
@@ -360,15 +379,15 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AVAILABLE!==undefined){
 		    if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.extrudedHeight = 100;
 			else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.extrudedHeight = 50;
 			else{entity.polygon.extrudedHeight = 5;}
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.extrudedHeight = 5;
-		}  
+		}*/  
       }
     });
   }
@@ -380,7 +399,7 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.AGG_POT!==undefined){
 		    if(entity.properties.AGG_POT>=0.79) entity.polygon.extrudedHeight = 100;
 		    else if(entity.properties.AGG_POT>=0.67) entity.polygon.extrudedHeight = 80;
@@ -389,9 +408,9 @@ export class ViewerComponent extends DataSubscriber {
 		    else if(entity.properties.AGG_POT===0||null) entity.polygon.extrudedHeight = 5;
 		    else {entity.polygon.extrudedHeight = 5;}
 		  }
-		}else{
+		/*}else{
 		  entity.polygon.extrudedHeight = 5;
-		}   
+		}*/   
       }
     });
   }
@@ -437,14 +456,14 @@ export class ViewerComponent extends DataSubscriber {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(entity.properties.TRANSPAREN._value===1){
+        //if(entity.properties.TRANSPAREN._value===1){
 	      if(entity.properties.HB_LIMIT!==undefined){
 		    entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
 		    height.push(Number(entity.properties.HB_LIMIT._value));
 		  }else{entity.polygon.extrudedHeight =0;}
-		}else{
+		/*}else{
 		  entity.polygon.extrudedHeight = 0;
-		}  
+		}*/  
       }
     });
     this.Maximum=Math.max(...height);
