@@ -235,8 +235,8 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   colorByGPR(promise,viewer) {
-  	this.Colors=["YELLOW","DARKORANGE","RED"，"LIGHTSLATEGRAY"];
-    this.texts=["0.9 - 1.7","2.0 - 2.8","3.0 - 3.5"，"0 OR NULL"];
+  	this.Colors=["YELLOW","DARKORANGE","RED","LIGHTSLATEGRAY"];
+    this.texts=["0.9 - 1.7","2.0 - 2.8","3.0 - 3.5","0 OR NULL"];
   	promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
