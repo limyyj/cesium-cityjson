@@ -1,17 +1,23 @@
 <div id="cesiumContainer" (click)="select()">
 	<div id="ColorandHeight">
 		<div id="toolbar">
-		<div id="Hidediv" style="width: 80px;height:63px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
+		<div id="Hidediv" style="width: 110px;height:83px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
 			<table><tr>
-					<th class="colorkey" style="width: 100%"><div class="Hide">Hide<input type="checkbox" id="CheckHide" [checked]="CheckHide" (click)="changeHide();checkHide()"></div></th>
+					<th class="colorkey" style="width: 100%"><div class="Hide" style="width: 110px;text-align: left;">SELETED<input type="checkbox" id="CheckHide" [checked]="CheckHide" (click)="changeHide();checkHide()"></div></th>
+				</tr>
+				<tr>
+					<th class="colorkey" style="width: 100%"><div class="Hide" style="width: 110px;text-align: left;">COMMITTED<input type="checkbox" id="CheckHide" [checked]="CheckCom" (click)="changeCom();checkHide()"></div></th>
+				</tr>
+				<tr>
+					<th class="colorkey" style="width: 100%"><div class="Hide" style="width: 110px;text-align: left;">OCCUPIED<input type="checkbox" id="CheckHide" [checked]="CheckOcc" (click)="changeOcc();checkHide()"></div></th>
 				</tr>
 			</table>
 		</div>
 		<div style="width: 68%;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
-		<div style="width: 80px;display:inline-block;height:60px;word-wrap:break-word;">
-			<table>
+		<div style="width: 80px;display:inline-block;height:80px;word-wrap:break-word;">
+			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
 				<tr >
-          		<td ><div class="Hide" style="text-align: center;">Color</div></td>
+          		<td ><div class="Hide" style="text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;">Color</div></td>
           		</tr>
 				<tr>
           		<th><div>
@@ -28,7 +34,7 @@
 				</tr>
 			</table>
 		</div>
-		<div id="color" style="width:88%;display:inline-block;position: relative;height:60px;word-wrap:break-word;">
+		<div id="color" style="width:88%;display:inline-block;position: relative;height:80px;word-wrap:break-word;">
 			<table style="width: 100%">
 				<tr >
           		<td *ngFor="let Color of Colors" style="width: 40px;"><div [ngStyle]="{ 'background-color': Color}" >&nbsp;&nbsp;&nbsp;</div></td>
@@ -40,10 +46,10 @@
 		</div> 
 		</div>
 		<div style="width: 200px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
-		<div style="width: 80px;display:inline-block;position: relative;height:60px;word-wrap:break-word;">
-			<table>
+		<div style="width: 80px;display:inline-block;position: relative;height:80px;word-wrap:break-word;">
+			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
 				<tr >
-          		<td ><div class="Hide" style="text-align: center;">Height</div></td>
+          		<td ><div class="Hide" style="text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;">Height</div></td>
           		</tr>
 				<tr>
 				<tr>
@@ -62,14 +68,14 @@
 				</tr>
 			</table>
 		</div>
-		<div style="width: 100px;display:inline-block;position: relative;color:white;height:60px">
-			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 30px">
-			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Min</div></th>
-			<th style="width:50px;"><div style="width:100%;color:white;text-shadow: 0px 0px 3px black;">{{Minimum}}</div></th></tr>	
+		<div style="width: 100px;display:inline-block;position: relative;color:white;height:80px">
+			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 25px">
+			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">Min</div></th>
+			<th style="width:50px;"><div style="width:100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">{{Minimum}}</div></th></tr>	
 			</table>
-			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 30px">
-			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">Max</div></th>
-			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;">{{Maximum}}</div></th></tr>
+			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 100%;height: 25px;">
+			<tr ><th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">Max</div></th>
+			<th style="width:50px;"><div style="width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;">{{Maximum}}</div></th></tr>
 			</table>
 		</div>
 	</div>

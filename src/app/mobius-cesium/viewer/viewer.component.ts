@@ -22,6 +22,8 @@ export class ViewerComponent extends DataSubscriber {
   Minimum:Number;
   centers:Array<number>;
   CheckHide:boolean;
+  CheckCom:boolean;
+  CheckOcc:boolean;
   viewer:any;
   selectEntity:any=null;
   material:object;
@@ -49,6 +51,16 @@ export class ViewerComponent extends DataSubscriber {
         this.CheckHide = false;
     } else {
       this.CheckHide=this.dataService.CheckHide;
+    }
+    if(this.CheckCom == undefined) {
+        this.CheckCom = false;
+    } else {
+      this.CheckCom=this.dataService.CheckCom;
+    }
+    if(this.CheckOcc == undefined) {
+        this.CheckOcc = false;
+    } else {
+      this.CheckOcc=this.dataService.CheckOcc;
     }
 
   }
@@ -134,9 +146,9 @@ export class ViewerComponent extends DataSubscriber {
   	}else if(this.ColorValue==="HB_LIMIT"){
   	  this.colorByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
   	}
-  	if(this.CheckHide===true){
-  	  this.Hide();
-  	}
+  	if(this.CheckHide===true) this.Hide();
+  	if(this.CheckCom===true) this.Commited();
+  	if(this.CheckOcc===true) this.Occupied();
   	this.dataService.getColorValue(this.ColorValue);
   }
 
@@ -293,9 +305,9 @@ export class ViewerComponent extends DataSubscriber {
   	}else if(this.HeightValue==="HB_LIMIT"){
 	  this.HeightByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
   	}
-  	if(this.CheckHide===true){
-  	  this.Hide();
-  	}
+  	if(this.CheckHide===true) this.Hide();
+  	if(this.CheckCom===true) this.Commited();
+  	if(this.CheckOcc===true) this.Occupied();
   	this.dataService.getHeightValue(this.HeightValue);
   }
 
@@ -460,17 +472,37 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   checkHide(){
-  	if(this.CheckHide===true){
-  	  this.Hide();
+	if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+	if(this.CheckCom===true) {this.Commited();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+	if(this.CheckOcc===true) {this.Occupied();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+	/*else{
+	  this.onChangeHeight(this.HeightValue);
+	  this.onChangeColor(this.ColorValue);
+	}*/
+	this.dataService.CheckHide=this.CheckHide;
+	this.dataService.CheckCom=this.CheckCom;
+	this.dataService.CheckOcc=this.CheckOcc;
+  }
+  changeHide(){
+  	this.CheckHide=!this.CheckHide;
+  	this.dataService.CheckHide=this.CheckHide;
+  }
+  /*checkCom(){
+  	if(this.CheckCom===true){
+  	  this.Commited();
 	}else{
 	  this.onChangeHeight(this.HeightValue);
 	  this.onChangeColor(this.ColorValue);
 	}
 	this.dataService.CheckHide=this.CheckHide;
+  }*/
+  changeCom(){
+  	this.CheckCom=!this.CheckCom;
+  	this.dataService.CheckCom=this.CheckCom;
   }
-  changeHide(){
-  	this.CheckHide=!this.CheckHide;
-  	this.dataService.CheckHide=this.CheckHide;
+  changeOcc(){
+  	this.CheckOcc=!this.CheckOcc;
+  	this.dataService.CheckOcc=this.CheckOcc;
   }
 
   Hide(){
@@ -479,6 +511,30 @@ export class ViewerComponent extends DataSubscriber {
 	  for (var i = 0; i < entities.length; i++) {
 	    var entity = entities[i];
 		if(entity.properties.HIDE._value!==undefined&&entity.properties.HIDE._value===1){
+	      entity.polygon.extrudedHeight = 0;
+		  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+		}
+	  }
+	});
+  }
+  Commited(){
+  	this.cesiumpromise.then(function(dataSource) {
+	  var entities = dataSource.entities.values;
+	  for (var i = 0; i < entities.length; i++) {
+	    var entity = entities[i];
+		if(entity.properties.AVAILABLE._value==="COMMITTED"){
+	      entity.polygon.extrudedHeight = 0;
+		  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+		}
+	  }
+	});
+  }
+  Occupied(){
+  	this.cesiumpromise.then(function(dataSource) {
+	  var entities = dataSource.entities.values;
+	  for (var i = 0; i < entities.length; i++) {
+	    var entity = entities[i];
+		if(entity.properties.AVAILABLE._value==="OCCUPIED"){
 	      entity.polygon.extrudedHeight = 0;
 		  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 		}
@@ -511,12 +567,12 @@ export class ViewerComponent extends DataSubscriber {
 		else {entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
 	  }
   	}else if(this.ColorValue==="DIST_EWL"){
-  	  if(entity.properties.DIST_TRUNK!==undefined){
-	    if(entity.properties.DIST_TRUNK>=239) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
-	    else if(entity.properties.DIST_TRUNK>=151) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-	    else if(entity.properties.DIST_TRUNK>=96) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
-	    else if(entity.properties.DIST_TRUNK>=61) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
-	    else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+  	  if(entity.properties.DIST_EWL!==undefined){
+	    if(entity.properties.DIST_EWL>=715) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
+	    else if(entity.properties.DIST_EWL>=451) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+	    else if(entity.properties.DIST_EWL>=286) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
+	    else if(entity.properties.DIST_EWL>=181) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
+	    else if(entity.properties.DIST_EWL===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
 	    else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
 	  } 
   	}else if(this.ColorValue==="DIST_TRUNK"){
