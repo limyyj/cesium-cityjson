@@ -608,8 +608,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         });
     };
     ViewerComponent.prototype.colorByGPR = function (promise, viewer) {
-        this.Colors = ["LIGHTSLATEGRAY", "YELLOW", "DARKORANGE", "RED", "LIGHTSLATEGRAY"];
-        this.texts = ["0 OR NULL", "0.9 - 1.7", "2.0 - 2.8", "3.0 - 3.5", "Others"];
+        this.Colors = ["LIGHTSLATEGRAY", "YELLOW", "DARKORANGE", "RED"];
+        this.texts = ["0 OR NULL", "0.9 - 1.7", "2.0 - 2.8", "3.0 - 3.5"];
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
@@ -913,7 +913,7 @@ var ViewerComponent = /** @class */ (function (_super) {
     ViewerComponent.prototype.select = function () {
         var viewer = this.viewer;
         if (this.selectEntity !== null) {
-            this.ColorSelect(this.selectEntity); /*this.selectEntity.polygon.material=this.material;*/
+            this.ColorSelect(this.selectEntity);
         }
         if (viewer.selectedEntity !== undefined && viewer.selectedEntity.polygon !== null) {
             var material = viewer.selectedEntity.polygon.material;
