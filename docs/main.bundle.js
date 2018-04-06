@@ -945,16 +945,16 @@ var ViewerComponent = /** @class */ (function (_super) {
             }
         }
         else if (this.ColorValue === "DIST_EWL") {
-            if (entity.properties.DIST_TRUNK !== undefined) {
-                if (entity.properties.DIST_TRUNK >= 239)
+            if (entity.properties.DIST_EWL !== undefined) {
+                if (entity.properties.DIST_EWL >= 715)
                     entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK >= 151)
+                else if (entity.properties.DIST_EWL >= 451)
                     entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK >= 96)
+                else if (entity.properties.DIST_EWL >= 286)
                     entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK >= 61)
+                else if (entity.properties.DIST_EWL >= 181)
                     entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
-                else if (entity.properties.DIST_TRUNK === 0 || null)
+                else if (entity.properties.DIST_EWL === 0 || null)
                     entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
                 else
                     entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
