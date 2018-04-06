@@ -7,6 +7,14 @@
  padding: 0px !important;
  font-size: 14px;
 }
+/*.cesium-viewer-bottom{
+  display: none !important;
+}
+.cesium-timeline-main{
+  display: none !important;
+
+}*/
+
 .cesium-button {
   display: inline-block;
   position: relative;

@@ -475,10 +475,6 @@ export class ViewerComponent extends DataSubscriber {
 	if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
 	if(this.CheckCom===true) {this.Commited();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
 	if(this.CheckOcc===true) {this.Occupied();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
-	/*else{
-	  this.onChangeHeight(this.HeightValue);
-	  this.onChangeColor(this.ColorValue);
-	}*/
 	this.dataService.CheckHide=this.CheckHide;
 	this.dataService.CheckCom=this.CheckCom;
 	this.dataService.CheckOcc=this.CheckOcc;
@@ -487,15 +483,6 @@ export class ViewerComponent extends DataSubscriber {
   	this.CheckHide=!this.CheckHide;
   	this.dataService.CheckHide=this.CheckHide;
   }
-  /*checkCom(){
-  	if(this.CheckCom===true){
-  	  this.Commited();
-	}else{
-	  this.onChangeHeight(this.HeightValue);
-	  this.onChangeColor(this.ColorValue);
-	}
-	this.dataService.CheckHide=this.CheckHide;
-  }*/
   changeCom(){
   	this.CheckCom=!this.CheckCom;
   	this.dataService.CheckCom=this.CheckCom;
