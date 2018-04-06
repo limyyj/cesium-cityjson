@@ -1,3 +1,4 @@
+
 #cesiumContainer{
  height: 100%;
  width: 100%; 
@@ -66,9 +67,12 @@
 .cesium-viewer{
   font-size: 14px !important;
 }
-/*.cesium-infoBox{
-  max-width:270px;
-}*/
+body{
+  font-size: 10px;
+}
+.cesium-infoBox-description table{
+  background-color: #F1F1F1;
+}
 .cesium-infoBox-iframe{
   height:650px;
 }

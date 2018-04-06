@@ -8,7 +8,10 @@ html, body, #cesiumContainer {
     padding: 0;  
     overflow: hidden;  
 } 
-.cesium-infoBox-description{
+.cesium-infoBox {
+   color: #F1F1F1;
+}
+/*.cesium-infoBox-description{
   background-color: #395D73 !important;
 }
 
@@ -26,4 +29,4 @@ html, body, #cesiumContainer {
 }
 .cesium-infoBox-description table{
   color:white !important;
-}
+}*/

@@ -24,6 +24,7 @@ export class ViewerComponent extends DataSubscriber {
   CheckHide:boolean;
   viewer:any;
   selectEntity:any=null;
+  material:object;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -69,6 +70,7 @@ export class ViewerComponent extends DataSubscriber {
       document.getElementsByClassName('cesium-viewer')[0].remove();
 	}	
     var viewer = new Cesium.Viewer('cesiumContainer' , {
+    	infoBox:true,
       imageryProvider : Cesium.createOpenStreetMapImageryProvider({ 
      	url : 'https://stamen-tiles.a.ssl.fastly.net/toner/', 
       })
@@ -79,16 +81,15 @@ export class ViewerComponent extends DataSubscriber {
     document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
     document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth="270px";
    /* document.getElementsByClassName("cesium-infoBox-iframe")[0]["style"].height="650px";*/
-	/*console.log(document.getElementsByTagName('link'));
-	var frame = viewer.infoBox.frame;
+	/*console.log(document.getElementsByTagName('link'));*/
+	/*var frame = viewer.infoBox.frame;
     frame.addEventListener('load', function () {
 	    var cssLink = frame.contentDocument.createElement('link');
-	    cssLink.href = Cesium.buildModuleUrl('./frame.css');
+	    cssLink.href = "../src/styles.css";
 	    cssLink.rel = 'stylesheet';
-	    cssLink.type = 'text/html';
+	    cssLink.type = 'text/css';
 	    frame.contentDocument.head.appendChild(cssLink);
-	}, false);
-	console.log(frame);*/
+	}, false);*/
 	this.viewer=viewer;
 	this.data=data;
     var promise = Cesium.GeoJsonDataSource.load(this.data);
@@ -98,7 +99,16 @@ export class ViewerComponent extends DataSubscriber {
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];                               
 		entity.polygon.outline = false;
+
+
+		/*var description = '<table class="cesium-infoBox-defaultTable cesium-infoBox-defaultTable-lighter"><tbody>';
+        description += '<tr><th>' + "Latitude" + '</th><td>'+'</td></tr>';
+        description += '<tr><th>' + "Longitude" + '</th><td>'+'</td></tr>';
+        description += '</tbody></table>';
+        entity.description = description;*/
+		
       }
+
     });
     viewer.zoomTo(promise);
     this.cesiumviewer=viewer;
@@ -443,6 +453,7 @@ export class ViewerComponent extends DataSubscriber {
 		    entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
 		    height.push(Number(entity.properties.HB_LIMIT._value));
 		  }else{entity.polygon.extrudedHeight =0;}
+
       }
     });
     this.Maximum=Math.max(...height);
@@ -476,15 +487,15 @@ export class ViewerComponent extends DataSubscriber {
   }
   select(){
   	var viewer=this.viewer;
-  	if(this.selectEntity!==null) {this.selectEntity.polygon.outline=false;this.selectEntity.polygon.material.color._value.alpha=1;}
+  	if(this.selectEntity!==null) {this.selectEntity.polygon.material=this.material;}
   	if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
-  	  if(viewer.selectedEntity.polygon.outlineColor._value!==Cesium.Color.SPRINGGREEN){
-  	  	viewer.selectedEntity.polygon.material.color._value.alpha=0.5;
-  		viewer.selectedEntity.polygon.outline=true;
-  		viewer.selectedEntity.polygon.outlineColor=Cesium.Color.SPRINGGREEN;
-  		viewer.selectedEntity.polygon.outlineWidth=new Cesium.ConstantProperty(100);
+  		const material=viewer.selectedEntity.polygon.material;
+  	  	viewer.selectedEntity.polygon.material=Cesium.Color.WHITE;
   		this.selectEntity=viewer.selectedEntity;
-  	  }
+  		this.material=material;
   	}
+  	/*var frame = viewer.infoBox.frame;
+	//var elmnt = frame.contentWindow.document.getElementsByTagName("cesium-infoBox-description")[0];
+	console.log(frame.contentWindow.document.body.get(0));*/
   }
 }
