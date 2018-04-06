@@ -913,7 +913,7 @@ var ViewerComponent = /** @class */ (function (_super) {
     ViewerComponent.prototype.select = function () {
         var viewer = this.viewer;
         if (this.selectEntity !== null) {
-            this.selectEntity.polygon.material = this.material;
+            this.ColorSelect(this.selectEntity); /*this.selectEntity.polygon.material=this.material;*/
         }
         if (viewer.selectedEntity !== undefined && viewer.selectedEntity.polygon !== null) {
             var material = viewer.selectedEntity.polygon.material;
@@ -921,9 +921,127 @@ var ViewerComponent = /** @class */ (function (_super) {
             this.selectEntity = viewer.selectedEntity;
             this.material = material;
         }
-        /*var frame = viewer.infoBox.frame;
-        //var elmnt = frame.contentWindow.document.getElementsByTagName("cesium-infoBox-description")[0];
-        console.log(frame.contentWindow.document.body.get(0));*/
+        else {
+            this.selectEntity = null;
+            this.material = null;
+        }
+    };
+    ViewerComponent.prototype.ColorSelect = function (entity) {
+        if (this.ColorValue === "Status_Cat") {
+            if (entity.properties.Status_Cat !== undefined) {
+                if (entity.properties.Status_Cat._value === "Available")
+                    entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
+                else if (entity.properties.Status_Cat._value === "Prime")
+                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
+                else if (entity.properties.Status_Cat._value === "Remnant")
+                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
+                else if (entity.properties.Status_Cat._value === "Estate under active master / infra planning")
+                    entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
+                else if (entity.properties.Status_Cat._value === "0" || null)
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                else {
+                    entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
+                }
+            }
+        }
+        else if (this.ColorValue === "DIST_EWL") {
+            if (entity.properties.DIST_TRUNK !== undefined) {
+                if (entity.properties.DIST_TRUNK >= 239)
+                    entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK >= 151)
+                    entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK >= 96)
+                    entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK >= 61)
+                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK === 0 || null)
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                else
+                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
+            }
+        }
+        else if (this.ColorValue === "DIST_TRUNK") {
+            if (entity.properties.DIST_TRUNK !== undefined) {
+                if (entity.properties.DIST_TRUNK >= 239)
+                    entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK >= 151)
+                    entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK >= 96)
+                    entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK >= 61)
+                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
+                else if (entity.properties.DIST_TRUNK === 0 || null)
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                else
+                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
+            }
+        }
+        else if (this.ColorValue === "AVAILABLE") {
+            if (entity.properties.AVAILABLE !== undefined) {
+                if (entity.properties.AVAILABLE._value === "AVAILABLE")
+                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
+                else if (entity.properties.AVAILABLE._value === "COMMITTED")
+                    entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
+                else if (entity.properties.AVAILABLE._value === "OCCUPIED")
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+        }
+        else if (this.ColorValue === "AGG_POT") {
+            if (entity.properties.AGG_POT !== undefined) {
+                if (entity.properties.AGG_POT >= 0.79)
+                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
+                else if (entity.properties.AGG_POT >= 0.67)
+                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(1);
+                else if (entity.properties.AGG_POT >= 0.56)
+                    entity.polygon.material = Cesium.Color.KHAKI.withAlpha(1);
+                else if (entity.properties.AGG_POT >= 0.38)
+                    entity.polygon.material = Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
+                else if (entity.properties.AGG_POT === 0 || null)
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                else
+                    entity.polygon.material = Cesium.Color.DARKCYAN.withAlpha(1);
+            }
+        }
+        else if (this.ColorValue === "GPR") {
+            if (entity.properties.GPR !== undefined) {
+                if (entity.properties.GPR._value === "0.0" || entity.properties.GPR._value === 0.0 || entity.properties.GPR._value === 0 || entity.properties.GPR._value === null)
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                else if (entity.properties.GPR._value === "0.9" || entity.properties.GPR._value === 0.9 || entity.properties.GPR._value === "1.0" || entity.properties.GPR._value === "1" || entity.properties.GPR._value === 1.0 || entity.properties.GPR._value === 1
+                    || entity.properties.GPR._value === "1.4" || entity.properties.GPR._value === 1.4 || entity.properties.GPR._value === "1.7" || entity.properties.GPR._value === 1.7)
+                    entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
+                else if (entity.properties.GPR._value === "2" || entity.properties.GPR._value === "2.0" || entity.properties.GPR._value === 2.0 || entity.properties.GPR._value === 2 || entity.properties.GPR._value === "2.1" || entity.properties.GPR._value === 2.1 ||
+                    entity.properties.GPR._value === "2.3" || entity.properties.GPR._value === 2.3 || entity.properties.GPR._value === "2.5" || entity.properties.GPR._value === 2.5 ||
+                    entity.properties.GPR._value === "2.8" || entity.properties.GPR._value === 2.8)
+                    entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
+                else if (entity.properties.GPR._value === "3.0" || entity.properties.GPR._value === "3" || entity.properties.GPR._value === 3.0 || entity.properties.GPR._value === 3 || entity.properties.GPR._value === "3.2" || entity.properties.GPR._value === 3.2 ||
+                    entity.properties.GPR._value === "3.5" || entity.properties.GPR._value === 3.5)
+                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
+                else {
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+            }
+        }
+        else if (this.ColorValue === "HB_LIMIT") {
+            if (entity.properties.HB_LIMIT !== undefined) {
+                if (entity.properties.HB_LIMIT >= 93)
+                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
+                else if (entity.properties.HB_LIMIT >= 86)
+                    entity.polygon.material = Cesium.Color.ORANGERED.withAlpha(1);
+                else if (entity.properties.HB_LIMIT >= 77)
+                    entity.polygon.material = Cesium.Color.DARKORANGE.withAlpha(1);
+                else if (entity.properties.HB_LIMIT >= 63)
+                    entity.polygon.material = Cesium.Color.YELLOW.withAlpha(1);
+                else if (entity.properties.HB_LIMIT === 0 || null)
+                    entity.polygon.material = Cesium.Color.WHITE.withAlpha(1);
+                else
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+        }
+        if (this.CheckHide === true) {
+            if (entity.properties.HIDE._value !== undefined && entity.properties.HIDE._value === 1) {
+                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+        }
     };
     ViewerComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
