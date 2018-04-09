@@ -444,6 +444,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
         document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
         document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth = "250px";
+        document.getElementsByClassName('cesium-infoBox-title')[0]["style"].background = "#395d73";
+        document.getElementsByClassName('cesium-infoBox-iframe')[0]["style"].height = "700px";
         var frame = viewer.infoBox.frame;
         frame.addEventListener('load', function () {
             var cssLink = frame.contentDocument.createElement('link');
