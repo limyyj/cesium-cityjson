@@ -5,7 +5,7 @@
     right: 0;
     width: 40%;
     max-width: 480px;
-    background: rgba(38, 38, 38, 0.95);
+    background: #F1F1F1;
     color: #edffff;
     border: 1px solid #444;
     border-right: none;
@@ -29,7 +29,7 @@
     display: block;
     height: 20px;
     padding: 5px 30px 5px 25px;
-    background: rgba(84, 84, 84, 1.0);
+    background: #F1F1F1;
     border-top-left-radius: 7px;
     text-align: center;
     text-overflow: ellipsis;
@@ -66,7 +66,7 @@ button.cesium-infoBox-close {
     border: none;
     border-radius: 2px;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 12px;
     padding: 0 5px;
     margin: 0;
     color: #edffff;
