@@ -159,7 +159,7 @@ body {
   font-weight: normal;
   padding: 3px;
   vertical-align: middle;
-  text-align: center;
+  text-align: left;
 }
 
 .cesium-infoBox-defaultTable td {
@@ -189,11 +189,11 @@ body {
 }
 
 .cesium-infoBox-defaultTable-lighter tr:nth-child(odd) {
-  background-color: #F1F1F1;
+  background-color: black;
 }
 
 .cesium-infoBox-defaultTable-lighter tr:nth-child(even) {
-  background-color: #F1F1F1;
+  background-color: black;
 }
 
 .cesium-infoBox-loadingContainer {
