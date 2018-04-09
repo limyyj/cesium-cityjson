@@ -22,6 +22,7 @@ body {
 .cesium-infoBox-description table {
     color: #edffff;
     font-size: 13px;
+    background: #F1F1F1 !important;
 }
 
 .cesium-infoBox-defaultTable {
