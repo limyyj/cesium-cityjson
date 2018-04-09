@@ -137,14 +137,14 @@ body {
 }
 
 .cesium-infoBox-description table {
-  color: #edffff;
+  color: #395D73;
   background: #F1F1F1;
   font-size: 12px;
 }
 
 .cesium-infoBox-defaultTable {
   width: 100%;
-  color: #edffff;
+  color: #395D73;
 }
 
 .cesium-infoBox-defaultTable tr:nth-child(odd) {
