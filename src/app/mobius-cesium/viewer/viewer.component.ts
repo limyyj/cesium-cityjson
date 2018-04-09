@@ -27,6 +27,7 @@ export class ViewerComponent extends DataSubscriber {
   viewer:any;
   selectEntity:any=null;
   material:object;
+  propertyNames:Array<any>;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -91,28 +92,27 @@ export class ViewerComponent extends DataSubscriber {
     document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
     document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
-    document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth="270px";
-   /* document.getElementsByClassName("cesium-infoBox-iframe")[0]["style"].height="650px";*/
-	/*console.log(document.getElementsByTagName('link'));*/
-	/*var frame = viewer.infoBox.frame;
+    document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth="250px";
+    document.getElementsByClassName('cesium-infoBox-title')[0]["style"].background="#395d73";
+    document.getElementsByClassName('cesium-infoBox-iframe')[0]["style"].height="700px";
+	var frame = viewer.infoBox.frame;
     frame.addEventListener('load', function () {
 	    var cssLink = frame.contentDocument.createElement('link');
-	    cssLink.href = "../src/styles.css";
+	    cssLink.href = "viewer.component.css";
 	    cssLink.rel = 'stylesheet';
-	    cssLink.type = 'text/css';
+	    cssLink.type = 'text/html';
 	    frame.contentDocument.head.appendChild(cssLink);
-	}, false);*/
+	}, false);
 	this.viewer=viewer;
 	this.data=data;
     var promise = Cesium.GeoJsonDataSource.load(this.data);
+    var self= this;
     promise.then(function(dataSource) {
       viewer.dataSources.add(dataSource);
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];                               
 		entity.polygon.outline = false;
-
-
 		/*var description = '<table class="cesium-infoBox-defaultTable cesium-infoBox-defaultTable-lighter"><tbody>';
         description += '<tr><th>' + "Latitude" + '</th><td>'+'</td></tr>';
         description += '<tr><th>' + "Longitude" + '</th><td>'+'</td></tr>';
@@ -120,6 +120,7 @@ export class ViewerComponent extends DataSubscriber {
         entity.description = description;*/
 		
       }
+      self.propertyNames=entities[0].properties.propertyNames;
 
     });
     viewer.zoomTo(promise);

@@ -13,7 +13,7 @@
 				</tr>
 			</table>
 		</div>
-		<div style="width: 68%;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
+		<div style="width: calc(100% - 345px);display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
 		<div style="width: 80px;display:inline-block;height:80px;word-wrap:break-word;">
 			<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
 				<tr >
@@ -22,13 +22,14 @@
 				<tr>
           		<th><div>
 				<select class="cesium-button" (change)="onChangeColor($event.target.value)">
-					<option class="cesium-option" value="Status_Cat">Status_Cat</option>
+					<option class="cesium-option"  *ngFor="let propertyName of propertyNames" value={{propertyName}}>{{propertyName}}</option>
+					<!-- <option class="cesium-option" value="Status_Cat">Status_Cat</option>
 					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
 					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
 					<option class="cesium-option" value="AVAILABLE">AVAILABLE</option>
 					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
 					<option class="cesium-option" value="GPR">GPR</option>
-					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option>
+					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option> -->
 				</select>
 				</div></th>
 				</tr>
@@ -55,13 +56,14 @@
 				<tr>
 	          	<th><div >
 				<select class="cesium-button" (change)="onChangeHeight($event.target.value)">
-					<option class="cesium-option" value="Status_Cat">Status_Cat</option>
+					<option class="cesium-option"  *ngFor="let propertyName of propertyNames" value={{propertyName}}>{{propertyName}}</option>
+					<!-- <option class="cesium-option" value="Status_Cat">Status_Cat</option>
 					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
 					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
 					<option class="cesium-option" value="AVAILABLE">AVAILABLE</option>
 					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
 					<option class="cesium-option" value="GPR">GPR</option>
-					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option>
+					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option> -->
 				</select>
 				</div>
 				</th>

@@ -1,3 +1,7 @@
+body{
+  background: red;
+}
+
 
 #cesiumContainer{
  height: 100%;
@@ -7,13 +11,6 @@
  padding: 0px !important;
  font-size: 14px;
 }
-/*.cesium-viewer-bottom{
-  display: none !important;
-}
-.cesium-timeline-main{
-  display: none !important;
-
-}*/
 
 .cesium-button {
   display: inline-block;
@@ -49,28 +46,10 @@
   font-family:sans-serif !important;
   font-size: 14px !important;
 }
-/*.cesium-infoBox{
-  background-color: #395D73;
-}
 
-.cesium-infoBox-iframe{
-  font-family: sans-serif !important;
-}
 .cesium-infoBox-title{
-  font-family: sans-serif !important;
-  font-size: 14px !important;
-  background-color: #395D73;
-}
-.cesium-infoBox-defaultTable td{
-  font-family: sans-serif !important;
-  font-size: 10px !important;
-}
-.cesium-infoBox-description table{
-  color:white;
-}
-*/
-.cesium-infoBox-title{
-  height:14px
+  height:14px;
+  background: #395D73;
 }
 .cesium-viewer{
   font-size: 14px !important;
@@ -78,6 +57,11 @@
 body{
   font-size: 10px;
 }
+
+.cesium-infoBox-description{
+  background-color: red !important;
+}
+
 .cesium-infoBox-description table{
   background-color: #F1F1F1;
 }
@@ -120,6 +104,3 @@ body{
   text-shadow: 0px 0px 3px black;
 }
 
-/*.cesium-infoBox-description, body, html { color: #000000; background-color: #FFF; }
-.cesium-infoBox-description * { max-width:100%; word-wrap: break-word; word-break: break-word; }
-.cesium-infoBox-defaultTable-lighter tr, .cesium-infoBox-defaultTable-lighter td { max-width:100%; }*/

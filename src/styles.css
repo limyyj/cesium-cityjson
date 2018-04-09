@@ -11,6 +11,17 @@ html, body, #cesiumContainer {
 .cesium-infoBox {
    color: #F1F1F1;
 }
+
+iframe{
+
+    background: red !important;
+
+
+  .cesium-infoBox-description{
+    background: red !important;
+  }
+  
+}
 /*.cesium-infoBox-description{
   background-color: #395D73 !important;
 }
