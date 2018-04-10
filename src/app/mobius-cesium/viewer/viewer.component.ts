@@ -94,15 +94,16 @@ export class ViewerComponent extends DataSubscriber {
     document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
     document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth="250px";
     document.getElementsByClassName('cesium-infoBox-title')[0]["style"].background="#395d73";
-    document.getElementsByClassName('cesium-infoBox-iframe')[0]["style"].height="700px";
-	var frame = viewer.infoBox.frame;
+    /*document.getElementsByTagName('iframe')[0].style.maxHeight="300px";
+    console.log(document.getElementsByTagName('iframe')[0].style.maxHeight);*/
+	/*var frame = viewer.infoBox.frame;
     frame.addEventListener('load', function () {
 	    var cssLink = frame.contentDocument.createElement('link');
 	    cssLink.href = "viewer.component.css";
 	    cssLink.rel = 'stylesheet';
 	    cssLink.type = 'text/html';
 	    frame.contentDocument.head.appendChild(cssLink);
-	}, false);
+	}, false);*/
 	this.viewer=viewer;
 	this.data=data;
     var promise = Cesium.GeoJsonDataSource.load(this.data);
@@ -121,6 +122,13 @@ export class ViewerComponent extends DataSubscriber {
 		
       }
       self.propertyNames=entities[0].properties.propertyNames;
+      for(var i=0;i<self.propertyNames.length;i++){
+
+      	if(self.propertyNames[i].indexOf("ID")!==-1||self.propertyNames[i].indexOf("id")!==-1){
+      		self.propertyNames.splice(i,1);
+      		i=i-1;
+      	}
+      }
 
     });
     viewer.zoomTo(promise);
