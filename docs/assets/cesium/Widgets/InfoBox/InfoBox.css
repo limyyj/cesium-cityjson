@@ -95,5 +95,5 @@ button.cesium-infoBox-close:active {
   border: none;
   width: 100%;
   width: calc(100% - 2px);
-  height: 500px !important;
+  height: 560px !important;
 }
