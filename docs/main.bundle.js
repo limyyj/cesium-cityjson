@@ -27,7 +27,7 @@ module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  ma
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<!-- <body> -->\n<!-- <div id=\"cesiumContainer\"></div>\n<div> -->\n  <!-- <div id=\"cesiumContainer\">\n  \t<div id=\"loadfile\">\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n\t</div>\n  </div> -->\n<!-- </div> -->\n<!-- </body> -->\n\n<div>\n\t<div id=\"loadfile\">\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.4&nbsp;&nbsp;</div>\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n  </div>\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\n<!-- <body> -->\n<!-- <div id=\"cesiumContainer\"></div>\n<div> -->\n  <!-- <div id=\"cesiumContainer\">\n  \t<div id=\"loadfile\">\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n\t</div>\n  </div> -->\n<!-- </div> -->\n<!-- </body> -->\n\n<div style=\"height: 765px\">\n\t<div id=\"loadfile\">\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.4&nbsp;&nbsp;</div>\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\n  </div>\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\n</div>"
 
 /***/ }),
 
@@ -336,7 +336,7 @@ var MobiusCesium = /** @class */ (function () {
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: white;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #395D73;\r\n}\r\n\r\n\r\n.cesium-option,.Hide{\r\n  background-color: #395D73;\r\n  color: white;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\n\r\n.Hide{\r\n  margin: auto;\r\n  width:80px;\r\n  height: 20px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  font-family:sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n\r\n\r\n.cesium-infoBox-title{\r\n  height:14px;\r\n  background: #395D73;\r\n}\r\n\r\n\r\n.cesium-viewer{\r\n  font-size: 14px !important;\r\n}\r\n\r\n\r\nbody{\r\n  font-size: 10px;\r\n}\r\n\r\n\r\n.cesium-infoBox-description{\r\n  background-color: red !important;\r\n}\r\n\r\n\r\n.cesium-infoBox-description table{\r\n  background-color: #F1F1F1;\r\n}\r\n\r\n\r\n.cesium-infoBox-iframe{\r\n  height:650px;\r\n}\r\n\r\n\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 10px;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 60px;\r\n  display:inline-block;\r\n}\r\n\r\n\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 1px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n\r\n\r\n.colorkey{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n\r\n\r\n.table_text{\r\n  margin: auto;\r\n  width:40px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  text-shadow: 0px 0px 3px black;\r\n}\r\n\r\n"
+module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: white;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #395D73;\r\n}\r\n\r\n\r\n.cesium-option,.Hide{\r\n  background-color: #395D73;\r\n  color: white;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\n\r\n.Hide{\r\n  margin: auto;\r\n  width:80px;\r\n  height: 20px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  font-family:sans-serif !important;\r\n  font-size: 14px !important;\r\n}\r\n\r\n\r\n.cesium-infoBox-title{\r\n  height:14px;\r\n  background: #395D73;\r\n}\r\n\r\n\r\n.cesium-viewer{\r\n  font-size: 14px !important;\r\n}\r\n\r\n\r\nbody{\r\n  font-size: 10px;\r\n}\r\n\r\n\r\n.cesium-infoBox-description{\r\n  background-color: red !important;\r\n}\r\n\r\n\r\n.cesium-infoBox-description table{\r\n  background-color: #F1F1F1;\r\n}\r\n\r\n\r\n.cesium-infoBox-iframe{\r\n  max-height: 300px !important;\r\n  height:650px !important;\r\n}\r\n\r\n\r\n#ColorandHeight{\r\n  position: absolute;\r\n  bottom: 10px;\r\n  width: 100%;\r\n  z-index: 98;\r\n  height: 60px;\r\n  display:inline-block;\r\n}\r\n\r\n\r\n#toolbar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 1px;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n\r\n\r\n.colorkey{\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n\r\n\r\n.table_text{\r\n  margin: auto;\r\n  width:40px;\r\n  word-wrap:break-word;\r\n  font-weight: normal;\r\n  color:white;\r\n  text-shadow: 0px 0px 3px black;\r\n}\r\n\r\n"
 
 /***/ }),
 
@@ -445,15 +445,16 @@ var ViewerComponent = /** @class */ (function (_super) {
         document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
         document.getElementsByClassName('cesium-infoBox')[0]["style"].maxWidth = "250px";
         document.getElementsByClassName('cesium-infoBox-title')[0]["style"].background = "#395d73";
-        document.getElementsByClassName('cesium-infoBox-iframe')[0]["style"].height = "700px";
-        var frame = viewer.infoBox.frame;
+        /*document.getElementsByTagName('iframe')[0].style.maxHeight="300px";
+        console.log(document.getElementsByTagName('iframe')[0].style.maxHeight);*/
+        /*var frame = viewer.infoBox.frame;
         frame.addEventListener('load', function () {
             var cssLink = frame.contentDocument.createElement('link');
             cssLink.href = "viewer.component.css";
             cssLink.rel = 'stylesheet';
             cssLink.type = 'text/html';
             frame.contentDocument.head.appendChild(cssLink);
-        }, false);
+        }, false);*/
         this.viewer = viewer;
         this.data = data;
         var promise = Cesium.GeoJsonDataSource.load(this.data);
@@ -471,6 +472,12 @@ var ViewerComponent = /** @class */ (function (_super) {
                 entity.description = description;*/
             }
             self.propertyNames = entities[0].properties.propertyNames;
+            for (var i = 0; i < self.propertyNames.length; i++) {
+                if (self.propertyNames[i].indexOf("ID") !== -1 || self.propertyNames[i].indexOf("id") !== -1) {
+                    self.propertyNames.splice(i, 1);
+                    i = i - 1;
+                }
+            }
         });
         viewer.zoomTo(promise);
         this.cesiumviewer = viewer;
