@@ -27,6 +27,7 @@ export class ViewerComponent extends DataSubscriber {
   material:object;
   propertyNames:Array<any>;
   Name:string;*/
+  propertyNames:Array<any>;
   viewer:any;
   selectEntity:any=null;
   material:object;
