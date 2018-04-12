@@ -1,9 +1,11 @@
-<!-- <div id="cesiumContainer">
-  	<div id="loadfile">
-	    <div class="version" style="font-family:sans-serif;color:white;"> v0.0.1</div>
-	    <input type="file" id="files" name="files[]" style="font-family:sans-serif;color:white;" (change)="handleFileSelect($event)" />
-	</div>
-</div> -->
 <div id="mobiuscesium">
-	<cesium-viewer></cesium-viewer>
+	<split direction="horizontal" style="background-color: #8aa8c0;">
+		<split-area [size]="0.5" id="splitgroups" style="overflow-x:hidden;overflow-y: auto;">
+		    <app-toolwindow></app-toolwindow>
+		</split-area>
+		<split-area [size]="99.5" id="splitviewer">
+		    <cesium-viewer></cesium-viewer>
+		</split-area>
+	</split>
+	
 </div>

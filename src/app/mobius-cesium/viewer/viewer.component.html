@@ -1,5 +1,5 @@
 <div id="cesiumContainer" (click)="select()">
-	<div id="ColorandHeight">
+	<!-- <div id="ColorandHeight">
 		<div id="toolbar">
 		<div id="Hidediv" style="width: 110px;height:83px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;">
 			<table><tr>
@@ -23,19 +23,19 @@
           		<th><div>
 				<select class="cesium-button" (change)="onChangeColor($event.target.value)">
 					<option class="cesium-option"  *ngFor="let propertyName of propertyNames" value={{propertyName}}>{{propertyName}}</option>
-					<!-- <option class="cesium-option" value="Status_Cat">Status_Cat</option>
+					<option class="cesium-option" value="Status_Cat">Status_Cat</option>
 					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
 					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
 					<option class="cesium-option" value="AVAILABLE">AVAILABLE</option>
 					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
 					<option class="cesium-option" value="GPR">GPR</option>
 					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option> -->
-				</select>
+				<!-- </select>
 				</div></th>
 				</tr>
 			</table>
 		</div>
-		<div id="color" style="width:88%;display:inline-block;position: relative;height:80px;word-wrap:break-word;">
+		<div id="color" style="width:calc(100% - 90px);display:inline-block;position: relative;height:80px;word-wrap:break-word;">
 			<table style="width: 100%">
 				<tr >
           		<td *ngFor="let Color of Colors" style="width: 40px;"><div [ngStyle]="{ 'background-color': Color}" >&nbsp;&nbsp;&nbsp;</div></td>
@@ -56,7 +56,7 @@
 				<tr>
 	          	<th><div >
 				<select class="cesium-button" (change)="onChangeHeight($event.target.value)">
-					<option class="cesium-option"  *ngFor="let propertyName of propertyNames" value={{propertyName}}>{{propertyName}}</option>
+					<option class="cesium-option"  *ngFor="let propertyName of propertyNames" value={{propertyName}}>{{propertyName}}</option> -->
 					<!-- <option class="cesium-option" value="Status_Cat">Status_Cat</option>
 					<option class="cesium-option" value="DIST_EWL">DIST_EWL</option>
 					<option class="cesium-option" value="DIST_TRUNK">DIST_TRUNK</option>
@@ -64,7 +64,7 @@
 					<option class="cesium-option" value="AGG_POT">AGG_POT</option>
 					<option class="cesium-option" value="GPR">GPR</option>
 					<option class="cesium-option" value="HB_LIMIT">HB_LIMIT</option> -->
-				</select>
+		<!-- 		</select>
 				</div>
 				</th>
 				</tr>
@@ -81,5 +81,5 @@
 			</table>
 		</div>
 	</div>
-	</div>
+	</div> -->
 </div>
