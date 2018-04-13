@@ -10,14 +10,14 @@
 }
 
 /deep/.mat-tab-label, /deep/.mat-tab-label-active{
-  min-width: 55px!important;
+  min-width: 60px!important;
   padding: 3px!important;
   margin: 3px!important;
   color:#395d73;
 }
 /deep/.mat-tab-label{
   height: 30px !important;
-  width: 55px !important;
+  width: 60px !important;
 }
 /deep/.mat-tab-labels{
   margin-left: 5px;
