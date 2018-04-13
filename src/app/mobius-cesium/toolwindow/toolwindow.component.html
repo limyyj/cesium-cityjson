@@ -21,7 +21,7 @@
         <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
           <tr *ngFor="let Key of ColorKey">
             <th  style="width: 40px;"><div [ngStyle]="{ 'background-color': Key.color}" >&nbsp;&nbsp;&nbsp;</div></th>
-            <th style="font-size: 12px;font-weight: normal;color:#395d73;width: 100px;height: 14px"><span style="width: 100px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;" matTooltip="select">{{Key.text}}</span></th>
+            <th  style="font-size: 12px;font-weight: normal;color:#395d73;width: 100px;height: 14px"><div style="width: 100px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;"><span matTooltip="select" style="width: 100px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;" >{{Key.text}}</span></div></th>
           </tr>
         </table>
 	  </div>

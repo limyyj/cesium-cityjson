@@ -5,9 +5,10 @@ import { ViewerComponent} from "./viewer/viewer.component";
 import { DataService } from './data/data.service';
 import { ToolwindowComponent } from './toolwindow/toolwindow.component';
 import { AngularSplitModule } from 'angular-split';
-import {MatTabsModule} from '@angular/material/tabs';
 import { BrowserAnimationsModule ,NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
+import { MatTabsModule} from '@angular/material/tabs';
+import { MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
     imports: [CommonModule,
@@ -15,6 +16,7 @@ import {MatTooltipModule} from '@angular/material/tooltip';
               MatTabsModule,
               BrowserAnimationsModule,
               NoopAnimationsModule,
+              BrowserModule,
               MatTooltipModule
 			 ],
     exports: [ MobiuscesiumComponent ],
