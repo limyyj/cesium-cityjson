@@ -21,7 +21,7 @@
         <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
           <tr *ngFor="let Key of ColorKey">
             <th  style="width: 40px;"><div [ngStyle]="{ 'background-color': Key.color}" >&nbsp;&nbsp;&nbsp;</div></th>
-            <th  style="font-size: 12px;font-weight: normal;color:#395d73;width: 100px;height: 14px"><div style="width: 100px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;"><span matTooltip="select" style="width: 100px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;" >{{Key.text}}</span></div></th>
+            <th  style="font-size: 12px;font-weight: normal;color:#395d73;width: 130px;height: 14px"><div matTooltip={{Key.text}}  style="width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{Key.text}}</div></th>
           </tr>
         </table>
 	  </div>
@@ -58,8 +58,8 @@
           </tr>
         </table>
         <table>
-          <tr ><th style="width:80px;"><div style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;">Min</div></th>
-          <th style="width:80px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;">{{Min}}</div></th></tr>  
+          <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;">Min</div></th>
+          <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;">{{Min}}</div></th></tr>  
           </table>
           <table >
           <tr ><th style="width:80px;"><div style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;">Max</div></th>
