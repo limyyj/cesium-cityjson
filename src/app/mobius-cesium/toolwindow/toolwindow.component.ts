@@ -31,11 +31,24 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   Max:number;
   Min:number;
   SelectedEntity:object;
+  ScaleValue:number;
+  CheckScale:boolean;
+  HideNum:Array<number>;
+  RelaHide:Array<string>;
+  HeightHide:Array<string>;
+  textHide:Array<number>;
+  HideMax:Array<number>;
+  HideMin:Array<number>;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
     this.ColorStore=["LIGHTCORAL","RED","CORAL","CRIMSON","ROYALBLUE","AQUA","BROWN","CADETBLUE","CHARTREUSE",
             "DARKORCHID","DARKRED","DARKSEAGREEN","DARKTURQUOISE","DEEPPINK","FORESTGREEN","GOLDENROD","CRIMSON","CRIMSON"];
+    this.HeightHide=[undefined,undefined,undefined];
+    this.RelaHide=[undefined,undefined,undefined];
+    this.textHide=[undefined,undefined,undefined];
+    this.HideMax=[undefined,undefined,undefined];
+    this.HideMin=[undefined,undefined,undefined];
   }
  
   ngOnInit() {
@@ -44,6 +57,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     } else {
       this.CheckHide=this.dataService.CheckHide;
     }
+    
   	
 
   }
@@ -123,6 +137,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.Max = Math.max.apply(Math, texts);
     this.Min= Math.min.apply(Math, texts);
     if(this.CheckHide===true) this.Hide();
+    this.changescale(this.ScaleValue)
     this.dataService.getHeightValue(this.HeightValue);
   }
 
@@ -234,12 +249,50 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
   }
 
-  checkHide(){
-  if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
-  this.dataService.CheckHide=this.CheckHide;
+  changescale(ScaleValue){
+    this.ScaleValue=ScaleValue;
+    var scale:number=this.ScaleValue/this.Max;
+    if(this.CheckScale===true){
+      var promise=this.dataService.cesiumpromise;
+      var self= this;
+      promise.then(function(dataSource) {
+        var entities = dataSource.entities.values;
+        for (var i = 0; i < entities.length; i++) {
+          var entity=entities[i];
+          if(entity.properties[self.HeightValue]!==undefined){
+          if(entity.properties[self.HeightValue]._value!==" "){
+            entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+          }
+          }
+        }
+      });
+      if(this.CheckHide===true) this.Hide();
+    }else{
+      var promise=this.dataService.cesiumpromise;
+      var self= this;
+      promise.then(function(dataSource) {
+        var entities = dataSource.entities.values;
+        for (var i = 0; i < entities.length; i++) {
+          var entity=entities[i];
+          if(entity.properties[self.HeightValue]!==undefined){
+          if(entity.properties[self.HeightValue]._value!==" "){
+            entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+          }
+          }
+        }
+      });
+    }
+  }
+  checkscale(){
+    this.CheckScale=!this.CheckScale;
   }
 
-  Hide(){
+  checkHide(){
+    if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+    //this.dataService.CheckHide=this.CheckHide;
+  }
+
+  /*Hide(){
     var promise=this.dataService.cesiumpromise;
     var self=this;
     promise.then(function(dataSource) {
@@ -252,10 +305,175 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         }
       }
     });
-  }
+  }*/
+
   changeHide(){
     this.CheckHide=!this.CheckHide;
-    this.dataService.CheckHide=this.CheckHide;
+    //this.dataService.CheckHide=this.CheckHide;
+  }
+
+  addHide(){
+    /*var addHide=document.getElementById("addHide");
+    addHide.innerHTML=""*/
+    // const addHide=document.getElementsByClassName("addHide")[0];
+    // var clone = addHide.cloneNode(true);
+    // clone["style"].display=null;
+    // clone["id"]="addHide"+this.HideNum;
+    // var number=this.HideNum-1;
+    // var buttons = document.getElementById(String(number));
+    // buttons.onclick=this.deleteHide;
+    // console.log(buttons);
+    // addHide.parentNode.appendChild(clone);
+    var texts=this.Initial();
+    for(var i=0;i<4;i++){
+      var addHide=document.getElementById("addHide"+i);
+      if(addHide["style"].display==="none"){
+        addHide["style"].display=null;
+        if(this.HeightKey!==undefined){
+          if(this.HeightHide[i] === undefined) {
+            this.HeightHide[i] = this.HeightKey[0];
+          }
+          if(this.RelaHide[i] === undefined) {
+            this.RelaHide[i] = ">";
+          }
+          if(this.textHide[i] == undefined) {
+            this.textHide[i] = Math.min.apply(Math, texts);
+            this.HideMax[i]=Math.max.apply(Math, texts);
+            this.HideMin[i]=Math.min.apply(Math, texts);
+          }
+        }
+        break;
+      }
+    }
+  }
+  deleteHide(id){
+    var addHide=document.getElementById("addHide"+id);
+    addHide["style"].display="none";
+    this.HeightHide[id] = undefined;
+    this.RelaHide[id] = undefined;
+    this.textHide[id] = undefined;
+    this.HideMax[id] = undefined;
+    this.HideMin[id] = undefined;
+  }
+
+  Initial():Array<any>{
+    var texts=[];
+    var promise=this.dataService.cesiumpromise;
+    var self= this;
+    promise.then(function(dataSource) {
+      var entities = dataSource.entities.values;
+      for (var i = 0; i < entities.length; i++) {
+        var entity = entities[i];
+        if(entity.properties[self.HeightKey[0]]!==undefined){
+          if(entity.properties[self.HeightKey[0]]._value!==" "){
+            if(texts.length===0) {texts[0]=entity.properties[self.HeightKey[0]]._value;}
+            else{if(texts.indexOf(entity.properties[self.HeightKey[0]]._value)===-1) texts.push(entity.properties[self.HeightKey[0]]._value);}
+          }
+        }
+      }
+    });
+    return texts;
+  }
+
+  Changerelation(HeightHide,RelaHide,id){
+    this.HeightHide[id]=HeightHide;
+    this.RelaHide[id]=RelaHide;
+    var texts=[];
+    var promise=this.dataService.cesiumpromise;
+    for(var j=0;j<this.HeightKey.length;j++){
+      if(this.HeightHide[id]===this.HeightKey[j]){
+        var self= this;
+        promise.then(function(dataSource) {
+        var entities = dataSource.entities.values;
+        for (var i = 0; i < entities.length; i++) {
+          var entity = entities[i];
+          if(entity.properties[self.HeightHide[id]]!==undefined){
+          if(entity.properties[self.HeightHide[id]]._value!==" "){
+            if(texts.length===0) {texts[0]=entity.properties[self.HeightHide[id]]._value;}
+            else{if(texts.indexOf(entity.properties[self.HeightHide[id]]._value)===-1) texts.push(entity.properties[self.HeightHide[id]]._value);}
+            }
+          }
+        }
+      });
+      }
+    }
+    this.HideMax[id] = Math.max.apply(Math, texts);
+    this.HideMin[id]= Math.min.apply(Math, texts);
+    this.textHide[id]=this.HideMin[id];
+    this.CheckHide=false;
+    this.onChangeHeight(this.HeightValue);
+    this.onChangeColor(this.ColorValue);
+  }
+  Changetext(event){
+    this.textHide[0]=event;
+    this.CheckHide=false;
+    this.onChangeHeight(this.HeightValue);
+    this.onChangeColor(this.ColorValue);
+    //if(this.CheckHide===true)  {this.Hide();}
+  }
+  Changetext1(event){
+    this.textHide[1]=event;
+    this.CheckHide=false;
+    this.onChangeHeight(this.HeightValue);
+    this.onChangeColor(this.ColorValue);
+  }
+  Changetext2(event){
+    this.textHide[2]=event;
+    this.CheckHide=false;
+    this.onChangeHeight(this.HeightValue);
+    this.onChangeColor(this.ColorValue);
+  }
+
+  Hide(){
+    var promise=this.dataService.cesiumpromise;
+    for(var j=0;j<4;j++){
+      if(this.HeightHide[j]!==undefined){
+        var propertyname=this.HeightHide[j];
+        var relation=this.RelaHide[j];
+        var text=this.textHide[j];
+        var self=this;
+        if(relation===">"){
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity = entities[i];
+              if(entity.properties[propertyname]._value!==undefined){
+                if(entity.properties[propertyname]._value<=text){
+                  entity.polygon.extrudedHeight = 0;
+                  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+              }
+            }
+          });
+        }else if(relation==="<"){
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity = entities[i];
+              if(entity.properties[propertyname]._value!==undefined){
+                if(entity.properties[propertyname]._value>=text){
+                  entity.polygon.extrudedHeight = 0;
+                  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+              }
+            }
+          });
+        }else{
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity = entities[i];
+              if(entity.properties[propertyname]._value!==undefined){
+                if(entity.properties[propertyname]._value===text){
+                  entity.polygon.extrudedHeight = 0;
+                  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+              }
+            }
+          });
+        }
+      }
+    }
   }
 
 }

@@ -14,10 +14,12 @@
   padding: 3px!important;
   margin: 3px!important;
   color:#395d73;
+  background-color: transparent !important;
 }
 /deep/.mat-tab-label{
   height: 30px !important;
   width: 60px !important;
+  background-color: transparent !important;
 }
 /deep/.mat-tab-labels{
   margin-left: 5px;
@@ -44,6 +46,7 @@
   color:#395d73;
   border: 0;
   height: 20px;
+  background-color: transparent !important;
 }
 /*/deep/.mat-tab-label .mat-ripple .ng-star-inserted .mat-tab-label-active{
   width: 50px !important;
@@ -52,12 +55,36 @@
   background-color:rgb(138, 168, 192) !important;
 }
 
+/deep/.mat-accent .mat-slider-thumb {
+    background-color: #395d73 !important;
+    cursor: -webkit-grab;
+} 
+
+/deep/.mat-slider-track-fill{
+  background-color: #395d73 !important;
+}
+
+/deep/.mat-slider-thumb-label-text {
+    color: #395d73 !important;
+    font-size: 12px !important;
+}
+/deep/.mat-slider-thumb-label{
+    height: 15px !important;
+    width: 15px !important;
+    top: -20px !important;
+    right: -7px !important;
+    background-color: white !important;
+    border: 1px solid #395d73 !important;
+}
+.mat-slider{
+    width: 50px !important;
+}
 
 .cesium-button {
   display: inline-block;
   position: relative;
   border: 1px solid #8AA8C0;
-  color: white;
+  color: #395D73;
   fill: #395D73;
   border-radius: 0px;
   padding: 3px 0px;
@@ -70,10 +97,10 @@
   user-select: none;
   width: 80px;
   font-family:sans-serif !important;
-  background: #395D73;
+  background: #F1F1F1;
 }
 .cesium-option{
-  background-color: #395D73;
-  color: white;
+  background-color: #F1F1F1;
+  color: #395D73;
   border: 1px solid #8AA8C0;
 }

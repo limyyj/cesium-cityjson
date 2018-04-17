@@ -1,3 +1,17 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css");
+
+@font-face{
+  font-family: "FontAwesome";
+}
+
+.font-awesome-hand{
+  font-family: FontAwesome;
+}
+
+.font-awesome-hand::after{
+  font-family: FontAwesome;
+}
+
 #mobiuscesium{
     height: 101%; 
     font-family: sans-serif !important;

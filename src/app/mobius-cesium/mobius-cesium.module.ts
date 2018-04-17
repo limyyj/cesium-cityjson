@@ -9,6 +9,7 @@ import { BrowserAnimationsModule ,NoopAnimationsModule} from '@angular/platform-
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { MatTabsModule} from '@angular/material/tabs';
 import { MatTooltipModule} from '@angular/material/tooltip';
+import {MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
     imports: [CommonModule,
@@ -17,7 +18,8 @@ import { MatTooltipModule} from '@angular/material/tooltip';
               BrowserAnimationsModule,
               NoopAnimationsModule,
               BrowserModule,
-              MatTooltipModule
+              MatTooltipModule,
+              MatSliderModule
 			 ],
     exports: [ MobiuscesiumComponent ],
     declarations: [MobiuscesiumComponent,
