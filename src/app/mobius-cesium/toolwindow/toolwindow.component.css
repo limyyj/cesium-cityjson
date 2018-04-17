@@ -48,9 +48,7 @@
   height: 20px;
   background-color: transparent !important;
 }
-/*/deep/.mat-tab-label .mat-ripple .ng-star-inserted .mat-tab-label-active{
-  width: 50px !important;
-}*/
+
 /deep/split-gutter{
   background-color:rgb(138, 168, 192) !important;
 }
@@ -103,4 +101,14 @@
   background-color: #F1F1F1;
   color: #395D73;
   border: 1px solid #8AA8C0;
+}
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  padding: 0; 
+  color:#395d73;
+  width: 100%;
+  background-color: #395d73;
 }
