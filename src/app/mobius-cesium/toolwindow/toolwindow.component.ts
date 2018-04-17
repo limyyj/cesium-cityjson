@@ -400,28 +400,36 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.HideMax[id] = Math.max.apply(Math, texts);
     this.HideMin[id]= Math.min.apply(Math, texts);
     this.textHide[id]=this.HideMin[id];
-    this.CheckHide=false;
-    this.onChangeHeight(this.HeightValue);
-    this.onChangeColor(this.ColorValue);
+    if(this.CheckHide===true){
+      this.CheckHide=false;
+      this.onChangeHeight(this.HeightValue);
+      this.onChangeColor(this.ColorValue);
+    }
   }
   Changetext(event){
     this.textHide[0]=event;
-    this.CheckHide=false;
-    this.onChangeHeight(this.HeightValue);
-    this.onChangeColor(this.ColorValue);
+    if(this.CheckHide===true){
+      this.CheckHide=false;
+      this.onChangeHeight(this.HeightValue);
+      this.onChangeColor(this.ColorValue);
+    }
     //if(this.CheckHide===true)  {this.Hide();}
   }
   Changetext1(event){
     this.textHide[1]=event;
-    this.CheckHide=false;
-    this.onChangeHeight(this.HeightValue);
-    this.onChangeColor(this.ColorValue);
+    if(this.CheckHide===true){
+      this.CheckHide=false;
+      this.onChangeHeight(this.HeightValue);
+      this.onChangeColor(this.ColorValue);
+    }
   }
   Changetext2(event){
     this.textHide[2]=event;
-    this.CheckHide=false;
-    this.onChangeHeight(this.HeightValue);
-    this.onChangeColor(this.ColorValue);
+    if(this.CheckHide===true){
+      this.CheckHide=false;
+      this.onChangeHeight(this.HeightValue);
+      this.onChangeColor(this.ColorValue);
+    }
   }
 
   Hide(){
