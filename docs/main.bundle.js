@@ -27,17 +27,15 @@ module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  ma
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 765px\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.6&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 765px\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.7&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\r\n</div>"
 
 /***/ }),
 
 /***/ "./src/app/app.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mobius_cesium_data_data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -47,8 +45,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 var AppComponent = /** @class */ (function () {
     function AppComponent(dataService) {
         this.dataService = dataService;
@@ -69,73 +68,70 @@ var AppComponent = /** @class */ (function () {
         fr.readAsText(files[0]);
     };
     AppComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+        core_1.Component({
             selector: 'app-root',
             template: __webpack_require__("./src/app/app.component.html"),
             styles: [__webpack_require__("./src/app/app.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__mobius_cesium_data_data_service__["a" /* DataService */]])
+        __metadata("design:paramtypes", [data_service_1.DataService])
     ], AppComponent);
     return AppComponent;
 }());
-
+exports.AppComponent = AppComponent;
 
 
 /***/ }),
 
 /***/ "./src/app/app.module.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_component__ = __webpack_require__("./src/app/app.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mobius_cesium_mobius_cesium_module__ = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.module.ts");
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var platform_browser_1 = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var app_component_1 = __webpack_require__("./src/app/app.component.ts");
+var mobius_cesium_module_1 = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.module.ts");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["H" /* NgModule */])({
+        core_1.NgModule({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]
+                app_component_1.AppComponent
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_3__mobius_cesium_mobius_cesium_module__["a" /* MobiusCesium */]
+                platform_browser_1.BrowserModule,
+                mobius_cesium_module_1.MobiusCesium
             ],
             providers: [],
-            bootstrap: [__WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]]
+            bootstrap: [app_component_1.AppComponent]
         })
     ], AppModule);
     return AppModule;
 }());
-
+exports.AppModule = AppModule;
 
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/data/DataSubscriber.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataSubscriber; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 
+Object.defineProperty(exports, "__esModule", { value: true });
+var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 var DataSubscriber = /** @class */ (function () {
     function DataSubscriber(injector) {
         var _this = this;
-        this.dataService = injector.get(__WEBPACK_IMPORTED_MODULE_0__data_service__["a" /* DataService */]);
+        this.dataService = injector.get(data_service_1.DataService);
         this._subscription = this.dataService.getMessage().subscribe(function (message) {
             _this._message = message;
             _this.notify(message.text);
@@ -146,18 +142,16 @@ var DataSubscriber = /** @class */ (function () {
     };
     return DataSubscriber;
 }());
-
+exports.DataSubscriber = DataSubscriber;
 
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/data/data.service.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -167,11 +161,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var Subject_1 = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
 var DataService = /** @class */ (function () {
     function DataService() {
-        this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.subject = new Subject_1.Subject();
     }
     DataService.prototype.sendMessage = function (message) {
         this.subject.next({ text: message });
@@ -199,12 +194,12 @@ var DataService = /** @class */ (function () {
         this.HeightValue = HeightValue;
     };
     DataService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Injectable */])(),
+        core_1.Injectable(),
         __metadata("design:paramtypes", [])
     ], DataService);
     return DataService;
 }());
-
+exports.DataService = DataService;
 
 
 /***/ }),
@@ -224,12 +219,10 @@ module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awes
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/mobius-cesium.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MobiuscesiumComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -239,8 +232,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 var MobiuscesiumComponent = /** @class */ (function () {
     function MobiuscesiumComponent(dataService) {
         this.dataService = dataService;
@@ -264,59 +258,48 @@ var MobiuscesiumComponent = /** @class */ (function () {
         }
     };
     __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Input */])(),
+        core_1.Input(),
         __metadata("design:type", Object)
     ], MobiuscesiumComponent.prototype, "data", void 0);
     MobiuscesiumComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+        core_1.Component({
             selector: 'mobius-cesium',
             template: __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.html"),
             styles: [__webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.scss")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__data_data_service__["a" /* DataService */]])
+        __metadata("design:paramtypes", [data_service_1.DataService])
     ], MobiuscesiumComponent);
     return MobiuscesiumComponent;
 }());
-
+exports.MobiuscesiumComponent = MobiuscesiumComponent;
 
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/mobius-cesium.module.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MobiusCesium; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("./node_modules/@angular/common/esm5/common.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__ = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__ = __webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__data_data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolwindow_toolwindow_component__ = __webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular_split__ = __webpack_require__("./node_modules/angular-split/esm5/angular-split.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__ = __webpack_require__("./node_modules/@angular/material/esm5/tabs.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__ = __webpack_require__("./node_modules/@angular/material/esm5/tooltip.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__ = __webpack_require__("./node_modules/@angular/material/esm5/slider.es5.js");
+
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-
-
-
-
-
-
-
-
-
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var common_1 = __webpack_require__("./node_modules/@angular/common/esm5/common.js");
+var mobius_cesium_component_1 = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.ts");
+var viewer_component_1 = __webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.ts");
+var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
+var toolwindow_component_1 = __webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.ts");
+var angular_split_1 = __webpack_require__("./node_modules/angular-split/esm5/angular-split.js");
+var animations_1 = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+var platform_browser_1 = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
+var tabs_1 = __webpack_require__("./node_modules/@angular/material/esm5/tabs.es5.js");
+var tooltip_1 = __webpack_require__("./node_modules/@angular/material/esm5/tooltip.es5.js");
+var slider_1 = __webpack_require__("./node_modules/@angular/material/esm5/slider.es5.js");
 var MobiusCesium = /** @class */ (function () {
     function MobiusCesium() {
     }
@@ -325,32 +308,32 @@ var MobiusCesium = /** @class */ (function () {
         return {
             ngModule: MobiusCesium_1,
             providers: [
-                __WEBPACK_IMPORTED_MODULE_4__data_data_service__["a" /* DataService */]
+                data_service_1.DataService
             ]
         };
     };
     MobiusCesium = MobiusCesium_1 = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["H" /* NgModule */])({
-            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["a" /* CommonModule */],
-                __WEBPACK_IMPORTED_MODULE_6_angular_split__["a" /* AngularSplitModule */],
-                __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__["a" /* MatTabsModule */],
-                __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["b" /* NoopAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__["a" /* MatTooltipModule */],
-                __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__["a" /* MatSliderModule */]
+        core_1.NgModule({
+            imports: [common_1.CommonModule,
+                angular_split_1.AngularSplitModule,
+                tabs_1.MatTabsModule,
+                animations_1.BrowserAnimationsModule,
+                animations_1.NoopAnimationsModule,
+                platform_browser_1.BrowserModule,
+                tooltip_1.MatTooltipModule,
+                slider_1.MatSliderModule
             ],
-            exports: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */]],
-            declarations: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */],
-                __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__["a" /* ViewerComponent */],
-                __WEBPACK_IMPORTED_MODULE_5__toolwindow_toolwindow_component__["a" /* ToolwindowComponent */]],
-            providers: [__WEBPACK_IMPORTED_MODULE_4__data_data_service__["a" /* DataService */]],
+            exports: [mobius_cesium_component_1.MobiuscesiumComponent],
+            declarations: [mobius_cesium_component_1.MobiuscesiumComponent,
+                viewer_component_1.ViewerComponent,
+                toolwindow_component_1.ToolwindowComponent],
+            providers: [data_service_1.DataService],
         })
     ], MobiusCesium);
     return MobiusCesium;
     var MobiusCesium_1;
 }());
-
+exports.MobiusCesium = MobiusCesium;
 
 
 /***/ }),
@@ -358,24 +341,22 @@ var MobiusCesium = /** @class */ (function () {
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "#toolwindow{\r\n  position: relative;\r\n  background-color: #F1F1F1 !important;\r\n  height: 100%;\r\n  width: 700px;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#395d73;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-labels{\r\n  margin-left: 5px;\r\n}\r\n\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 50px !important;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  color: #395D73;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ccc;\r\n  padding: 0; \r\n  color:#395d73;\r\n  width: 100%;\r\n  background-color: #395d73;\r\n}"
+module.exports = "#toolwindow{\r\n  position: relative;\r\n  background-color: #F1F1F1 !important;\r\n  height: 100%;\r\n  width: 700px;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#395d73;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-labels{\r\n  margin-left: 5px;\r\n}\r\n\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  color: #395D73;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ccc;\r\n  padding: 0; \r\n  color:#395d73;\r\n  width: 100%;\r\n  background-color: #395d73;\r\n}"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"Attributes\">\r\n  \t  <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">ID</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n  \t  <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n  \t  <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><div style=\"width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Min}}</div></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Max}}</div></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\"  (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Hide\" style=\"color:#395d73;\" (click)=\"addHide()\"></div></th>\r\n        </tr>\r\n      </table>\r\n      <div id=\"addHide\">\r\n       <div id=\"addHide0\"  style=\"display: none\">\r\n        <table>\r\n          <tr ><th style=\"width:30px;height: 25px;margin-top: 5px\"><div class=\"Hide\" style=\"width: 30px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Hide</div></th>\r\n          <th style=\"width:10px;height: 25px;margin-top: 5px\"><input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckHide\" (click)=\"changeHide();checkHide()\"></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:20px;height: 25px;margin-top: 5px\"><div>\r\n            <select class=\"cesium-button\" id=\"0\" (change)=\"Changerelation($event.target.value,RelaHide[0],$event.target.id)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select></div></th>\r\n          <th style=\"width:40px;height: 25px;margin-top: 5px\"><div style=\"width:40px;height: 25px;\">\r\n            <select class=\"cesium-button\" id=\"0\" (change)=\"Changerelation(HeightHide[0],$event.target.value,$event.target.id)\" style=\"width:40px;height: 25px;\">\r\n               <option class=\"cesium-option\" value=\">\">></option>\r\n               <option class=\"cesium-option\" value=\"<\"><</option>\r\n               <option class=\"cesium-option\" value=\"=\">=</option>\r\n            </select></div></th>\r\n          <th style=\"width:8px;height: 25px;margin-top: 5px\"><button id=\"0\" (click)=\"deleteHide($event.target.id)\"><i class=\"fa fa-trash\" id=\"0\" style=\"color:#395d73; \"></i></button></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th style=\"width:50px;height: 25px;margin-top: 5px\"><input type=\"text\"  id=\"0\" value={{textHide[0]}} (change)=\"Changetext($event.target.value)\" style=\"width:50px\"></th>\r\n          <th style=\"width:10px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;\">{{HideMin[0]}}</div></th>\r\n          <th style=\"width:10px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;\"><mat-slider class=\"slider\" name=\"range\" [id]=\"0\" min={{HideMin[0]}} max={{HideMax[0]}} step=0.01 thumbLabel=true value={{textHide[0]}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2))\" >\r\n          </mat-slider></div></th>\r\n          <th><div style=\"font-weight: normal;display: inline-block;color:#395d73;\">{{HideMax[0]}}</div></th></tr>\r\n        </table><hr>\r\n        </div>\r\n        <div id=\"addHide1\"  style=\"display: none\">\r\n        <table>\r\n          <tr ><th style=\"width:20px;height: 25px;margin-top: 5px\"><div>\r\n            <select class=\"cesium-button\" id=\"1\" (change)=\"Changerelation($event.target.value,RelaHide[1],$event.target.id)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select></div></th>\r\n          <th style=\"width:40px;height: 25px;margin-top: 5px\"><div style=\"width:40px;height: 25px;\">\r\n            <select class=\"cesium-button\" id=\"1\" (change)=\"Changerelation(HeightHide[1],$event.target.value,$event.target.id)\" style=\"width:40px;height: 25px;\">\r\n               <option class=\"cesium-option\" value=\">\">></option>\r\n               <option class=\"cesium-option\" value=\"<\"><</option>\r\n               <option class=\"cesium-option\" value=\"=\">=</option>\r\n            </select></div></th>\r\n          <th style=\"width:8px;height: 25px;margin-top: 5px\"><button id=\"1\" (click)=\"deleteHide($event.target.id)\"><i class=\"fa fa-trash\" id=\"1\" style=\"color:#395d73;\"></i></button></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th style=\"width:50px;height: 25px;margin-top: 5px\"><input type=\"text\"  value={{textHide[1]}} (change)=\"Changetext1($event.target.value)\" style=\"width:50px\"></th>\r\n          <th style=\"width:10px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;\">{{HideMin[1]}}</div>\r\n          </th>\r\n          <th style=\"width:10px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;\"><mat-slider class=\"slider\" name=\"range\" id=\"1\" min={{HideMin[1]}} max={{HideMax[1]}} step=0.01 thumbLabel=true value={{textHide[1]}} #textscale1 (change)=\"Changetext1(textscale1.value.toPrecision(2))\" >\r\n          </mat-slider></div></th>\r\n          <th><div style=\"font-weight: normal;display: inline-block;color:#395d73;\">{{HideMax[1]}}</div></th></tr>\r\n        </table><hr>\r\n        </div>\r\n        <div id=\"addHide2\"  style=\"display: none\">\r\n        <table>\r\n          <tr ><th style=\"width:20px;height: 25px;margin-top: 5px\"><div>\r\n            <select class=\"cesium-button\" id=\"2\"  (change)=\"Changerelation($event.target.value,RelaHide[2],$event.target.id)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select></div></th>\r\n          <th style=\"width:40px;height: 25px;margin-top: 5px\"><div style=\"width:40px;height: 25px;\">\r\n            <select class=\"cesium-button\" id=\"2\" (change)=\"Changerelation(HeightHide[2],$event.target.value,$event.target.id)\" style=\"width:40px;height: 25px;\">\r\n               <option class=\"cesium-option\" value=\">\">></option>\r\n               <option class=\"cesium-option\" value=\"<\"><</option>\r\n               <option class=\"cesium-option\" value=\"=\">=</option>\r\n            </select></div></th>\r\n          <th style=\"width:8px;height: 25px;margin-top: 5px\"><button id=\"2\" (click)=\"deleteHide($event.target.id)\"><i class=\"fa fa-trash\" id=\"2\" style=\"color:#395d73;\"></i></button></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th style=\"width:50px;height: 25px;margin-top: 5px\"><input type=\"text\"  value={{textHide[2]}} (change)=\"Changetext2($event.target.value)\" style=\"width:50px\"></th>\r\n          <th style=\"width:10px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;\">{{HideMin[2]}}</div>\r\n          </th>\r\n          <th style=\"width:10px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;\"><mat-slider class=\"slider\" name=\"range\" id=\"2\" min={{HideMin[2]}} max={{HideMax[2]}} step=0.01 thumbLabel=true value={{textHide[2]}} #textscale2 (change)=\"Changetext2(textscale2.value.toPrecision(2))\" >\r\n          </mat-slider></div></th>\r\n          <th><div style=\"font-weight: normal;display: inline-block;color:#395d73;\">{{HideMax[2]}}</div></th></tr>\r\n        </table><hr>\r\n        </div>\r\n    </div>\r\n\t    </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"Attributes\">\r\n  \t  <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">ID</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n  \t  <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n  \t  <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><div style=\"width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Min}}</div></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Max}}</div></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Hide\" style=\"color:#395d73;\" (click)=\"addHide()\"></div></th>\r\n        </tr>\r\n      </table>\r\n      <div id=\"addHide\">\r\n       <div id=\"addHide0\"  style=\"display: none\">\r\n        <table>\r\n          <tr ><th style=\"width:20px;height: 25px;margin-top: 5px\"><div>\r\n            <select class=\"cesium-button\" id=\"0\" (change)=\"Changerelation($event.target.value,RelaHide[0],$event.target.id)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select></div></th>\r\n          <th style=\"width:40px;height: 25px;margin-top: 5px\"><div style=\"width:40px;height: 25px;\">\r\n            <select class=\"cesium-button\" id=\"0\" (change)=\"Changerelation(HeightHide[0],$event.target.value,$event.target.id)\" style=\"width:40px;height: 25px;\">\r\n               <option class=\"cesium-option\" value=0>></option>\r\n               <option class=\"cesium-option\" value=1><</option>\r\n               <option class=\"cesium-option\" value=2>=</option>\r\n            </select></div></th>\r\n            <th style=\"width:70px;height: 20px;margin-top: 5px\"><input type=\"text\"  id=\"0\" value={{textHide[0]}} (change)=\"Changetext($event.target.value)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th style=\"width:30px;height: 25px;margin-top: 5px\" id=\"0\"><button id=\"0\" style=\"width:30px;height: 25px;\" (click)=\"deleteHide(0)\"><span><i class=\"fa fa-trash\" style=\"color:#395d73;\"></i></span></button></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th style=\"width:30px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{HideMin[0]}}</div></th>\r\n          <th style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" [id]=\"0\" min={{HideMin[0]}} max={{HideMax[0]}} step=0.01 thumbLabel=true value={{textHide[0]}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2))\" >\r\n          </mat-slider></div></th>\r\n          <th><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{HideMax[0]}}</div></th></tr>\r\n        </table><hr>\r\n        </div>\r\n        <div id=\"addHide1\"  style=\"display: none\">\r\n        <table>\r\n          <tr ><th style=\"width:20px;height: 25px;margin-top: 5px\"><div>\r\n            <select class=\"cesium-button\" id=\"1\" (change)=\"Changerelation($event.target.value,RelaHide[1],$event.target.id)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select></div></th>\r\n          <th style=\"width:40px;height: 25px;margin-top: 5px\"><div style=\"width:40px;height: 25px;\">\r\n            <select class=\"cesium-button\" id=\"1\" (change)=\"Changerelation(HeightHide[1],$event.target.value,$event.target.id)\" style=\"width:40px;height: 25px;\">\r\n               <option class=\"cesium-option\" value=0>></option>\r\n               <option class=\"cesium-option\" value=1><</option>\r\n               <option class=\"cesium-option\" value=2>=</option>\r\n            </select></div></th>\r\n            <th style=\"width:70px;height: 20px;margin-top: 5px\"><input type=\"text\"  value={{textHide[1]}} (change)=\"Changetext1($event.target.value)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th style=\"width:30px;height: 25px;margin-top: 5px\"><button style=\"width:30px;height: 25px\" id=\"1\" (click)=\"deleteHide(1)\"><span><i class=\"fa fa-trash\" id=\"1\" style=\"color:#395d73;\"></i></span></button></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th style=\"width:30px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{HideMin[1]}}</div>\r\n          </th>\r\n          <th style=\"width:150px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;\"><mat-slider class=\"slider\" name=\"range\" id=\"1\" min={{HideMin[1]}} max={{HideMax[1]}} step=0.01 thumbLabel=true value={{textHide[1]}} #textscale1 (change)=\"Changetext1(textscale1.value.toPrecision(2))\" >\r\n          </mat-slider></div></th>\r\n          <th><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{HideMax[1]}}</div></th></tr>\r\n        </table><hr>\r\n        </div>\r\n        <div id=\"addHide2\"  style=\"display: none\">\r\n        <table>\r\n          <tr ><th style=\"width:20px;height: 25px;margin-top: 5px\"><div>\r\n            <select class=\"cesium-button\" id=\"2\"  (change)=\"Changerelation($event.target.value,RelaHide[2],$event.target.id)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select></div></th>\r\n          <th style=\"width:40px;height: 25px;margin-top: 5px\"><div style=\"width:40px;height: 25px;\">\r\n            <select class=\"cesium-button\" id=\"2\" (change)=\"Changerelation(HeightHide[2],$event.target.value,$event.target.id)\" style=\"width:40px;height: 25px;\">\r\n               <option class=\"cesium-option\" value=0>></option>\r\n               <option class=\"cesium-option\" value=1><</option>\r\n               <option class=\"cesium-option\" value=2>=</option>\r\n            </select></div></th>\r\n            <th style=\"width:70px;height: 20px;margin-top: 5px\"><input type=\"text\"  value={{textHide[2]}} (change)=\"Changetext2($event.target.value)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th style=\"width:30px;height: 25px;margin-top: 5px\"><button style=\"width:30px;height: 25px\" id=\"2\" (click)=\"deleteHide(2)\"><span><i class=\"fa fa-trash\" id=\"2\" style=\"color:#395d73;\"></i></span></button></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th style=\"width:30px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{HideMin[2]}}</div>\r\n          </th>\r\n          <th style=\"width:150px;height: 25px;margin-top: 5px\"><div style=\"font-weight: normal;display: inline-block;\"><mat-slider class=\"slider\" name=\"range\" id=\"2\" min={{HideMin[2]}} max={{HideMax[2]}} step=0.01 thumbLabel=true value={{textHide[2]}} #textscale2 (change)=\"Changetext2(textscale2.value.toPrecision(2))\" >\r\n          </mat-slider></div></th>\r\n          <th><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{HideMax[2]}}</div></th></tr>\r\n        </table><hr>\r\n        </div>\r\n    </div>\r\n\t    </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ToolwindowComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -395,14 +376,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var DataSubscriber_1 = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
+var chroma = __webpack_require__("./node_modules/chroma-js/chroma.js");
 var ToolwindowComponent = /** @class */ (function (_super) {
     __extends(ToolwindowComponent, _super);
     function ToolwindowComponent(injector, myElement) {
         var _this = _super.call(this, injector) || this;
-        _this.ColorStore = ["LIGHTCORAL", "RED", "CORAL", "CRIMSON", "ROYALBLUE", "AQUA", "BROWN", "CADETBLUE", "CHARTREUSE",
-            "DARKORCHID", "DARKRED", "DARKSEAGREEN", "DARKTURQUOISE", "DEEPPINK", "FORESTGREEN", "GOLDENROD", "CRIMSON", "CRIMSON"];
+        _this.ScaleValue = 1000;
+        _this.CheckScale = true;
+        /*this.ColorStore= ["LIGHTCORAL","RED","CORAL","CRIMSON","ROYALBLUE","AQUA","BROWN","CADETBLUE","CHARTREUSE",
+                "DARKORCHID","DARKRED","DARKSEAGREEN","DARKTURQUOISE","DEEPPINK","FORESTGREEN","GOLDENROD","CRIMSON","CRIMSON"];*/
+        _this.ChromaScale = chroma.scale("SPECTRAL");
+        //this.ColorFeature=this.ChromaScale(0.2);
+        //console.log(this.ColorFeature);
         _this.HeightHide = [undefined, undefined, undefined];
         _this.RelaHide = [undefined, undefined, undefined];
         _this.textHide = [undefined, undefined, undefined];
@@ -533,7 +521,9 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             for (var j = 0; j < Colortext.length; j++) {
                 var ColorKey = [];
                 ColorKey.text = Colortext[j];
-                ColorKey.color = this.ColorStore[j];
+                //ColorKey.color=this.ColorStore[j];
+                var Color = this.ChromaScale((j / Colortext.length).toFixed(2));
+                ColorKey.color = Color;
                 this.ColorKey.push(ColorKey);
             }
             this.dataService.Colortexts = this.ColorKey;
@@ -542,39 +532,47 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.colorByNum();
         }
         else {
+            this.texts = texts;
             for (var j = 0; j < texts.length; j++) {
                 var ColorKey = [];
                 ColorKey.text = texts[j];
-                ColorKey.color = this.ColorStore[j];
+                //ColorKey.color=this.ColorStore[j];
+                var Color = this.ChromaScale((j / texts.length).toFixed(2));
+                ColorKey.color = Color;
                 this.ColorKey.push(ColorKey);
             }
             this.dataService.Colortexts = this.ColorKey;
             this.colorByCat();
         }
-        if (this.CheckHide === true)
-            this.Hide();
+        this.Hide();
         this.dataService.getColorValue(this.ColorValue);
     };
     ToolwindowComponent.prototype.colorByNum = function () {
         var max = Math.max.apply(Math, this.texts);
         var min = Math.min.apply(Math, this.texts);
         var promise = this.dataService.cesiumpromise;
+        var ChromaScale = this.ChromaScale;
         var self = this;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
+            var a = 0, b = 0, c = 0, d = 0, e = 0;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
                 if (entity.properties[self.ColorValue] !== undefined) {
-                    if (entity.properties[self.ColorValue] >= min + 0.8 * (max - min))
-                        entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
-                    else if (entity.properties[self.ColorValue] >= min + 0.6 * (max - min))
-                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                    else if (entity.properties[self.ColorValue] >= min + 0.4 * (max - min))
-                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                    else if (entity.properties[self.ColorValue] >= min + 0.2 * (max - min))
-                        entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                    else {
+                    if (entity.properties[self.ColorValue]._value >= min + 0.8 * (max - min))
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0)._rgb[0], ChromaScale(0)._rgb[1], ChromaScale(0)._rgb[2]);
+                    else if (entity.properties[self.ColorValue]._value >= min + 0.6 * (max - min))
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0], ChromaScale(0.2)._rgb[1], ChromaScale(0.2)._rgb[2]);
+                    else if (entity.properties[self.ColorValue]._value >= min + 0.4 * (max - min))
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0], ChromaScale(0.4)._rgb[1], ChromaScale(0.4)._rgb[2]);
+                    else if (entity.properties[self.ColorValue]._value >= min + 0.2 * (max - min)) {
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0], ChromaScale(0.6)._rgb[1], ChromaScale(0.6)._rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value === null || entity.properties[self.ColorValue] === "") {
                         entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    }
+                    else if (entity.properties[self.ColorValue]._value < min + 0.2 * (max - min)) {
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0], ChromaScale(0.8)._rgb[1], ChromaScale(0.8)._rgb[2]);
                     }
                 }
             }
@@ -586,69 +584,45 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         for (var i = 0; i < this.ColorKey.length; i++) {
             texts.push(this.ColorKey[i].text);
         }
+        var ChromaScale = this.ChromaScale;
         var promise = this.dataService.cesiumpromise;
         promise.then(function (dataSource) {
             var self = this;
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
-                if (entity.properties[Name]._value === texts[0]) {
-                    entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
+                if (entity.properties[Name] !== undefined) {
+                    var initial = false;
+                    for (var j = 0; j < texts.length; j++) {
+                        if (entity.properties[Name]._value === texts[j]) {
+                            var rgb = ChromaScale((j / texts.length).toFixed(2));
+                            entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                            initial = true;
+                        }
+                    }
+                    if (initial === false) {
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    }
                 }
-                else if (entity.properties[Name]._value === texts[1]) {
-                    entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[2]) {
-                    entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[3]) {
-                    entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[4]) {
-                    entity.polygon.material = Cesium.Color.ROYALBLUE.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[5]) {
-                    entity.polygon.material = Cesium.Color.AQUA.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[6]) {
-                    entity.polygon.material = Cesium.Color.BROWN.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[7]) {
-                    entity.polygon.material = Cesium.Color.CADETBLUE.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[8]) {
-                    entity.polygon.material = Cesium.Color.CHARTREUSE.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[9]) {
-                    entity.polygon.material = Cesium.Color.DARKORCHID.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[10]) {
-                    entity.polygon.material = Cesium.Color.DARKRED.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[11]) {
-                    entity.polygon.material = Cesium.Color.DARKSEAGREEN.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[12]) {
-                    entity.polygon.material = Cesium.Color.DARKTURQUOISE.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[13]) {
-                    entity.polygon.material = Cesium.Color.DEEPPINK.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[14]) {
-                    entity.polygon.material = Cesium.Color.FORESTGREEN.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[15]) {
-                    entity.polygon.material = Cesium.Color.GOLDENROD.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[16]) {
-                    entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                }
-                else if (entity.properties[Name]._value === texts[17]) {
-                    entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                }
-                else {
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                }
+                /*if(entity.properties[Name]._value===texts[0]){ entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[1]){ entity.polygon.material=Cesium.Color.RED.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[2]){ entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[3]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[4]){ entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[5]){ entity.polygon.material=Cesium.Color.AQUA.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[6]){ entity.polygon.material=Cesium.Color.BROWN.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[7]){ entity.polygon.material=Cesium.Color.CADETBLUE.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[8]){ entity.polygon.material=Cesium.Color.CHARTREUSE.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[9]){ entity.polygon.material=Cesium.Color.DARKORCHID.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[10]){ entity.polygon.material=Cesium.Color.DARKRED.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[11]){ entity.polygon.material=Cesium.Color.DARKSEAGREEN.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[12]){ entity.polygon.material=Cesium.Color.DARKTURQUOISE.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[13]){ entity.polygon.material=Cesium.Color.DEEPPINK.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[14]){ entity.polygon.material=Cesium.Color.FORESTGREEN.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[15]){ entity.polygon.material=Cesium.Color.GOLDENROD.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[16]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
+                else if(entity.properties[Name]._value===texts[17]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
+                else{entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}*/
             }
         });
     };
@@ -669,8 +643,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                     }
                 }
             });
-            if (this.CheckHide === true)
-                this.Hide();
+            this.Hide();
         }
         else {
             var promise = this.dataService.cesiumpromise;
@@ -691,17 +664,12 @@ var ToolwindowComponent = /** @class */ (function (_super) {
     ToolwindowComponent.prototype.checkscale = function () {
         this.CheckScale = !this.CheckScale;
     };
-    ToolwindowComponent.prototype.checkHide = function () {
-        if (this.CheckHide === true) {
-            this.Hide();
-        }
-        else {
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
-        }
-        //this.dataService.CheckHide=this.CheckHide;
-    };
-    /*Hide(){
+    /*checkHide(){
+      if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
+      //this.dataService.CheckHide=this.CheckHide;
+    }
+  
+    Hide(){
       var promise=this.dataService.cesiumpromise;
       var self=this;
       promise.then(function(dataSource) {
@@ -714,11 +682,12 @@ var ToolwindowComponent = /** @class */ (function (_super) {
           }
         }
       });
+    }
+  
+    changeHide(){
+      this.CheckHide=!this.CheckHide;
+      //this.dataService.CheckHide=this.CheckHide;
     }*/
-    ToolwindowComponent.prototype.changeHide = function () {
-        this.CheckHide = !this.CheckHide;
-        //this.dataService.CheckHide=this.CheckHide;
-    };
     ToolwindowComponent.prototype.addHide = function () {
         /*var addHide=document.getElementById("addHide");
         addHide.innerHTML=""*/
@@ -732,7 +701,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         // console.log(buttons);
         // addHide.parentNode.appendChild(clone);
         var texts = this.Initial();
-        for (var i = 0; i < 4; i++) {
+        for (var i = 0; i < 3; i++) {
             var addHide = document.getElementById("addHide" + i);
             if (addHide["style"].display === "none") {
                 addHide["style"].display = null;
@@ -741,26 +710,23 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                         this.HeightHide[i] = this.HeightKey[0];
                     }
                     if (this.RelaHide[i] === undefined) {
-                        this.RelaHide[i] = ">";
+                        this.RelaHide[i] = 0;
                     }
                     if (this.textHide[i] == undefined) {
-                        this.textHide[i] = Math.min.apply(Math, texts);
-                        this.HideMax[i] = Math.max.apply(Math, texts);
-                        this.HideMin[i] = Math.min.apply(Math, texts);
+                        this.textHide[i] = Math.round(Math.min.apply(Math, texts) * 100) / 100;
+                        this.HideMax[i] = Math.ceil(Math.max.apply(Math, texts));
+                        this.HideMin[i] = Math.round(Math.min.apply(Math, texts) * 100) / 100;
                     }
                 }
                 break;
             }
         }
     };
-    ToolwindowComponent.prototype.deleteHide = function (id) {
-        var addHide = document.getElementById("addHide" + id);
+    ToolwindowComponent.prototype.deleteHide = function (event) {
+        var addHide = document.getElementById("addHide" + event);
         addHide["style"].display = "none";
-        this.HeightHide[id] = undefined;
-        this.RelaHide[id] = undefined;
-        this.textHide[id] = undefined;
-        this.HideMax[id] = undefined;
-        this.HideMin[id] = undefined;
+        this.textHide[event] = this.HideMin[event];
+        this.Hide();
     };
     ToolwindowComponent.prototype.Initial = function () {
         var texts = [];
@@ -812,104 +778,121 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                 });
             }
         }
-        this.HideMax[id] = Math.max.apply(Math, texts);
-        this.HideMin[id] = Math.min.apply(Math, texts);
+        this.HideMax[id] = Math.ceil(Math.max.apply(Math, texts));
+        this.HideMin[id] = Math.round(Math.min.apply(Math, texts) * 100) / 100;
         this.textHide[id] = this.HideMin[id];
-        if (this.CheckHide === true) {
-            this.CheckHide = false;
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
-        }
+        this.Hide();
     };
     ToolwindowComponent.prototype.Changetext = function (event) {
         this.textHide[0] = event;
-        if (this.CheckHide === true) {
-            this.CheckHide = false;
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
-        }
-        //if(this.CheckHide===true)  {this.Hide();}
+        this.Hide();
     };
     ToolwindowComponent.prototype.Changetext1 = function (event) {
         this.textHide[1] = event;
-        if (this.CheckHide === true) {
-            this.CheckHide = false;
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
-        }
+        this.Hide();
     };
     ToolwindowComponent.prototype.Changetext2 = function (event) {
         this.textHide[2] = event;
-        if (this.CheckHide === true) {
-            this.CheckHide = false;
-            this.onChangeHeight(this.HeightValue);
-            this.onChangeColor(this.ColorValue);
+        this.Hide();
+    };
+    ToolwindowComponent.prototype._compare = function (value, slider, relation) {
+        switch (relation) {
+            case 0:
+                return value < slider;
+            case 1:
+                return value > slider;
+            case 2:
+                return value === slider;
         }
     };
     ToolwindowComponent.prototype.Hide = function () {
         var promise = this.dataService.cesiumpromise;
-        for (var j = 0; j < 4; j++) {
+        var propertyname = [];
+        var relation = [];
+        var text = [];
+        var scale = this.ScaleValue / this.Max;
+        for (var j = 0; j < 3; j++) {
             if (this.HeightHide[j] !== undefined) {
-                var propertyname = this.HeightHide[j];
-                var relation = this.RelaHide[j];
-                var text = this.textHide[j];
-                var self = this;
-                if (relation === ">") {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[propertyname]._value !== undefined) {
-                                if (entity.properties[propertyname]._value <= text) {
-                                    entity.polygon.extrudedHeight = 0;
-                                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                }
+                propertyname.push(this.HeightHide[j]);
+                relation.push(Number(this.RelaHide[j]));
+                text.push(Number(this.textHide[j]));
+            }
+        }
+        var self = this;
+        promise.then(function (dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+                var entity = entities[i];
+                for (var j_1 = 0; j_1 < propertyname.length; j_1++) {
+                    var value = entity.properties[propertyname[j_1]]._value;
+                    if (value !== undefined) {
+                        if (self._compare(value, text[j_1], relation[j_1])) {
+                            entity.polygon.extrudedHeight = 0;
+                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                            break;
+                        }
+                        else {
+                            self.ColorByNumCat(entity);
+                            if (self.CheckScale === true) {
+                                entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                            }
+                            else {
+                                entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
                             }
                         }
-                    });
+                    }
                 }
-                else if (relation === "<") {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[propertyname]._value !== undefined) {
-                                if (entity.properties[propertyname]._value >= text) {
-                                    entity.polygon.extrudedHeight = 0;
-                                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                }
-                            }
-                        }
-                    });
+            }
+        });
+    };
+    ToolwindowComponent.prototype.ColorByNumCat = function (entity) {
+        var ChromaScale = this.ChromaScale;
+        var self = this;
+        if (typeof (self.texts[0]) === "number") {
+            var max = Math.max.apply(Math, self.texts);
+            var min = Math.min.apply(Math, self.texts);
+            var ChromaScale = self.ChromaScale;
+            if (entity.properties[self.ColorValue]._value >= min + 0.8 * (max - min))
+                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0)._rgb[0], ChromaScale(0)._rgb[1], ChromaScale(0)._rgb[2]);
+            else if (entity.properties[self.ColorValue]._value >= min + 0.6 * (max - min))
+                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0], ChromaScale(0.2)._rgb[1], ChromaScale(0.2)._rgb[2]);
+            else if (entity.properties[self.ColorValue]._value >= min + 0.4 * (max - min))
+                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0], ChromaScale(0.4)._rgb[1], ChromaScale(0.4)._rgb[2]);
+            else if (entity.properties[self.ColorValue]._value >= min + 0.2 * (max - min))
+                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0], ChromaScale(0.6)._rgb[1], ChromaScale(0.6)._rgb[2]);
+            else if (entity.properties[self.ColorValue]._value === null || entity.properties[self.ColorValue] === "") {
+                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+            else {
+                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0], ChromaScale(0.8)._rgb[1], ChromaScale(0.8)._rgb[2]);
+            }
+        }
+        else {
+            var Colortexts = self.dataService.Colortexts;
+            var initial = false;
+            for (var j = 0; j < Colortexts.length; j++) {
+                if (entity.properties[self.ColorValue]._value === Colortexts[j].text) {
+                    var rgb = ChromaScale((j / Colortexts.length).toFixed(2));
+                    entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                    initial = true;
                 }
-                else {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[propertyname]._value !== undefined) {
-                                if (entity.properties[propertyname]._value === text) {
-                                    entity.polygon.extrudedHeight = 0;
-                                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                }
-                            }
-                        }
-                    });
-                }
+            }
+            if (initial === false) {
+                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
             }
         }
     };
     ToolwindowComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+        core_1.Component({
             selector: 'app-toolwindow',
             template: __webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.html"),
             styles: [__webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]])
+        __metadata("design:paramtypes", [core_1.Injector, core_1.ElementRef])
     ], ToolwindowComponent);
     return ToolwindowComponent;
-}(__WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__["a" /* DataSubscriber */]));
-
+}(DataSubscriber_1.DataSubscriber));
+exports.ToolwindowComponent = ToolwindowComponent;
 
 
 /***/ }),
@@ -929,12 +912,10 @@ module.exports = "<div id=\"cesiumContainer\" (click)=\"select()\">\r\n\t<!-- <d
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewerComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -954,8 +935,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-
-
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var DataSubscriber_1 = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
+var chroma = __webpack_require__("./node_modules/chroma-js/chroma.js");
 var ViewerComponent = /** @class */ (function (_super) {
     __extends(ViewerComponent, _super);
     function ViewerComponent(injector, myElement) {
@@ -963,6 +946,7 @@ var ViewerComponent = /** @class */ (function (_super) {
         _this.tileset = new Cesium.Cesium3DTileset({});
         _this.selectEntity = null;
         _this.myElement = myElement;
+        _this.ChromaScale = chroma.scale("SPECTRAL");
         return _this;
     }
     ViewerComponent.prototype.ngOnInit = function () {
@@ -1081,29 +1065,34 @@ var ViewerComponent = /** @class */ (function (_super) {
                 if (typeof (entity.properties[this.ColorValue]._value) === "number") {
                     var max = this.dataService.MaxColor;
                     var min = this.dataService.MinColor;
-                    if (entity.properties[this.ColorValue] >= min + 0.8 * (max - min))
-                        entity.polygon.material = Cesium.Color.LIGHTCORAL.withAlpha(1);
-                    else if (entity.properties[this.ColorValue] >= min + 0.6 * (max - min))
-                        entity.polygon.material = Cesium.Color.RED.withAlpha(1);
-                    else if (entity.properties[this.ColorValue] >= min + 0.4 * (max - min))
-                        entity.polygon.material = Cesium.Color.CORAL.withAlpha(1);
-                    else if (entity.properties[this.ColorValue] >= min + 0.2 * (max - min))
-                        entity.polygon.material = Cesium.Color.CRIMSON.withAlpha(1);
-                    else {
+                    var ChromaScale = this.ChromaScale;
+                    if (entity.properties[this.ColorValue]._value >= min + 0.8 * (max - min))
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0)._rgb[0], ChromaScale(0)._rgb[1], ChromaScale(0)._rgb[2]);
+                    else if (entity.properties[this.ColorValue]._value >= min + 0.6 * (max - min))
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0], ChromaScale(0.2)._rgb[1], ChromaScale(0.2)._rgb[2]);
+                    else if (entity.properties[this.ColorValue]._value >= min + 0.4 * (max - min))
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0], ChromaScale(0.4)._rgb[1], ChromaScale(0.4)._rgb[2]);
+                    else if (entity.properties[this.ColorValue]._value >= min + 0.2 * (max - min))
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0], ChromaScale(0.6)._rgb[1], ChromaScale(0.6)._rgb[2]);
+                    else if (entity.properties[this.ColorValue]._value === null || entity.properties[this.ColorValue] === "") {
                         entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    }
+                    else {
+                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0], ChromaScale(0.8)._rgb[1], ChromaScale(0.8)._rgb[2]);
                     }
                 }
                 else {
+                    var ChromaScale = this.ChromaScale;
                     var Colortexts = this.dataService.Colortexts;
-                    var intitial = true;
+                    var initial = false;
                     for (var j = 0; j < Colortexts.length; j++) {
                         if (entity.properties[this.ColorValue]._value === Colortexts[j].text) {
-                            var color = Colortexts[j].color;
-                            entity.polygon.material = Cesium.Color[color].withAlpha(1);
-                            intitial = false;
+                            var rgb = ChromaScale((j / Colortexts.length).toFixed(2));
+                            entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                            initial = true;
                         }
                     }
-                    if (intitial === true) {
+                    if (initial === false) {
                         entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
                     }
                 }
@@ -1111,16 +1100,16 @@ var ViewerComponent = /** @class */ (function (_super) {
         }
     };
     ViewerComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+        core_1.Component({
             selector: 'cesium-viewer',
             template: __webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.html"),
             styles: [__webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]])
+        __metadata("design:paramtypes", [core_1.Injector, core_1.ElementRef])
     ], ViewerComponent);
     return ViewerComponent;
-}(__WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__["a" /* DataSubscriber */]));
-
+}(DataSubscriber_1.DataSubscriber));
+exports.ViewerComponent = ViewerComponent;
 /*onChangeColor(ColorValue){
   this.ColorValue=ColorValue;*/
 /*if(this.ColorValue==="Status_Cat"||undefined){
@@ -1675,15 +1664,16 @@ ColorSelect(entity){
 /***/ }),
 
 /***/ "./src/environments/environment.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
+
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-var environment = {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.environment = {
     production: false
 };
 
@@ -1691,23 +1681,20 @@ var environment = {
 /***/ }),
 
 /***/ "./src/main.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__("./node_modules/@angular/platform-browser-dynamic/esm5/platform-browser-dynamic.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__("./src/app/app.module.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
 
-
-
-
-if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
-    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_11" /* enableProdMode */])();
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+var platform_browser_dynamic_1 = __webpack_require__("./node_modules/@angular/platform-browser-dynamic/esm5/platform-browser-dynamic.js");
+var app_module_1 = __webpack_require__("./src/app/app.module.ts");
+var environment_1 = __webpack_require__("./src/environments/environment.ts");
+if (environment_1.environment.production) {
+    core_1.enableProdMode();
 }
 window['CESIUM_BASE_URL'] = 'assets/cesium';
-Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
+platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule)
     .catch(function (err) { return console.log(err); });
 
 
