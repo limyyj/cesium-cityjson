@@ -518,8 +518,15 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.texts = texts;
             var max = Math.max.apply(Math, texts);
             var min = Math.min.apply(Math, texts);
-            var Colortext = [">=" + (min + 0.8 * (max - min)).toFixed(2), (min + 0.8 * (max - min)).toFixed(2) + " - " + (min + 0.6 * (max - min)).toFixed(2), (min + 0.6 * (max - min)).toFixed(2) + " - " + (min + 0.4 * (max - min)).toFixed(2),
-                (min + 0.4 * (max - min)).toFixed(2) + " - " + (min + 0.2 * (max - min)).toFixed(2), "<=" + (min + 0.2 * (max - min)).toFixed(2)];
+            var range = 12;
+            var Colortext = [];
+            Colortext.push(">=" + (min + ((range - 1) / range) * (max - min)).toFixed(2));
+            for (var i = range - 2; i > 0; i--) {
+                Colortext.push((min + (i / range) * (max - min)).toFixed(2) + " - " + (min + ((i + 1) / range) * (max - min)).toFixed(2));
+            }
+            /*var Colortext=[">="+(min+0.8*(max-min)).toFixed(2),(min+0.8*(max-min)).toFixed(2)+" - "+(min+0.6*(max-min)).toFixed(2),(min+0.6*(max-min)).toFixed(2)+" - "+(min+0.4*(max-min)).toFixed(2),
+                       (min+0.4*(max-min)).toFixed(2)+" - "+(min+0.2*(max-min)).toFixed(2),"<="+(min+0.2*(max-min)).toFixed(2)];*/
+            Colortext.push("<=" + (min + (1 / range) * (max - min)).toFixed(2));
             for (var j = 0; j < Colortext.length; j++) {
                 var ColorKey = [];
                 ColorKey.text = Colortext[j];
@@ -554,28 +561,74 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         var min = Math.min.apply(Math, this.texts);
         var promise = this.dataService.cesiumpromise;
         var ChromaScale = this.ChromaScale;
+        var ColorKey = this.ColorKey;
+        var range = ColorKey.length;
         var self = this;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
-            var a = 0, b = 0, c = 0, d = 0, e = 0;
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
                 if (entity.properties[self.ColorValue] !== undefined) {
-                    if (entity.properties[self.ColorValue]._value >= min + 0.8 * (max - min))
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0)._rgb[0], ChromaScale(0)._rgb[1], ChromaScale(0)._rgb[2]);
-                    else if (entity.properties[self.ColorValue]._value >= min + 0.6 * (max - min))
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0], ChromaScale(0.2)._rgb[1], ChromaScale(0.2)._rgb[2]);
-                    else if (entity.properties[self.ColorValue]._value >= min + 0.4 * (max - min))
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0], ChromaScale(0.4)._rgb[1], ChromaScale(0.4)._rgb[2]);
-                    else if (entity.properties[self.ColorValue]._value >= min + 0.2 * (max - min)) {
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0], ChromaScale(0.6)._rgb[1], ChromaScale(0.6)._rgb[2]);
+                    /*for(var j=0;j<range;j++){
+                      var rgb=ColorKey[j].color._rgb;*/
+                    if (entity.properties[self.ColorValue]._value >= (min + (11 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[0].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                     }
-                    else if (entity.properties[self.ColorValue]._value === null || entity.properties[self.ColorValue] === "") {
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    else if (entity.properties[self.ColorValue]._value >= (min + (10 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[1].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                     }
-                    else if (entity.properties[self.ColorValue]._value < min + 0.2 * (max - min)) {
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0], ChromaScale(0.8)._rgb[1], ChromaScale(0.8)._rgb[2]);
+                    else if (entity.properties[self.ColorValue]._value >= (min + (9 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[2].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                     }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (8 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[3].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (7 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[4].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (6 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[5].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (5 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[6].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (4 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[7].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (3 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[8].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (2 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[9].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value >= (min + (1 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[10].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[self.ColorValue]._value < (min + (1 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[11].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    /*else if(entity.properties[self.ColorValue]._value<min+(1/range)*(max-min)){
+                      entity.polygon.material=Cesium.Color.fromBytes(ColorKey[range-1].color._rgb[0],ColorKey[range-1].color._rgb[1],ColorKey[range-1].color._rgb[2]);
+                    }*/
+                    //}
+                    /*if(entity.properties[self.ColorValue]._value>=min+0.8*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0)._rgb[0],ChromaScale(0)._rgb[1],ChromaScale(0)._rgb[2]);
+                    else if(entity.properties[self.ColorValue]._value>=min+0.6*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0],ChromaScale(0.2)._rgb[1],ChromaScale(0.2)._rgb[2]);
+                    else if(entity.properties[self.ColorValue]._value>=min+0.4*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0],ChromaScale(0.4)._rgb[1],ChromaScale(0.4)._rgb[2]);
+                    else if(entity.properties[self.ColorValue]._value>=min+0.2*(max-min)) {entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0],ChromaScale(0.6)._rgb[1],ChromaScale(0.6)._rgb[2]);}
+                    else if(entity.properties[self.ColorValue]._value===null||entity.properties[self.ColorValue]==="") {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+                    else if(entity.properties[self.ColorValue]._value<min+0.2*(max-min)){entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0],ChromaScale(0.8)._rgb[1],ChromaScale(0.8)._rgb[2]);}*/
                 }
             }
         });
@@ -850,24 +903,65 @@ var ToolwindowComponent = /** @class */ (function (_super) {
     ToolwindowComponent.prototype.ColorByNumCat = function (entity) {
         var ChromaScale = this.ChromaScale;
         var self = this;
+        var ColorKey = this.ColorKey;
         if (typeof (self.texts[0]) === "number") {
             var max = Math.max.apply(Math, self.texts);
             var min = Math.min.apply(Math, self.texts);
             var ChromaScale = self.ChromaScale;
-            if (entity.properties[self.ColorValue]._value >= min + 0.8 * (max - min))
-                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0)._rgb[0], ChromaScale(0)._rgb[1], ChromaScale(0)._rgb[2]);
-            else if (entity.properties[self.ColorValue]._value >= min + 0.6 * (max - min))
-                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0], ChromaScale(0.2)._rgb[1], ChromaScale(0.2)._rgb[2]);
-            else if (entity.properties[self.ColorValue]._value >= min + 0.4 * (max - min))
-                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0], ChromaScale(0.4)._rgb[1], ChromaScale(0.4)._rgb[2]);
-            else if (entity.properties[self.ColorValue]._value >= min + 0.2 * (max - min))
-                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0], ChromaScale(0.6)._rgb[1], ChromaScale(0.6)._rgb[2]);
-            else if (entity.properties[self.ColorValue]._value === null || entity.properties[self.ColorValue] === "") {
-                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            if (entity.properties[self.ColorValue]._value >= (min + (11 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[0].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
             }
-            else {
-                entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0], ChromaScale(0.8)._rgb[1], ChromaScale(0.8)._rgb[2]);
+            else if (entity.properties[self.ColorValue]._value >= (min + (10 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[1].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
             }
+            else if (entity.properties[self.ColorValue]._value >= (min + (9 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[2].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (8 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[3].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (7 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[4].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (6 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[5].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (5 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[6].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (4 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[7].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (3 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[8].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (2 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[9].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value >= (min + (1 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[10].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            else if (entity.properties[self.ColorValue]._value < (min + (1 / 12) * (max - min)).toFixed(2)) {
+                var rgb = ColorKey[11].color._rgb;
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            /*if(entity.properties[self.ColorValue]._value>=min+0.8*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0)._rgb[0],ChromaScale(0)._rgb[1],ChromaScale(0)._rgb[2]);
+            else if(entity.properties[self.ColorValue]._value>=min+0.6*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0],ChromaScale(0.2)._rgb[1],ChromaScale(0.2)._rgb[2]);
+            else if(entity.properties[self.ColorValue]._value>=min+0.4*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0],ChromaScale(0.4)._rgb[1],ChromaScale(0.4)._rgb[2]);
+            else if(entity.properties[self.ColorValue]._value>=min+0.2*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0],ChromaScale(0.6)._rgb[1],ChromaScale(0.6)._rgb[2]);
+            else if(entity.properties[self.ColorValue]._value===null||entity.properties[self.ColorValue]==="") {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+            else {entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0],ChromaScale(0.8)._rgb[1],ChromaScale(0.8)._rgb[2]);}*/
         }
         else {
             var Colortexts = self.dataService.Colortexts;
@@ -1062,26 +1156,67 @@ var ViewerComponent = /** @class */ (function (_super) {
     };
     ViewerComponent.prototype.ColorSelect = function (entity) {
         this.ColorValue = this.dataService.ColorValue;
+        var ColorKey = this.dataService.Colortexts;
         for (var i = 0; i < this.propertyNames.length; i++) {
             if (this.ColorValue === this.propertyNames[i]) {
                 if (typeof (entity.properties[this.ColorValue]._value) === "number") {
                     var max = this.dataService.MaxColor;
                     var min = this.dataService.MinColor;
                     var ChromaScale = this.ChromaScale;
-                    if (entity.properties[this.ColorValue]._value >= min + 0.8 * (max - min))
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0)._rgb[0], ChromaScale(0)._rgb[1], ChromaScale(0)._rgb[2]);
-                    else if (entity.properties[this.ColorValue]._value >= min + 0.6 * (max - min))
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0], ChromaScale(0.2)._rgb[1], ChromaScale(0.2)._rgb[2]);
-                    else if (entity.properties[this.ColorValue]._value >= min + 0.4 * (max - min))
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0], ChromaScale(0.4)._rgb[1], ChromaScale(0.4)._rgb[2]);
-                    else if (entity.properties[this.ColorValue]._value >= min + 0.2 * (max - min))
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0], ChromaScale(0.6)._rgb[1], ChromaScale(0.6)._rgb[2]);
-                    else if (entity.properties[this.ColorValue]._value === null || entity.properties[this.ColorValue] === "") {
-                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    if (entity.properties[this.ColorValue]._value >= (min + (11 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[0].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                     }
-                    else {
-                        entity.polygon.material = Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0], ChromaScale(0.8)._rgb[1], ChromaScale(0.8)._rgb[2]);
+                    else if (entity.properties[this.ColorValue]._value >= (min + (10 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[1].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                     }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (9 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[2].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (8 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[3].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (7 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[4].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (6 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[5].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (5 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[6].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (4 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[7].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (3 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[8].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (2 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[9].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value >= (min + (1 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[10].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    else if (entity.properties[this.ColorValue]._value < (min + (1 / 12) * (max - min)).toFixed(2)) {
+                        var rgb = ColorKey[11].color._rgb;
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    }
+                    /*if(entity.properties[this.ColorValue]._value>=min+0.8*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0)._rgb[0],ChromaScale(0)._rgb[1],ChromaScale(0)._rgb[2]);
+                    else if(entity.properties[this.ColorValue]._value>=min+0.6*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0],ChromaScale(0.2)._rgb[1],ChromaScale(0.2)._rgb[2]);
+                    else if(entity.properties[this.ColorValue]._value>=min+0.4*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0],ChromaScale(0.4)._rgb[1],ChromaScale(0.4)._rgb[2]);
+                    else if(entity.properties[this.ColorValue]._value>=min+0.2*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0],ChromaScale(0.6)._rgb[1],ChromaScale(0.6)._rgb[2]);
+                    else if(entity.properties[this.ColorValue]._value===null||entity.properties[this.ColorValue]==="") {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+                    else {entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0],ChromaScale(0.8)._rgb[1],ChromaScale(0.8)._rgb[2]);}*/
                 }
                 else {
                     var ChromaScale = this.ChromaScale;
