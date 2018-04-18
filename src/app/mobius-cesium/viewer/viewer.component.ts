@@ -1,5 +1,6 @@
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 import {DataSubscriber} from "../data/DataSubscriber";
+import chroma =require("chroma-js");
 
 
 @Component({
@@ -27,6 +28,7 @@ export class ViewerComponent extends DataSubscriber {
   material:object;
   propertyNames:Array<any>;
   Name:string;*/
+  ChromaScale:any;
   propertyNames:Array<any>;
   viewer:any;
   selectEntity:any=null;
@@ -36,6 +38,7 @@ export class ViewerComponent extends DataSubscriber {
   constructor(injector: Injector, myElement: ElementRef) { 
   	super(injector);
     this.myElement = myElement;
+    this.ChromaScale=chroma.scale("SPECTRAL");
   }
 
   ngOnInit() {
@@ -154,22 +157,25 @@ export class ViewerComponent extends DataSubscriber {
         if(typeof(entity.properties[this.ColorValue]._value)==="number"){
           var max=this.dataService.MaxColor;
           var min=this.dataService.MinColor;
-          if(entity.properties[this.ColorValue]>=min+0.8*(max-min)) entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);
-          else if(entity.properties[this.ColorValue]>=min+0.6*(max-min)) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-          else if(entity.properties[this.ColorValue]>=min+0.4*(max-min)) entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-          else if(entity.properties[this.ColorValue]>=min+0.2*(max-min)) entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);
-          else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+          var ChromaScale=this.ChromaScale;
+          if(entity.properties[this.ColorValue]._value>=min+0.8*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0)._rgb[0],ChromaScale(0)._rgb[1],ChromaScale(0)._rgb[2]);
+          else if(entity.properties[this.ColorValue]._value>=min+0.6*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0],ChromaScale(0.2)._rgb[1],ChromaScale(0.2)._rgb[2]);
+          else if(entity.properties[this.ColorValue]._value>=min+0.4*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0],ChromaScale(0.4)._rgb[1],ChromaScale(0.4)._rgb[2]);
+          else if(entity.properties[this.ColorValue]._value>=min+0.2*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0],ChromaScale(0.6)._rgb[1],ChromaScale(0.6)._rgb[2]);
+          else if(entity.properties[this.ColorValue]._value===null||entity.properties[this.ColorValue]==="") {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+          else {entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0],ChromaScale(0.8)._rgb[1],ChromaScale(0.8)._rgb[2]);}
         }else{
+          var ChromaScale=this.ChromaScale;
           var Colortexts=this.dataService.Colortexts;
-          var intitial:boolean=true;
+          var initial:boolean=false;
           for(var j=0;j<Colortexts.length;j++){
-            if(entity.properties[this.ColorValue]._value===Colortexts[j].text){
-              var color=Colortexts[j].color;
-              entity.polygon.material=Cesium.Color[color].withAlpha(1);
-              intitial=false;
+            if(entity.properties[this.ColorValue]._value===Colortexts[j].text) {
+              var rgb=ChromaScale((j/Colortexts.length).toFixed(2));
+              entity.polygon.material=entity.polygon.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+              initial=true;
             }
           }
-          if(intitial===true){
+          if(initial===false){
             entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
           }
         }
