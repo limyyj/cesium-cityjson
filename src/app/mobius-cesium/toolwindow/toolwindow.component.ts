@@ -45,11 +45,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
-    /*this.ColorStore= ["LIGHTCORAL","RED","CORAL","CRIMSON","ROYALBLUE","AQUA","BROWN","CADETBLUE","CHARTREUSE",
-            "DARKORCHID","DARKRED","DARKSEAGREEN","DARKTURQUOISE","DEEPPINK","FORESTGREEN","GOLDENROD","CRIMSON","CRIMSON"];*/
     this.ChromaScale=chroma.scale("SPECTRAL");
-    //this.ColorFeature=this.ChromaScale(0.2);
-    //console.log(this.ColorFeature);
     this.HeightHide=[undefined,undefined,undefined];
     this.RelaHide=[undefined,undefined,undefined];
     this.textHide=[undefined,undefined,undefined];
@@ -182,8 +178,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       for(var i=range-2;i>0;i--){
         Colortext.push((min+(i/range)*(max-min)).toFixed(2)+" - "+(min+((i+1)/range)*(max-min)).toFixed(2));
       }
-      /*var Colortext=[">="+(min+0.8*(max-min)).toFixed(2),(min+0.8*(max-min)).toFixed(2)+" - "+(min+0.6*(max-min)).toFixed(2),(min+0.6*(max-min)).toFixed(2)+" - "+(min+0.4*(max-min)).toFixed(2),
-                 (min+0.4*(max-min)).toFixed(2)+" - "+(min+0.2*(max-min)).toFixed(2),"<="+(min+0.2*(max-min)).toFixed(2)];*/
       Colortext.push("<="+(min+(1/range)*(max-min)).toFixed(2))
       for(var j=0;j<Colortext.length;j++){
         var ColorKey:any=[];
@@ -359,7 +353,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
             this.RelaHide[i] = 0;
           }
           if(this.textHide[i] == undefined) {
-            this.textHide[i] = Math.round(Math.min.apply(Math, texts)*100)/100;
+            this.textHide[i] = Math.ceil(Math.max.apply(Math, texts));//Math.round(Math.min.apply(Math, texts)*100)/100;
             this.HideMax[i]=Math.ceil(Math.max.apply(Math, texts));
             this.HideMin[i]=Math.round(Math.min.apply(Math, texts)*100)/100;
           }
@@ -371,7 +365,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   deleteHide(event){
     var addHide=document.getElementById("addHide"+event);
     addHide["style"].display="none";
-    this.textHide[event] = this.HideMin[event];
+    this.textHide[event] = this.HideMax[event];
     this.Hide();
   }
 
@@ -418,7 +412,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }
     this.HideMax[id] = Math.ceil(Math.max.apply(Math, texts));
     this.HideMin[id]= Math.round(Math.min.apply(Math, texts)*100)/100;
-    this.textHide[id]=this.HideMin[id];
+    this.textHide[id]=this.HideMax[id];
     this.Hide();
   }
   Changetext(event){
@@ -437,9 +431,9 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   _compare(value: number, slider: number, relation: number): boolean {
     switch (relation) {
       case 0:
-        return value < slider;
-      case 1:
         return value > slider;
+      case 1:
+        return value < slider;
       case 2:
         return value === slider;
     }

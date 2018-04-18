@@ -29,34 +29,6 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   ngOnInit() {
-  	//this.ColorValue="Status_Cat";
-  	//this.HeightValue="HB_LIMIT";
-  	/*if(this.ColorValue == undefined) {
-        this.ColorValue = "Status_Cat";
-    } else {
-      this.ColorValue=this.dataService.ColorValue;
-    }
-    if(this.HeightValue == undefined) {
-        this.HeightValue = "Status_Cat";
-    } else {
-      this.HeightValue=this.dataService.HeightValue;
-    }
-    if(this.CheckHide == undefined) {
-        this.CheckHide = false;
-    } else {
-      this.CheckHide=this.dataService.CheckHide;
-    }
-    if(this.CheckCom == undefined) {
-        this.CheckCom = false;
-    } else {
-      this.CheckCom=this.dataService.CheckCom;
-    }
-    if(this.CheckOcc == undefined) {
-        this.CheckOcc = false;
-    } else {
-      this.CheckOcc=this.dataService.CheckOcc;
-    }*/
-
   }
 
   notify(message: string): void{
