@@ -106,13 +106,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(this.viewer!==undefined){
       if(this.ColorValue!==this.dataService.ColorValue){
         this.ColorValue=this.dataService.ColorValue;
-        this.ColorNames=this.dataService.propertyNames; 
+        this.ColorNames=this.dataService.propertyNames;
+        this.ColorNames.sort();
         this.onChangeColor(this.ColorValue);
         
       }
       if(this.HeightValue!==this.dataService.HeightValue){
         this.HeightValue=this.dataService.HeightValue;
         this.HeightKey=this.dataService.HeightKey;
+        this.HeightKey.sort();
         this.onChangeHeight(this.HeightValue);
       }
     }
@@ -174,8 +176,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.texts=texts;
       var max = Math.max.apply(Math, texts);
       var min = Math.min.apply(Math, texts);
-      var Colortext=[">="+(min+0.8*(max-min)).toFixed(2),(min+0.8*(max-min)).toFixed(2)+" - "+(min+0.6*(max-min)).toFixed(2),(min+0.6*(max-min)).toFixed(2)+" - "+(min+0.4*(max-min)).toFixed(2),
-                 (min+0.4*(max-min)).toFixed(2)+" - "+(min+0.2*(max-min)).toFixed(2),"<="+(min+0.2*(max-min)).toFixed(2)];
+      var range:number=12;
+      var Colortext:any=[];
+      Colortext.push(">="+(min+((range-1)/range)*(max-min)).toFixed(2));
+      for(var i=range-2;i>0;i--){
+        Colortext.push((min+(i/range)*(max-min)).toFixed(2)+" - "+(min+((i+1)/range)*(max-min)).toFixed(2));
+      }
+      /*var Colortext=[">="+(min+0.8*(max-min)).toFixed(2),(min+0.8*(max-min)).toFixed(2)+" - "+(min+0.6*(max-min)).toFixed(2),(min+0.6*(max-min)).toFixed(2)+" - "+(min+0.4*(max-min)).toFixed(2),
+                 (min+0.4*(max-min)).toFixed(2)+" - "+(min+0.2*(max-min)).toFixed(2),"<="+(min+0.2*(max-min)).toFixed(2)];*/
+      Colortext.push("<="+(min+(1/range)*(max-min)).toFixed(2))
       for(var j=0;j<Colortext.length;j++){
         var ColorKey:any=[];
         ColorKey.text=Colortext[j];
@@ -209,19 +218,23 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     var min = Math.min.apply(Math, this.texts);
     var promise=this.dataService.cesiumpromise;
     var ChromaScale=this.ChromaScale;
+    var ColorKey=this.ColorKey;
+    var range=ColorKey.length;
     var self= this;
     promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
-      var a=0,b=0,c=0,d=0,e=0;
       for (var i = 0; i < entities.length; i++) {
         var entity=entities[i];
         if(entity.properties[self.ColorValue]!==undefined){
-          if(entity.properties[self.ColorValue]._value>=min+0.8*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0)._rgb[0],ChromaScale(0)._rgb[1],ChromaScale(0)._rgb[2]);
-          else if(entity.properties[self.ColorValue]._value>=min+0.6*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0],ChromaScale(0.2)._rgb[1],ChromaScale(0.2)._rgb[2]);
-          else if(entity.properties[self.ColorValue]._value>=min+0.4*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0],ChromaScale(0.4)._rgb[1],ChromaScale(0.4)._rgb[2]);
-          else if(entity.properties[self.ColorValue]._value>=min+0.2*(max-min)) {entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0],ChromaScale(0.6)._rgb[1],ChromaScale(0.6)._rgb[2]);}
-          else if(entity.properties[self.ColorValue]._value===null||entity.properties[self.ColorValue]==="") {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-          else if(entity.properties[self.ColorValue]._value<min+0.2*(max-min)){entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0],ChromaScale(0.8)._rgb[1],ChromaScale(0.8)._rgb[2]);}
+          for(var j=1;j<range;j++){
+            if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
+            var rgb=ColorKey[range-j].color._rgb;
+            entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            }else if(entity.properties[self.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
+              var rgb=ColorKey[range-1].color._rgb;
+              entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            }
+          }
         }
       }
     });
@@ -253,25 +266,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
             entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
           }
         }
-        /*if(entity.properties[Name]._value===texts[0]){ entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[1]){ entity.polygon.material=Cesium.Color.RED.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[2]){ entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[3]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[4]){ entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[5]){ entity.polygon.material=Cesium.Color.AQUA.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[6]){ entity.polygon.material=Cesium.Color.BROWN.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[7]){ entity.polygon.material=Cesium.Color.CADETBLUE.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[8]){ entity.polygon.material=Cesium.Color.CHARTREUSE.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[9]){ entity.polygon.material=Cesium.Color.DARKORCHID.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[10]){ entity.polygon.material=Cesium.Color.DARKRED.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[11]){ entity.polygon.material=Cesium.Color.DARKSEAGREEN.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[12]){ entity.polygon.material=Cesium.Color.DARKTURQUOISE.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[13]){ entity.polygon.material=Cesium.Color.DEEPPINK.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[14]){ entity.polygon.material=Cesium.Color.FORESTGREEN.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[15]){ entity.polygon.material=Cesium.Color.GOLDENROD.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[16]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
-        else if(entity.properties[Name]._value===texts[17]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
-        else{entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}*/
       }
   });
 
@@ -495,17 +489,22 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
   ColorByNumCat(entity){
     var ChromaScale=this.ChromaScale;
+    var ColorKey=this.ColorKey;
+    var range=ColorKey.length;
     var self=this;
     if(typeof(self.texts[0])==="number") {
       var max = Math.max.apply(Math, self.texts);
       var min = Math.min.apply(Math, self.texts);
       var ChromaScale=self.ChromaScale;
-      if(entity.properties[self.ColorValue]._value>=min+0.8*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0)._rgb[0],ChromaScale(0)._rgb[1],ChromaScale(0)._rgb[2]);
-      else if(entity.properties[self.ColorValue]._value>=min+0.6*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.2)._rgb[0],ChromaScale(0.2)._rgb[1],ChromaScale(0.2)._rgb[2]);
-      else if(entity.properties[self.ColorValue]._value>=min+0.4*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.4)._rgb[0],ChromaScale(0.4)._rgb[1],ChromaScale(0.4)._rgb[2]);
-      else if(entity.properties[self.ColorValue]._value>=min+0.2*(max-min)) entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.6)._rgb[0],ChromaScale(0.6)._rgb[1],ChromaScale(0.6)._rgb[2]);
-      else if(entity.properties[self.ColorValue]._value===null||entity.properties[self.ColorValue]==="") {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-      else {entity.polygon.material=Cesium.Color.fromBytes(ChromaScale(0.8)._rgb[0],ChromaScale(0.8)._rgb[1],ChromaScale(0.8)._rgb[2]);}
+      for(var j=1;j<range;j++){
+        if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
+        var rgb=ColorKey[range-j].color._rgb;
+        entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+        }else if(entity.properties[self.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
+          var rgb=ColorKey[range-1].color._rgb;
+          entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+        }
+      }
     }else{
       var Colortexts=self.dataService.Colortexts;
       var initial:boolean=false;
