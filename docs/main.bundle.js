@@ -27,7 +27,7 @@ module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  ma
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 765px\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.7&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 100%\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.8&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\r\n</div>"
 
 /***/ }),
 
@@ -441,11 +441,13 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             if (this.ColorValue !== this.dataService.ColorValue) {
                 this.ColorValue = this.dataService.ColorValue;
                 this.ColorNames = this.dataService.propertyNames;
+                this.ColorNames.sort();
                 this.onChangeColor(this.ColorValue);
             }
             if (this.HeightValue !== this.dataService.HeightValue) {
                 this.HeightValue = this.dataService.HeightValue;
                 this.HeightKey = this.dataService.HeightKey;
+                this.HeightKey.sort();
                 this.onChangeHeight(this.HeightValue);
             }
         }
@@ -1034,8 +1036,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         this.dataService.cesiumpromise = promise;
         this.dataService.propertyNames = this.propertyNames;
         this.dataService.HeightKey = HeightKey;
-        this.ColorValue = this.propertyNames[0];
-        this.HeightValue = HeightKey[0];
+        this.ColorValue = this.propertyNames.sort()[0];
+        this.HeightValue = HeightKey.sort()[0];
         this.dataService.ColorValue = this.ColorValue;
         this.dataService.HeightValue = this.HeightValue;
         viewer.zoomTo(promise);
