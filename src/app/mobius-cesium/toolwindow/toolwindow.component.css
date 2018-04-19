@@ -2,7 +2,7 @@
   position: relative;
   background-color: #F1F1F1 !important;
   height: 100%;
-  width: 700px;
+  width: 100%;
   font-family: Roboto,"Helvetica Neue",sans-serif;
   font-size: 14px !important;
   line-height: 14px;
@@ -79,6 +79,25 @@
 }
 
 .cesium-button {
+  display: inline-block;
+  position: relative;
+  border: 1px solid #8AA8C0;
+  color: #395D73;
+  fill: #395D73;
+  border-radius: 0px;
+  padding: 3px 0px;
+  margin: 0px 0px;
+  cursor: pointer;
+  overflow: hidden;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  width: 80px;
+  font-family:sans-serif !important;
+  background: #F1F1F1;
+}
+.cesium-button-select{
   display: inline-block;
   position: relative;
   border: 1px solid #8AA8C0;

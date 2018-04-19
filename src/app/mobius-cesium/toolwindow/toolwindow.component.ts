@@ -36,16 +36,19 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   SelectedEntity:object;
   ScaleValue:number=1000;
   CheckScale:boolean=true;
-  HideNum:Array<number>;
+  HideNum:Array<string>;
   RelaHide:Array<number>;
   HeightHide:Array<string>;
   textHide:Array<number>;
   HideMax:Array<number>;
   HideMin:Array<number>;
+  Maxtext:number;
+  Mintext:number;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
     this.ChromaScale=chroma.scale("SPECTRAL");
+    this.HideNum=[];
     this.HeightHide=[undefined,undefined,undefined];
     this.RelaHide=[undefined,undefined,undefined];
     this.textHide=[undefined,undefined,undefined];
@@ -303,69 +306,35 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.CheckScale=!this.CheckScale;
   }
 
-  /*checkHide(){
-    if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
-    //this.dataService.CheckHide=this.CheckHide;
-  }
-
-  Hide(){
-    var promise=this.dataService.cesiumpromise;
-    var self=this;
-    promise.then(function(dataSource) {
-      var entities = dataSource.entities.values;
-      for (var i = 0; i < entities.length; i++) {
-        var entity = entities[i];
-        if(entity.properties.HIDE._value!==undefined&&entity.properties.HIDE._value===1){
-          entity.polygon.extrudedHeight = 0;
-          entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-        }
-      }
-    });
-  }
-
-  changeHide(){
-    this.CheckHide=!this.CheckHide;
-    //this.dataService.CheckHide=this.CheckHide;
-  }*/
-
+  hideElementArr = [];
   addHide(){
-    /*var addHide=document.getElementById("addHide");
-    addHide.innerHTML=""*/
-    // const addHide=document.getElementsByClassName("addHide")[0];
-    // var clone = addHide.cloneNode(true);
-    // clone["style"].display=null;
-    // clone["id"]="addHide"+this.HideNum;
-    // var number=this.HideNum-1;
-    // var buttons = document.getElementById(String(number));
-    // buttons.onclick=this.deleteHide;
-    // console.log(buttons);
-    // addHide.parentNode.appendChild(clone);
-    var texts=this.Initial();
-    for(var i=0;i<3;i++){
-      var addHide=document.getElementById("addHide"+i);
-      if(addHide["style"].display==="none"){
-        addHide["style"].display=null;
-        if(this.HeightKey!==undefined){
-          if(this.HeightHide[i] === undefined) {
-            this.HeightHide[i] = this.HeightKey[0];
-          }
-          if(this.RelaHide[i] === undefined) {
-            this.RelaHide[i] = 0;
-          }
-          if(this.textHide[i] == undefined) {
-            this.textHide[i] = Math.ceil(Math.max.apply(Math, texts));//Math.round(Math.min.apply(Math, texts)*100)/100;
-            this.HideMax[i]=Math.ceil(Math.max.apply(Math, texts));
-            this.HideMin[i]=Math.round(Math.min.apply(Math, texts)*100)/100;
-          }
+    var lastnumber:string;
+    if(this.HideNum.length===0) {this.HideNum[0]="0";lastnumber=this.HideNum[0]}
+    else{
+      for(var i=0;i<this.HideNum.length+1;i++){
+        if(this.HideNum.indexOf(String(i))===-1){
+          this.HideNum.push(String(i));
+          lastnumber=String(i);
+          break;
         }
-        break;
       }
     }
+    var texts=this.Initial();
+    this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:this.HeightKey[0],RelaHide:0,textHide: Math.ceil(Math.max.apply(Math, texts)),
+                              HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
+    return;
   }
   deleteHide(event){
-    var addHide=document.getElementById("addHide"+event);
-    addHide["style"].display="none";
-    this.textHide[event] = this.HideMax[event];
+    var index=this.HideNum.indexOf(event);
+    var divid=String("addHide".concat(String(event)));
+    var addHide=document.getElementById(divid);
+    var hidecontainer=document.getElementsByClassName("hide-container")[0];
+    hidecontainer.removeChild(addHide);
+    if(this.hideElementArr[index].RelaHide==="0") this.hideElementArr[index].textHide=this.hideElementArr[index].HideMax;
+    if(this.hideElementArr[index].RelaHide==="1") this.hideElementArr[index].textHide=this.hideElementArr[index].HideMin;
+    this.hideElementArr.splice(index,1);
+    this.HideNum.splice(index,1);
+    console.log(this.hideElementArr,this.HideNum);
     this.Hide();
   }
 
@@ -389,42 +358,34 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   Changerelation(HeightHide,RelaHide,id){
-    this.HeightHide[id]=HeightHide;
-    this.RelaHide[id]=RelaHide;
+    console.log(HeightHide,RelaHide);
+    var index=this.HideNum.indexOf(id);
+    this.hideElementArr[index].HeightHide=HeightHide;
+    this.hideElementArr[index].RelaHide=RelaHide;
     var texts=[];
     var promise=this.dataService.cesiumpromise;
-    for(var j=0;j<this.HeightKey.length;j++){
-      if(this.HeightHide[id]===this.HeightKey[j]){
-        var self= this;
-        promise.then(function(dataSource) {
-        var entities = dataSource.entities.values;
-        for (var i = 0; i < entities.length; i++) {
-          var entity = entities[i];
-          if(entity.properties[self.HeightHide[id]]!==undefined){
-          if(entity.properties[self.HeightHide[id]]._value!==" "){
-            if(texts.length===0) {texts[0]=entity.properties[self.HeightHide[id]]._value;}
-            else{if(texts.indexOf(entity.properties[self.HeightHide[id]]._value)===-1) texts.push(entity.properties[self.HeightHide[id]]._value);}
-            }
+    var self= this;
+    promise.then(function(dataSource) {
+    var entities = dataSource.entities.values;
+    for (var i = 0; i < entities.length; i++) {
+      var entity = entities[i];
+      if(entity.properties[HeightHide]!==undefined){
+        if(entity.properties[HeightHide]._value!==" "){
+          if(texts.length===0) {texts[0]=entity.properties[HeightHide]._value;}
+          else{if(texts.indexOf(entity.properties[HeightHide]._value)===-1) texts.push(entity.properties[HeightHide]._value);}
           }
         }
-      });
       }
-    }
-    this.HideMax[id] = Math.ceil(Math.max.apply(Math, texts));
-    this.HideMin[id]= Math.round(Math.min.apply(Math, texts)*100)/100;
-    this.textHide[id]=this.HideMax[id];
+    });
+    this.hideElementArr[index].HideMax=Math.ceil(Math.max.apply(Math, texts));
+    this.hideElementArr[index].HideMin=Math.round(Math.min.apply(Math, texts)*100)/100;
+    if(RelaHide==="0"||RelaHide===0) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMax;
+    if(RelaHide==="1"||RelaHide===1) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMin;
     this.Hide();
   }
-  Changetext(event){
-    this.textHide[0]=event;
-    this.Hide();
-  }
-  Changetext1(event){
-    this.textHide[1]=event;
-    this.Hide();
-  }
-  Changetext2(event){
-    this.textHide[2]=event;
+  Changetext(value,id){
+    var index=this.HideNum.indexOf(id);
+    this.hideElementArr[index].textHide=value;
     this.Hide();
   }
 
@@ -446,11 +407,11 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     var relation:any=[];
     var text:any=[];
     var scale:number=this.ScaleValue/this.Max;
-    for(var j=0;j<3;j++){
-      if(this.HeightHide[j]!==undefined){
-        propertyname.push(this.HeightHide[j]);
-        relation.push(Number(this.RelaHide[j]));
-        text.push(Number(this.textHide[j]));
+    for(var j=0;j<this.hideElementArr.length;j++){
+      if(this.hideElementArr[j]!==undefined){
+        propertyname.push(this.hideElementArr[j].HeightHide);
+        relation.push(Number(this.hideElementArr[j].RelaHide));
+        text.push(Number(this.hideElementArr[j].textHide));
       }
     }
     var self=this;
