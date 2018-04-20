@@ -60,109 +60,52 @@
        <table>
           <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Scale</div></th>
           <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="text" value={{ScaleValue}} (change)="changescale($event.target.value)" style="width:80px"></div></th>
-          <th style="width:85px;height: 25px;"><div style="width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th></tr>  
+          <th style="width:85px;height: 25px;"><div style="width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th></tr>
+          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Invert</div></th>
+          <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckOpp" (click)="checkopp();changeopp()"></div></th></tr>  
       </table>
       <hr>
       <table>
         <tr>
-        <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;"><input type="button" value="Add Hide" style="color:#395d73;" (click)="addHide()"></div></th>
+        <th class="colorkey" style="width: 80px;height: 25px;"><div class="Hide" style="width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;"><input type="button" value="Add Filter" style="color:#395d73;width: 80px;height: 25px;" (click)="addHide()"></div></th>
+        <th style="width:20px;height: 25px;"><div style="width:20px;height: 25px;margin-left: 10px">
+          <select class="cesium-button-select"  (change)="ChangeHeight($event.target.value)">
+             <option class="cesium-option"  *ngFor="let ColorName of ColorNames" value={{ColorName}}>{{ColorName}}</option>
+          </select></div></th>
         </tr>
       </table>
-      <!-- <div id="addHide">
-       <div id="addHide0"  style="display: none">
-        <table>
-          <tr ><th style="width:20px;height: 25px;margin-top: 5px"><div>
-            <select class="cesium-button" id="0" (change)="Changerelation($event.target.value,RelaHide[0],$event.target.id)">
-               <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
-            </select></div></th>
-          <th style="width:40px;height: 25px;margin-top: 5px"><div style="width:40px;height: 25px;">
-            <select class="cesium-button" id="0" (change)="Changerelation(HeightHide[0],$event.target.value,$event.target.id)" style="width:40px;height: 25px;">
-               <option class="cesium-option" value=0>></option>
-               <option class="cesium-option" value=1><</option>
-               <option class="cesium-option" value=2>=</option>
-            </select></div></th>
-            <th style="width:70px;height: 20px;margin-top: 5px"><input type="text"  id="0" value={{textHide[0]}} (change)="Changetext($event.target.value)" style="width:70px;height: 20px;"></th>
-          <th style="width:30px;height: 25px;margin-top: 5px" id="0"><button id="0" style="width:30px;height: 25px;" (click)="deleteHide(0)"><span><i class="fa fa-trash" style="color:#395d73;"></i></span></button></th></tr>
-        </table>
-        <table>
-          <tr>
-          <th style="width:30px;height: 25px;margin-top: 5px"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;">{{HideMin[0]}}</div></th>
-          <th style="width:150px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" [id]="0" min={{HideMin[0]}} max={{HideMax[0]}} step=0.01 thumbLabel=true value={{textHide[0]}} #textscale (change)="Changetext(textscale.value.toPrecision(2))" >
-          </mat-slider></div></th>
-          <th><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;">{{HideMax[0]}}</div></th></tr>
-        </table><hr>
-        </div>
-        <div id="addHide1"  style="display: none">
-        <table>
-          <tr ><th style="width:20px;height: 25px;margin-top: 5px"><div>
-            <select class="cesium-button" id="1" (change)="Changerelation($event.target.value,RelaHide[1],$event.target.id)">
-               <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
-            </select></div></th>
-          <th style="width:40px;height: 25px;margin-top: 5px"><div style="width:40px;height: 25px;">
-            <select class="cesium-button" id="1" (change)="Changerelation(HeightHide[1],$event.target.value,$event.target.id)" style="width:40px;height: 25px;">
-               <option class="cesium-option" value=0>></option>
-               <option class="cesium-option" value=1><</option>
-               <option class="cesium-option" value=2>=</option>
-            </select></div></th>
-            <th style="width:70px;height: 20px;margin-top: 5px"><input type="text"  value={{textHide[1]}} (change)="Changetext1($event.target.value)" style="width:70px;height: 20px;"></th>
-          <th style="width:30px;height: 25px;margin-top: 5px"><button style="width:30px;height: 25px" id="1" (click)="deleteHide(1)"><span><i class="fa fa-trash" id="1" style="color:#395d73;"></i></span></button></th></tr>
-        </table>
-        <table>
-          <tr>
-          <th style="width:30px;height: 25px;margin-top: 5px"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;">{{HideMin[1]}}</div>
-          </th>
-          <th style="width:150px;height: 25px;margin-top: 5px"><div style="font-weight: normal;display: inline-block;"><mat-slider class="slider" name="range" id="1" min={{HideMin[1]}} max={{HideMax[1]}} step=0.01 thumbLabel=true value={{textHide[1]}} #textscale1 (change)="Changetext1(textscale1.value.toPrecision(2))" >
-          </mat-slider></div></th>
-          <th><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;">{{HideMax[1]}}</div></th></tr>
-        </table><hr>
-        </div>
-        <div id="addHide2"  style="display: none">
-        <table>
-          <tr ><th style="width:20px;height: 25px;margin-top: 5px"><div>
-            <select class="cesium-button" id="2"  (change)="Changerelation($event.target.value,RelaHide[2],$event.target.id)">
-               <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
-            </select></div></th>
-          <th style="width:40px;height: 25px;margin-top: 5px"><div style="width:40px;height: 25px;">
-            <select class="cesium-button" id="2" (change)="Changerelation(HeightHide[2],$event.target.value,$event.target.id)" style="width:40px;height: 25px;">
-               <option class="cesium-option" value=0>></option>
-               <option class="cesium-option" value=1><</option>
-               <option class="cesium-option" value=2>=</option>
-            </select></div></th>
-            <th style="width:70px;height: 20px;margin-top: 5px"><input type="text"  value={{textHide[2]}} (change)="Changetext2($event.target.value)" style="width:70px;height: 20px;"></th>
-          <th style="width:30px;height: 25px;margin-top: 5px"><button style="width:30px;height: 25px" id="2" (click)="deleteHide(2)"><span><i class="fa fa-trash" id="2" style="color:#395d73;"></i></span></button></th></tr>
-        </table>
-        <table>
-          <tr>
-          <th style="width:30px;height: 25px;margin-top: 5px"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;">{{HideMin[2]}}</div>
-          </th>
-          <th style="width:150px;height: 25px;margin-top: 5px"><div style="font-weight: normal;display: inline-block;"><mat-slider class="slider" name="range" id="2" min={{HideMin[2]}} max={{HideMax[2]}} step=0.01 thumbLabel=true value={{textHide[2]}} #textscale2 (change)="Changetext2(textscale2.value.toPrecision(2))" >
-          </mat-slider></div></th>
-          <th><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;">{{HideMax[2]}}</div></th></tr>
-        </table><hr>
-        </div>
-    </div> -->
-      <div class="hide-container">
-        <div *ngFor="let item of hideElementArr;" id={{item.divid}}>
+      <div class="hide-container" style="margin-top:5px;">
+        <div *ngFor="let item of hideElementArr;" id={{item.divid}} >
       <table>
-        <tr ><th style="width:20px;height: 25px;margin-top: 5px"><div>
-          <select class="cesium-button-select" id={{item.id}}  (change)="Changerelation($event.target.value,item.RelaHide,item.id)">
+        <tr ><th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}
+         <!--  <select class="cesium-button-select" id={{item.id}}  (change)="Changerelation($event.target.value,item.RelaHide,item.id)">
              <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
-          </select></div></th>
-        <th style="width:40px;height: 25px;margin-top: 5px"><div style="width:40px;height: 25px;">
-          <select class="cesium-button-select" (change)="Changerelation(item.HeightHide,$event.target.value,item.id)" style="width:40px;height: 25px;">
+          </select> --></div></th>
+        <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;"><div style="width:40px;height: 25px;">
+          <select class="cesium-button-select" (change)="Changerelation($event.target.value,item.id)" style="width:40px;height: 25px;">
              <option class="cesium-option" value=0>></option>
              <option class="cesium-option" value=1><</option>
              <option class="cesium-option" value=2>=</option>
           </select></div></th>
-          <th style="width:70px;height: 20px;margin-top: 5px"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:70px;height: 20px;"></th>
-        <th style="width:30px;height: 25px;margin-top: 5px" id={{item.id}}><button class="button"  style="width:30px;height: 25px;" (click)="deleteHide(item.id)"><span id={{item.id}} ><i class="fa fa-trash"  style="color:#395d73;"></i></span></button></th></tr>
+          <th *ngIf="item.type === 'category'" style="width:40px;height: 25px;"><div style="width:40px;height: 25px;">
+          <select class="cesium-button-select" (change)="ChangeCategory($event.target.value,item.id,0)" style="width:40px;height: 25px;">
+            <option class="cesium-option" value=0>none</option>
+            <option class="cesium-option" value=1>=</option>
+            <option class="cesium-option" value=2>!=</option>
+          </select></div></th>
+          <th *ngIf="item.type === 'number'" style="width:70px;height: 20px;"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:70px;height: 20px;"></th>
+          <th *ngIf="item.type === 'category'" style="width:73px;height: 25px;"><div style="width:73px;height: 25px;">
+          <select class="cesium-button-select" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
+            <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
+          </select></div></th>
+        <th style="width:30px;height: 25px;" id={{item.id}}><button class="button"  style="width:30px;height: 25px;" (click)="deleteHide(item.id)"><span id={{item.id}} ><i class="fa fa-trash"  style="color:#395d73;"></i></span></button></th></tr>
       </table>
       <table>
         <tr>
-        <th style="width:30px;height: 25px;margin-top: 5px"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;">{{item.HideMin}}</div></th>
-        <th style="width:150px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
+        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;">{{item.HideMin}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:150px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
         </mat-slider></div></th>
-        <th><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
+        <th *ngIf="item.type === 'number'"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
       </table><hr>
         </div>
       </div>

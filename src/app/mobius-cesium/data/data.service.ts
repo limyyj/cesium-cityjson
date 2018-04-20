@@ -9,6 +9,7 @@ export class DataService {
   ColorValue:string;
   HeightValue:string;
   CheckHide:boolean;
+  CheckOpp:boolean;
   CheckCom:boolean;
   CheckOcc:boolean;
   viewer:any;

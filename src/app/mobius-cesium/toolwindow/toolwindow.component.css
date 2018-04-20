@@ -24,6 +24,9 @@
 /deep/.mat-tab-labels{
   margin-left: 5px;
 }
+/deep/.mat-tab-header{
+  width: 700px !important;
+}
 /deep/.mat-tab-header-pagination-controls-enabled{
   display: none !important;
 }
