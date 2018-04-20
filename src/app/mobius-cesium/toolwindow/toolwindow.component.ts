@@ -370,8 +370,12 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     var addHide=document.getElementById(divid);
     var hidecontainer=document.getElementsByClassName("hide-container")[0];
     hidecontainer.removeChild(addHide);
-    if(this.hideElementArr[index].RelaHide==="0"||this.hideElementArr[index].RelaHide===0) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMin;
-    if(this.hideElementArr[index].RelaHide==="1"||this.hideElementArr[index].RelaHide===1) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMax;
+    if(this.hideElementArr[index].type==="number"){
+      if(this.hideElementArr[index].RelaHide==="0"||this.hideElementArr[index].RelaHide===0) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMin;
+      if(this.hideElementArr[index].RelaHide==="1"||this.hideElementArr[index].RelaHide===1) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMax;
+    }else if(this.hideElementArr[index].type==="category"){
+      this.hideElementArr[index].RelaHide=0;
+    }
     this.Hide();
     this.hideElementArr.splice(index,1);
     this.HideNum.splice(index,1);
@@ -437,89 +441,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(type===0){
       self.hideElementArr[index].RelaHide=Number(categary);
     }
-    if(self.hideElementArr[index].RelaHide===0){
-      promise.then(function(dataSource) {
-        var entities = dataSource.entities.values;
-        for (var i = 0; i < entities.length; i++) {
-          var entity=entities[i];
-          if(entity.properties[self.hideElementArr[index].HeightHide]!==undefined){
-            self.ColorByNumCat(entity);
-            if(self.CheckScale===true){
-              if(self.CheckOpp===true){
-                entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
-              }else{
-                entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
-              }
-            }
-            else{
-              if(self.CheckOpp===true){
-                entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
-              }else{
-                entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
-              }
-            }
-          }
-        }
-      });
-    }else if(self.hideElementArr[index].RelaHide===1){
-      promise.then(function(dataSource) {
-        var entities = dataSource.entities.values;
-        for (var i = 0; i < entities.length; i++) {
-          var entity=entities[i];
-          if(entity.properties[self.hideElementArr[index].HeightHide]!==undefined){
-            if(entity.properties[self.hideElementArr[index].HeightHide]._value!==self.hideElementArr[index].CategaryHide){
-              entity.polygon.extrudedHeight = 0;
-              entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }else{
-              self.ColorByNumCat(entity);
-              if(self.CheckScale===true){
-                if(self.CheckOpp===true){
-                  entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
-                }else{
-                  entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
-                }
-              }
-              else{
-                if(self.CheckOpp===true){
-                  entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
-                }else{
-                  entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
-                }
-              }
-            }
-          }
-        }
-      });
-    }else if(self.hideElementArr[index].RelaHide===2){
-      promise.then(function(dataSource) {
-        var entities = dataSource.entities.values;
-        for (var i = 0; i < entities.length; i++) {
-          var entity=entities[i];
-          if(entity.properties[self.hideElementArr[index].HeightHide]!==undefined){
-            if(entity.properties[self.hideElementArr[index].HeightHide]._value===self.hideElementArr[index].CategaryHide){
-              entity.polygon.extrudedHeight = 0;
-              entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-            }else{
-              self.ColorByNumCat(entity);
-              if(self.CheckScale===true){
-                if(self.CheckOpp===true){
-                  entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
-                }else{
-                  entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
-                }
-              }
-              else{
-                if(self.CheckOpp===true){
-                  entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
-                }else{
-                  entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
-                }
-              }
-            }
-          }
-        }
-      });
-    }
+    self.Hide();
   }
 
 
@@ -539,6 +461,16 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         return value === slider;
     }
   }
+  _compareCat(value: string, Categary:string,relation: number): boolean {
+    switch (relation) {
+      case 0:
+        return value ===  null;
+      case 1:
+        return value !== Categary;
+      case 2:
+        return value === Categary;
+    }
+  }
 
 
   Hide(){
@@ -551,7 +483,11 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       if(this.hideElementArr[j]!==undefined){
         propertyname.push(this.hideElementArr[j].HeightHide);
         relation.push(Number(this.hideElementArr[j].RelaHide));
-        text.push(Number(this.hideElementArr[j].textHide));
+        if(this.hideElementArr[j].type==="number"){
+          text.push(Number(this.hideElementArr[j].textHide));
+        }else if(this.hideElementArr[j].type==="category"){
+          text.push(String(this.hideElementArr[j].CategaryHide));
+        }
       }
     }
     var self=this;
@@ -562,33 +498,57 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         for (let j = 0; j < propertyname.length; j++) {
           const value = entity.properties[propertyname[j]]._value;
           if(value !== undefined){
-            if (self._compare(value, text[j], relation[j])) {
-              entity.polygon.extrudedHeight = 0;
-              entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-              break;
-            }else{
-              self.ColorByNumCat(entity);
-              if(self.CheckScale===true){
-                if(self.CheckOpp===true){
-                  entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
-                }else{
-                  entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+            if(typeof(value)==="number"){
+              if (self._compare(value, text[j], relation[j])) {
+                entity.polygon.extrudedHeight = 0;
+                entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                break;
+              }else{
+                self.ColorByNumCat(entity);
+                if(self.CheckScale===true){
+                  if(self.CheckOpp===true){
+                    entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+                  }else{
+                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                  }
+                }
+                else{
+                  if(self.CheckOpp===true){
+                    entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
+                  }else{
+                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+                  }
                 }
               }
-              else{
-                if(self.CheckOpp===true){
-                  entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
-                }else{
-                  entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+            }else if(typeof(value)==="string"){
+              if (self._compareCat(value, text[j], relation[j])) {
+                entity.polygon.extrudedHeight = 0;
+                entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                break;
+              }else{
+                self.ColorByNumCat(entity);
+                if(self.CheckScale===true){
+                  if(self.CheckOpp===true){
+                    entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+                  }else{
+                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                  }
+                }
+                else{
+                  if(self.CheckOpp===true){
+                    entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
+                  }else{
+                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+                  }
                 }
               }
+
             }
 
           }
         }
       }
     });
-
   }
 
   ColorByNumCat(entity){
