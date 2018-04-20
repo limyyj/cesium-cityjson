@@ -75,12 +75,9 @@
         </tr>
       </table>
       <div class="hide-container" style="margin-top:5px;">
-        <div *ngFor="let item of hideElementArr;" id={{item.divid}} >
+        <div *ngFor="let item of hideElementArr;" id={{item.divid}}>
       <table>
-        <tr ><th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}
-         <!--  <select class="cesium-button-select" id={{item.id}}  (change)="Changerelation($event.target.value,item.RelaHide,item.id)">
-             <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
-          </select> --></div></th>
+        <tr ><th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
         <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;"><div style="width:40px;height: 25px;">
           <select class="cesium-button-select" (change)="Changerelation($event.target.value,item.id)" style="width:40px;height: 25px;">
              <option class="cesium-option" value=0>></option>

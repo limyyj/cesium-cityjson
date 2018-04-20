@@ -19,7 +19,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   PropertyNames:Array<string>;
   Properties:Array<any>;
   cesiumpromise:any;
-  //CheckHide:boolean;
   CheckOpp:boolean;
   ColorValue:string;
   HeightValue:string;
@@ -39,10 +38,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   CheckScale:boolean=true;
   HideNum:Array<string>;
   RelaHide:Array<number>;
-  HeightHide:Array<string>;
-  textHide:Array<number>;
-  HideMax:Array<number>;
-  HideMin:Array<number>;
   Maxtext:number;
   Mintext:number;
   HideValue:string;
@@ -52,19 +47,9 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     super(injector);
     this.ChromaScale=chroma.scale("SPECTRAL");
     this.HideNum=[];
-    this.HeightHide=[undefined,undefined,undefined];
-    this.RelaHide=[undefined,undefined,undefined];
-    this.textHide=[undefined,undefined,undefined];
-    this.HideMax=[undefined,undefined,undefined];
-    this.HideMin=[undefined,undefined,undefined];
   }
  
   ngOnInit() {
-    /*if(this.CheckHide == undefined) {
-        this.CheckHide = false;
-    } else {
-      this.CheckHide=this.dataService.CheckHide;
-    }*/
     if(this.CheckOpp == undefined) {
         this.CheckOpp = false;
     } else {
