@@ -172,6 +172,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var DataService = /** @class */ (function () {
     function DataService() {
         this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.ScaleValue = 1000;
+        this.CheckScale = true;
     }
     DataService.prototype.sendMessage = function (message) {
         this.subject.next({ text: message });
@@ -299,7 +301,7 @@ var MobiuscesiumComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__ = __webpack_require__("./node_modules/@angular/material/esm5/tabs.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__ = __webpack_require__("./node_modules/@angular/material/esm5/tooltip.es5.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__ = __webpack_require__("./node_modules/@angular/material/esm5/slider.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_material_sidenav__ = __webpack_require__("./node_modules/@angular/material/esm5/sidenav.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -341,7 +343,7 @@ var MobiusCesium = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__["a" /* BrowserModule */],
                 __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__["a" /* MatTooltipModule */],
                 __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__["a" /* MatSliderModule */],
-                __WEBPACK_IMPORTED_MODULE_12__angular_material_sidenav__["a" /* MatSidenavModule */]
+                __WEBPACK_IMPORTED_MODULE_12__angular_forms__["a" /* FormsModule */]
             ],
             exports: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */]],
             declarations: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */],
@@ -368,7 +370,7 @@ module.exports = "#toolwindow{\r\n  position: relative;\r\n  background-color: #
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"Attributes\">\r\n  \t  <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">ID</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n  \t  <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n\t  </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n  \t  <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><div style=\"width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Min}}</div></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Max}}</div></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 80px;height: 25px;\"><div class=\"Hide\" style=\"width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 80px;height: 25px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 25px;\"><div style=\"width:20px;height: 25px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n\t    </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"Attributes\">\r\n      <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">ID</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;width: 85px\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;cursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n    </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n      <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 12px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n    </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n      <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><div style=\"width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Min}}</div></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Max}}</div></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 80px;height: 25px;\"><div class=\"Hide\" style=\"width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 80px;height: 25px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 25px;\"><div style=\"width:20px;height: 25px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
 
 /***/ }),
 
@@ -407,20 +409,15 @@ var ToolwindowComponent = /** @class */ (function (_super) {
     __extends(ToolwindowComponent, _super);
     function ToolwindowComponent(injector, myElement) {
         var _this = _super.call(this, injector) || this;
-        _this.ScaleValue = 1000;
-        _this.CheckScale = true;
         _this.hideElementArr = [];
         _this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
         _this.HideNum = [];
+        _this.ScaleValue = _this.dataService.ScaleValue;
+        _this.CheckScale = _this.dataService.CheckScale;
+        _this.CheckOpp = _this.dataService.CheckOpp;
         return _this;
     }
     ToolwindowComponent.prototype.ngOnInit = function () {
-        if (this.CheckOpp == undefined) {
-            this.CheckOpp = false;
-        }
-        else {
-            this.CheckOpp = this.dataService.CheckOpp;
-        }
     };
     ToolwindowComponent.prototype.notify = function (message) {
         if (message == "model_update") {
@@ -458,12 +455,14 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                 this.ColorValue = this.dataService.ColorValue;
                 this.ColorNames = this.dataService.propertyNames;
                 this.ColorNames.sort();
+                this.selectColor = this.ColorValue;
                 this.onChangeColor(this.ColorValue);
             }
             if (this.HeightValue !== this.dataService.HeightValue) {
                 this.HeightValue = this.dataService.HeightValue;
                 this.HeightKey = this.dataService.HeightKey;
                 this.HeightKey.sort();
+                this.selectHeight = this.HeightValue;
                 this.onChangeHeight(this.HeightValue);
             }
         }
@@ -693,6 +692,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
     };
     ToolwindowComponent.prototype.checkscale = function () {
         this.CheckScale = !this.CheckScale;
+        this.dataService.CheckScale = this.CheckScale;
     };
     ToolwindowComponent.prototype.addHide = function () {
         var lastnumber;
@@ -994,6 +994,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
     };
     ToolwindowComponent.prototype.checkopp = function () {
         this.CheckOpp = !this.CheckOpp;
+        this.dataService.CheckOpp = this.CheckOpp;
     };
     ToolwindowComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -1031,8 +1032,6 @@ module.exports = "<div id=\"cesiumContainer\" (click)=\"select()\">\r\n</div>"
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewerComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js__ = __webpack_require__("./node_modules/chroma-js/chroma.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_chroma_js__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1054,7 +1053,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 
 
-
 var ViewerComponent = /** @class */ (function (_super) {
     __extends(ViewerComponent, _super);
     function ViewerComponent(injector, myElement) {
@@ -1062,7 +1060,6 @@ var ViewerComponent = /** @class */ (function (_super) {
         _this.tileset = new Cesium.Cesium3DTileset({});
         _this.selectEntity = null;
         _this.myElement = myElement;
-        _this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
         return _this;
     }
     ViewerComponent.prototype.ngOnInit = function () {
@@ -1123,10 +1120,24 @@ var ViewerComponent = /** @class */ (function (_super) {
         this.dataService.cesiumpromise = promise;
         this.dataService.propertyNames = this.propertyNames;
         this.dataService.HeightKey = HeightKey;
-        this.ColorValue = this.propertyNames.sort()[0];
-        this.HeightValue = HeightKey.sort()[0];
-        this.dataService.ColorValue = this.ColorValue;
-        this.dataService.HeightValue = this.HeightValue;
+        if (this.dataService.ColorValue !== undefined) {
+            this.ColorValue = this.dataService.ColorValue;
+        }
+        else {
+            this.ColorValue = this.propertyNames.sort()[0];
+            this.dataService.ColorValue = this.ColorValue;
+        }
+        if (this.dataService.HeightValue !== undefined) {
+            this.HeightValue = this.dataService.HeightValue;
+        }
+        else {
+            this.HeightValue = HeightKey.sort()[0];
+            this.dataService.HeightValue = this.HeightValue;
+        }
+        // this.ColorValue=this.propertyNames.sort()[0];
+        // this.HeightValue=HeightKey.sort()[0]
+        // this.dataService.ColorValue=this.ColorValue;
+        // this.dataService.HeightValue=this.HeightValue;
         viewer.zoomTo(promise);
     };
     ViewerComponent.prototype.select = function () {
@@ -1197,555 +1208,6 @@ var ViewerComponent = /** @class */ (function (_super) {
     return ViewerComponent;
 }(__WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__["a" /* DataSubscriber */]));
 
-/*onChangeColor(ColorValue){
-  this.ColorValue=ColorValue;*/
-/*if(this.ColorValue==="Status_Cat"||undefined){
-  this.colorByStatus_Cat(this.cesiumpromise,this.cesiumviewer);
-}else if(this.ColorValue==="DIST_EWL"){
-  this.colorByDIST_EWL(this.cesiumpromise,this.cesiumviewer);
-}else if(this.ColorValue==="DIST_TRUNK"){
-  this.colorByDIST_TRUNK(this.cesiumpromise,this.cesiumviewer);
-}else if(this.ColorValue==="AVAILABLE"){
-  this.colorByAVAILABLE(this.cesiumpromise,this.cesiumviewer);
-}else if(this.ColorValue==="AGG_POT"){
-  this.colorByAGG_POT(this.cesiumpromise,this.cesiumviewer);
-}else if(this.ColorValue==="GPR"){
-  this.colorByGPR(this.cesiumpromise,this.cesiumviewer);
-}else if(this.ColorValue==="HB_LIMIT"){
-  this.colorByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
-}*/
-/*var texts=[];
-this.texts=[];
-this.Colors=[];
-for(var j=0;j<this.propertyNames.length;j++){
-  if(this.ColorValue===this.propertyNames[j]){
-    this.Name=this.propertyNames[j];
-    var self= this;
-    this.cesiumpromise.then(function(dataSource) {
-      var entities = dataSource.entities.values;
-      for (var i = 0; i < entities.length; i++) {
-        var entity = entities[i];
-        if(entity.properties[self.Name]!==undefined){
-          if(entity.properties[self.Name]._value!==" "){
-            if(texts.length===0) {texts[0]=entity.properties[self.Name]._value;}
-            else{if(texts.indexOf(entity.properties[self.Name]._value)===-1) texts.push(entity.properties[self.Name]._value);}
-            }
-          }
-        }
-    });
-  }
-}
-for(var j=0;j<texts.length;j++){
-  this.Colors.push(this.ColorStore[j]);
-}
-this.texts=texts;
-if(typeof(texts[0])==="number") {
-  this.colorByNum();
-}else{this.colorByCat();}
-if(this.CheckHide===true) this.Hide();
-if(this.CheckCom===true) this.Commited();
-if(this.CheckOcc===true) this.Occupied();
-this.dataService.getColorValue(this.ColorValue);
-}
-colorByCat(){
-var Name=this.ColorValue;
-var texts=this.texts;
-this.cesiumpromise.then(function(dataSource) {
-  var self= this;
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-    if(entity.properties[Name]._value===texts[0]){ entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[1]){ entity.polygon.material=Cesium.Color.RED.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[2]){ entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[3]){ entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[4]){ entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[5]){ entity.polygon.material=Cesium.Color.AQUA.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[6]){ entity.polygon.material=Cesium.Color.BROWN.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[7]){ entity.polygon.material=Cesium.Color.CADETBLUE.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[8]){ entity.polygon.material=Cesium.Color.CHARTREUSE.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[9]){ entity.polygon.material=Cesium.Color.DARKORCHID.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[10]){ entity.polygon.material=Cesium.Color.DARKTURQUOISE.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[11]){ entity.polygon.material=Cesium.Color.DEEPPINK.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[12]){ entity.polygon.material=Cesium.Color.FORESTGREEN.withAlpha(1);}
-    else if(entity.properties[Name]._value===texts[13]){ entity.polygon.material=Cesium.Color.GOLDENROD.withAlpha(1);}
-    else{entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-  }
-});
-}
-
-
-colorByNum(){
-var max = Math.max.apply(Math, this.texts);
-var min = Math.min.apply(Math, this.texts);
-console.log(max,min);
-
-}
-
-colorByStatus_Cat(promise,viewer) {
-this.Colors=["lightcoral","red","coral","crimson","ROYALBLUE","lightslategray"];
-this.texts=["Available","Prime","Remnant","Estate under active master / infra planning","Others","0 OR NULL"];
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-      if(entity.properties.Status_Cat!==undefined){
-        if(entity.properties.Status_Cat._value==="Available") entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);
-        else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-        else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-        else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);
-        else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-        else {entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
-      }
-  }
-});
-
-
-}
-
-colorByDIST_TRUNK(promise,viewer) {
-this.Colors=["DARKCYAN","MEDIUMTURQUOISE","KHAKI","GOLD","CORAL","LIGHTSLATEGRAY"];
-this.texts=[">= 239","238 - 151","150 - 96","95 - 61","<= 60","0 OR NULL"];
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-      if(entity.properties.DIST_TRUNK!==undefined){
-        if(entity.properties.DIST_TRUNK>=239) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
-        else if(entity.properties.DIST_TRUNK>=151) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-        else if(entity.properties.DIST_TRUNK>=96) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
-        else if(entity.properties.DIST_TRUNK>=61) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
-        else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-        else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-      }
-  }
-});
-}
-
-colorByDIST_EWL(promise,viewer) {
-this.Colors=["DARKCYAN","MEDIUMTURQUOISE","KHAKI","GOLD","CORAL","LIGHTSLATEGRAY"];
-this.texts=[">= 715","714 - 451","450 - 286","285 - 181","<= 180","0 OR NULL"];
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-      if(entity.properties.DIST_EWL!==undefined){
-        if(entity.properties.DIST_EWL>=715) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
-        else if(entity.properties.DIST_EWL>=451) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-        else if(entity.properties.DIST_EWL>=286) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
-        else if(entity.properties.DIST_EWL>=181) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
-        else if(entity.properties.DIST_EWL===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-        else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-      }
-  }
-});
-}
-
-colorByAVAILABLE(promise,viewer) {
-this.Colors=["RED","ROYALBLUE","LIGHTSLATEGRAY"];
-this.texts=["AVAILABLE","COMMITTED","OCCUPIED"];
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-      if(entity.properties.AVAILABLE!==undefined){
-        if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-        else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);
-        else if(entity.properties.AVAILABLE._value==="OCCUPIED") entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      }
-  }
-});
-}
-
-colorByAGG_POT(promise,viewer) {
-this.Colors=["CORAL","GOLD","KHAKI","MEDIUMTURQUOISE","DARKCYAN","LIGHTSLATEGRAY"];
-this.texts=[">= 0.79","0.789 - 0.67","0.669 - 0.56","0.559 - 0.38","<= 0.379","0 OR NULL"];
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-      if(entity.properties.AGG_POT!==undefined){
-        if(entity.properties.AGG_POT>=0.79) entity.polygon.material=Cesium.Color.CORAL .withAlpha(1);
-        else if(entity.properties.AGG_POT>=0.67) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
-        else if(entity.properties.AGG_POT>=0.56) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
-        else if(entity.properties.AGG_POT>=0.38) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-        else if(entity.properties.AGG_POT===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-        else entity.polygon.material=Cesium.Color.DARKCYAN.withAlpha(1);
-      }
-  }
-});
-}
-
-colorByGPR(promise,viewer) {
-this.Colors=["YELLOW","DARKORANGE","RED","LIGHTSLATEGRAY"];
-this.texts=["0.9 - 1.7","2.0 - 2.8","3.0 - 3.5","0 OR NULL"];
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-    if(entity.properties.GPR!==undefined){
-      if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value==="1"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1
-        ||entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4||entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7)
-        entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
-      else if(entity.properties.GPR._value==="2"||entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
-        entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3||entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5||
-        entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
-      else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value==="3"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
-        entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-      else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-    }
-  }
-});
-}
-
-colorByHB_LIMIT(promise,viewer) {
-this.Colors=["RED","ORANGERED","DARKORANGE","YELLOW","LIGHTSLATEGRAY"];
-this.texts=[">= 93","92 - 86","85 - 77","76 - 63","<= 62"];
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-      if(entity.properties.HB_LIMIT!==undefined){
-        if(entity.properties.HB_LIMIT>=93) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-        else if(entity.properties.HB_LIMIT>=86) entity.polygon.material=Cesium.Color.ORANGERED.withAlpha(1);
-        else if(entity.properties.HB_LIMIT>=77) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
-        else if(entity.properties.HB_LIMIT>=63) entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
-        else if(entity.properties.HB_LIMIT===0||null) entity.polygon.material=Cesium.Color.WHITE.withAlpha(1);
-        else entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      }
-  }
-});
-}
-
-onChangeHeight(HeightValue){
-this.HeightValue=HeightValue;
-if(this.HeightValue==="Status_Cat"){
-  this.HeightByStatus_Cat(this.cesiumpromise,this.cesiumviewer);
-}else if(this.HeightValue==="DIST_EWL"){
-  this.HeightByDIST_EWL(this.cesiumpromise,this.cesiumviewer);
-}else if(this.HeightValue==="DIST_TRUNK"){
-  this.HeightByDIST_TRUNK(this.cesiumpromise,this.cesiumviewer);
-}else if(this.HeightValue==="AVAILABLE"){
-  this.HeightByAVAILABLE(this.cesiumpromise,this.cesiumviewer);
-}else if(this.HeightValue==="AGG_POT"){
-  this.HeightByAGG_POT(this.cesiumpromise,this.cesiumviewer);
-}else if(this.HeightValue==="GPR"){
-  this.HeightByGPR(this.cesiumpromise,this.cesiumviewer);
-}else if(this.HeightValue==="HB_LIMIT"){
-  this.HeightByHB_LIMIT(this.cesiumpromise,this.cesiumviewer);
-}
-if(this.CheckHide===true) this.Hide();
-if(this.CheckCom===true) this.Commited();
-if(this.CheckOcc===true) this.Occupied();
-this.dataService.getHeightValue(this.HeightValue);
-}
-
-HeightByStatus_Cat(promise,viewer) {
-this.Maximum=500;
-this.Minimum=25;
-promise.then(function(dataSource) {
-  var entities = dataSource.entities.values;
-  for (var i = 0; i < entities.length; i++) {
-    var entity = entities[i];
-    //if(entity.properties.TRANSPAREN._value===1){
-      if(entity.properties.Status_Cat!==undefined){
-        if(entity.properties.Status_Cat._value==="Available") entity.polygon.extrudedHeight = 100*5;
-        else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.extrudedHeight = 100*5;
-        else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.extrudedHeight = 100*5;
-        else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.extrudedHeight = 100*5;
-        else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.extrudedHeight = 5*5;
-        else{entity.polygon.extrudedHeight = 50*5;}*/
-/*var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-center=Cesium.Ellipsoid.WGS84.scaleToGeodeticSurface(center, center);
-viewer.entities.add({
-    name : 'Glowing blue line on the surface',
-    polyline : {
-        positions : Cesium.Cartesian3.fromDegreesArrayHeights([103.63626290332934,1.3333570541789537,0,
-                                                        103.63660236586097,1.33303363743232,1000]),
-
-        width : 10,
-        material : new Cesium.PolylineGlowMaterialProperty({
-            glowPower : 0.2,
-            color : Cesium.Color.BLUE
-        })
-    }
-});
-viewer.zoomTo(viewer.entities);*/
-/* }
-}
-});
-}*/
-/*HeightByDIST_EWL(promise,viewer) {
-  this.Maximum=1500;
-  this.Minimum=25;
-  promise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-        if(entity.properties.DIST_EWL!==undefined){
-          if(entity.properties.DIST_EWL>=715) entity.polygon.extrudedHeight = 5*5;
-          else if(entity.properties.DIST_EWL>=451) entity.polygon.extrudedHeight = 20*5;
-          else if(entity.properties.DIST_EWL>=286) entity.polygon.extrudedHeight = 50*5;
-          else if(entity.properties.DIST_EWL>=181) entity.polygon.extrudedHeight = 80*5;
-          else if(entity.properties.DIST_EWL===0||null) entity.polygon.extrudedHeight = 5*5;
-          else entity.polygon.extrudedHeight = 100*5;
-        }
-    }
-  });
-}
-
-HeightByDIST_TRUNK(promise,viewer) {
-  this.Maximum=500;
-  this.Minimum=25;
-  promise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-        if(entity.properties.DIST_TRUNK!==undefined){
-          if(entity.properties.DIST_TRUNK>=239) entity.polygon.extrudedHeight = 5*5;
-          else if(entity.properties.DIST_TRUNK>=151) entity.polygon.extrudedHeight = 20*5;
-          else if(entity.properties.DIST_TRUNK>=96) entity.polygon.extrudedHeight = 50*5;
-          else if(entity.properties.DIST_TRUNK>=61) entity.polygon.extrudedHeight = 80*5;
-          else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.extrudedHeight = 5*5;
-          else entity.polygon.extrudedHeight = 100*5;
-        }
-    }
-  });
-}
-
-HeightByAVAILABLE(promise,viewer) {
-  this.Maximum=500;
-  this.Minimum=25;
-  promise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-        if(entity.properties.AVAILABLE!==undefined){
-          if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.extrudedHeight = 100*5;
-          else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.extrudedHeight = 50*5;
-          else{entity.polygon.extrudedHeight = 5*5;}
-        }
-    }
-  });
-}
-
-HeightByAGG_POT(promise,viewer) {
-  this.Maximum=500;
-  this.Minimum=25;
-  promise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-        if(entity.properties.AGG_POT!==undefined){
-          if(entity.properties.AGG_POT>=0.79) entity.polygon.extrudedHeight = 100*5;
-          else if(entity.properties.AGG_POT>=0.67) entity.polygon.extrudedHeight = 80*5;
-          else if(entity.properties.AGG_POT>=0.56) entity.polygon.extrudedHeight = 50*5;
-          else if(entity.properties.AGG_POT>=0.38) entity.polygon.extrudedHeight = 20*5;
-          else if(entity.properties.AGG_POT===0||null) entity.polygon.extrudedHeight = 5*5;
-          else {entity.polygon.extrudedHeight = 5*5;}
-        }
-    }
-  });
-}
-
-HeightByGPR(promise,viewer) {
-  this.Maximum=600;
-  this.Minimum=25;
-  promise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-      if(entity.properties.GPR!==undefined){
-        if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===null||entity.properties.GPR._value===0||entity.properties.GPR._value==="0")
-          entity.polygon.extrudedHeight = 5*5;
-        else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9) entity.polygon.extrudedHeight = 9*5;
-        else if(entity.properties.GPR._value==="1.0"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1||entity.properties.GPR._value==="1")
-          entity.polygon.extrudedHeight = 10*5;
-        else if(entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4) entity.polygon.extrudedHeight = 15*5;
-        else if(entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7) entity.polygon.extrudedHeight = 30*5;
-        else if(entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2")
-          entity.polygon.extrudedHeight = 60*5;
-        else if(entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1) entity.polygon.extrudedHeight = 70*5;
-        else if(entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3) entity.polygon.extrudedHeight = 85*5;
-        else if(entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5) entity.polygon.extrudedHeight = 90*5;
-        else if(entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.extrudedHeight = 95*5;
-        else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3")
-          entity.polygon.extrudedHeight = 105*5;
-        else if(entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2) entity.polygon.extrudedHeight = 110*5;
-        else if(entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.extrudedHeight = 120*5;
-        else{entity.polygon.extrudedHeight = 30*5;}
-      }else{entity.polygon.extrudedHeight = 5*5;}
-    }
-  });
-}
-
-
-HeightByHB_LIMIT(promise,viewer) {
-  var height:Array<any>=[];
-  this.Maximum=0;
-  this.Minimum=0;
-  var max:number=0;
-  promise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-        if(entity.properties.HB_LIMIT!==undefined){
-          entity.polygon.extrudedHeight = entity.properties.HB_LIMIT;
-          height.push(Number(entity.properties.HB_LIMIT._value));
-        }else{entity.polygon.extrudedHeight =0;}
-
-    }
-  });
-  this.Maximum=Math.max(...height);
-}
-
-checkHide(){
-  if(this.CheckHide===true) {this.Hide();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
-  if(this.CheckCom===true) {this.Commited();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
-  if(this.CheckOcc===true) {this.Occupied();}else{this.onChangeHeight(this.HeightValue);this.onChangeColor(this.ColorValue);}
-  this.dataService.CheckHide=this.CheckHide;
-  this.dataService.CheckCom=this.CheckCom;
-  this.dataService.CheckOcc=this.CheckOcc;
-}
-changeHide(){
-  this.CheckHide=!this.CheckHide;
-  this.dataService.CheckHide=this.CheckHide;
-}
-changeCom(){
-  this.CheckCom=!this.CheckCom;
-  this.dataService.CheckCom=this.CheckCom;
-}
-changeOcc(){
-  this.CheckOcc=!this.CheckOcc;
-  this.dataService.CheckOcc=this.CheckOcc;
-}
-
-Hide(){
-  this.cesiumpromise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-      if(entity.properties.HIDE._value!==undefined&&entity.properties.HIDE._value===1){
-        entity.polygon.extrudedHeight = 0;
-        entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      }
-    }
-  });
-}
-Commited(){
-  this.cesiumpromise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-      if(entity.properties.AVAILABLE._value==="COMMITTED"){
-        entity.polygon.extrudedHeight = 0;
-        entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      }
-    }
-  });
-}
-Occupied(){
-  this.cesiumpromise.then(function(dataSource) {
-    var entities = dataSource.entities.values;
-    for (var i = 0; i < entities.length; i++) {
-      var entity = entities[i];
-      if(entity.properties.AVAILABLE._value==="OCCUPIED"){
-        entity.polygon.extrudedHeight = 0;
-        entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      }
-    }
-  });
-}
-select(){
-  var viewer=this.viewer;
-  if(this.selectEntity!==null) {this.ColorSelect(this.selectEntity);}
-  if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
-    this.dataService.SelectedEntity=viewer.selectedEntity;
-      const material=viewer.selectedEntity.polygon.material;
-      viewer.selectedEntity.polygon.material=Cesium.Color.WHITE;
-      this.selectEntity=viewer.selectedEntity;
-      this.material=material;
-  }else{
-      this.selectEntity=null;
-      this.material=null;
-  }
-  
-}
-
-ColorSelect(entity){
-  if(this.ColorValue==="Status_Cat"){
-    if(entity.properties.Status_Cat!==undefined){
-      if(entity.properties.Status_Cat._value==="Available") entity.polygon.material=Cesium.Color.LIGHTCORAL.withAlpha(1);
-      else if(entity.properties.Status_Cat._value==="Prime") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-      else if(entity.properties.Status_Cat._value==="Remnant") entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-      else if(entity.properties.Status_Cat._value==="Estate under active master / infra planning") entity.polygon.material=Cesium.Color.CRIMSON.withAlpha(1);
-      else if(entity.properties.Status_Cat._value==="0"||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      else {entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);}
-    }
-  }else if(this.ColorValue==="DIST_EWL"){
-    if(entity.properties.DIST_EWL!==undefined){
-      if(entity.properties.DIST_EWL>=715) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
-      else if(entity.properties.DIST_EWL>=451) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-      else if(entity.properties.DIST_EWL>=286) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
-      else if(entity.properties.DIST_EWL>=181) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
-      else if(entity.properties.DIST_EWL===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-    }
-  }else if(this.ColorValue==="DIST_TRUNK"){
-    if(entity.properties.DIST_TRUNK!==undefined){
-      if(entity.properties.DIST_TRUNK>=239) entity.polygon.material=Cesium.Color.DARKCYAN .withAlpha(1);
-      else if(entity.properties.DIST_TRUNK>=151) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-      else if(entity.properties.DIST_TRUNK>=96) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
-      else if(entity.properties.DIST_TRUNK>=61) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
-      else if(entity.properties.DIST_TRUNK===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      else entity.polygon.material=Cesium.Color.CORAL.withAlpha(1);
-    }
-  }else if(this.ColorValue==="AVAILABLE"){
-    if(entity.properties.AVAILABLE!==undefined){
-      if(entity.properties.AVAILABLE._value==="AVAILABLE") entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-      else if(entity.properties.AVAILABLE._value==="COMMITTED") entity.polygon.material=Cesium.Color.ROYALBLUE.withAlpha(1);
-      else if(entity.properties.AVAILABLE._value==="OCCUPIED") entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-    }
-  }else if(this.ColorValue==="AGG_POT"){
-    if(entity.properties.AGG_POT!==undefined){
-      if(entity.properties.AGG_POT>=0.79) entity.polygon.material=Cesium.Color.CORAL .withAlpha(1);
-      else if(entity.properties.AGG_POT>=0.67) entity.polygon.material=Cesium.Color.GOLD.withAlpha(1);
-      else if(entity.properties.AGG_POT>=0.56) entity.polygon.material=Cesium.Color.KHAKI.withAlpha(1);
-      else if(entity.properties.AGG_POT>=0.38) entity.polygon.material=Cesium.Color.MEDIUMTURQUOISE.withAlpha(1);
-      else if(entity.properties.AGG_POT===0||null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      else entity.polygon.material=Cesium.Color.DARKCYAN.withAlpha(1);
-    }
-  }else if(this.ColorValue==="GPR"){
-    if(entity.properties.GPR!==undefined){
-        if(entity.properties.GPR._value==="0.0"||entity.properties.GPR._value===0.0||entity.properties.GPR._value===0||entity.properties.GPR._value===null) entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-        else if(entity.properties.GPR._value==="0.9"||entity.properties.GPR._value===0.9||entity.properties.GPR._value==="1.0"||entity.properties.GPR._value==="1"||entity.properties.GPR._value===1.0||entity.properties.GPR._value===1
-          ||entity.properties.GPR._value==="1.4"||entity.properties.GPR._value===1.4||entity.properties.GPR._value==="1.7"||entity.properties.GPR._value===1.7)
-          entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
-        else if(entity.properties.GPR._value==="2"||entity.properties.GPR._value==="2.0"||entity.properties.GPR._value===2.0||entity.properties.GPR._value===2||entity.properties.GPR._value==="2.1"||entity.properties.GPR._value===2.1||
-          entity.properties.GPR._value==="2.3"||entity.properties.GPR._value===2.3||entity.properties.GPR._value==="2.5"||entity.properties.GPR._value===2.5||
-          entity.properties.GPR._value==="2.8"||entity.properties.GPR._value===2.8) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
-        else if(entity.properties.GPR._value==="3.0"||entity.properties.GPR._value==="3"||entity.properties.GPR._value===3.0||entity.properties.GPR._value===3||entity.properties.GPR._value==="3.2"||entity.properties.GPR._value===3.2||
-          entity.properties.GPR._value==="3.5"||entity.properties.GPR._value===3.5) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-        else {entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-      }
-  }else if(this.ColorValue==="HB_LIMIT"){
-    if(entity.properties.HB_LIMIT!==undefined){
-      if(entity.properties.HB_LIMIT>=93) entity.polygon.material=Cesium.Color.RED.withAlpha(1);
-      else if(entity.properties.HB_LIMIT>=86) entity.polygon.material=Cesium.Color.ORANGERED.withAlpha(1);
-      else if(entity.properties.HB_LIMIT>=77) entity.polygon.material=Cesium.Color.DARKORANGE.withAlpha(1);
-      else if(entity.properties.HB_LIMIT>=63) entity.polygon.material=Cesium.Color.YELLOW.withAlpha(1);
-      else if(entity.properties.HB_LIMIT===0||null) entity.polygon.material=Cesium.Color.WHITE.withAlpha(1);
-      else entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-    }
-  }
-  if(this.CheckHide===true){
-    if(entity.properties.HIDE._value!==undefined&&entity.properties.HIDE._value===1){
-      entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-    }
-  }
-
-}*/ 
 
 
 /***/ }),
