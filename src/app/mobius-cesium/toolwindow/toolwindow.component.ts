@@ -51,6 +51,10 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.ScaleValue=this.dataService.ScaleValue;
     this.CheckScale=this.dataService.CheckScale;
     this.CheckOpp=this.dataService.CheckOpp;
+    if(this.dataService.HideNum!==undefined) {
+      this.HideNum=this.dataService.HideNum;
+      this.hideElementArr=this.dataService.hideElementArr;
+    }
   }
  
   ngOnInit() {
@@ -328,6 +332,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   hideElementArr = [];
   addHide(){
     var lastnumber:string;
+    //if(this.dataService.HideNum!==undefined) {this.HideNum=this.dataService.HideNum;this.hideElementArr=this.dataService.hideElementArr;}
     if(this.HideNum.length===0) {this.HideNum[0]="0";lastnumber=this.HideNum[0]}
     else{
       for(var i=0;i<this.HideNum.length+1;i++){
@@ -343,6 +348,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(typeof(texts[0])==="number"){this.HideType="number"}else{this.HideType="category";}
     this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:this.HideValue,type:this.HideType,Category:texts,CategaryHide:texts[0],RelaHide:0,textHide: Math.round(Math.min.apply(Math, texts)*100)/100,
                               HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
+    this.dataService.hideElementArr=this.hideElementArr;
+    this.dataService.HideNum=this.HideNum;
     return;
   }
 
@@ -361,6 +368,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.Hide();
     this.hideElementArr.splice(index,1);
     this.HideNum.splice(index,1);
+    this.dataService.hideElementArr=this.hideElementArr;
+    this.dataService.HideNum=this.HideNum;
   }
 
   Initial(HideValue):Array<any>{
@@ -410,20 +419,21 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(RelaHide==="0"||RelaHide===0) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMin;
     if(RelaHide==="1"||RelaHide===1) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMax;
     this.Hide();
+    this.dataService.hideElementArr=this.hideElementArr;
   }
 
   ChangeCategory(categary,id,type){
     var scale:number=this.ScaleValue/this.Max;
     var index=this.HideNum.indexOf(id);
     var promise=this.dataService.cesiumpromise;
-    var self= this;
     if(type===1){
-      self.hideElementArr[index].CategaryHide=categary;
+      this.hideElementArr[index].CategaryHide=categary;
     }
     if(type===0){
-      self.hideElementArr[index].RelaHide=Number(categary);
+      this.hideElementArr[index].RelaHide=Number(categary);
     }
-    self.Hide();
+    this.Hide();
+    this.dataService.hideElementArr=this.hideElementArr;
   }
 
 
@@ -431,6 +441,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     var index=this.HideNum.indexOf(id);
     this.hideElementArr[index].textHide=value;
     this.Hide();
+    this.dataService.hideElementArr=this.hideElementArr;
   }
 
   _compare(value: number, slider: number, relation: number): boolean {

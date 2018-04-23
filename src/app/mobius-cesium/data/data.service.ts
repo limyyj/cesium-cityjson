@@ -23,6 +23,8 @@ export class DataService {
   MaxColor:number;
   ScaleValue:number=1000;
   CheckScale:boolean=true;
+  hideElementArr:Array<any>;
+  HideNum:Array<any>;
 
   sendMessage(message?: string) {
     this.subject.next({text: message});
