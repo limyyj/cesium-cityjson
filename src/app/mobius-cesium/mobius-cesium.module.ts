@@ -10,7 +10,7 @@ import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser'
 import { MatTabsModule} from '@angular/material/tabs';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import {MatSliderModule } from '@angular/material/slider';
-import {MatSidenavModule} from '@angular/material/sidenav';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [CommonModule,
@@ -21,8 +21,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
               BrowserModule,
               MatTooltipModule,
               MatSliderModule,
-              MatSidenavModule
-			 ],
+              FormsModule
+       ],
     exports: [ MobiuscesiumComponent ],
     declarations: [MobiuscesiumComponent,
                     ViewerComponent,
@@ -30,8 +30,8 @@ import {MatSidenavModule} from '@angular/material/sidenav';
     providers: [DataService],
 })
 export class MobiusCesium {
- 	
- 	static forRoot(): ModuleWithProviders {
+   
+   static forRoot(): ModuleWithProviders {
         return {
             ngModule: MobiusCesium,
             providers: [

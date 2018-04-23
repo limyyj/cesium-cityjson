@@ -2,8 +2,8 @@ import { Component, OnInit, Injector, ElementRef ,NgModule} from '@angular/core'
 import {DataSubscriber} from "../data/DataSubscriber";
 //import { AngularSplitModule } from 'angular-split';
 import { DataService } from "../data/data.service";
+import {ViewerComponent} from "../viewer/viewer.component";
 import * as chroma from "chroma-js";
-
 
 @Component({
   selector: 'app-toolwindow',
@@ -33,30 +33,27 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   Max:number;
   Min:number;
   SelectedEntity:object;
-  ScaleValue:number=1000;
-  CheckScale:boolean=true;
+  ScaleValue:number;
+  CheckScale:boolean;
   HideNum:Array<string>;
   RelaHide:Array<number>;
   Maxtext:number;
   Mintext:number;
   HideValue:string;
   HideType:string;
+  selectColor:string;
+  selectHeight:string;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
     this.ChromaScale=chroma.scale("SPECTRAL");
     this.HideNum=[];
+    this.ScaleValue=this.dataService.ScaleValue;
+    this.CheckScale=this.dataService.CheckScale;
+    this.CheckOpp=this.dataService.CheckOpp;
   }
  
   ngOnInit() {
-    if(this.CheckOpp == undefined) {
-        this.CheckOpp = false;
-    } else {
-      this.CheckOpp=this.dataService.CheckOpp;
-    }
-    
-  	
-
   }
 
   notify(message: string): void{
@@ -77,8 +74,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.PropertyNames.sort();
       this.viewer=this.dataService.viewer;
     }
-   
-    
   }
 
   ngDoCheck(){
@@ -99,12 +94,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.ColorValue=this.dataService.ColorValue;
         this.ColorNames=this.dataService.propertyNames;
         this.ColorNames.sort();
+        this.selectColor=this.ColorValue;
         this.onChangeColor(this.ColorValue);
+        
       }
       if(this.HeightValue!==this.dataService.HeightValue){
         this.HeightValue=this.dataService.HeightValue;
         this.HeightKey=this.dataService.HeightKey;
         this.HeightKey.sort();
+        this.selectHeight=this.HeightValue;
         this.onChangeHeight(this.HeightValue);
       }
     }
@@ -324,6 +322,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
   checkscale(){
     this.CheckScale=!this.CheckScale;
+    this.dataService.CheckScale=this.CheckScale;
   }
 
   hideElementArr = [];
@@ -605,6 +604,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
   checkopp(){
     this.CheckOpp=!this.CheckOpp;
+    this.dataService.CheckOpp=this.CheckOpp;
   }
 
 

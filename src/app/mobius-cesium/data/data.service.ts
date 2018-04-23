@@ -21,6 +21,8 @@ export class DataService {
   Colortexts:Array<any>;
   MinColor:number;
   MaxColor:number;
+  ScaleValue:number=1000;
+  CheckScale:boolean=true;
 
   sendMessage(message?: string) {
     this.subject.next({text: message});
