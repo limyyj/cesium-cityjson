@@ -172,6 +172,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var DataService = /** @class */ (function () {
     function DataService() {
         this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+        this.CheckOpp = false;
         this.ScaleValue = 1000;
         this.CheckScale = true;
     }
