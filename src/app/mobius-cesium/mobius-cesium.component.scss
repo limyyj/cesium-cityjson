@@ -19,6 +19,11 @@
   	padding: 0px !important;
   	font-size: 14px;
 }
+#button{
+  position:absolute;
+  z-index: 99;
+
+}
 
 /* split-area{
   overflow-y: hidden !important;

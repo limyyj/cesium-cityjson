@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 import {DataSubscriber} from "../data/DataSubscriber";
-import chroma =require("chroma-js");
+import * as chroma from "chroma-js";
 
 
 @Component({

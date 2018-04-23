@@ -2,8 +2,7 @@ import { Component, OnInit, Injector, ElementRef ,NgModule} from '@angular/core'
 import {DataSubscriber} from "../data/DataSubscriber";
 //import { AngularSplitModule } from 'angular-split';
 import { DataService } from "../data/data.service";
-import {ViewerComponent} from "../viewer/viewer.component";
-import chroma =require("chroma-js");
+import * as chroma from "chroma-js";
 
 
 @Component({
@@ -101,7 +100,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.ColorNames=this.dataService.propertyNames;
         this.ColorNames.sort();
         this.onChangeColor(this.ColorValue);
-        
       }
       if(this.HeightValue!==this.dataService.HeightValue){
         this.HeightValue=this.dataService.HeightValue;

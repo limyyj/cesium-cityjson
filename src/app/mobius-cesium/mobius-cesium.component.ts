@@ -8,6 +8,7 @@ import {DataService} from './data/data.service';
 })
 export class MobiuscesiumComponent {
 	@Input() data: JSON;
+	showFiller:boolean;
 
 	constructor(private dataService: DataService){
 

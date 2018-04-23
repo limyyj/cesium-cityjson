@@ -4,8 +4,22 @@
 		    <app-toolwindow></app-toolwindow>
 		</split-area>
 		<split-area [size]="99.5" id="splitviewer">
-		    <cesium-viewer></cesium-viewer>
+			<cesium-viewer></cesium-viewer>
+		   <!--  <cesium-viewer></cesium-viewer> -->
 		</split-area>
+
+		<!-- <mat-drawer-container autosize>
+		  <mat-drawer #drawer mode="over">
+		    <p *ngIf="showFiller"><app-toolwindow></app-toolwindow></p>
+		  </mat-drawer>
+		    <button type="button" mat-button id="button" (click)="showFiller=!showFiller">
+		      >
+		    </button>
+		    
+		</mat-drawer-container>
+		<cesium-viewer></cesium-viewer> -->
+
 	</split>
+	<<!--  cesium-viewer style="width: 100%;height: 100%"></cesium-viewer>-->
 	
 </div>
