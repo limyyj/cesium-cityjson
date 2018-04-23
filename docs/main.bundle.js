@@ -32,10 +32,12 @@ module.exports = "<!--The content below is only a placeholder and can be replace
 /***/ }),
 
 /***/ "./src/app/app.component.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__mobius_cesium_data_data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -45,9 +47,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
+
+
 var AppComponent = /** @class */ (function () {
     function AppComponent(dataService) {
         this.dataService = dataService;
@@ -68,70 +69,73 @@ var AppComponent = /** @class */ (function () {
         fr.readAsText(files[0]);
     };
     AppComponent = __decorate([
-        core_1.Component({
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-root',
             template: __webpack_require__("./src/app/app.component.html"),
             styles: [__webpack_require__("./src/app/app.component.css")]
         }),
-        __metadata("design:paramtypes", [data_service_1.DataService])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__mobius_cesium_data_data_service__["a" /* DataService */]])
     ], AppComponent);
     return AppComponent;
 }());
-exports.AppComponent = AppComponent;
+
 
 
 /***/ }),
 
 /***/ "./src/app/app.module.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_component__ = __webpack_require__("./src/app/app.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__mobius_cesium_mobius_cesium_module__ = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.module.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var platform_browser_1 = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var app_component_1 = __webpack_require__("./src/app/app.component.ts");
-var mobius_cesium_module_1 = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.module.ts");
+
+
+
+
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
-        core_1.NgModule({
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["H" /* NgModule */])({
             declarations: [
-                app_component_1.AppComponent
+                __WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]
             ],
             imports: [
-                platform_browser_1.BrowserModule,
-                mobius_cesium_module_1.MobiusCesium
+                __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_3__mobius_cesium_mobius_cesium_module__["a" /* MobiusCesium */]
             ],
             providers: [],
-            bootstrap: [app_component_1.AppComponent]
+            bootstrap: [__WEBPACK_IMPORTED_MODULE_2__app_component__["a" /* AppComponent */]]
         })
     ], AppModule);
     return AppModule;
 }());
-exports.AppModule = AppModule;
+
 
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/data/DataSubscriber.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataSubscriber; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 var DataSubscriber = /** @class */ (function () {
     function DataSubscriber(injector) {
         var _this = this;
-        this.dataService = injector.get(data_service_1.DataService);
+        this.dataService = injector.get(__WEBPACK_IMPORTED_MODULE_0__data_service__["a" /* DataService */]);
         this._subscription = this.dataService.getMessage().subscribe(function (message) {
             _this._message = message;
             _this.notify(message.text);
@@ -142,16 +146,18 @@ var DataSubscriber = /** @class */ (function () {
     };
     return DataSubscriber;
 }());
-exports.DataSubscriber = DataSubscriber;
+
 
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/data/data.service.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -161,12 +167,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var Subject_1 = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
+
+
 var DataService = /** @class */ (function () {
     function DataService() {
-        this.subject = new Subject_1.Subject();
+        this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
     }
     DataService.prototype.sendMessage = function (message) {
         this.subject.next({ text: message });
@@ -194,12 +199,12 @@ var DataService = /** @class */ (function () {
         this.HeightValue = HeightValue;
     };
     DataService = __decorate([
-        core_1.Injectable(),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Injectable */])(),
         __metadata("design:paramtypes", [])
     ], DataService);
     return DataService;
 }());
-exports.DataService = DataService;
+
 
 
 /***/ }),
@@ -207,22 +212,24 @@ exports.DataService = DataService;
 /***/ "./src/app/mobius-cesium/mobius-cesium.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"mobiuscesium\" style=\"height: 100%\">\r\n\t<split direction=\"horizontal\" style=\"background-color: #8aa8c0;\">\r\n\t\t<split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow:hidden;\">\r\n\t\t    <app-toolwindow></app-toolwindow>\r\n\t\t</split-area>\r\n\t\t<split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t    <cesium-viewer></cesium-viewer>\r\n\t\t</split-area>\r\n\t</split>\r\n\t\r\n</div>\r\n"
+module.exports = "<div id=\"mobiuscesium\" style=\"height: 100%\">\r\n\t<split direction=\"horizontal\" style=\"background-color: #8aa8c0;\">\r\n\t\t<split-area [size]=\"0.5\" id=\"splitgroups\" style=\"overflow:hidden;\">\r\n\t\t    <app-toolwindow></app-toolwindow>\r\n\t\t</split-area>\r\n\t\t<split-area [size]=\"99.5\" id=\"splitviewer\">\r\n\t\t\t<cesium-viewer></cesium-viewer>\r\n\t\t   <!--  <cesium-viewer></cesium-viewer> -->\r\n\t\t</split-area>\r\n\r\n\t\t<!-- <mat-drawer-container autosize>\r\n\t\t  <mat-drawer #drawer mode=\"over\">\r\n\t\t    <p *ngIf=\"showFiller\"><app-toolwindow></app-toolwindow></p>\r\n\t\t  </mat-drawer>\r\n\t\t    <button type=\"button\" mat-button id=\"button\" (click)=\"showFiller=!showFiller\">\r\n\t\t      >\r\n\t\t    </button>\r\n\t\t    \r\n\t\t</mat-drawer-container>\r\n\t\t<cesium-viewer></cesium-viewer> -->\r\n\r\n\t</split>\r\n\t<<!--  cesium-viewer style=\"width: 100%;height: 100%\"></cesium-viewer>-->\r\n\t\r\n</div>\r\n"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/mobius-cesium.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\");\n@font-face {\n  font-family: \"FontAwesome\"; }\n.font-awesome-hand {\n  font-family: FontAwesome; }\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\n#mobiuscesium {\n  height: 101%;\n  font-family: sans-serif !important;\n  margin: 0px !important;\n  padding: 0px !important;\n  font-size: 14px; }\n/* split-area{\r\n  overflow-y: hidden !important;\r\n  height: 100% !important;\r\n}\r\n\r\nsplit-gutter{\r\n  border-right: 1px solid #8aa8c0 !important;\r\n  border-top: 1px solid #8aa8c0 !important;\r\n  background-color: #8aa8c0 !important;\r\n} */\n"
+module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\");\n@font-face {\n  font-family: \"FontAwesome\"; }\n.font-awesome-hand {\n  font-family: FontAwesome; }\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\n#mobiuscesium {\n  height: 101%;\n  font-family: sans-serif !important;\n  margin: 0px !important;\n  padding: 0px !important;\n  font-size: 14px; }\n#button {\n  position: absolute;\n  z-index: 99; }\n/* split-area{\r\n  overflow-y: hidden !important;\r\n  height: 100% !important;\r\n}\r\n\r\nsplit-gutter{\r\n  border-right: 1px solid #8aa8c0 !important;\r\n  border-top: 1px solid #8aa8c0 !important;\r\n  background-color: #8aa8c0 !important;\r\n} */\n"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/mobius-cesium.component.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MobiuscesiumComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -232,9 +239,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
+
+
 var MobiuscesiumComponent = /** @class */ (function () {
     function MobiuscesiumComponent(dataService) {
         this.dataService = dataService;
@@ -258,48 +264,61 @@ var MobiuscesiumComponent = /** @class */ (function () {
         }
     };
     __decorate([
-        core_1.Input(),
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["C" /* Input */])(),
         __metadata("design:type", Object)
     ], MobiuscesiumComponent.prototype, "data", void 0);
     MobiuscesiumComponent = __decorate([
-        core_1.Component({
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'mobius-cesium',
             template: __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.html"),
             styles: [__webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.scss")]
         }),
-        __metadata("design:paramtypes", [data_service_1.DataService])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__data_data_service__["a" /* DataService */]])
     ], MobiuscesiumComponent);
     return MobiuscesiumComponent;
 }());
-exports.MobiuscesiumComponent = MobiuscesiumComponent;
+
 
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/mobius-cesium.module.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MobiusCesium; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common__ = __webpack_require__("./node_modules/@angular/common/esm5/common.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__ = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__ = __webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__data_data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toolwindow_toolwindow_component__ = __webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular_split__ = __webpack_require__("./node_modules/angular-split/esm5/angular-split.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__ = __webpack_require__("./node_modules/@angular/material/esm5/tabs.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__ = __webpack_require__("./node_modules/@angular/material/esm5/tooltip.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__ = __webpack_require__("./node_modules/@angular/material/esm5/slider.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_material_sidenav__ = __webpack_require__("./node_modules/@angular/material/esm5/sidenav.es5.js");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var common_1 = __webpack_require__("./node_modules/@angular/common/esm5/common.js");
-var mobius_cesium_component_1 = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.ts");
-var viewer_component_1 = __webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.ts");
-var data_service_1 = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
-var toolwindow_component_1 = __webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.ts");
-var angular_split_1 = __webpack_require__("./node_modules/angular-split/esm5/angular-split.js");
-var animations_1 = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
-var platform_browser_1 = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
-var tabs_1 = __webpack_require__("./node_modules/@angular/material/esm5/tabs.es5.js");
-var tooltip_1 = __webpack_require__("./node_modules/@angular/material/esm5/tooltip.es5.js");
-var slider_1 = __webpack_require__("./node_modules/@angular/material/esm5/slider.es5.js");
+
+
+
+
+
+
+
+
+
+
+
+
+
 var MobiusCesium = /** @class */ (function () {
     function MobiusCesium() {
     }
@@ -308,32 +327,33 @@ var MobiusCesium = /** @class */ (function () {
         return {
             ngModule: MobiusCesium_1,
             providers: [
-                data_service_1.DataService
+                __WEBPACK_IMPORTED_MODULE_4__data_data_service__["a" /* DataService */]
             ]
         };
     };
     MobiusCesium = MobiusCesium_1 = __decorate([
-        core_1.NgModule({
-            imports: [common_1.CommonModule,
-                angular_split_1.AngularSplitModule,
-                tabs_1.MatTabsModule,
-                animations_1.BrowserAnimationsModule,
-                animations_1.NoopAnimationsModule,
-                platform_browser_1.BrowserModule,
-                tooltip_1.MatTooltipModule,
-                slider_1.MatSliderModule
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["H" /* NgModule */])({
+            imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["a" /* CommonModule */],
+                __WEBPACK_IMPORTED_MODULE_6_angular_split__["a" /* AngularSplitModule */],
+                __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__["a" /* MatTabsModule */],
+                __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["b" /* NoopAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__["a" /* MatTooltipModule */],
+                __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__["a" /* MatSliderModule */],
+                __WEBPACK_IMPORTED_MODULE_12__angular_material_sidenav__["a" /* MatSidenavModule */]
             ],
-            exports: [mobius_cesium_component_1.MobiuscesiumComponent],
-            declarations: [mobius_cesium_component_1.MobiuscesiumComponent,
-                viewer_component_1.ViewerComponent,
-                toolwindow_component_1.ToolwindowComponent],
-            providers: [data_service_1.DataService],
+            exports: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */]],
+            declarations: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */],
+                __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__["a" /* ViewerComponent */],
+                __WEBPACK_IMPORTED_MODULE_5__toolwindow_toolwindow_component__["a" /* ToolwindowComponent */]],
+            providers: [__WEBPACK_IMPORTED_MODULE_4__data_data_service__["a" /* DataService */]],
         })
     ], MobiusCesium);
     return MobiusCesium;
     var MobiusCesium_1;
 }());
-exports.MobiusCesium = MobiusCesium;
+
 
 
 /***/ }),
@@ -353,10 +373,14 @@ module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-gr
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ToolwindowComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js__ = __webpack_require__("./node_modules/chroma-js/chroma.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_chroma_js__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -376,10 +400,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var DataSubscriber_1 = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
-var chroma = __webpack_require__("./node_modules/chroma-js/chroma.js");
+
+
+
 var ToolwindowComponent = /** @class */ (function (_super) {
     __extends(ToolwindowComponent, _super);
     function ToolwindowComponent(injector, myElement) {
@@ -387,7 +410,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         _this.ScaleValue = 1000;
         _this.CheckScale = true;
         _this.hideElementArr = [];
-        _this.ChromaScale = chroma.scale("SPECTRAL");
+        _this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
         _this.HideNum = [];
         return _this;
     }
@@ -973,16 +996,16 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         this.CheckOpp = !this.CheckOpp;
     };
     ToolwindowComponent = __decorate([
-        core_1.Component({
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'app-toolwindow',
             template: __webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.html"),
             styles: [__webpack_require__("./src/app/mobius-cesium/toolwindow/toolwindow.component.css")]
         }),
-        __metadata("design:paramtypes", [core_1.Injector, core_1.ElementRef])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]])
     ], ToolwindowComponent);
     return ToolwindowComponent;
-}(DataSubscriber_1.DataSubscriber));
-exports.ToolwindowComponent = ToolwindowComponent;
+}(__WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__["a" /* DataSubscriber */]));
+
 
 
 /***/ }),
@@ -997,15 +1020,19 @@ module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"cesiumContainer\" (click)=\"select()\">\r\n\t<!-- <div id=\"ColorandHeight\">\r\n\t\t<div id=\"toolbar\">\r\n\t\t<div id=\"Hidediv\" style=\"width: 110px;height:83px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t\t<table><tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Seleted<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckHide\" (click)=\"changeHide();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Committed<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckCom\" (click)=\"changeCom();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t\t<th class=\"colorkey\" style=\"width: 100%\"><div class=\"Hide\" style=\"width: 110px;color:white;text-shadow: 0px 0px 3px black;border:0;text-align: left;background: transparent;\">Occupied<input type=\"checkbox\" id=\"CheckHide\" [checked]=\"CheckOcc\" (click)=\"changeOcc();checkHide()\"></div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: calc(100% - 345px);display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;\">Color</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n          \t\t<th><div>\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\"  *ngFor=\"let propertyName of propertyNames\" value={{propertyName}}>{{propertyName}}</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option> -->\r\n\t\t\t\t<!-- </select>\r\n\t\t\t\t</div></th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div id=\"color\" style=\"width:calc(100% - 90px);display:inline-block;position: relative;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table style=\"width: 100%\">\r\n\t\t\t\t<tr >\r\n          \t\t<td *ngFor=\"let Color of Colors\" style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Color}\" >&nbsp;&nbsp;&nbsp;</div></td>\r\n          \t\t</tr>\r\n          \t\t<tr >\r\n          \t\t<td class=\"colorkey\" *ngFor=\"let text of texts\" style=\"width: 40px;\"><div class=\"table_text\">{{text}}</div></td>\r\n          \t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div> \r\n\t\t</div>\r\n\t\t<div style=\"width: 200px;display:inline-block;border-style: solid;border-color:#395D73;word-wrap:break-word;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important;\">\r\n\t\t<div style=\"width: 80px;display:inline-block;position: relative;height:80px;word-wrap:break-word;\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t\t\t\t<tr >\r\n          \t\t<td ><div class=\"Hide\" style=\"text-align: left;border:0;background-color:transparent;color:white;text-shadow: 0px 0px 3px black;\">Height</div></td>\r\n          \t\t</tr>\r\n\t\t\t\t<tr>\r\n\t\t\t\t<tr>\r\n\t          \t<th><div >\r\n\t\t\t\t<select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\">\r\n\t\t\t\t\t<option class=\"cesium-option\"  *ngFor=\"let propertyName of propertyNames\" value={{propertyName}}>{{propertyName}}</option> -->\r\n\t\t\t\t\t<!-- <option class=\"cesium-option\" value=\"Status_Cat\">Status_Cat</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_EWL\">DIST_EWL</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"DIST_TRUNK\">DIST_TRUNK</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AVAILABLE\">AVAILABLE</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"AGG_POT\">AGG_POT</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"GPR\">GPR</option>\r\n\t\t\t\t\t<option class=\"cesium-option\" value=\"HB_LIMIT\">HB_LIMIT</option> -->\r\n\t\t<!-- \t\t</select>\r\n\t\t\t\t</div>\r\n\t\t\t\t</th>\r\n\t\t\t\t</tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t\t<div style=\"width: 100px;display:inline-block;position: relative;color:white;height:80px\">\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 25px\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">Min</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width:100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">{{Minimum}}</div></th></tr>\t\r\n\t\t\t</table>\r\n\t\t\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 100%;height: 25px;\">\r\n\t\t\t<tr ><th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">Max</div></th>\r\n\t\t\t<th style=\"width:50px;\"><div style=\"width: 100%;color:white;text-shadow: 0px 0px 3px black;font-weight: normal;text-align: left;\">{{Maximum}}</div></th></tr>\r\n\t\t\t</table>\r\n\t\t</div>\r\n\t</div>\r\n\t</div> -->\r\n</div>"
+module.exports = "<div id=\"cesiumContainer\" (click)=\"select()\">\r\n</div>"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewerComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js__ = __webpack_require__("./node_modules/chroma-js/chroma.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_chroma_js__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1025,10 +1052,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var DataSubscriber_1 = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
-var chroma = __webpack_require__("./node_modules/chroma-js/chroma.js");
+
+
+
 var ViewerComponent = /** @class */ (function (_super) {
     __extends(ViewerComponent, _super);
     function ViewerComponent(injector, myElement) {
@@ -1036,7 +1062,7 @@ var ViewerComponent = /** @class */ (function (_super) {
         _this.tileset = new Cesium.Cesium3DTileset({});
         _this.selectEntity = null;
         _this.myElement = myElement;
-        _this.ChromaScale = chroma.scale("SPECTRAL");
+        _this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
         return _this;
     }
     ViewerComponent.prototype.ngOnInit = function () {
@@ -1161,16 +1187,16 @@ var ViewerComponent = /** @class */ (function (_super) {
         }
     };
     ViewerComponent = __decorate([
-        core_1.Component({
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'cesium-viewer',
             template: __webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.html"),
             styles: [__webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.css")]
         }),
-        __metadata("design:paramtypes", [core_1.Injector, core_1.ElementRef])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]])
     ], ViewerComponent);
     return ViewerComponent;
-}(DataSubscriber_1.DataSubscriber));
-exports.ViewerComponent = ViewerComponent;
+}(__WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__["a" /* DataSubscriber */]));
+
 /*onChangeColor(ColorValue){
   this.ColorValue=ColorValue;*/
 /*if(this.ColorValue==="Status_Cat"||undefined){
@@ -1725,16 +1751,15 @@ ColorSelect(entity){
 /***/ }),
 
 /***/ "./src/environments/environment.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return environment; });
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `.angular-cli.json`.
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.environment = {
+var environment = {
     production: false
 };
 
@@ -1742,20 +1767,23 @@ exports.environment = {
 /***/ }),
 
 /***/ "./src/main.ts":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__("./node_modules/@angular/platform-browser-dynamic/esm5/platform-browser-dynamic.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__("./src/app/app.module.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__("./src/environments/environment.ts");
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-var platform_browser_dynamic_1 = __webpack_require__("./node_modules/@angular/platform-browser-dynamic/esm5/platform-browser-dynamic.js");
-var app_module_1 = __webpack_require__("./src/app/app.module.ts");
-var environment_1 = __webpack_require__("./src/environments/environment.ts");
-if (environment_1.environment.production) {
-    core_1.enableProdMode();
+
+
+
+if (__WEBPACK_IMPORTED_MODULE_3__environments_environment__["a" /* environment */].production) {
+    Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_11" /* enableProdMode */])();
 }
 window['CESIUM_BASE_URL'] = 'assets/cesium';
-platform_browser_dynamic_1.platformBrowserDynamic().bootstrapModule(app_module_1.AppModule)
+Object(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_2__app_app_module__["a" /* AppModule */])
     .catch(function (err) { return console.log(err); });
 
 
