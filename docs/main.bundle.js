@@ -460,6 +460,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                 this.ColorValue = this.dataService.ColorValue;
                 this.ColorNames = this.dataService.propertyNames;
                 this.ColorNames.sort();
+                this.ColorNames = ["None"].concat(this.ColorNames);
                 this.selectColor = this.ColorValue;
                 this.onChangeColor(this.ColorValue);
             }
@@ -467,6 +468,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                 this.HeightValue = this.dataService.HeightValue;
                 this.HeightKey = this.dataService.HeightKey;
                 this.HeightKey.sort();
+                this.HeightKey = ["None"].concat(this.HeightKey);
                 this.selectHeight = this.HeightValue;
                 this.onChangeHeight(this.HeightValue);
             }
@@ -495,6 +497,16 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                                 }
                             }
                         }
+                    }
+                });
+            }
+            else if (this.HeightValue === "None") {
+                var self = this;
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        entity.polygon.extrudedHeight = 0;
                     }
                 });
             }
@@ -532,6 +544,16 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                     }
                 });
             }
+            else if (this.ColorValue === "None") {
+                var self = this;
+                promise.then(function (dataSource) {
+                    var entities = dataSource.entities.values;
+                    for (var i = 0; i < entities.length; i++) {
+                        var entity = entities[i];
+                        entity.polygon.material = Cesium.Color.White;
+                    }
+                });
+            }
         }
         if (typeof (texts[0]) === "number") {
             this.texts = texts;
@@ -557,7 +579,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.dataService.MinColor = min;
             this.colorByNum();
         }
-        else {
+        else if (typeof (texts[0]) === "string") {
             this.texts = texts;
             for (var j = 0; j < texts.length; j++) {
                 var ColorKey = [];
@@ -721,7 +743,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         if (typeof (texts[0]) === "number") {
             this.HideType = "number";
         }
-        else {
+        else if (typeof (texts[0]) === "string") {
             this.HideType = "category";
         }
         this.hideElementArr.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber, HeightHide: this.HideValue, type: this.HideType, Category: texts, CategaryHide: texts[0], RelaHide: 0, textHide: Math.round(Math.min.apply(Math, texts) * 100) / 100,
@@ -1069,7 +1091,6 @@ var ViewerComponent = /** @class */ (function (_super) {
     __extends(ViewerComponent, _super);
     function ViewerComponent(injector, myElement) {
         var _this = _super.call(this, injector) || this;
-        _this.tileset = new Cesium.Cesium3DTileset({});
         _this.selectEntity = null;
         _this.myElement = myElement;
         return _this;
@@ -1094,14 +1115,18 @@ var ViewerComponent = /** @class */ (function (_super) {
         var viewer = new Cesium.Viewer('cesiumContainer', {
             infoBox: true,
             imageryProvider: Cesium.createOpenStreetMapImageryProvider({
-                url: 'https://stamen-tiles.a.ssl.fastly.net/toner/',
-            })
+                url: 'https://stamen-tiles.a.ssl.fastly.net/toner/'
+            }),
+            timeline: false,
+            fullscreenButton: false,
+            automaticallyTrackDataSourceClocks: false,
+            animation: false,
         });
         document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
-        document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
-        document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
-        document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
-        document.getElementsByClassName('cesium-viewer-infoBoxContainer')[0].remove();
+        //document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
+        //document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
+        //document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
+        //document.getElementsByClassName('cesium-viewer-infoBoxContainer')[0].remove();
         this.viewer = viewer;
         this.dataService.viewer = this.viewer;
         this.data = data;
@@ -1146,11 +1171,27 @@ var ViewerComponent = /** @class */ (function (_super) {
             this.HeightValue = HeightKey.sort()[0];
             this.dataService.HeightValue = this.HeightValue;
         }
+        /*viewer.homebutton(Cesium.HomeButton({
+          container:'cesiumContainer',
+          viewerModel:Cesium.HomeButtonViewMode({
+            command:Cesium.Command({
+              
+            })
+          })
+        }));*/
         // this.ColorValue=this.propertyNames.sort()[0];
         // this.HeightValue=HeightKey.sort()[0]
         // this.dataService.ColorValue=this.ColorValue;
         // this.dataService.HeightValue=this.HeightValue;
         viewer.zoomTo(promise);
+        // console.log(Cesium.HomeButton)
+        /*document.getElementsByClassName('cesium-svgPath-svg')[1].remove();
+        // console.log(document.getElementsByClassName('cesium-svgPath-svg')[1])
+        document.getElementsByClassName('cesium-home-button')[0].addEventListener("click",function(){
+          viewer.zoomTo(promise);
+        });
+        //document.getElementsByClassName('cesium-home-button')[0]
+        console.log(document.getElementsByClassName('cesium-home-button')[0]);*/
     };
     ViewerComponent.prototype.select = function () {
         var viewer = this.viewer;
