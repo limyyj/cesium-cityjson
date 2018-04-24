@@ -1,6 +1,5 @@
 import { Component, OnInit, Injector, ElementRef ,NgModule} from '@angular/core';
 import {DataSubscriber} from "../data/DataSubscriber";
-//import { AngularSplitModule } from 'angular-split';
 import { DataService } from "../data/data.service";
 import {ViewerComponent} from "../viewer/viewer.component";
 import * as chroma from "chroma-js";
