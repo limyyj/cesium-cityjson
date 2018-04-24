@@ -456,19 +456,17 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             }
         }
         if (this.viewer !== undefined) {
-            if (this.ColorValue !== this.dataService.ColorValue) {
+            if (this.ColorValue !== this.dataService.ColorValue || this.ColorNames !== this.dataService.propertyNames) {
                 this.ColorValue = this.dataService.ColorValue;
                 this.ColorNames = this.dataService.propertyNames;
                 this.ColorNames.sort();
-                this.ColorNames = ["None"].concat(this.ColorNames);
                 this.selectColor = this.ColorValue;
                 this.onChangeColor(this.ColorValue);
             }
-            if (this.HeightValue !== this.dataService.HeightValue) {
+            if (this.HeightValue !== this.dataService.HeightValue || this.HeightKey !== this.dataService.HeightKey) {
                 this.HeightValue = this.dataService.HeightValue;
                 this.HeightKey = this.dataService.HeightKey;
                 this.HeightKey.sort();
-                this.HeightKey = ["None"].concat(this.HeightKey);
                 this.selectHeight = this.HeightValue;
                 this.onChangeHeight(this.HeightValue);
             }
@@ -1113,25 +1111,24 @@ var ViewerComponent = /** @class */ (function (_super) {
             document.getElementsByClassName('cesium-viewer')[0].remove();
         }
         var viewer = new Cesium.Viewer('cesiumContainer', {
-            infoBox: true,
+            infoBox: false,
             imageryProvider: Cesium.createOpenStreetMapImageryProvider({
                 url: 'https://stamen-tiles.a.ssl.fastly.net/toner/'
             }),
             timeline: false,
             fullscreenButton: false,
             automaticallyTrackDataSourceClocks: false,
-            animation: false,
+            animation: false
+        });
+        viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
+            e.cancel = true;
+            viewer.zoomTo(promise);
         });
         document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
-        //document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
-        //document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
-        //document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
-        //document.getElementsByClassName('cesium-viewer-infoBoxContainer')[0].remove();
         this.viewer = viewer;
         this.dataService.viewer = this.viewer;
         this.data = data;
         var promise = Cesium.GeoJsonDataSource.load(this.data);
-        ;
         var self = this;
         var HeightKey = [];
         promise.then(function (dataSource) {
@@ -1157,41 +1154,47 @@ var ViewerComponent = /** @class */ (function (_super) {
         this.dataService.cesiumpromise = promise;
         this.dataService.propertyNames = this.propertyNames;
         this.dataService.HeightKey = HeightKey;
-        if (this.dataService.ColorValue !== undefined) {
-            this.ColorValue = this.dataService.ColorValue;
-        }
-        else {
+        if (this.dataService.ColorValue === undefined) {
             this.ColorValue = this.propertyNames.sort()[0];
             this.dataService.ColorValue = this.ColorValue;
         }
-        if (this.dataService.HeightValue !== undefined) {
-            this.HeightValue = this.dataService.HeightValue;
+        else if (this.propertyNames.indexOf(this.dataService.ColorValue) === -1) {
+            this.ColorValue = this.propertyNames.sort()[0];
+            this.dataService.ColorValue = this.ColorValue;
         }
         else {
+            this.ColorValue = this.dataService.ColorValue;
+        }
+        if (this.dataService.HeightValue === undefined) {
             this.HeightValue = HeightKey.sort()[0];
+            ;
             this.dataService.HeightValue = this.HeightValue;
         }
-        /*viewer.homebutton(Cesium.HomeButton({
-          container:'cesiumContainer',
-          viewerModel:Cesium.HomeButtonViewMode({
-            command:Cesium.Command({
-              
-            })
-          })
-        }));*/
+        else if (HeightKey.indexOf(this.dataService.HeightValue) === -1) {
+            this.HeightValue = HeightKey.sort()[0];
+            ;
+            this.dataService.HeightValue = this.HeightValue;
+        }
+        else {
+            this.HeightValue = this.dataService.HeightValue;
+        }
+        /*if(this.dataService.ColorValue!==undefined){
+          this.ColorValue=this.dataService.ColorValue;
+        }else{
+          this.ColorValue=this.propertyNames.sort()[0];
+          this.dataService.ColorValue=this.ColorValue;
+        }
+        if(this.dataService.HeightValue!==undefined){
+          this.HeightValue=this.dataService.HeightValue;
+        }else{
+          this.HeightValue=HeightKey.sort()[0];
+          this.dataService.HeightValue=this.HeightValue;
+        }*/
         // this.ColorValue=this.propertyNames.sort()[0];
         // this.HeightValue=HeightKey.sort()[0]
         // this.dataService.ColorValue=this.ColorValue;
         // this.dataService.HeightValue=this.HeightValue;
         viewer.zoomTo(promise);
-        // console.log(Cesium.HomeButton)
-        /*document.getElementsByClassName('cesium-svgPath-svg')[1].remove();
-        // console.log(document.getElementsByClassName('cesium-svgPath-svg')[1])
-        document.getElementsByClassName('cesium-home-button')[0].addEventListener("click",function(){
-          viewer.zoomTo(promise);
-        });
-        //document.getElementsByClassName('cesium-home-button')[0]
-        console.log(document.getElementsByClassName('cesium-home-button')[0]);*/
     };
     ViewerComponent.prototype.select = function () {
         var viewer = this.viewer;
