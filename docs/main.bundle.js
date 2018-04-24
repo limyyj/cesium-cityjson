@@ -460,6 +460,8 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                 this.ColorValue = this.dataService.ColorValue;
                 this.ColorNames = this.dataService.propertyNames;
                 this.ColorNames.sort();
+                this.ColorNames = ["None"].concat(this.ColorNames);
+                this.dataService.propertyNames = this.ColorNames;
                 this.selectColor = this.ColorValue;
                 this.onChangeColor(this.ColorValue);
             }
@@ -467,6 +469,8 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                 this.HeightValue = this.dataService.HeightValue;
                 this.HeightKey = this.dataService.HeightKey;
                 this.HeightKey.sort();
+                this.HeightKey = ["None"].concat(this.HeightKey);
+                this.dataService.HeightKey = this.HeightKey;
                 this.selectHeight = this.HeightValue;
                 this.onChangeHeight(this.HeightValue);
             }
