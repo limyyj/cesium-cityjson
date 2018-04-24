@@ -97,6 +97,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.ColorValue=this.dataService.ColorValue;
         this.ColorNames=this.dataService.propertyNames;
         this.ColorNames.sort();
+        this.ColorNames=["None"].concat(this.ColorNames);
         this.selectColor=this.ColorValue;
         this.onChangeColor(this.ColorValue);
         
@@ -105,6 +106,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.HeightValue=this.dataService.HeightValue;
         this.HeightKey=this.dataService.HeightKey;
         this.HeightKey.sort();
+        this.HeightKey=["None"].concat(this.HeightKey);
         this.selectHeight=this.HeightValue;
         this.onChangeHeight(this.HeightValue);
       }
@@ -129,6 +131,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
             else{if(texts.indexOf(entity.properties[self.HeightValue]._value)===-1) texts.push(entity.properties[self.HeightValue]._value);}
             }
           }
+        }
+      });
+      }else if(this.HeightValue==="None"){
+        var self= this;
+        promise.then(function(dataSource) {
+        var entities = dataSource.entities.values;
+        for (var i = 0; i < entities.length; i++) {
+          var entity = entities[i];
+          entity.polygon.extrudedHeight =0;
         }
       });
       }
@@ -161,6 +172,16 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           }
         }
       });
+      }else if(this.ColorValue==="None"){
+        var self= this;
+        promise.then(function(dataSource) {
+        var entities = dataSource.entities.values;
+        for (var i = 0; i < entities.length; i++) {
+          var entity = entities[i];
+          entity.polygon.material=Cesium.Color.White;
+        }
+      });
+
       }
     }
     if(typeof(texts[0])==="number") {
@@ -186,7 +207,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.dataService.MaxColor=max;
       this.dataService.MinColor=min;
       this.colorByNum();
-    }else{
+    }else if(typeof(texts[0])==="string"){
       this.texts=texts;
       for(var j=0;j<texts.length;j++){
         var ColorKey:any=[];
@@ -344,7 +365,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }
     if(this.HideValue===undefined) this.HideValue=this.ColorNames[0];
     var texts=this.Initial(this.HideValue);
-    if(typeof(texts[0])==="number"){this.HideType="number"}else{this.HideType="category";}
+    if(typeof(texts[0])==="number"){this.HideType="number"}else if(typeof(texts[0])==="string"){this.HideType="category";}
     this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:this.HideValue,type:this.HideType,Category:texts,CategaryHide:texts[0],RelaHide:0,textHide: Math.round(Math.min.apply(Math, texts)*100)/100,
                               HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
     this.dataService.hideElementArr=this.hideElementArr;

@@ -10,8 +10,6 @@ import {DataSubscriber} from "../data/DataSubscriber";
 export class ViewerComponent extends DataSubscriber {
   data:JSON;
   myElement;
-  fullscreenContainer: HTMLCollectionOf<Element>;
-  tileset= new Cesium.Cesium3DTileset({});
   ColorValue:string;
   HeightValue:string;
   ChromaScale:any;
@@ -44,18 +42,30 @@ export class ViewerComponent extends DataSubscriber {
   LoadData(data:JSON){
     if(document.getElementsByClassName('cesium-viewer').length!==0){
       document.getElementsByClassName('cesium-viewer')[0].remove();
-  }  
+    }
     var viewer = new Cesium.Viewer('cesiumContainer' , {
       infoBox:true,
       imageryProvider : Cesium.createOpenStreetMapImageryProvider({ 
-       url : 'https://stamen-tiles.a.ssl.fastly.net/toner/', 
-      })
-    });
+       url : 'https://stamen-tiles.a.ssl.fastly.net/toner/'
+      }), 
+      timeline: false,
+      fullscreenButton:false,
+      automaticallyTrackDataSourceClocks:false,
+      animation:false,
+      /*homebutton:Cesium.HomeButton({
+        viewerModel:Cesium.HomeButtonViewMode({
+          /*command:Cesium.Command({
+          //afterExecute:evt
+          })*/
+        /*})/
+      }),*/
+    })
+
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
-    document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
-    document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
-    document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
-    document.getElementsByClassName('cesium-viewer-infoBoxContainer')[0].remove();
+    //document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
+    //document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
+    //document.getElementsByClassName('cesium-viewer-fullscreenContainer')[0].remove();
+    //document.getElementsByClassName('cesium-viewer-infoBoxContainer')[0].remove();
     this.viewer=viewer;
     this.dataService.viewer=this.viewer;
     this.data=data;
@@ -96,11 +106,29 @@ export class ViewerComponent extends DataSubscriber {
       this.HeightValue=HeightKey.sort()[0];
       this.dataService.HeightValue=this.HeightValue;
     }
+
+    
+    /*viewer.homebutton(Cesium.HomeButton({
+      container:'cesiumContainer',
+      viewerModel:Cesium.HomeButtonViewMode({
+        command:Cesium.Command({
+          
+        })
+      })
+    }));*/
     // this.ColorValue=this.propertyNames.sort()[0];
     // this.HeightValue=HeightKey.sort()[0]
     // this.dataService.ColorValue=this.ColorValue;
     // this.dataService.HeightValue=this.HeightValue;
     viewer.zoomTo(promise);
+    // console.log(Cesium.HomeButton)
+    /*document.getElementsByClassName('cesium-svgPath-svg')[1].remove();
+    // console.log(document.getElementsByClassName('cesium-svgPath-svg')[1])
+    document.getElementsByClassName('cesium-home-button')[0].addEventListener("click",function(){
+      viewer.zoomTo(promise);
+    });
+    //document.getElementsByClassName('cesium-home-button')[0]
+    console.log(document.getElementsByClassName('cesium-home-button')[0]);*/
   }
 
   select(){
