@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --base-href=https://sunhuiyao.github.io/Mobius_Cesium/",
+    "build": "ng build --base-href=https://phtj.github.io/cesium-viewer/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
