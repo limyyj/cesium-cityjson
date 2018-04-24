@@ -93,20 +93,17 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         }
     }
     if(this.viewer!==undefined){
-      if(this.ColorValue!==this.dataService.ColorValue){
+     if(this.ColorValue!==this.dataService.ColorValue||this.ColorNames!==this.dataService.propertyNames){
         this.ColorValue=this.dataService.ColorValue;
         this.ColorNames=this.dataService.propertyNames;
         this.ColorNames.sort();
-        this.ColorNames=["None"].concat(this.ColorNames);
         this.selectColor=this.ColorValue;
         this.onChangeColor(this.ColorValue);
-        
       }
-      if(this.HeightValue!==this.dataService.HeightValue){
+      if(this.HeightValue!==this.dataService.HeightValue||this.HeightKey!==this.dataService.HeightKey){
         this.HeightValue=this.dataService.HeightValue;
         this.HeightKey=this.dataService.HeightKey;
         this.HeightKey.sort();
-        this.HeightKey=["None"].concat(this.HeightKey);
         this.selectHeight=this.HeightValue;
         this.onChangeHeight(this.HeightValue);
       }
