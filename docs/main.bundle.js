@@ -175,6 +175,7 @@ var DataService = /** @class */ (function () {
         this.CheckOpp = false;
         this.ScaleValue = 1000;
         this.CheckScale = true;
+        this.CheckExtrude = false;
     }
     DataService.prototype.sendMessage = function (message) {
         this.subject.next({ text: message });
@@ -371,7 +372,7 @@ module.exports = "#toolwindow{\r\n  position: relative;\r\n  background-color: #
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"Attributes\">\r\n      <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n      <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n    </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n      <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><div style=\"width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Min}}</div></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Max}}</div></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 80px;height: 25px;\"><div class=\"Hide\" style=\"width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 80px;height: 25px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 25px;\"><div style=\"width:20px;height: 25px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"Attributes\">\r\n      <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n      <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n    </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n      <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><div style=\"width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Min}}</div></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{Max}}</div></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Line</div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckExtrude\" (click)=\"checkExtrude();changeExtrude()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 80px;height: 25px;\"><div class=\"Hide\" style=\"width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 80px;height: 25px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 25px;\"><div style=\"width:20px;height: 25px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
 
 /***/ }),
 
@@ -517,6 +518,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         this.Min = Math.min.apply(Math, texts);
         //if(this.CheckHide===true) this.Hide();
         this.changescale(this.ScaleValue);
+        this.changeExtrude();
         this.dataService.getHeightValue(this.HeightValue);
     };
     ToolwindowComponent.prototype.onChangeColor = function (ColorValue) {
@@ -595,6 +597,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.colorByCat();
         }
         this.Hide();
+        this.changeExtrude();
         this.dataService.getColorValue(this.ColorValue);
     };
     ToolwindowComponent.prototype.colorByNum = function () {
@@ -717,6 +720,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                 });
             }
         }
+        this.changeExtrude();
         this.Hide();
     };
     ToolwindowComponent.prototype.checkscale = function () {
@@ -903,24 +907,69 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             if (self._compare(value, text[j_1], relation[j_1])) {
                                 entity.polygon.extrudedHeight = 0;
                                 entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                                entity.polyline.show = false;
                                 break;
                             }
                             else {
                                 self.ColorByNumCat(entity);
                                 if (self.CheckScale === true) {
                                     if (self.CheckOpp === true) {
-                                        entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (self.Max - entity.properties[self.HeightValue]._value) * scale]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                        }
                                     }
                                     else {
-                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], entity.properties[self.HeightValue]._value * scale]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                        }
                                     }
                                 }
                                 else {
                                     if (self.CheckOpp === true) {
-                                        entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], self.Max - entity.properties[self.HeightValue]._value]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                                        }
                                     }
                                     else {
-                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], entity.properties[self.HeightValue]._value]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                                        }
                                     }
                                 }
                             }
@@ -929,24 +978,69 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             if (self._compareCat(value, text[j_1], relation[j_1])) {
                                 entity.polygon.extrudedHeight = 0;
                                 entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                                entity.polyline.show = false;
                                 break;
                             }
                             else {
                                 self.ColorByNumCat(entity);
                                 if (self.CheckScale === true) {
                                     if (self.CheckOpp === true) {
-                                        entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (self.Max - entity.properties[self.HeightValue]._value) * scale]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                        }
                                     }
                                     else {
-                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], entity.properties[self.HeightValue]._value * scale]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                        }
                                     }
                                 }
                                 else {
                                     if (self.CheckOpp === true) {
-                                        entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], self.Max - entity.properties[self.HeightValue]._value]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                                        }
                                     }
                                     else {
-                                        entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                                        if (self.CheckExtrude === true) {
+                                            var center = self.dataService.poly_center[i];
+                                            entity.polyline = new Cesium.PolylineGraphics({
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], entity.properties[self.HeightValue]._value]),
+                                                width: center[2],
+                                                material: entity.polygon.material,
+                                                show: true
+                                            });
+                                        }
+                                        else {
+                                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                                        }
                                     }
                                 }
                             }
@@ -997,17 +1091,33 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             var self = this;
             if (self.CheckScale === true) {
                 var scale = self.ScaleValue / self.Max;
-                promise.then(function (dataSource) {
-                    var entities = dataSource.entities.values;
-                    for (var i = 0; i < entities.length; i++) {
-                        var entity = entities[i];
-                        if (entity.properties[self.HeightValue] !== undefined) {
-                            if (entity.properties[self.HeightValue]._value !== " ") {
-                                entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                if (self.CheckExtrude === false) {
+                    promise.then(function (dataSource) {
+                        var entities = dataSource.entities.values;
+                        for (var i = 0; i < entities.length; i++) {
+                            var entity = entities[i];
+                            entity.polylin.show = false;
+                            if (entity.properties[self.HeightValue] !== undefined) {
+                                if (entity.properties[self.HeightValue]._value !== " ") {
+                                    entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
+                else {
+                    promise.then(function (dataSource) {
+                        var entities = dataSource.entities.values;
+                        for (var i = 0; i < entities.length; i++) {
+                            var entity = entities[i];
+                            if (entity.properties[self.HeightValue] !== undefined) {
+                                if (entity.properties[self.HeightValue]._value !== " ") {
+                                    entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                                }
+                            }
+                        }
+                    });
+                }
             }
             else {
                 promise.then(function (dataSource) {
@@ -1027,10 +1137,124 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.changescale(this.ScaleValue);
         }
         this.Hide();
+        this.changeExtrude();
     };
     ToolwindowComponent.prototype.checkopp = function () {
         this.CheckOpp = !this.CheckOpp;
         this.dataService.CheckOpp = this.CheckOpp;
+    };
+    ToolwindowComponent.prototype.changeExtrude = function () {
+        var scale = this.ScaleValue / this.Max;
+        if (this.CheckExtrude === true) {
+            if (this.CheckScale === true) {
+                if (this.CheckOpp === true) {
+                    var promise = this.dataService.cesiumpromise;
+                    var self = this;
+                    promise.then(function (dataSource) {
+                        var entities = dataSource.entities.values;
+                        for (var i = 0; i < entities.length; i++) {
+                            var entity = entities[i];
+                            entity.polygon.extrudedHeight = 0;
+                            var center = self.dataService.poly_center[i];
+                            entity.polyline = new Cesium.PolylineGraphics({
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (self.Max - entity.properties[self.HeightValue]._value) * scale]),
+                                width: center[2],
+                                material: entity.polygon.material,
+                                show: true
+                            });
+                        }
+                    });
+                }
+                else {
+                    var promise = this.dataService.cesiumpromise;
+                    var self = this;
+                    promise.then(function (dataSource) {
+                        var entities = dataSource.entities.values;
+                        for (var i = 0; i < entities.length; i++) {
+                            var entity = entities[i];
+                            entity.polygon.extrudedHeight = 0;
+                            var center = self.dataService.poly_center[i];
+                            console.log(center[2]);
+                            entity.polyline = new Cesium.PolylineGraphics({
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], entity.properties[self.HeightValue]._value * scale]),
+                                width: center[2],
+                                material: entity.polygon.material,
+                                show: true
+                            });
+                        }
+                    });
+                }
+            }
+            else {
+                if (this.CheckOpp === true) {
+                    var promise = this.dataService.cesiumpromise;
+                    var self = this;
+                    promise.then(function (dataSource) {
+                        var entities = dataSource.entities.values;
+                        for (var i = 0; i < entities.length; i++) {
+                            var entity = entities[i];
+                            entity.polygon.extrudedHeight = 0;
+                            var center = self.dataService.poly_center[i];
+                            entity.polyline = new Cesium.PolylineGraphics({
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], self.Max - entity.properties[self.HeightValue]._value]),
+                                width: center[2],
+                                material: entity.polygon.material,
+                                show: true
+                            });
+                        }
+                    });
+                }
+                else {
+                    var promise = this.dataService.cesiumpromise;
+                    var self = this;
+                    promise.then(function (dataSource) {
+                        var entities = dataSource.entities.values;
+                        for (var i = 0; i < entities.length; i++) {
+                            var entity = entities[i];
+                            entity.polygon.extrudedHeight = 0;
+                            var center = self.dataService.poly_center[i];
+                            entity.polyline = new Cesium.PolylineGraphics({
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], entity.properties[self.HeightValue]._value]),
+                                width: center[2],
+                                material: entity.polygon.material,
+                                show: true
+                            });
+                        }
+                    });
+                }
+            }
+        }
+        else {
+            var promise = this.dataService.cesiumpromise;
+            var self = this;
+            promise.then(function (dataSource) {
+                var entities = dataSource.entities.values;
+                for (var i = 0; i < entities.length; i++) {
+                    var entity = entities[i];
+                    entity.polyline.show = false;
+                    if (self.CheckScale === true) {
+                        if (self.CheckOpp === true) {
+                            entity.polygon.extrudedHeight = (self.Max - entity.properties[self.HeightValue]._value) * scale;
+                        }
+                        else {
+                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                        }
+                    }
+                    else {
+                        if (self.CheckOpp === true) {
+                            entity.polygon.extrudedHeight = self.Max - entity.properties[self.HeightValue]._value;
+                        }
+                        else {
+                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value;
+                        }
+                    }
+                }
+            });
+        }
+    };
+    ToolwindowComponent.prototype.checkExtrude = function () {
+        this.CheckExtrude = !this.CheckExtrude;
+        this.dataService.CheckExtrude = this.CheckExtrude;
     };
     ToolwindowComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -1132,6 +1356,7 @@ var ViewerComponent = /** @class */ (function (_super) {
         this.viewer = viewer;
         this.dataService.viewer = this.viewer;
         this.data = data;
+        this.poly_center = [];
         var promise = Cesium.GeoJsonDataSource.load(this.data);
         var self = this;
         var HeightKey = [];
@@ -1139,9 +1364,17 @@ var ViewerComponent = /** @class */ (function (_super) {
             viewer.dataSources.add(dataSource);
             var entities = dataSource.entities.values;
             for (var i = 0; i < entities.length; i++) {
+                var poly_center = [];
                 var entity = entities[i];
                 entity.polygon.outline = false;
+                var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+                var radius = Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius / 100);
+                var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).longitude).toFixed(10);
+                var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).latitude).toFixed(10);
+                poly_center = [longitudeString, latitudeString, radius];
+                self.poly_center.push(poly_center);
             }
+            self.dataService.poly_center = self.poly_center;
             self.propertyNames = entities[0].properties.propertyNames;
             for (var i = 0; i < self.propertyNames.length; i++) {
                 if (self.propertyNames[i].indexOf("ID") !== -1 || self.propertyNames[i].indexOf("id") !== -1) {
