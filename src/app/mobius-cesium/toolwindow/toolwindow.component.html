@@ -62,7 +62,10 @@
           <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="text" value={{ScaleValue}} (change)="changescale($event.target.value)" style="width:80px"></div></th>
           <th style="width:85px;height: 25px;"><div style="width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th></tr>
           <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Invert</div></th>
-          <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckOpp" (click)="checkopp();changeopp()"></div></th></tr>  
+          <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckOpp" (click)="checkopp();changeopp()"></div></th></tr>
+          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Line</div></th>
+          <!-- <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="text" value={{ExtrudeValue}} (change)="changeExtrude($event.target.value)" style="width:80px"></div></th> -->
+          <th style="width:85px;height: 25px;"><div style="width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckExtrude" (click)="checkExtrude();changeExtrude()"></div></th></tr>  
       </table>
       <hr>
       <table>

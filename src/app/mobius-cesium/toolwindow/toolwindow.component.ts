@@ -34,6 +34,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   SelectedEntity:object;
   ScaleValue:number;
   CheckScale:boolean;
+  ExtrudeValue:number;
+  CheckExtrude:boolean;
   HideNum:Array<string>;
   RelaHide:Array<number>;
   Maxtext:number;
@@ -48,6 +50,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.ChromaScale=chroma.scale("SPECTRAL");
     this.HideNum=[];
     this.ScaleValue=this.dataService.ScaleValue;
+    this.ExtrudeValue=this.dataService.ExtrudeValue;
     this.CheckScale=this.dataService.CheckScale;
     this.CheckOpp=this.dataService.CheckOpp;
     if(this.dataService.HideNum!==undefined) {
@@ -148,7 +151,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.Max = Math.max.apply(Math, texts);
     this.Min= Math.min.apply(Math, texts);
     //if(this.CheckHide===true) this.Hide();
-    this.changescale(this.ScaleValue)
+    this.changescale(this.ScaleValue);
+    this.changeExtrude();
     this.dataService.getHeightValue(this.HeightValue);
   }
 
@@ -343,6 +347,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         });
       }
     }
+    this.changeExtrude();
     this.Hide();
   }
   checkscale(){
@@ -604,17 +609,32 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       var self= this;
       if(self.CheckScale===true){
         var scale:number=self.ScaleValue/self.Max;
-        promise.then(function(dataSource) {
-          var entities = dataSource.entities.values;
-          for (var i = 0; i < entities.length; i++) {
-            var entity=entities[i];
-            if(entity.properties[self.HeightValue]!==undefined){
-              if(entity.properties[self.HeightValue]._value!==" "){
-                entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+        if(self.CheckExtrude===false){
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity=entities[i];
+              entity.polylin.show=false;
+              if(entity.properties[self.HeightValue]!==undefined){
+                if(entity.properties[self.HeightValue]._value!==" "){
+                  entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+                }
               }
             }
-          }
-        });
+          });
+        }else{
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity=entities[i];
+              if(entity.properties[self.HeightValue]!==undefined){
+                if(entity.properties[self.HeightValue]._value!==" "){
+                  entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+                }
+              }
+            }
+          });
+        }
       }else{
         promise.then(function(dataSource) {
           var entities = dataSource.entities.values;
@@ -632,6 +652,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.changescale(this.ScaleValue);
     }
     this.Hide();
+    this.changeExtrude();
   }
 
   checkopp(){
@@ -639,6 +660,117 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.dataService.CheckOpp=this.CheckOpp;
   }
 
+  changeExtrude(){
+    var scale:number=this.ScaleValue/this.Max;
+    if(this.CheckExtrude===true){
+      if(this.CheckScale===true){
+        if(this.CheckOpp===true){
+          var promise=this.dataService.cesiumpromise;
+          var self= this;
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity=entities[i];
+              entity.polygon.extrudedHeight=0;
+              var center=self.dataService.poly_center[i];
 
+              entity.polyline=new Cesium.PolylineGraphics({
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(self.Max-entity.properties[self.HeightValue]._value)*scale]),
+                width:center[2],
+                material:entity.polygon.material,
+                show:true
+              })
+            }
+          });
+        }else{
+          var promise=this.dataService.cesiumpromise;
+          var self= this;
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity=entities[i];
+              entity.polygon.extrudedHeight=0;
+              var center=self.dataService.poly_center[i];
+              console.log(center[2]);
+              entity.polyline=new Cesium.PolylineGraphics({
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],entity.properties[self.HeightValue]._value*scale]),
+                width:center[2],
+                material:entity.polygon.material,
+                show:true
+              })
+            }
+          });
+        }
+      }else{
+        if(this.CheckOpp===true){
+          var promise=this.dataService.cesiumpromise;
+          var self= this;
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity=entities[i];
+              entity.polygon.extrudedHeight=0;
+              var center=self.dataService.poly_center[i];
+              entity.polyline=new Cesium.PolylineGraphics({
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],self.Max-entity.properties[self.HeightValue]._value]),
+                width:center[2],
+                material:entity.polygon.material,
+                show:true
+              })
+            }
+          });
+        }else{
+          var promise=this.dataService.cesiumpromise;
+          var self= this;
+          promise.then(function(dataSource) {
+            var entities = dataSource.entities.values;
+            for (var i = 0; i < entities.length; i++) {
+              var entity=entities[i];
+              entity.polygon.extrudedHeight=0;
+              var center=self.dataService.poly_center[i];
+              entity.polyline=new Cesium.PolylineGraphics({
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],entity.properties[self.HeightValue]._value]),
+                width:center[2],
+                material:entity.polygon.material,
+                show:true
+              })
+            }
+          });
+        }
+      }
+    }else{
+      var promise=this.dataService.cesiumpromise;
+      var self= this;
+      promise.then(function(dataSource) {
+        var entities = dataSource.entities.values;
+        for (var i = 0; i < entities.length; i++) {
+          var entity=entities[i];
+          entity.polyline.show=false;
+          if(self.CheckScale===true){
+            if(self.CheckOpp===true){
+              entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+            }else{
+              entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+            }
+          }
+          else{
+            if(self.CheckOpp===true){
+              entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
+            }else{
+              entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+            }
+          }
+        }
+      });
+
+
+    }
+
+  }
+  checkExtrude(){
+    this.CheckExtrude=!this.CheckExtrude;
+    this.dataService.CheckExtrude=this.CheckExtrude;
+
+  }
 
 }

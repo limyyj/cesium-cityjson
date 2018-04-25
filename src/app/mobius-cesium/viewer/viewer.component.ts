@@ -17,6 +17,7 @@ export class ViewerComponent extends DataSubscriber {
   viewer:any;
   selectEntity:any=null;
   material:object;
+  poly_center:Array<any>;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -61,6 +62,7 @@ export class ViewerComponent extends DataSubscriber {
     this.viewer=viewer;
     this.dataService.viewer=this.viewer;
     this.data=data;
+    this.poly_center=[];
     var promise = Cesium.GeoJsonDataSource.load(this.data);
     var self= this;
     var HeightKey:any=[];
@@ -68,9 +70,17 @@ export class ViewerComponent extends DataSubscriber {
       viewer.dataSources.add(dataSource);
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
+        var poly_center:any=[];
         var entity = entities[i];                               
         entity.polygon.outline = false;
+        var center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+        var radius=Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius/100);
+        var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).longitude).toFixed(10); 
+        var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).latitude).toFixed(10); 
+        poly_center=[longitudeString,latitudeString,radius];
+        self.poly_center.push(poly_center);
       }
+      self.dataService.poly_center=self.poly_center;
       self.propertyNames=entities[0].properties.propertyNames;
       for(var i=0;i<self.propertyNames.length;i++){
         if(self.propertyNames[i].indexOf("ID")!==-1||self.propertyNames[i].indexOf("id")!==-1){
@@ -139,7 +149,6 @@ export class ViewerComponent extends DataSubscriber {
       this.selectEntity=undefined;
       this.material=undefined;
     }
-    
   }
   ColorSelect(entity){
     this.ColorValue=this.dataService.ColorValue;
