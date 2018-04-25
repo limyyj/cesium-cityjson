@@ -226,6 +226,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.colorByCat();
     }
     this.Hide();
+    this.changeExtrude();
     this.dataService.getColorValue(this.ColorValue);
   }
   colorByNum(){
@@ -521,21 +522,64 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               if (self._compare(value, text[j], relation[j])) {
                 entity.polygon.extrudedHeight = 0;
                 entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                entity.polyline.show=false;
                 break;
               }else{
                 self.ColorByNumCat(entity);
                 if(self.CheckScale===true){
                   if(self.CheckOpp===true){
-                    entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(self.Max-entity.properties[self.HeightValue]._value)*scale]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
+                      entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+                    }
                   }else{
-                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],entity.properties[self.HeightValue]._value*scale]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
+                      entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                    }
                   }
                 }
                 else{
                   if(self.CheckOpp===true){
-                    entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],self.Max-entity.properties[self.HeightValue]._value]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
+                      entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
+                    }
+                    
                   }else{
-                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],entity.properties[self.HeightValue]._value]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
+                      entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+                    }
+                    
                   }
                 }
               }
@@ -543,21 +587,62 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               if (self._compareCat(value, text[j], relation[j])) {
                 entity.polygon.extrudedHeight = 0;
                 entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                entity.polyline.show=false;
                 break;
               }else{
                 self.ColorByNumCat(entity);
                 if(self.CheckScale===true){
                   if(self.CheckOpp===true){
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(self.Max-entity.properties[self.HeightValue]._value)*scale]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
                     entity.polygon.extrudedHeight =(self.Max-entity.properties[self.HeightValue]._value)*scale;
+                    }
                   }else{
-                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],entity.properties[self.HeightValue]._value*scale]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
+                      entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                    }
                   }
                 }
                 else{
                   if(self.CheckOpp===true){
-                    entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],self.Max-entity.properties[self.HeightValue]._value]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
+                      entity.polygon.extrudedHeight =self.Max-entity.properties[self.HeightValue]._value;
+                    }
                   }else{
-                    entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+                    if(self.CheckExtrude===true){
+                      var center=self.dataService.poly_center[i];
+                      entity.polyline=new Cesium.PolylineGraphics({
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],entity.properties[self.HeightValue]._value]),
+                        width:center[2],
+                        material:entity.polygon.material,
+                        show:true
+                      })
+                    }else{
+                      entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value;
+                    }
                   }
                 }
               }
