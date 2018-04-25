@@ -34,7 +34,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   SelectedEntity:object;
   ScaleValue:number;
   CheckScale:boolean;
-  ExtrudeValue:number;
   CheckExtrude:boolean;
   HideNum:Array<string>;
   RelaHide:Array<number>;
@@ -50,7 +49,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.ChromaScale=chroma.scale("SPECTRAL");
     this.HideNum=[];
     this.ScaleValue=this.dataService.ScaleValue;
-    this.ExtrudeValue=this.dataService.ExtrudeValue;
     this.CheckScale=this.dataService.CheckScale;
     this.CheckOpp=this.dataService.CheckOpp;
     if(this.dataService.HideNum!==undefined) {
