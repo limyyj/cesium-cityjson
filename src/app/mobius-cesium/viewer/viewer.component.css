@@ -12,7 +12,21 @@ body{
  font-size: 14px;
 }
 
-.cesium-button {
+#ColorBar{
+  z-index:99;
+  margin: 5px;
+  width: 100%;
+  padding: 2px 5px;
+  position: absolute;
+  display:inline-block;
+  bottom: 1px;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  table-layout:fixed !important;
+  white-space: nowrap !important;
+}
+
+/*.cesium-button {
   display: inline-block;
   position: relative;
   border: 1px solid #8AA8C0;
@@ -103,5 +117,5 @@ body{
   font-weight: normal;
   color:white;
   text-shadow: 0px 0px 3px black;
-}
+}*/
 

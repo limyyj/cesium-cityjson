@@ -774,7 +774,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               var entity=entities[i];
               entity.polygon.extrudedHeight=0;
               var center=self.dataService.poly_center[i];
-              console.log(center[2]);
               entity.polyline=new Cesium.PolylineGraphics({
                 positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],entity.properties[self.HeightValue]._value*scale]),
                 width:center[2],

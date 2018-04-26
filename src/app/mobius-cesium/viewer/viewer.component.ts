@@ -1,5 +1,6 @@
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 import {DataSubscriber} from "../data/DataSubscriber";
+import * as chroma from "chroma-js";
 
 
 @Component({
@@ -18,11 +19,27 @@ export class ViewerComponent extends DataSubscriber {
   selectEntity:any=null;
   material:object;
   poly_center:Array<any>;
+  Colorbar:Array<any>;
+  Max:number;
+  Min:number;
+  texts:Array<any>;
+  Cattexts:Array<any>;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
     super(injector);
     this.myElement = myElement;
+    this.Colorbar=[];
+    this.ChromaScale=chroma.scale("SPECTRAL");
+    for(var i=0;i<80;i++){
+      this.Colorbar.push(this.ChromaScale(i/80));
+    }
+  }
+  ngDoCheck(){
+    if(this.ColorValue!==this.dataService.ColorValue){
+      this.ColorValue=this.dataService.ColorValue;
+      this.Colortext();
+    }
   }
 
   ngOnInit() {
@@ -70,6 +87,7 @@ export class ViewerComponent extends DataSubscriber {
       viewer.dataSources.add(dataSource);
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
+        var texts=[];
         var poly_center:any=[];
         var entity = entities[i];                               
         entity.polygon.outline = false;
@@ -133,6 +151,50 @@ export class ViewerComponent extends DataSubscriber {
     // this.dataService.ColorValue=this.ColorValue;
     // this.dataService.HeightValue=this.HeightValue;
     viewer.zoomTo(promise);
+    this.Colortext();
+    
+  }
+
+  Colortext(){
+    this.texts=undefined;
+    this.Cattexts=undefined;
+    var propertyname=this.ColorValue;
+    var texts=[];
+    var promise=this.dataService.cesiumpromise;
+    var self= this;
+      promise.then(function(dataSource) {
+      var entities = dataSource.entities.values;
+      for (var i = 0; i < entities.length; i++) {
+        var entity = entities[i];
+        if(entity.properties[propertyname]!==undefined){
+        if(entity.properties[propertyname]._value!==" "&&typeof(entity.properties[propertyname]._value)==="number"){
+          if(texts.length===0) {texts[0]=entity.properties[propertyname]._value;}
+          else{if(texts.indexOf(entity.properties[propertyname]._value)===-1) texts.push(entity.properties[propertyname]._value);}
+          }else if(entity.properties[propertyname]._value!==" "&&typeof(entity.properties[propertyname]._value)==="string"){
+          if(texts.length===0) {texts[0]=entity.properties[propertyname]._value;}
+          else{if(texts.indexOf(entity.properties[propertyname]._value)===-1) texts.push(entity.properties[propertyname]._value);}
+          }
+        }
+      }
+    });
+    if(typeof(texts[0])==="number"){
+      var Max=Math.max.apply(Math, texts);
+      var Min=Math.min.apply(Math, texts);
+      this.texts=[Min];
+      for(var i=1;i<10;i++){
+        this.texts.push((Min+(Max-Min)*(i/10)).toFixed(3));
+      }
+      this.texts.push(Max);
+    }
+    if(typeof(texts[0])==="string"){
+      this.Cattexts=[];
+      for(var j=0;j<texts.length;j++){
+        var ColorKey:any=[];
+        ColorKey.text=texts[j];
+        ColorKey.color=this.ChromaScale((j/texts.length).toFixed(2));
+        this.Cattexts.push(ColorKey);
+      }
+    }
   }
 
   select(){
