@@ -30,7 +30,7 @@ export class ViewerComponent extends DataSubscriber {
     super(injector);
     this.myElement = myElement;
     this.Colorbar=[];
-    this.ChromaScale=chroma.scale("SPECTRAL");
+    this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);
     for(var i=0;i<80;i++){
       this.Colorbar.push(this.ChromaScale(i/80));
     }
@@ -38,6 +38,15 @@ export class ViewerComponent extends DataSubscriber {
   ngDoCheck(){
     if(this.ColorValue!==this.dataService.ColorValue){
       this.ColorValue=this.dataService.ColorValue;
+      this.Colortext();
+    }
+    if(this.Max!==this.dataService.MaxColor){
+      this.Max=this.dataService.MaxColor;
+      this.Colortext();
+
+    }
+    if(this.Min!==this.dataService.MinColor){
+      this.Min=this.dataService.MinColor;
       this.Colortext();
     }
   }
@@ -90,7 +99,7 @@ export class ViewerComponent extends DataSubscriber {
         var texts=[];
         var poly_center:any=[];
         var entity = entities[i];                               
-        entity.polygon.outline = false;
+        entity.polygon.outlineColor = Cesium.Color.Black;
         var center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
         var radius=Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius/100);
         var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).longitude).toFixed(10); 
@@ -178,19 +187,63 @@ export class ViewerComponent extends DataSubscriber {
       }
     });
     if(typeof(texts[0])==="number"){
-      var Max=Math.max.apply(Math, texts);
-      var Min=Math.min.apply(Math, texts);
-      this.texts=[Min];
-      for(var i=1;i<10;i++){
-        this.texts.push((Min+(Max-Min)*(i/10)).toFixed(3));
+      this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);
+      if(this.dataService.MaxColor===undefined){
+        this.Max=Math.max.apply(Math, texts);
+        this.Min=Math.min.apply(Math, texts);
+        var Max=this.Max;
+        var Min=this.Min;
+      }else{
+        var Max=this.Max;
+        var Min=this.Min;
       }
-      this.texts.push(Max);
+      if(Max<1){
+        this.texts=[Min];
+        for(var i=1;i<10;i++){
+          this.texts.push((Min+(Max-Min)*(i/10)).toFixed(3));
+        }
+        this.texts.push(Max);
+      }else if(Max>1000){
+        var number=String((Min/1000).toFixed(2)).concat("K");
+        this.texts=[number];
+        for(var i=1;i<10;i++){
+          var number=String(((Min+(Max-Min)*(i/10))/1000).toFixed(2)).concat("K");
+          this.texts.push(number);
+        }
+        var number=String((Max/1000).toFixed(2)).concat("K");
+        this.texts.push(number);
+      }else if(Max>1000000){
+        var number=String((Min/1000000).toFixed(2)).concat("M");
+        this.texts=[number];
+        for(var i=1;i<10;i++){
+          var number=String(((Min+(Max-Min)*(i/10))/1000000).toFixed(2)).concat("M");
+          this.texts.push(number);
+        }
+        var number=String((Max/1000000).toFixed(2)).concat("M");
+        this.texts.push(number);
+      }else if(Max>1000000000){
+        var number=String((Min/1000000000).toFixed(2)).concat("B");
+        this.texts=[number];
+        for(var i=1;i<10;i++){
+          var number=String(((Min+(Max-Min)*(i/10))/1000000000).toFixed(2)).concat("B");
+          this.texts.push(number);
+        }
+        var number=String((Max/1000000000).toFixed(2)).concat("B");
+        this.texts.push(number);
+      }else if(Max>=1&&Max<=1000){
+        this.texts=[Math.round(Min)];
+        for(var i=1;i<10;i++){
+          this.texts.push(Math.round(Min+(Max-Min)*(i/10)));
+        }
+        this.texts.push(Math.round(Max));
+      }
     }
     if(typeof(texts[0])==="string"){
       this.Cattexts=[];
       for(var j=0;j<texts.length;j++){
         var ColorKey:any=[];
         ColorKey.text=texts[j];
+        this.ChromaScale=chroma.scale("SPECTRAL");
         ColorKey.color=this.ChromaScale((j/texts.length).toFixed(2));
         this.Cattexts.push(ColorKey);
       }

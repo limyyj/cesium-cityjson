@@ -209,6 +209,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.dataService.Colortexts=this.ColorKey;
       this.dataService.MaxColor=max;
       this.dataService.MinColor=min;
+      this.Max=max;
+      this.Min=min;
       this.colorByNum();
     }else if(typeof(texts[0])==="string"){
       this.texts=texts;
@@ -227,9 +229,21 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.changeExtrude();
     this.dataService.getColorValue(this.ColorValue);
   }
+
+  changeMin(Min){
+    this.Min=Number(Min);
+    this.dataService.MinColor=Number(Min);
+    this.colorByNum();
+  }
+  changeMax(Max){
+    this.Max=Number(Max);
+    this.dataService.MaxColor=Number(Max);
+    this.colorByNum();
+  }
+
   colorByNum(){
-    var max = Math.max.apply(Math, this.texts);
-    var min = Math.min.apply(Math, this.texts);
+    var max = this.dataService.MaxColor;
+    var min=this.dataService.MinColor;
     var promise=this.dataService.cesiumpromise;
     var ChromaScale=this.ChromaScale;
     var ColorKey=this.ColorKey;
@@ -686,6 +700,10 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       }
     }
   }
+
+  
+
+
   changeopp(){
     if(this.CheckOpp===true){
       var promise=this.dataService.cesiumpromise;

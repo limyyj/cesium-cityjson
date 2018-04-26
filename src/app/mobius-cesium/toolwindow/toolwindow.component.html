@@ -51,11 +51,11 @@
         </table>
         <table>
           <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Min</div></th>
-          <th style="width:60px;height: 25px;"><div style="width:60px;color:#395d73;font-weight: normal;text-align: left;border:0;">{{Min}}</div></th></tr>  
+          <th style="width:60px;height: 25px;"><input type="text"  value={{Min}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeMin($event.target.value)"></th></tr>  
           </table>
           <table >
           <tr ><th style="width:60px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Max</div></th>
-          <th style="width:60px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">{{Max}}</div></th></tr>
+          <th style="width:60px;"><input type="text" value={{Max}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeMax($event.target.value)"></th></tr>
       </table>
        <table>
           <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Scale</div></th>
@@ -101,10 +101,10 @@
       </table>
       <table>
         <tr>
-        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;">{{item.HideMin}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;">{{item.HideMin}}</div></th>
         <th *ngIf="item.type === 'number'" style="width:150px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
         </mat-slider></div></th>
-        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
+        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
       </table><hr>
         </div>
       </div>
