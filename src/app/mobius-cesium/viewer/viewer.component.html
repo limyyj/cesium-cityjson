@@ -2,7 +2,7 @@
   <div id="ColorBar" *ngIf="texts!==undefined">
   	<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 88%;margin-left: 9%">
        <tr >
-          <th *ngFor="let text of texts;" style="text-align:right;width: 7%"><div  style="writing-mode:vertical-lr;width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{text}}</div></th>
+          <th *ngFor="let text of texts;" style="text-align:right;width: 7%"><div  style="width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{text}}</div></th><!-- writing-mode:vertical-lr; -->
         </tr>
     </table>
 	<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;">
