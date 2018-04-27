@@ -1,10 +1,25 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {DataService} from './data/data.service';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 
 @Component({
   selector: 'mobius-cesium',
   templateUrl: './mobius-cesium.component.html',
-  styleUrls: ['./mobius-cesium.component.scss']
+  styleUrls: ['./mobius-cesium.component.scss'],
+  animations: [
+    trigger('slide_in_out', [
+      state('slide_in', style({
+        width: '250px',
+        // css styles when the element is in slide_in
+      })),
+      state('slide_out', style({
+        width: '0px'
+        // css styles when the element is in slide_out
+      })),
+      // animation effect when transitioning from one state to another
+      transition('slide_in <=> slide_out', animate(300))
+    ]),
+  ]
 })
 export class MobiuscesiumComponent {
 	@Input() data: JSON;
@@ -31,19 +46,15 @@ export class MobiuscesiumComponent {
 			this.setModel(this.data);
 		}
 	}
-
-	/*LoadViewer(){
-    var viewer = new Cesium.Viewer('cesiumContainer');
-    document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
-    document.getElementsByClassName('cesium-viewer-animationContainer')[0].remove();
-    document.getElementsByClassName('cesium-viewer-timelineContainer')[0].remove();
-    var promise= viewer.dataSources.add(Cesium.GeoJsonDataSource.load(this.data, {//'https://raw.githubusercontent.com/wandererwillow/urbanenvironment/master/Data/Neighborhood%20Boundary%20Map_4326.json', {
-      stroke: Cesium.Color.HOTPINK,
-      fill: Cesium.Color.PINK.withAlpha(0.5),
-      strokeWidth: 3
-    }));
-    viewer.flyTo(promise);
-  }*/
-
-
+	slider_state:string = "slide_out";
+  	toggleSlider(): void{
+    // do something to change the animation_state variable
+    	this.slider_state = this.slider_state === 'slide_out' ? 'slide_in' : 'slide_out';
+    	var toggle=document.getElementById("Toggle");
+    	if(this.slider_state === 'slide_out'){
+    	  toggle.style.left="0px";
+    	}else if(this.slider_state === 'slide_in'){
+    	  toggle.style.left="250px";
+    	}
+  	}
 }

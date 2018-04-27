@@ -197,7 +197,7 @@ export class ViewerComponent extends DataSubscriber {
         var Max=this.Max;
         var Min=this.Min;
       }
-      if(Max<1){
+      if(Max<=1){
         this.texts=[Min];
         for(var i=1;i<10;i++){
           this.texts.push((Min+(Max-Min)*(i/10)).toFixed(3));

@@ -43,6 +43,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   HideType:string;
   selectColor:string;
   selectHeight:string;
+  Filter:boolean=false;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -225,8 +226,12 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.dataService.Colortexts=this.ColorKey;
       this.colorByCat();
     }
-    this.Hide();
+    
     this.changeExtrude();
+    /*if(this.data.crs.cesium!==undefined&&this.data.crs.cesium.length!==0){
+      this.addHide();
+    }*/
+    this.Hide();
     this.dataService.getColorValue(this.ColorValue);
   }
 
@@ -372,25 +377,53 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   hideElementArr = [];
   addHide(){
     var lastnumber:string;
+    if(this.data.crs.cesium!==undefined&&this.data.crs.cesium.length!==0){
+      if(this.Filter===false){
+        for(var i=0;i<this.data.crs.cesium.Filter.length;i++){
+          if(this.HideNum.length===0) {this.HideNum[0]="0";lastnumber=this.HideNum[0]}
+          else{
+            for(var i=0;i<this.HideNum.length+1;i++){
+              if(this.HideNum.indexOf(String(i))===-1){
+                this.HideNum.push(String(i));
+                lastnumber=String(i);
+                break;
+              }
+            }
+          }
+          var propertyname=this.data.crs.cesium.Filter[i].name;
+          var relation=Number(this.data.crs.cesium.Filter[i].relation);
+          var text=this.data.crs.cesium.Filter[i].text;
+          if(typeof(text)==="number"){this.HideType="number";var texts=this.Initial(propertyname);}else if(typeof(text)==="string"){this.HideType="category";}
+          this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:propertyname,type:this.HideType,Category:texts,CategaryHide:text,RelaHide:relation,textHide: text,
+                                HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
+        }
+
+      }
+      this.Hide();
+    }
+    if(this.Filter===true){
     //if(this.dataService.HideNum!==undefined) {this.HideNum=this.dataService.HideNum;this.hideElementArr=this.dataService.hideElementArr;}
-    if(this.HideNum.length===0) {this.HideNum[0]="0";lastnumber=this.HideNum[0]}
-    else{
-      for(var i=0;i<this.HideNum.length+1;i++){
-        if(this.HideNum.indexOf(String(i))===-1){
-          this.HideNum.push(String(i));
-          lastnumber=String(i);
-          break;
+      if(this.HideNum.length===0) {this.HideNum[0]="0";lastnumber=this.HideNum[0]}
+      else{
+        for(var i=0;i<this.HideNum.length+1;i++){
+          if(this.HideNum.indexOf(String(i))===-1){
+            this.HideNum.push(String(i));
+            lastnumber=String(i);
+            break;
+          }
         }
       }
+      if(this.HideValue===undefined) this.HideValue=this.ColorNames[0];
+      var texts=this.Initial(this.HideValue);
+      if(typeof(texts[0])==="number"){this.HideType="number"}else if(typeof(texts[0])==="string"){this.HideType="category";}
+      this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:this.HideValue,type:this.HideType,Category:texts,CategaryHide:texts[0],RelaHide:0,textHide: Math.round(Math.min.apply(Math, texts)*100)/100,
+                                HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
+      
+      return;
     }
-    if(this.HideValue===undefined) this.HideValue=this.ColorNames[0];
-    var texts=this.Initial(this.HideValue);
-    if(typeof(texts[0])==="number"){this.HideType="number"}else if(typeof(texts[0])==="string"){this.HideType="category";}
-    this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:this.HideValue,type:this.HideType,Category:texts,CategaryHide:texts[0],RelaHide:0,textHide: Math.round(Math.min.apply(Math, texts)*100)/100,
-                              HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
     this.dataService.hideElementArr=this.hideElementArr;
     this.dataService.HideNum=this.HideNum;
-    return;
+    this.Filter=true;
   }
 
   deleteHide(event){
@@ -497,7 +530,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   _compareCat(value: string, Categary:string,relation: number): boolean {
     switch (relation) {
       case 0:
-        return value ===  null;
+        return value ===  undefined;
       case 1:
         return value !== Categary;
       case 2:
@@ -529,13 +562,16 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
         for (let j = 0; j < propertyname.length; j++) {
-          const value = entity.properties[propertyname[j]]._value;
+          const value = entity.properties[propertyname[j]]._value;   
+
           if(value !== undefined){
             if(typeof(value)==="number"){
               if (self._compare(value, text[j], relation[j])) {
                 entity.polygon.extrudedHeight = 0;
                 entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                entity.polyline.show=false;
+                if(self.CheckExtrude===true){
+                  entity.polyline.show=false;
+                }
                 break;
               }else{
                 self.ColorByNumCat(entity);
@@ -600,7 +636,9 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               if (self._compareCat(value, text[j], relation[j])) {
                 entity.polygon.extrudedHeight = 0;
                 entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                entity.polyline.show=false;
+                if(self.CheckExtrude===true){
+                  entity.polyline.show=false;
+                }
                 break;
               }else{
                 self.ColorByNumCat(entity);
@@ -755,8 +793,9 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }else{
       this.changescale(this.ScaleValue);
     }
-    this.Hide();
+    
     this.changeExtrude();
+    this.Hide();
   }
 
   checkopp(){
