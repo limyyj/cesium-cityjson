@@ -393,7 +393,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           var propertyname=this.data.crs.cesium.Filter[i].name;
           var relation=Number(this.data.crs.cesium.Filter[i].relation);
           var text=this.data.crs.cesium.Filter[i].text;
-          if(typeof(text)==="number"){this.HideType="number";var texts=this.Initial(propertyname);}else if(typeof(text)==="string"){this.HideType="category";}
+          if(typeof(text)==="number"){this.HideType="number";var texts=this.Initial(propertyname);}else if(typeof(text)==="string"){this.HideType="category";var texts=this.Initial(propertyname);}
           this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:propertyname,type:this.HideType,Category:texts,CategaryHide:text,RelaHide:relation,textHide: text,
                                 HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
         }
