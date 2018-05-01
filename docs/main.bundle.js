@@ -1838,8 +1838,8 @@ var ToolwindowComponent = /** @class */ (function (_super) {
     ToolwindowComponent.prototype.changescale = function (ScaleValue) {
         //var Max=Math.max.apply(Math, this.texts);
         var Max = this.HeightMax;
-        /*this.ScaleValue=Number(ScaleValue);
-        var scale:number=this.ScaleValue;
+        this.ScaleValue = Number(ScaleValue);
+        /*var scale:number=this.ScaleValue;
         if(this.CheckScale===true){
           var promise=this.dataService.cesiumpromise;
           var self= this;
@@ -1903,7 +1903,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.changeExtrude();
         }
         else {
-            this.ScaleValue = Number(ScaleValue);
+            //this.ScaleValue=Number(ScaleValue);
             var scale = this.ScaleValue;
             if (this.CheckScale === true) {
                 var promise = this.dataService.cesiumpromise;
@@ -1968,6 +1968,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             }
         }
         this.Hide();
+        this.dataService.ScaleValue = this.ScaleValue;
     };
     ToolwindowComponent.prototype.checkscale = function () {
         this.CheckScale = !this.CheckScale;
