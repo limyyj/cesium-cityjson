@@ -334,8 +334,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   changescale(ScaleValue){
     //var Max=Math.max.apply(Math, this.texts);
     var Max=this.HeightMax;
-    /*this.ScaleValue=Number(ScaleValue);
-    var scale:number=this.ScaleValue;
+    this.ScaleValue=Number(ScaleValue);
+    /*var scale:number=this.ScaleValue;
     if(this.CheckScale===true){
       var promise=this.dataService.cesiumpromise;
       var self= this;
@@ -398,7 +398,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
       this.changeExtrude();
     }else{
-      this.ScaleValue=Number(ScaleValue);
+      //this.ScaleValue=Number(ScaleValue);
       var scale:number=this.ScaleValue;
       if(this.CheckScale===true){
         var promise=this.dataService.cesiumpromise;
@@ -460,6 +460,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       }
     }
     this.Hide();
+    this.dataService.ScaleValue=this.ScaleValue;
   }
   checkscale(){
     this.CheckScale=!this.CheckScale;
