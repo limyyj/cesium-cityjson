@@ -1,21 +1,6 @@
 <div id="toolwindow">
   <mat-tab-group class="mat-tab-group">
-    <mat-tab label="Attributes">
-      <div id="AttribsView"  style="margin-left: 5px;margin-top: 5px;">
-        <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-          <tr >
-            <th style="font-size: 10px;font-weight: normal;width: 85px;"><div style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">ID</div></th>
-            <th style="font-size: 10px;font-weight: normal;width: 85px"><div matTooltip={{ID}} style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{ID}}</div></th>
-          </tr>
-        </table>
-        <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-          <tr *ngFor="let Property of Properties">
-            <th style="font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px"><div matTooltip={{Property.Name}} style="width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Name}}</div></th>
-            <th style="font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px"><div matTooltip={{Property.Value}} style="width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Value}}</div></th>
-          </tr>
-        </table>
-      </div>
-    </mat-tab>
+    
     <!-- <mat-tab label="&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;" >
       <div id="KeyView" style="margin-left: 5px;margin-top: 5px;">
         <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
@@ -38,6 +23,14 @@
           </div></th>
           </tr>
           </table>
+          <table>
+          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Min</div></th>
+          <th style="width:60px;height: 25px;"><input type="text"  value={{Min}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeColorMin($event.target.value)"></th></tr>  
+          </table>
+          <table >
+          <tr ><th style="width:60px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Max</div></th>
+          <th style="width:60px;"><input type="text" value={{Max}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeColorMax($event.target.value)"></th></tr>
+      </table>
         <hr>
           <table>
           <tr>
@@ -51,11 +44,11 @@
         </table>
         <table>
           <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Min</div></th>
-          <th style="width:60px;height: 25px;"><input type="text"  value={{Min}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeMin($event.target.value)"></th></tr>  
+          <th style="width:60px;height: 25px;"><input type="text"  value={{HeightMin}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMin($event.target.value)"></th></tr>  
           </table>
           <table >
           <tr ><th style="width:60px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Max</div></th>
-          <th style="width:60px;"><input type="text" value={{Max}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeMax($event.target.value)"></th></tr>
+          <th style="width:60px;"><input type="text" value={{HeightMax}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMax($event.target.value)"></th></tr>
       </table>
        <table>
           <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Scale</div></th>
@@ -63,7 +56,7 @@
           <th style="width:85px;height: 25px;"><div style="width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th></tr>
           <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Invert</div></th>
           <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckOpp" (click)="checkopp();changeopp()"></div></th></tr>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Line</div></th>
+          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;">Height Chart</div></th>
           <th style="width:85px;height: 25px;"><div style="width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckExtrude" (click)="checkExtrude();changeExtrude()"></div></th></tr>  
       </table>
       <hr>
@@ -108,6 +101,22 @@
       </table><hr>
         </div>
       </div>
+      </div>
+    </mat-tab>
+    <mat-tab label="Attributes">
+      <div id="AttribsView"  style="margin-left: 5px;margin-top: 5px;">
+        <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
+          <tr >
+            <th style="font-size: 10px;font-weight: normal;width: 85px;"><div style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">ID</div></th>
+            <th style="font-size: 10px;font-weight: normal;width: 85px"><div matTooltip={{ID}} style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{ID}}</div></th>
+          </tr>
+        </table>
+        <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
+          <tr *ngFor="let Property of Properties">
+            <th style="font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px"><div matTooltip={{Property.Name}} style="width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Name}}</div></th>
+            <th style="font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px"><div matTooltip={{Property.Value}} style="width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Value}}</div></th>
+          </tr>
+        </table>
       </div>
     </mat-tab>
   </mat-tab-group>

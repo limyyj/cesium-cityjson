@@ -21,7 +21,9 @@ export class DataService {
   Colortexts:Array<any>;
   MinColor:number;
   MaxColor:number;
-  ScaleValue:number=1000;
+  MinHeight:number;
+  MaxHeight:number;
+  ScaleValue:number=1;
   CheckScale:boolean=true;
   CheckExtrude:boolean=false;
   hideElementArr:Array<any>;
