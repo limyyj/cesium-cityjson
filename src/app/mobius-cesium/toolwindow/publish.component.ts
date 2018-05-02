@@ -105,6 +105,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.dataService.MaxColor=this.Max;
       this.Min=data.colorMin;//this.ceisumData["colorMin"];
       this.dataService.MinColor=this.Min;
+      this.dataService.ColorValue=data.colorDefault;
+      /*this.changeColorMin(this.Min);
+      this.changeColorMax(this.Max);*/
     } 
     if(cesiumData["height"]!==undefined){
       data.heightDescr=cesiumData["height"].descr;
@@ -122,6 +125,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.dataService.MaxHeight=this.HeightMax;
       this.HeightMin=data.heightMin;//this.ceisumData["heightMin"];
       this.dataService.MinHeight=this.HeightMin;
+      this.dataService.HeightValue=data.heightDefault;
+      /*this.changeHeightMin(this.HeightMin);
+      this.changeHeightMax(this.HeightMax);*/
 
     }
     if(cesiumData["Filter"]!==undefined){
@@ -203,9 +209,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.HeightMax= Math.max.apply(Math, texts);
     this.HeightMin=Math.min.apply(Math, texts);
     this.changescale(this.ScaleValue);
-    if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+    /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
       this.changeExtrude();
-    }
+    }*/
     this.Hide();
     this.dataService.getHeightValue(this.HeightValue);
   }
@@ -284,9 +290,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.colorByCat();
     }
     
-    if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+    /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
       this.changeExtrude();
-    }
+    }*/
     /*if(this.data.crs.cesium!==undefined&&this.data.crs.cesium.length!==0){
       this.addHide();
     }*/
@@ -297,26 +303,26 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   changeColorMin(Min){
     this.Min=Number(Min);
     this.dataService.MinColor=Number(Min);
-    this.changeExtrude();
+    //this.changeExtrude();
     this.Hide();
   }
   changeColorMax(Max){
     this.Max=Number(Max);
     this.dataService.MaxColor=Number(Max);
-    this.changeExtrude();
+    //this.changeExtrude();
     this.Hide();
   }
 
   changeHeightMin(Min){
     this.HeightMin=Number(Min);
     this.dataService.MinHeight=Number(Min);
-    this.changeExtrude();
+    //this.changeExtrude();
     this.Hide();
   }
   changeHeightMax(Max){
     this.HeightMax=Number(Max);
     this.dataService.MaxHeight=Number(Max);
-    this.changeExtrude();
+    //this.changeExtrude();
     this.Hide();
   }
 
@@ -444,7 +450,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
         });
       }
     }*/
-    if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+    /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
       this.changeExtrude();
     }else{
       //this.ScaleValue=Number(ScaleValue);
@@ -478,7 +484,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
           });
         }
         /*this.Hide();*/
-      }else{
+      /*}else{
         var promise=this.dataService.cesiumpromise;
         var self= this;
         if(self.CheckOpp===false){
@@ -507,7 +513,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
           });
         }
       }
-    }
+    }*/
     this.Hide();
     this.dataService.ScaleValue=this.ScaleValue;
   }
@@ -545,6 +551,10 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.dataService.hideElementArr=this.hideElementArr;
     this.dataService.HideNum=this.HideNum;
     this.Hide();
+    /*this.changeColorMin(this.Min);
+    this.changeColorMax(this.Max);
+    this.changeHeightMin(this.HeightMin);
+    this.changeHeightMax(this.HeightMax);*/
     /*console.log(this.ceisumData);
     this.HeightValue=this.ceisumData["heightDefault"];
     this.dataService.HeightValue=this.HeightValue;
@@ -714,7 +724,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
+                      entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;//(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
                     }
                   }else{
                     if(self.CheckExtrude===true){
@@ -726,7 +736,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                      entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max))*scale;//entity.properties[self.HeightValue]._value*scale;
                     }
                   }
                 }
@@ -922,7 +932,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.changescale(this.ScaleValue);
     }*/
     
-    this.changeExtrude();
+    //this.changeExtrude();
     this.Hide();
   }
 
@@ -1028,7 +1038,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                 for (var i = 0; i < entities.length; i++) {
                   var entity=entities[i];
                   if(entity.polyline!==undefined) entity.polyline.show=false;
-                  entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
+                    entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
                 }
               });
             }else{
@@ -1037,7 +1047,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                 for (var i = 0; i < entities.length; i++) {
                   var entity=entities[i];
                   if(entity.polyline!==undefined) entity.polyline.show=false;
-                  entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max))*scale;
+                  entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max))*scale;//Math.min(entity.properties[self.HeightValue]._value*scale,Max*scale);
                 }
               });
             }
@@ -1064,6 +1074,11 @@ export class PublishComponent extends DataSubscriber implements OnInit{
             }
           }
         }
+      /*});
+
+
+    }*/
+    
 
   }
   checkExtrude(){

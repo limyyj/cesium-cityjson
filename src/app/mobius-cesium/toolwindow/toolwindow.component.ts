@@ -156,10 +156,10 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
     //if(this.CheckHide===true) this.Hide();
     this.changescale(this.ScaleValue);
-    if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+    /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
       this.changeExtrude();
-    }
-    
+    }*/
+    this.Hide();
     this.dataService.getHeightValue(this.HeightValue);
   }
 
@@ -236,41 +236,67 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.Max=null;
       this.Min=null;
     }
-    if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+    /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
       this.changeExtrude();
-    }
+    }*/
     //this.changeExtrude();
     /*if(this.data.crs.cesium!==undefined&&this.data.crs.cesium.length!==0){
       this.addHide();
     }*/
-    this.Hide();
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
+    }
+    
     this.dataService.getColorValue(this.ColorValue);
   }
 
   changeColorMin(Min){
     this.Min=Number(Min);
     this.dataService.MinColor=Number(Min);
-    this.changeExtrude();
-    this.Hide();
+    //this.changeExtrude();
+    //this.Hide();
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
+    }
   }
   changeColorMax(Max){
     this.Max=Number(Max);
     this.dataService.MaxColor=Number(Max);
-    this.changeExtrude();
-    this.Hide();
+    //this.changeExtrude();
+    //this.Hide();
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
+    }
   }
 
   changeHeightMin(Min){
     this.HeightMin=Number(Min);
     this.dataService.MinHeight=Number(Min);
-    this.changeExtrude();
-    this.Hide();
+    //this.changeExtrude();
+    //this.Hide();
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
+    }
   }
   changeHeightMax(Max){
     this.HeightMax=Number(Max);
     this.dataService.MaxHeight=Number(Max);
-    this.changeExtrude();
-    this.Hide();
+    //this.changeExtrude();
+    /*console.log(this.dataService.hideElementArr);
+    this.Hide();*/
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
+    }
   }
 
   colorByNum(){
@@ -395,7 +421,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       }
     }*/
     //this.changeExtrude();
-    if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+    /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
       this.changeExtrude();
     }else{
       //this.ScaleValue=Number(ScaleValue);
@@ -429,7 +455,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           });
         }
         /*this.Hide();*/
-      }else{
+      /*}else{
         var promise=this.dataService.cesiumpromise;
         var self= this;
         if(self.CheckOpp===false){
@@ -458,8 +484,13 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           });
         }
       }
+    }*/
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
     }
-    this.Hide();
+    //this.Hide();
     this.dataService.ScaleValue=this.ScaleValue;
   }
   checkscale(){
@@ -680,7 +711,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
+                      entity.polygon.extrudedHeight =(Math.min((Max-entity.properties[self.HeightValue]._value),Max))*scale;//(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
                     }
                   }else{
                     if(self.CheckExtrude===true){
@@ -692,7 +723,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =entity.properties[self.HeightValue]._value*scale;
+                      entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max))*scale;//entity.properties[self.HeightValue]._value*scale;
                     }
                   }
                 }
@@ -890,15 +921,25 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.changescale(this.ScaleValue);
     }*/
     
-    this.changeExtrude();
-    this.Hide();
+    //this.changeExtrude();
+    //this.Hide();
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
+    }
   }
 
   checkopp(){
     this.CheckOpp=!this.CheckOpp;
     this.dataService.CheckOpp=this.CheckOpp;
-    /*this.changeExtrude();
-    this.Hide();*/
+    /*this.changeExtrude();*/
+    //this.Hide();
+    if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
+      this.changeExtrude();
+    }else{
+      this.Hide();
+    }
   }
 
   changeExtrude(){
