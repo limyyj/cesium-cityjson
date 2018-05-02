@@ -404,7 +404,7 @@ module.exports = "#toolwindow{\r\n  position: relative;\r\n  /*background-color:
 /***/ "./src/app/mobius-cesium/toolwindow/publish.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n      <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th class=\"colorkey\" style=\"width: 100px\" *ngIf=\"ceisumData!==undifined\"><div style=\"width: 100px;color:#395d73;border:0;text-align: left;font-weight: normal;font-size: 10px\">{{ceisumData.colorDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th><div>\r\n            <select class=\"cesium-button\" style=\"left:40px\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n          <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{Min}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{Max}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMax($event.target.value)\"></th></tr>\r\n      </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th class=\"colorkey\" style=\"width: 100px\" *ngIf=\"ceisumData!==undifined\"><div style=\"width: 100px;color:#395d73;border:0;text-align: left;font-weight: normal;font-size: 10px\">{{ceisumData.heightDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th><div>\r\n            <select class=\"cesium-button\" style=\"left: 40px\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{HeightMax}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMax($event.target.value)\"></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\" *ngIf=\"ceisumData!==undifined\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{ceisumData.heightScale}}</div></th>\r\n          <th style=\"width:85px;height: 25px;\" *ngIf=\"ceisumData!==undifined\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Height Chart</div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckExtrude\" (click)=\"checkExtrude();changeExtrude()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:90px;height: 25px;\"><div style=\"width:90px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;font-size: 10px;\">{{item.descr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><!-- <div style=\"width:40px;height: 25px;vertical-align: middle;\"> -->\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">></div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\"><</div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">=</div>\r\n          <!-- <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select> --><!-- </div> --></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">none</div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\">=</div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">!=</div>\r\n          <!-- <div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div> --></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <!-- <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th> --></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Attributes\">\r\n      <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n      <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th class=\"colorkey\" style=\"width: 100px\" *ngIf=\"ceisumData!==undifined\"><div style=\"width: 100px;color:#395d73;border:0;text-align: left;font-weight: normal;font-size: 10px\">{{ceisumData.colorDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th><div>\r\n            <select class=\"cesium-button\" style=\"left:40px\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n          <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{Min}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{Max}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMax($event.target.value)\"></th></tr>\r\n      </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th class=\"colorkey\" style=\"width: 100px\" *ngIf=\"ceisumData!==undifined\"><div style=\"width: 100px;color:#395d73;border:0;text-align: left;font-weight: normal;font-size: 10px\">{{ceisumData.heightDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n          <th><div>\r\n            <select class=\"cesium-button\" style=\"left: 40px\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{HeightMax}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMax($event.target.value)\"></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\" *ngIf=\"ceisumData!==undifined\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\">{{ceisumData.heightScale}}</div></th>\r\n          <th style=\"width:85px;height: 25px;\" *ngIf=\"ceisumData!==undifined\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Height Chart</div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckExtrude\" (click)=\"checkExtrude();changeExtrude();Hide()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:90px;height: 25px;\"><div style=\"width:90px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;font-size: 10px;\">{{item.descr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><!-- <div style=\"width:40px;height: 25px;vertical-align: middle;\"> -->\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">></div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\"><</div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">=</div>\r\n          <!-- <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select> --><!-- </div> --></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">none</div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\">=</div>\r\n          <div style=\"width:40px;height: 25px;color:#395d73;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">!=</div>\r\n          <!-- <div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div> --></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <!-- <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th> --></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;vertical-align: top;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Attributes\">\r\n      <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
 
 /***/ }),
 
@@ -495,6 +495,9 @@ var PublishComponent = /** @class */ (function (_super) {
             this.dataService.MaxColor = this.Max;
             this.Min = data.colorMin; //this.ceisumData["colorMin"];
             this.dataService.MinColor = this.Min;
+            this.dataService.ColorValue = data.colorDefault;
+            /*this.changeColorMin(this.Min);
+            this.changeColorMax(this.Max);*/
         }
         if (cesiumData["height"] !== undefined) {
             data.heightDescr = cesiumData["height"].descr;
@@ -512,6 +515,9 @@ var PublishComponent = /** @class */ (function (_super) {
             this.dataService.MaxHeight = this.HeightMax;
             this.HeightMin = data.heightMin; //this.ceisumData["heightMin"];
             this.dataService.MinHeight = this.HeightMin;
+            this.dataService.HeightValue = data.heightDefault;
+            /*this.changeHeightMin(this.HeightMin);
+            this.changeHeightMax(this.HeightMax);*/
         }
         if (cesiumData["Filter"] !== undefined) {
             data.filter = cesiumData["Filter"];
@@ -596,9 +602,9 @@ var PublishComponent = /** @class */ (function (_super) {
         this.HeightMax = Math.max.apply(Math, texts);
         this.HeightMin = Math.min.apply(Math, texts);
         this.changescale(this.ScaleValue);
-        if (this.CheckScale !== undefined && this.CheckOpp !== undefined && this.CheckExtrude !== undefined) {
-            this.changeExtrude();
-        }
+        /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+          this.changeExtrude();
+        }*/
         this.Hide();
         this.dataService.getHeightValue(this.HeightValue);
     };
@@ -681,9 +687,9 @@ var PublishComponent = /** @class */ (function (_super) {
             this.dataService.Colortexts = this.ColorKey;
             this.colorByCat();
         }
-        if (this.CheckScale !== undefined && this.CheckOpp !== undefined && this.CheckExtrude !== undefined) {
-            this.changeExtrude();
-        }
+        /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+          this.changeExtrude();
+        }*/
         /*if(this.data.crs.cesium!==undefined&&this.data.crs.cesium.length!==0){
           this.addHide();
         }*/
@@ -693,25 +699,25 @@ var PublishComponent = /** @class */ (function (_super) {
     PublishComponent.prototype.changeColorMin = function (Min) {
         this.Min = Number(Min);
         this.dataService.MinColor = Number(Min);
-        this.changeExtrude();
+        //this.changeExtrude();
         this.Hide();
     };
     PublishComponent.prototype.changeColorMax = function (Max) {
         this.Max = Number(Max);
         this.dataService.MaxColor = Number(Max);
-        this.changeExtrude();
+        //this.changeExtrude();
         this.Hide();
     };
     PublishComponent.prototype.changeHeightMin = function (Min) {
         this.HeightMin = Number(Min);
         this.dataService.MinHeight = Number(Min);
-        this.changeExtrude();
+        //this.changeExtrude();
         this.Hide();
     };
     PublishComponent.prototype.changeHeightMax = function (Max) {
         this.HeightMax = Number(Max);
         this.dataService.MaxHeight = Number(Max);
-        this.changeExtrude();
+        //this.changeExtrude();
         this.Hide();
     };
     PublishComponent.prototype.colorByNum = function () {
@@ -838,74 +844,70 @@ var PublishComponent = /** @class */ (function (_super) {
             });
           }
         }*/
-        if (this.CheckScale !== undefined && this.CheckOpp !== undefined && this.CheckExtrude !== undefined) {
-            this.changeExtrude();
-        }
-        else {
-            //this.ScaleValue=Number(ScaleValue);
-            var scale = this.ScaleValue;
-            if (this.CheckScale === true) {
-                var promise = this.dataService.cesiumpromise;
-                var self = this;
-                if (self.CheckOpp === false) {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = Math.min(entity.properties[self.HeightValue]._value, Max) * scale;
-                                }
-                            }
-                        }
-                    });
+        /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+          this.changeExtrude();
+        }else{
+          //this.ScaleValue=Number(ScaleValue);
+          var scale:number=this.ScaleValue;
+          if(this.CheckScale===true){
+            var promise=this.dataService.cesiumpromise;
+            var self= this;
+            if(self.CheckOpp===false){
+              promise.then(function(dataSource) {
+                var entities = dataSource.entities.values;
+                for (var i = 0; i < entities.length; i++) {
+                  var entity=entities[i];
+                  if(entity.properties[self.HeightValue]!==undefined){
+                  if(entity.properties[self.HeightValue]._value!==" "){
+                    entity.polygon.extrudedHeight =Math.min(entity.properties[self.HeightValue]._value,Max)*scale;
+                  }
+                  }
                 }
-                else {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale;
-                                }
-                            }
-                        }
-                    });
+              });
+            }else{
+              promise.then(function(dataSource) {
+                var entities = dataSource.entities.values;
+                for (var i = 0; i < entities.length; i++) {
+                  var entity=entities[i];
+                  if(entity.properties[self.HeightValue]!==undefined){
+                  if(entity.properties[self.HeightValue]._value!==" "){
+                    entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
+                  }
+                  }
                 }
-                /*this.Hide();*/
+              });
             }
-            else {
-                var promise = this.dataService.cesiumpromise;
-                var self = this;
-                if (self.CheckOpp === false) {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = Math.min(entity.properties[self.HeightValue]._value, Max);
-                                }
-                            }
-                        }
-                    });
+            /*this.Hide();*/
+        /*}else{
+          var promise=this.dataService.cesiumpromise;
+          var self= this;
+          if(self.CheckOpp===false){
+            promise.then(function(dataSource) {
+              var entities = dataSource.entities.values;
+              for (var i = 0; i < entities.length; i++) {
+                var entity=entities[i];
+                if(entity.properties[self.HeightValue]!==undefined){
+                if(entity.properties[self.HeightValue]._value!==" "){
+                  entity.polygon.extrudedHeight =Math.min(entity.properties[self.HeightValue]._value,Max);
                 }
-                else {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = Max - Math.min((entity.properties[self.HeightValue]._value), Max);
-                                }
-                            }
-                        }
-                    });
                 }
-            }
+              }
+            });
+          }else{
+            promise.then(function(dataSource) {
+              var entities = dataSource.entities.values;
+              for (var i = 0; i < entities.length; i++) {
+                var entity=entities[i];
+                if(entity.properties[self.HeightValue]!==undefined){
+                if(entity.properties[self.HeightValue]._value!==" "){
+                  entity.polygon.extrudedHeight =Max-Math.min((entity.properties[self.HeightValue]._value),Max);
+                }
+                }
+              }
+            });
+          }
         }
+      }*/
         this.Hide();
         this.dataService.ScaleValue = this.ScaleValue;
     };
@@ -949,6 +951,10 @@ var PublishComponent = /** @class */ (function (_super) {
         this.dataService.hideElementArr = this.hideElementArr;
         this.dataService.HideNum = this.HideNum;
         this.Hide();
+        /*this.changeColorMin(this.Min);
+        this.changeColorMax(this.Max);
+        this.changeHeightMin(this.HeightMin);
+        this.changeHeightMax(this.HeightMax);*/
         /*console.log(this.ceisumData);
         this.HeightValue=this.ceisumData["heightDefault"];
         this.dataService.HeightValue=this.HeightValue;
@@ -1118,7 +1124,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (self.HeightMax - entity.properties[self.HeightValue]._value) * scale;
+                                            entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale; //(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
                                         }
                                     }
                                     else {
@@ -1132,7 +1138,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                            entity.polygon.extrudedHeight = (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale; //entity.properties[self.HeightValue]._value*scale;
                                         }
                                     }
                                 }
@@ -1332,7 +1338,7 @@ var PublishComponent = /** @class */ (function (_super) {
         }else{
           this.changescale(this.ScaleValue);
         }*/
-        this.changeExtrude();
+        //this.changeExtrude();
         this.Hide();
     };
     PublishComponent.prototype.checkopp = function () {
@@ -1451,7 +1457,7 @@ var PublishComponent = /** @class */ (function (_super) {
                             var entity = entities[i];
                             if (entity.polyline !== undefined)
                                 entity.polyline.show = false;
-                            entity.polygon.extrudedHeight = (Math.min(entity.properties[self.HeightValue]._value, Max)) * scale;
+                            entity.polygon.extrudedHeight = (Math.min(entity.properties[self.HeightValue]._value, Max)) * scale; //Math.min(entity.properties[self.HeightValue]._value*scale,Max*scale);
                         }
                     });
                 }
@@ -1481,6 +1487,10 @@ var PublishComponent = /** @class */ (function (_super) {
                 }
             }
         }
+        /*});
+  
+  
+      }*/
     };
     PublishComponent.prototype.checkExtrude = function () {
         this.CheckExtrude = !this.CheckExtrude;
@@ -1511,7 +1521,7 @@ module.exports = "#toolwindow{\r\n  position: relative;\r\n  /*background-color:
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    \r\n    <!-- <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n      <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n    </div>\r\n    </mat-tab> -->\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n      <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n          <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{Min}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{Max}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMax($event.target.value)\"></th></tr>\r\n      </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{HeightMax}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMax($event.target.value)\"></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Height Chart</div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckExtrude\" (click)=\"checkExtrude();changeExtrude()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 80px;height: 25px;\"><div class=\"Hide\" style=\"width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 80px;height: 25px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 25px;\"><div style=\"width:20px;height: 25px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Attributes\">\r\n      <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+module.exports = "<div id=\"toolwindow\">\r\n  <mat-tab-group class=\"mat-tab-group\">\r\n    \r\n    <!-- <mat-tab label=\"&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;\" >\r\n      <div id=\"KeyView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Key of ColorKey\">\r\n            <th  style=\"width: 40px;\"><div [ngStyle]=\"{ 'background-color': Key.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n            <th  style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 130px;height: 14px\"><div matTooltip={{Key.text}}  style=\"width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Key.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n    </div>\r\n    </mat-tab> -->\r\n    <mat-tab label=\"&nbsp;Settings&nbsp;\" >\r\n      <div id=\"SettingView\" style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Color</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"selectColor\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n          <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{Min}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{Max}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeColorMax($event.target.value)\"></th></tr>\r\n      </table>\r\n        <hr>\r\n          <table>\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#395d73;border:0;text-align: left;font-weight: normal;\">Height</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"selectHeight\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Min</div></th>\r\n          <th style=\"width:60px;height: 25px;\"><input type=\"text\"  value={{HeightMin}} style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMin($event.target.value)\"></th></tr>  \r\n          </table>\r\n          <table >\r\n          <tr ><th style=\"width:60px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Max</div></th>\r\n          <th style=\"width:60px;\"><input type=\"text\" value={{HeightMax}} style=\"width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;\" (change)=\"changeHeightMax($event.target.value)\"></th></tr>\r\n      </table>\r\n       <table>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Scale</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"text\" value={{ScaleValue}} (change)=\"changescale($event.target.value)\" style=\"width:80px\"></div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckScale\" (click)=\"checkscale();changescale(ScaleValue)\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Invert</div></th>\r\n          <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckOpp\" (click)=\"checkopp();changeopp()\"></div></th></tr>\r\n          <tr ><th style=\"width:60px;height: 25px;\"><div style=\"width: 60px;color:#395d73;font-weight: normal;text-align: left;border:0;\">Height Chart</div></th>\r\n          <th style=\"width:85px;height: 25px;\"><div style=\"width:85px;color:#395d73;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"CheckExtrude\" (click)=\"checkExtrude();changeExtrude();Hide()\"></div></th></tr>  \r\n      </table>\r\n      <hr>\r\n      <table>\r\n        <tr>\r\n        <th class=\"colorkey\" style=\"width: 80px;height: 25px;\"><div class=\"Hide\" style=\"width: 80px;height: 25px;color:#395d73;border-color:#395d73;border:0;text-align: left;font-weight: normal;\"><input type=\"button\" value=\"Add Filter\" style=\"color:#395d73;width: 80px;height: 25px;\" (click)=\"addHide()\"></div></th>\r\n        <th style=\"width:20px;height: 25px;\"><div style=\"width:20px;height: 25px;margin-left: 10px\">\r\n          <select class=\"cesium-button-select\"  (change)=\"ChangeHeight($event.target.value)\">\r\n             <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n          </select></div></th>\r\n        </tr>\r\n      </table>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#395d73;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"Changerelation($event.target.value,item.id)\" style=\"width:40px;height: 25px;\">\r\n             <option class=\"cesium-option\" value=0>></option>\r\n             <option class=\"cesium-option\" value=1><</option>\r\n             <option class=\"cesium-option\" value=2>=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\"><div style=\"width:40px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.RelaHide\" (change)=\"ChangeCategory($event.target.value,item.id,0)\" style=\"width:40px;height: 25px;\">\r\n            <option class=\"cesium-option\" value=0>none</option>\r\n            <option class=\"cesium-option\" value=1>=</option>\r\n            <option class=\"cesium-option\" value=2>!=</option>\r\n          </select></div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th>\r\n        <th style=\"width:30px;height: 25px;\" id={{item.id}}><button class=\"button\"  style=\"width:30px;height: 25px;\" (click)=\"deleteHide(item.id)\"><span id={{item.id}} ><i class=\"fa fa-trash\"  style=\"color:#395d73;\"></i></span></button></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#395d73;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      </div>\r\n    </mat-tab>\r\n    <mat-tab label=\"Attributes\">\r\n      <div id=\"AttribsView\"  style=\"margin-left: 5px;margin-top: 5px;\">\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr >\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n          </tr>\r\n        </table>\r\n        <table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n          <tr *ngFor=\"let Property of Properties\">\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n            <th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n          </tr>\r\n        </table>\r\n      </div>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
 
 /***/ }),
 
@@ -1660,9 +1670,10 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         this.HeightMin = Math.min.apply(Math, texts);
         //if(this.CheckHide===true) this.Hide();
         this.changescale(this.ScaleValue);
-        if (this.CheckScale !== undefined && this.CheckOpp !== undefined && this.CheckExtrude !== undefined) {
-            this.changeExtrude();
-        }
+        /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+          this.changeExtrude();
+        }*/
+        this.Hide();
         this.dataService.getHeightValue(this.HeightValue);
     };
     ToolwindowComponent.prototype.onChangeColor = function (ColorValue) {
@@ -1744,39 +1755,69 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.Max = null;
             this.Min = null;
         }
-        if (this.CheckScale !== undefined && this.CheckOpp !== undefined && this.CheckExtrude !== undefined) {
-            this.changeExtrude();
-        }
+        /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+          this.changeExtrude();
+        }*/
         //this.changeExtrude();
         /*if(this.data.crs.cesium!==undefined&&this.data.crs.cesium.length!==0){
           this.addHide();
         }*/
-        this.Hide();
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
+            this.changeExtrude();
+        }
+        else {
+            this.Hide();
+        }
         this.dataService.getColorValue(this.ColorValue);
     };
     ToolwindowComponent.prototype.changeColorMin = function (Min) {
         this.Min = Number(Min);
         this.dataService.MinColor = Number(Min);
-        this.changeExtrude();
-        this.Hide();
+        //this.changeExtrude();
+        //this.Hide();
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
+            this.changeExtrude();
+        }
+        else {
+            this.Hide();
+        }
     };
     ToolwindowComponent.prototype.changeColorMax = function (Max) {
         this.Max = Number(Max);
         this.dataService.MaxColor = Number(Max);
-        this.changeExtrude();
-        this.Hide();
+        //this.changeExtrude();
+        //this.Hide();
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
+            this.changeExtrude();
+        }
+        else {
+            this.Hide();
+        }
     };
     ToolwindowComponent.prototype.changeHeightMin = function (Min) {
         this.HeightMin = Number(Min);
         this.dataService.MinHeight = Number(Min);
-        this.changeExtrude();
-        this.Hide();
+        //this.changeExtrude();
+        //this.Hide();
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
+            this.changeExtrude();
+        }
+        else {
+            this.Hide();
+        }
     };
     ToolwindowComponent.prototype.changeHeightMax = function (Max) {
         this.HeightMax = Number(Max);
         this.dataService.MaxHeight = Number(Max);
-        this.changeExtrude();
-        this.Hide();
+        //this.changeExtrude();
+        /*console.log(this.dataService.hideElementArr);
+        this.Hide();*/
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
+            this.changeExtrude();
+        }
+        else {
+            this.Hide();
+        }
     };
     ToolwindowComponent.prototype.colorByNum = function () {
         var max = this.dataService.MaxColor;
@@ -1898,75 +1939,77 @@ var ToolwindowComponent = /** @class */ (function (_super) {
           }
         }*/
         //this.changeExtrude();
-        if (this.CheckScale !== undefined && this.CheckOpp !== undefined && this.CheckExtrude !== undefined) {
+        /*if(this.CheckScale!==undefined&&this.CheckOpp!==undefined&&this.CheckExtrude!==undefined){
+          this.changeExtrude();
+        }else{
+          //this.ScaleValue=Number(ScaleValue);
+          var scale:number=this.ScaleValue;
+          if(this.CheckScale===true){
+            var promise=this.dataService.cesiumpromise;
+            var self= this;
+            if(self.CheckOpp===false){
+              promise.then(function(dataSource) {
+                var entities = dataSource.entities.values;
+                for (var i = 0; i < entities.length; i++) {
+                  var entity=entities[i];
+                  if(entity.properties[self.HeightValue]!==undefined){
+                  if(entity.properties[self.HeightValue]._value!==" "){
+                    entity.polygon.extrudedHeight =Math.min(entity.properties[self.HeightValue]._value,Max)*scale;
+                  }
+                  }
+                }
+              });
+            }else{
+              promise.then(function(dataSource) {
+                var entities = dataSource.entities.values;
+                for (var i = 0; i < entities.length; i++) {
+                  var entity=entities[i];
+                  if(entity.properties[self.HeightValue]!==undefined){
+                  if(entity.properties[self.HeightValue]._value!==" "){
+                    entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
+                  }
+                  }
+                }
+              });
+            }
+            /*this.Hide();*/
+        /*}else{
+          var promise=this.dataService.cesiumpromise;
+          var self= this;
+          if(self.CheckOpp===false){
+            promise.then(function(dataSource) {
+              var entities = dataSource.entities.values;
+              for (var i = 0; i < entities.length; i++) {
+                var entity=entities[i];
+                if(entity.properties[self.HeightValue]!==undefined){
+                if(entity.properties[self.HeightValue]._value!==" "){
+                  entity.polygon.extrudedHeight =Math.min(entity.properties[self.HeightValue]._value,Max);
+                }
+                }
+              }
+            });
+          }else{
+            promise.then(function(dataSource) {
+              var entities = dataSource.entities.values;
+              for (var i = 0; i < entities.length; i++) {
+                var entity=entities[i];
+                if(entity.properties[self.HeightValue]!==undefined){
+                if(entity.properties[self.HeightValue]._value!==" "){
+                  entity.polygon.extrudedHeight =Max-Math.min((entity.properties[self.HeightValue]._value),Max);
+                }
+                }
+              }
+            });
+          }
+        }
+      }*/
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
             this.changeExtrude();
         }
         else {
-            //this.ScaleValue=Number(ScaleValue);
-            var scale = this.ScaleValue;
-            if (this.CheckScale === true) {
-                var promise = this.dataService.cesiumpromise;
-                var self = this;
-                if (self.CheckOpp === false) {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = Math.min(entity.properties[self.HeightValue]._value, Max) * scale;
-                                }
-                            }
-                        }
-                    });
-                }
-                else {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale;
-                                }
-                            }
-                        }
-                    });
-                }
-                /*this.Hide();*/
-            }
-            else {
-                var promise = this.dataService.cesiumpromise;
-                var self = this;
-                if (self.CheckOpp === false) {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = Math.min(entity.properties[self.HeightValue]._value, Max);
-                                }
-                            }
-                        }
-                    });
-                }
-                else {
-                    promise.then(function (dataSource) {
-                        var entities = dataSource.entities.values;
-                        for (var i = 0; i < entities.length; i++) {
-                            var entity = entities[i];
-                            if (entity.properties[self.HeightValue] !== undefined) {
-                                if (entity.properties[self.HeightValue]._value !== " ") {
-                                    entity.polygon.extrudedHeight = Max - Math.min((entity.properties[self.HeightValue]._value), Max);
-                                }
-                            }
-                        }
-                    });
-                }
-            }
+            this.Hide();
         }
-        this.Hide();
+        //this.Hide();
         this.dataService.ScaleValue = this.ScaleValue;
     };
     ToolwindowComponent.prototype.checkscale = function () {
@@ -2204,7 +2247,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (self.HeightMax - entity.properties[self.HeightValue]._value) * scale;
+                                            entity.polygon.extrudedHeight = (Math.min((Max - entity.properties[self.HeightValue]._value), Max)) * scale; //(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
                                         }
                                     }
                                     else {
@@ -2218,7 +2261,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = entity.properties[self.HeightValue]._value * scale;
+                                            entity.polygon.extrudedHeight = (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale; //entity.properties[self.HeightValue]._value*scale;
                                         }
                                     }
                                 }
@@ -2420,14 +2463,26 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         }else{
           this.changescale(this.ScaleValue);
         }*/
-        this.changeExtrude();
-        this.Hide();
+        //this.changeExtrude();
+        //this.Hide();
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
+            this.changeExtrude();
+        }
+        else {
+            this.Hide();
+        }
     };
     ToolwindowComponent.prototype.checkopp = function () {
         this.CheckOpp = !this.CheckOpp;
         this.dataService.CheckOpp = this.CheckOpp;
-        /*this.changeExtrude();
-        this.Hide();*/
+        /*this.changeExtrude();*/
+        //this.Hide();
+        if (this.dataService.hideElementArr === undefined || this.dataService.hideElementArr.length === 0) {
+            this.changeExtrude();
+        }
+        else {
+            this.Hide();
+        }
     };
     ToolwindowComponent.prototype.changeExtrude = function () {
         if (typeof (this.texts[0]) === "number") {
