@@ -53,10 +53,8 @@ export class MobiuscesiumComponent {
     	var toggle=document.getElementById("Toggle");
     	if(this.slider_state === 'slide_out'){
     	  toggle.style.left="0px";
-        toggle.innerText=">";
     	}else if(this.slider_state === 'slide_in'){
     	  toggle.style.left="250px";
-        toggle.innerText="<";
     	}
   	}
 }

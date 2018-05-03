@@ -1,10 +1,10 @@
 #toolwindow{
   position: relative;
   /*background-color: #F1F1F1 !important;*/
-  background-color: #F1F1F1 !important;
-  opacity:0.8;
+  background-color: rgba(20,20,20,0.5);
   height: 100%;
   width: 100%;
+  color:#ddd !important;
   font-family: Roboto,"Helvetica Neue",sans-serif;
   font-size: 14px !important;
   line-height: 14px;
@@ -15,7 +15,7 @@
   min-width: 60px!important;
   padding: 3px!important;
   margin: 3px!important;
-  color:#395d73;
+  color:#ddd !important;;
   background-color: transparent !important;
 }
 /deep/.mat-tab-label{
@@ -106,7 +106,6 @@
   display: inline-block;
   position: relative;
   border: 1px solid #8AA8C0;
-  color: #395D73;
   fill: #395D73;
   border-radius: 0px;
   padding: 3px 0px;
@@ -118,8 +117,10 @@
   -ms-user-select: none;
   user-select: none;
   width: 80px;
+  color: #395D73;
   font-family:sans-serif !important;
-  background: #F1F1F1;
+  color: #395D73;
+  background-color: #F1F1F1;
 }
 .cesium-option{
   background-color: #F1F1F1;
@@ -131,9 +132,9 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid rgba(20,20,20,0.5);
   padding: 0; 
-  color:#395d73;
+  color:rgba(20,20,20,0.5);
   width: 100%;
-  background-color: #395d73;
+  background-color: rgba(20,20,20,0.5);
 }

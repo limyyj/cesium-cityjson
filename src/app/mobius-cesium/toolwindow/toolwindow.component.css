@@ -1,10 +1,11 @@
 #toolwindow{
   position: relative;
   /*background-color: #F1F1F1 !important;*/
-  background-color: #F1F1F1 !important;
+  background-color: rgba(20,20,20,0.5);
   opacity:0.8;
   height: 100%;
   width: 100%;
+  color:#ddd !important;
   font-family: Roboto,"Helvetica Neue",sans-serif;
   font-size: 14px !important;
   line-height: 14px;
@@ -15,7 +16,7 @@
   min-width: 60px!important;
   padding: 3px!important;
   margin: 3px!important;
-  color:#395d73;
+  color:#ddd !important;
   background-color: transparent !important;
 }
 /deep/.mat-tab-label{
@@ -131,9 +132,9 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid rgba(20,20,20,0.5);
   padding: 0; 
   color:#395d73;
   width: 100%;
-  background-color: #395d73;
+  background-color: rgba(20,20,20,0.5);
 }

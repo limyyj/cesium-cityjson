@@ -1,4 +1,4 @@
-# Mobius_Cesium
+# cesium-viewer
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
 
@@ -28,4 +28,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## WebSite
 
-https://phtj.github.io/cesium-viewer/
+https://design-automation.github.io/cesium-viewer/"
