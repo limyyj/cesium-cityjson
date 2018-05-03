@@ -94,10 +94,10 @@
       </table>
       <table>
         <tr>
-        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#ddd !important;width:30px;">{{item.HideMin}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#ddd !important;width:30px;">{{item.HideMin}}</div></th>
         <th *ngIf="item.type === 'number'" style="width:150px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
         </mat-slider></div></th>
-        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
+        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
       </table><hr>
         </div>
       </div>

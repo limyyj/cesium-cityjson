@@ -314,32 +314,6 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.dataService.getColorValue(this.ColorValue);
   }
 
-  /*changeColorMin(Min){
-    this.Min=Number(Min);
-    this.dataService.MinColor=this.Min;
-    //this.changeExtrude();
-    this.Hide();
-  }
-  changeColorMax(Max){
-    this.Max=Number(Max);
-    this.dataService.MaxColor=this.Max;
-    //this.changeExtrude();
-    this.Hide();
-  }
-
-  changeHeightMin(Min){
-    this.HeightMin=Number(Min);
-    this.dataService.MinHeight=this.HeightMin;
-    //this.changeExtrude();
-    this.Hide();
-  }
-  changeHeightMax(Max){
-    this.HeightMax=Number(Max);
-    this.dataService.MaxHeight=this.HeightMax;
-    //this.changeExtrude();
-    this.Hide();
-  }*/
-
   colorByNum(){
     var max = this.dataService.MaxColor;
     var min=this.dataService.MinColor;

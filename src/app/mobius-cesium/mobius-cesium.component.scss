@@ -28,13 +28,12 @@
   position: absolute;
   top: calc(50% - 40px);
   z-index: 100;
-  width: 10px;
-  height:80px;
+  width: 30px;
+  height:100px;
   font-family:sans-serif;
-  background-color: rgba(20,20,20,0.5);
+  background-color: gray;//rgba(20,20,20,0.5);
   opacity:0.8;
-  border: 0px;
-  text-align: center;
+  border: 1px solid gray;
 }
 
 /* split-area{
