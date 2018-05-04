@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Subject} from 'rxjs/Subject';
+import * as chroma from "chroma-js";
 
 @Injectable()
 export class DataService {
@@ -29,6 +30,9 @@ export class DataService {
   hideElementArr:Array<any>;
   HideNum:Array<any>;
   poly_center:Array<any>;
+  ChromaScale:any;
+  ceisumData:Array<any>;
+
 
   sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -43,7 +47,7 @@ export class DataService {
   }
 
   constructor() {
-
+    this.ChromaScale=chroma.scale("SPECTRAL");
   }
 
   getGsModel(): any{

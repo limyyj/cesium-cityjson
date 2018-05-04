@@ -24,20 +24,26 @@ export class ViewerComponent extends DataSubscriber {
   Min:number;
   texts:Array<any>;
   Cattexts:Array<any>;
+  pickupArrs:Array<any>;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
     super(injector);
     this.myElement = myElement;
     this.Colorbar=[];
-    this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);
-    for(var i=0;i<80;i++){
-      this.Colorbar.push(this.ChromaScale(i/80));
-    }
+    this.ChromaScale=chroma.scale("SPECTRAL");
+    for(var i=79;i>-1;i--){
+        this.Colorbar.push(this.ChromaScale(i/80));
+      }
   }
   ngDoCheck(){
     if(this.ColorValue!==this.dataService.ColorValue){
       this.ColorValue=this.dataService.ColorValue;
+      this.ChromaScale=this.dataService.ChromaScale;
+      this.Colorbar=[];
+      for(var i=79;i>-1;i--){
+        this.Colorbar.push(this.ChromaScale(i/80));
+      }
       this.Colortext();
     }
     if(this.Max!==this.dataService.MaxColor){
@@ -134,10 +140,10 @@ export class ViewerComponent extends DataSubscriber {
     }
 
     if(this.dataService.HeightValue===undefined){
-      this.HeightValue=HeightKey.sort()[0];;
+      this.HeightValue=HeightKey.sort()[0];
       this.dataService.HeightValue=this.HeightValue;
     }else if(HeightKey.indexOf(this.dataService.HeightValue)===-1){
-      this.HeightValue=HeightKey.sort()[0];;
+      this.HeightValue=HeightKey.sort()[0];
       this.dataService.HeightValue=this.HeightValue;
     }else{
       this.HeightValue=this.dataService.HeightValue;
@@ -187,7 +193,7 @@ export class ViewerComponent extends DataSubscriber {
       }
     });
     if(typeof(texts[0])==="number"){
-      this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);
+      this.ChromaScale=chroma.scale("SPECTRAL");
       if(this.dataService.MaxColor===undefined){
         this.Max=Math.max.apply(Math, texts);
         this.Min=Math.min.apply(Math, texts);
@@ -265,6 +271,7 @@ export class ViewerComponent extends DataSubscriber {
       this.material=undefined;
     }
   }
+
   ColorSelect(entity){
     this.ColorValue=this.dataService.ColorValue;
     var ColorKey=this.dataService.Colortexts;
@@ -298,6 +305,80 @@ export class ViewerComponent extends DataSubscriber {
           if(initial===false){
             entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
           }
+        }
+      }
+    }
+    var propertyname:any=[];
+    var relation:any=[];
+    var text:any=[];
+    for(var j=0;j<this.dataService.hideElementArr.length;j++){
+      if(this.dataService.hideElementArr[j]!==undefined){
+        propertyname.push(this.dataService.hideElementArr[j].HeightHide);
+        relation.push(Number(this.dataService.hideElementArr[j].RelaHide));
+        if(this.dataService.hideElementArr[j].type==="number"){
+          text.push(Number(this.dataService.hideElementArr[j].textHide));
+        }else if(this.dataService.hideElementArr[j].type==="category"){
+          text.push(String(this.dataService.hideElementArr[j].CategaryHide));
+        }
+      }
+    }
+    for (let j = 0; j < propertyname.length; j++) {
+      const value = entity.properties[propertyname[j]]._value;
+      if(value !== undefined){
+        if(typeof(value)==="number"){
+          if (this._compare(value, text[j], relation[j])) {
+            entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+          }
+        }else if(typeof(value)==="string"){
+          if(text[j]!=="None"){
+            if (this._compareCat(value, text[j], relation[j])) {
+              entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+          }
+        }
+      }
+    }
+  }
+
+   _compare(value: number, slider: number, relation: number): boolean {
+    switch (relation) {
+      case 0:
+        return value < slider;
+      case 1:
+        return value > slider;
+      case 2:
+        return value === slider;
+    }
+  }
+  _compareCat(value: string, Categary:string,relation: number): boolean {
+      switch (relation) {
+      case 0:
+        return value ===  undefined;
+      case 1:
+        return value !== Categary;
+      case 2:
+        return value === Categary;
+    }
+  }
+
+  showAttribs(event){
+    if(this.data["crs"]!==undefined){
+      if(this.data["crs"].cesium.select!==undefined){
+        if(this.viewer.selectedEntity!==undefined){
+          var pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
+          this.pickupArrs=[];
+          this.pickupArrs.push({name:"ID",data:pickup.id.id});
+          for(var i=0;i<this.data["crs"].cesium.select.length;i++){
+            var propertyName:string=this.data["crs"].cesium.select[i];
+            this.pickupArrs.push({name:propertyName,data:this.dataService.SelectedEntity.properties[propertyName]._value})
+          }
+          var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
+          this.viewer.container.appendChild(nameOverlay);
+          nameOverlay.style.bottom = this.viewer.canvas.clientHeight - event.clientY + 'px';
+          nameOverlay.style.left = event.clientX + 'px';
+          nameOverlay.style.display= 'block';
+        }else{
+          document.getElementById("cesium-infoBox-defaultTable").style.display= 'none';
         }
       }
     }

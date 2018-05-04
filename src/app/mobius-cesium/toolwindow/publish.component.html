@@ -1,76 +1,57 @@
 <div id="toolwindow">
-  <mat-tab-group class="mat-tab-group">
-    <mat-tab label="&nbsp;Settings&nbsp;" >
       <div id="SettingView" style="margin-left: 5px;margin-top: 5px;" *ngIf="ceisumData!==undifined">
-        <table *ngIf="ceisumData!==undifined">
+        <div *ngIf="ceisumData.colorDefault!==undifined">
+        <table >
           <tr>
-          <!-- <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color</div></th> -->
           <th class="colorkey" style="width: 100px" *ngIf="ceisumData.colorDescr!==undifined"><div style="width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal">{{ceisumData.colorDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
-            <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color</div></th>
+            <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color&nbsp;&nbsp;:</div></th>
           <th><div>
-            <select class="cesium-button" (change)="onChangeColor($event.target.value)" >
+            <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="ColorValue">
               <option class="cesium-option"  *ngFor="let ColorName of ColorNames" value={{ColorName}}>{{ColorName}}</option>
             </select>
           </div></th>
           </tr>
           </table>
-          <table>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
-          <!-- <th style="width:60px;height: 25px;"><input type="text"  value={{Min}} style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" (change)="changeColorMin($event.target.value)"></th> -->
-          <th style="width:60px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.colorMin!==undifined">{{ceisumData.colorMin}}</div></th></tr>
-          </table>
-          <table >
-          <tr ><th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
-          <!-- <th style="width:60px;"><input type="text" value={{Max}} style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" (change)="changeColorMax($event.target.value)"></th> -->
-          <th style="width:60px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.colorMin!==undifined">{{ceisumData.colorMax}}</div></th></tr>
-      </table>
+    </div>
+    <div *ngIf="ceisumData.heightDefault!==undifined">
         <hr>
-          <table *ngIf="ceisumData!==undifined">
+          <table >
           <tr>
-          <!-- <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Height</div></th> -->
           <th class="colorkey" style="width: 100px" *ngIf="ceisumData.heightDescr!==undifined"><div style="width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">{{ceisumData.heightDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
-            <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Height</div></th>
+            <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Extrude&nbsp;&nbsp;:</div></th>
           <th><div>
-            <select class="cesium-button" (change)="onChangeHeight($event.target.value)">
+            <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="HeightValue">
                <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
             </select>
           </div></th>
           </tr>
         </table>
         <table>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
-          <th style="width:60px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMin!==undifined">{{ceisumData.heightMin}}</div></th></tr>
-          </table>
-          <table >
-          <tr ><th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
-          <th style="width:60px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMax!==undifined">{{ceisumData.heightMax}}</div></th></tr>
+          <tr ><th style="width:40px;height: 25px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min&nbsp;&nbsp;:</div></th>
+          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMin!==undifined">{{ceisumData.heightMin}}</div></th>
+
+          <th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max&nbsp;&nbsp;:</div></th>
+          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMax!==undifined">{{ceisumData.heightMax}}</div></th></tr>
       </table>
-       <!-- <table>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Scale</div></th>
-          <th style="width:80px;height: 25px;" *ngIf="ceisumData!==undifined"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">{{ceisumData.heightScale}}</div></th>
-          <th style="width:85px;height: 25px;" *ngIf="ceisumData!==undifined"><div style="width:85px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th></tr>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Invert</div></th>
-          <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckOpp" (click)="checkopp()"></div></th></tr>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Height Chart</div></th>
-          <th style="width:85px;height: 25px;"><div style="width:85px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckExtrude" (click)="checkExtrude();changeExtrude();Hide()"></div></th></tr>  
-      </table> -->
+    </div>
+    <div *ngIf="ceisumData.filter!==undifined">
       <hr>
       <div class="hide-container" style="margin-top:5px;">
         <div *ngFor="let item of hideElementArr;" id={{item.divid}}>
       <table>
-        <tr ><!-- <th style="width:90px;height: 25px;"><div style="width:90px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th> -->
+        <tr >
           <th style="width:100px;height: 25px;"><div style="width:100px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.descr}}</div></th></tr>
         </table>
         <table>
           <tr>
             <th style="width:90px;height: 25px;"><div style="width:90px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
-        <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;"><!-- <div style="width:40px;height: 25px;vertical-align: middle;"> -->
+        <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;">
           <div style="width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">></div>
           <div style="width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1"><</div>
           <div style="width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">=</div></th>
@@ -93,23 +74,7 @@
       </table><hr>
         </div>
       </div>
+      <button style="background-color: #ddd ;color:#395D73;" (click)="reset()">Reset</button>
       </div>
-    </mat-tab>
-    <mat-tab label="Attributes">
-      <div id="AttribsView"  style="margin-left: 5px;margin-top: 5px;">
-        <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-          <tr >
-            <th style="font-weight: normal;width: 85px;"><div style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">ID</div></th>
-            <th style="font-weight: normal;width: 85px"><div matTooltip={{ID}} style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{ID}}</div></th>
-          </tr>
-        </table>
-        <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-          <tr *ngFor="let Property of Properties">
-            <th style="font-size: 10px;font-weight: normal;color:#ddd !important;width: 85px;height: 14px"><div matTooltip={{Property.Name}} style="width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Name}}</div></th>
-            <th style="font-size: 10px;font-weight: normal;color:#ddd !important;width: 85px;height: 14px"><div matTooltip={{Property.Value}} style="width: 85px;height:14px;text-align: left;;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Value}}</div></th>
-          </tr>
-        </table>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+    </div>
 </div>
