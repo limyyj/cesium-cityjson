@@ -70,8 +70,8 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
       try{
-        if(this.data["features"]!==undefined){
-        this.LoadData(this.data);
+        if(this.data!==undefined&&this.data["features"]!==undefined){
+          this.LoadData(this.data);
         }
       }
       catch(ex){
