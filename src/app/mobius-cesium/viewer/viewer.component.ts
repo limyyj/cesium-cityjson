@@ -1,6 +1,7 @@
 import { Component, OnInit, Injector, ElementRef } from '@angular/core';
 import {DataSubscriber} from "../data/DataSubscriber";
 import * as chroma from "chroma-js";
+//import {CoordinateConvert} from 'coordinate-convert';
 
 
 @Component({
@@ -63,6 +64,13 @@ export class ViewerComponent extends DataSubscriber {
   notify(message: string): void{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
+      /*if(this.data!==undefined){
+        for(var i=0;i<this.data["features"].length;i++){
+          for(var j=0;j<this.data["features"][i]["geometry"].coordinates[0].length;j++){
+            console.log(this.data["features"][i]["geometry"].coordinates[0][j])
+          }
+        }
+      }*/
       try{
         //if(this.data!==undefined){
           this.LoadData(this.data);
@@ -107,14 +115,16 @@ export class ViewerComponent extends DataSubscriber {
         for (var i = 0; i < entities.length; i++) {
           var texts=[];
           var poly_center:any=[];
-          var entity = entities[i];                               
-          entity.polygon.outlineColor = Cesium.Color.Black;
-          var center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-          var radius=Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius/100);
-          var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).longitude).toFixed(10); 
-          var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).latitude).toFixed(10); 
-          poly_center=[longitudeString,latitudeString,radius];
-          self.poly_center.push(poly_center);
+          var entity = entities[i];
+          if(entity.polygon!==undefined) {
+            entity.polygon.outlineColor = Cesium.Color.Black;                            
+            var center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+            var radius=Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius/100);
+            var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).longitude).toFixed(10); 
+            var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).latitude).toFixed(10); 
+            poly_center=[longitudeString,latitudeString,radius];
+            self.poly_center.push(poly_center);
+          }
         }
         self.dataService.poly_center=self.poly_center;
         self.propertyNames=entities[0].properties.propertyNames;

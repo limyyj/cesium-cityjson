@@ -49,6 +49,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   HeightMax:number;
   HeightInti:boolean=false;
   ColorInti:boolean=false;
+  InitialTool:boolean=false;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -71,7 +72,14 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.data = this.dataService.getGsModel(); 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
-          this.LoadData(this.data);
+          if(this.data["crs"]!==undefined&&this.data["crs"]["cesium"]!==undefined){
+            this.LoadData(this.data);
+            this.InitialTool=false;
+
+          }else{
+            this.InitialTool=true;
+          }
+          
         }
       }
       catch(ex){

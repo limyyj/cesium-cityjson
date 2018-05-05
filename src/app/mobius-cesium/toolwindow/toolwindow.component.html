@@ -11,8 +11,8 @@
         </table>
     </div>
     </mat-tab> -->
-    <mat-tab label="&nbsp;Settings&nbsp;" >
-      <div id="SettingView" style="margin-left: 5px;margin-top: 5px;">
+    <mat-tab label="&nbsp;Visualise&nbsp;" *ngIf="InitialTool === true">
+      <div id="SettingView" style="margin-left: 5px;margin-top: 5px;" >
         <table>
           <tr>
           <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color</div></th>
@@ -103,8 +103,8 @@
       </div>
       </div>
     </mat-tab>
-    <mat-tab label="Attributes">
-      <div id="AttribsView"  style="margin-left: 5px;margin-top: 5px;">
+    <mat-tab label="Attributes" *ngIf="InitialTool === true">
+      <div id="AttribsView"  style="margin-left: 5px;margin-top: 5px;" >
         <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
           <tr >
             <th style="font-size: 10px;font-weight: normal;width: 85px;"><div style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">ID</div></th>
@@ -118,6 +118,9 @@
           </tr>
         </table>
       </div>
+    </mat-tab>
+    <mat-tab label="&nbsp;Publish&nbsp;" *ngIf="InitialTool === false">
+      <app-publish ></app-publish>
     </mat-tab>
   </mat-tab-group>
 </div>

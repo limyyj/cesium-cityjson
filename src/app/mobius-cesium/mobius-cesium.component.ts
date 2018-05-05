@@ -35,6 +35,7 @@ export class MobiuscesiumComponent {
 		catch(ex){
 			this.data = undefined;
 			//console.error("Error generating model");
+
 		}
 	}
 	ngOnInit() {

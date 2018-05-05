@@ -46,6 +46,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   Filter:boolean=false;
   HeightMin:number;
   HeightMax:number;
+  InitialTool:boolean=false;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -67,7 +68,14 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
       try{
-        this.LoadData(this.data);
+        if(this.data!==undefined&&this.data["features"]!==undefined){
+          if(this.data["crs"]===undefined||this.data["crs"]["cesium"]===undefined){
+              this.LoadData(this.data);
+              this.InitialTool=true;
+          }else{
+            this.InitialTool=false;
+          }
+        }
       }
       catch(ex){
         console.log(ex);
@@ -76,10 +84,12 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   LoadData(data:JSON){
-    if(data["features"]!==undefined){
-      this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
-      this.PropertyNames.sort();
-      this.viewer=this.dataService.viewer;
+    if(data!==undefined){
+      if(data["features"]!==undefined){
+        this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
+        this.PropertyNames.sort();
+        this.viewer=this.dataService.viewer;
+      }
     }
   }
 
@@ -344,12 +354,22 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           for(var j=0;j<texts.length;j++){
             if(entity.properties[Name]._value===texts[j]) {
               var rgb=ChromaScale((j/texts.length).toFixed(2));
-              entity.polygon.material=entity.polygon.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+              if(entity.polygon!==undefined){
+                entity.polygon.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+              }
+              if(entity.polyline!==undefined){
+                entity.polyline.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+              }
               initial=true;
             }
           }
           if(initial===false){
-            entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            if(entity.polygon!==undefined){
+              entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+            if(entity.polyline!==undefined){
+              entity.polyline.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
           }
         }
       }
