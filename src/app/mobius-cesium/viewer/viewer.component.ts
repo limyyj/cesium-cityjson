@@ -258,8 +258,15 @@ export class ViewerComponent extends DataSubscriber {
     if(this.selectEntity!==undefined&&this.selectEntity!==null) {this.ColorSelect(this.selectEntity);}
     if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
       this.dataService.SelectedEntity=viewer.selectedEntity;
-      const material=viewer.selectedEntity.polygon.material;
-      viewer.selectedEntity.polygon.material=Cesium.Color.WHITE;
+      var material;
+      if(viewer.selectedEntity.polygon!==undefined){
+        material=viewer.selectedEntity.polygon.material;
+        viewer.selectedEntity.polygon.material=Cesium.Color.WHITE;
+      }
+      if(viewer.selectedEntity.polyline!==undefined){
+        material=viewer.selectedEntity.polyline.material;
+        viewer.selectedEntity.polyline.material=Cesium.Color.WHITE;
+      }
       this.selectEntity=viewer.selectedEntity;
       this.material=material;
     }else{
@@ -282,10 +289,12 @@ export class ViewerComponent extends DataSubscriber {
           for(var j=1;j<range;j++){
             if(entity.properties[this.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
             var rgb=ColorKey[range-j].color._rgb;
-            entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             }else if(entity.properties[this.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
               var rgb=ColorKey[range-1].color._rgb;
-              entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+              if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+              if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             }
           }
         }else{
@@ -295,41 +304,47 @@ export class ViewerComponent extends DataSubscriber {
           for(var j=0;j<Colortexts.length;j++){
             if(entity.properties[this.ColorValue]._value===Colortexts[j].text) {
               var rgb=ChromaScale((j/Colortexts.length).toFixed(2));
-              entity.polygon.material=entity.polygon.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+              if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+              if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
               initial=true;
             }
           }
           if(initial===false){
-            entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
           }
         }
       }
     }
-    var propertyname:any=[];
-    var relation:any=[];
-    var text:any=[];
-    for(var j=0;j<this.dataService.hideElementArr.length;j++){
-      if(this.dataService.hideElementArr[j]!==undefined){
-        propertyname.push(this.dataService.hideElementArr[j].HeightHide);
-        relation.push(Number(this.dataService.hideElementArr[j].RelaHide));
-        if(this.dataService.hideElementArr[j].type==="number"){
-          text.push(Number(this.dataService.hideElementArr[j].textHide));
-        }else if(this.dataService.hideElementArr[j].type==="category"){
-          text.push(String(this.dataService.hideElementArr[j].CategaryHide));
+    if(this.dataService.hideElementArr!==undefined&&this.dataService.hideElementArr.length!==0){
+      var propertyname:any=[];
+      var relation:any=[];
+      var text:any=[];
+      for(var j=0;j<this.dataService.hideElementArr.length;j++){
+        if(this.dataService.hideElementArr[j]!==undefined){
+          propertyname.push(this.dataService.hideElementArr[j].HeightHide);
+          relation.push(Number(this.dataService.hideElementArr[j].RelaHide));
+          if(this.dataService.hideElementArr[j].type==="number"){
+            text.push(Number(this.dataService.hideElementArr[j].textHide));
+          }else if(this.dataService.hideElementArr[j].type==="category"){
+            text.push(String(this.dataService.hideElementArr[j].CategaryHide));
+          }
         }
       }
-    }
-    for (let j = 0; j < propertyname.length; j++) {
-      const value = entity.properties[propertyname[j]]._value;
-      if(value !== undefined){
-        if(typeof(value)==="number"){
-          if (this._compare(value, text[j], relation[j])) {
-            entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-          }
-        }else if(typeof(value)==="string"){
-          if(text[j]!=="None"){
-            if (this._compareCat(value, text[j], relation[j])) {
-              entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+      for (let j = 0; j < propertyname.length; j++) {
+        const value = entity.properties[propertyname[j]]._value;
+        if(value !== undefined){
+          if(typeof(value)==="number"){
+            if (this._compare(value, text[j], relation[j])) {
+              if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+              if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+          }else if(typeof(value)==="string"){
+            if(text[j]!=="None"){
+              if (this._compareCat(value, text[j], relation[j])) {
+                if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+              }
             }
           }
         }

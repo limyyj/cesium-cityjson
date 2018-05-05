@@ -200,7 +200,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         var entities = dataSource.entities.values;
         for (var i = 0; i < entities.length; i++) {
           var entity = entities[i];
-          entity.polygon.material=Cesium.Color.White;
+          if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.White;
+          if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.Black;
         }
       });
 
@@ -325,10 +326,12 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           for(var j=1;j<range;j++){
             if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
             var rgb=ColorKey[range-j].color._rgb;
-            entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             }else if(entity.properties[self.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
               var rgb=ColorKey[range-1].color._rgb;
-              entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+              if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+              if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             }
           }
         }
@@ -712,12 +715,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           if(value !== undefined){
             if(typeof(value)==="number"){
               if (self._compare(value, text[j], relation[j])) {
-                entity.polygon.extrudedHeight = 0;
-                entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                if(self.CheckExtrude===true){
-                  if(entity.polyline.show!==undefined) entity.polyline.show=false;
+                if(entity.polygon!==undefined){
+                  entity.polygon.extrudedHeight = 0;
+                  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                  if(self.CheckExtrude===true){
+                    if(entity.polyline.show!==undefined) entity.polyline.show=false;
+                  }
+                  break;
                 }
-                break;
+                if(entity.polyline!==undefined)  entity.polyline.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
               }else{
                 self.ColorByNumCat(entity);
                 if(self.CheckScale===true){
@@ -779,12 +785,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               }
             }else if(typeof(value)==="string"){
               if (self._compareCat(value, text[j], relation[j])) {
-                entity.polygon.extrudedHeight = 0;
-                entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                if(self.CheckExtrude===true){
-                  if(entity.polyline.show!==undefined) entity.polyline.show=false;
+                if(entity.polygon!==undefined){
+                  entity.polygon.extrudedHeight = 0;
+                  entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                  if(self.CheckExtrude===true){
+                    if(entity.polyline.show!==undefined) entity.polyline.show=false;
+                  }
+                  break;
                 }
-                break;
+                if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
               }else{
                 self.ColorByNumCat(entity);
                 if(self.CheckScale===true){
