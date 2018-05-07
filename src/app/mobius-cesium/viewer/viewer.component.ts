@@ -89,9 +89,9 @@ export class ViewerComponent extends DataSubscriber {
     }
     var viewer = new Cesium.Viewer('cesiumContainer' , {
       infoBox:false,
-      /*imageryProvider : Cesium.createOpenStreetMapImageryProvider({ 
+      imageryProvider : Cesium.createOpenStreetMapImageryProvider({ 
        url : 'https://stamen-tiles.a.ssl.fastly.net/toner/'
-      }), */
+      }), 
       timeline: false,
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
@@ -104,8 +104,8 @@ export class ViewerComponent extends DataSubscriber {
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
     /*viewer.scene.imageryLayers.removeAll();
     viewer.scene.globe.baseColor=Cesium.Color.GREY;*/
-    viewer.scene.backgroundColor = Cesium.Color.GREY;
-    console.log(viewer.scene.globe.baseColor);
+    /*viewer.scene.backgroundColor = Cesium.Color.GREY;
+    console.log(viewer.scene.globe.baseColor);*/
     if(this.data!==undefined){
       this.viewer=viewer;
       this.dataService.viewer=this.viewer;
