@@ -26,6 +26,7 @@ export class ViewerComponent extends DataSubscriber {
   texts:Array<any>;
   Cattexts:Array<any>;
   pickupArrs:Array<any>;
+  ShowColorBar:boolean=false;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -102,10 +103,6 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
     });
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
-    /*viewer.scene.imageryLayers.removeAll();
-    viewer.scene.globe.baseColor=Cesium.Color.GREY;*/
-    /*viewer.scene.backgroundColor = Cesium.Color.GREY;
-    console.log(viewer.scene.globe.baseColor);*/
     if(this.data!==undefined){
       this.viewer=viewer;
       this.dataService.viewer=this.viewer;
@@ -129,8 +126,17 @@ export class ViewerComponent extends DataSubscriber {
             var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).latitude).toFixed(10); 
             poly_center=[longitudeString,latitudeString,radius];
             self.poly_center.push(poly_center);
+            
+          }
+          if(entity.billboard!==undefined){
+            entity.billboard = undefined;
+            entity.point = new Cesium.PointGraphics({
+              color: Cesium.Color.BLUE,
+              pixelSize: 10
+            });
           }
         }
+        if(entities[0].polygon!==undefined) {self.ShowColorBar=true;console.log(self.ShowColorBar);}else{self.ShowColorBar=false;}
         self.dataService.poly_center=self.poly_center;
         self.propertyNames=entities[0].properties.propertyNames;
         for(var i=0;i<self.propertyNames.length;i++){
@@ -144,6 +150,7 @@ export class ViewerComponent extends DataSubscriber {
           }
         }
       });
+      
       this.dataService.cesiumpromise=promise;
       this.dataService.propertyNames=this.propertyNames;
       this.dataService.HeightKey=HeightKey;
@@ -256,6 +263,10 @@ export class ViewerComponent extends DataSubscriber {
         ColorKey.color=this.ChromaScale((j/texts.length).toFixed(2));
         this.Cattexts.push(ColorKey);
       }
+    }
+    if(this.ShowColorBar===false){
+      this.Cattexts=undefined;
+      this.Colorbar=undefined;
     }
   }
 
