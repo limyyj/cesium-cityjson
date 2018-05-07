@@ -66,6 +66,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
   notify(message: string): void{
     if(message == "model_update" ){
+      this.data=undefined;
+      this.viewer=undefined;
       this.data = this.dataService.getGsModel(); 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
@@ -94,7 +96,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   ngDoCheck(){
-    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined){
+    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined&&this.InitialTool===true){
        if(this.ID!==this.dataService.SelectedEntity._id){
           this.ID=this.dataService.SelectedEntity._id;
           this.Properties=[];
@@ -106,7 +108,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           }
         }
     }
-    if(this.viewer!==undefined){
+    if(this.viewer!==undefined&&this.InitialTool===true){
      if(this.ColorValue!==this.dataService.ColorValue||this.ColorNames!==this.dataService.propertyNames){
         this.ColorValue=this.dataService.ColorValue;
         this.ColorNames=this.dataService.propertyNames;

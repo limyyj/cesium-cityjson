@@ -32,8 +32,8 @@ export class DataService {
   poly_center:Array<any>;
   ChromaScale:any;
   ceisumData:Array<any>;
-  InitialTool:boolean=false;
-  InitialPub:boolean=false;
+  InitialTool:boolean;
+  InitialPub:boolean;
 
 
   sendMessage(message?: string) {

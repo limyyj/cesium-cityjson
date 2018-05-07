@@ -69,7 +69,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
 
   notify(message: string): void{
     if(message == "model_update" ){
-      this.data = this.dataService.getGsModel(); 
+      this.data=undefined;
+      this.viewer=undefined;
+      this.data = this.dataService.getGsModel();
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
           if(this.data["crs"]!==undefined&&this.data["crs"]["cesium"]!==undefined){
@@ -192,7 +194,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   }
 
   ngDoCheck(){
-    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined){
+    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined&&this.InitialTool===false){
        if(this.ID!==this.dataService.SelectedEntity._id){
           this.ID=this.dataService.SelectedEntity._id;
           this.Properties=[];

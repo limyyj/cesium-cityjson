@@ -64,6 +64,7 @@ export class ViewerComponent extends DataSubscriber {
   notify(message: string): void{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
+
       /*if(this.data!==undefined){
         for(var i=0;i<this.data["features"].length;i++){
           for(var j=0;j<this.data["features"][i]["geometry"].coordinates[0].length;j++){
@@ -88,9 +89,9 @@ export class ViewerComponent extends DataSubscriber {
     }
     var viewer = new Cesium.Viewer('cesiumContainer' , {
       infoBox:false,
-      imageryProvider : Cesium.createOpenStreetMapImageryProvider({ 
+      /*imageryProvider : Cesium.createOpenStreetMapImageryProvider({ 
        url : 'https://stamen-tiles.a.ssl.fastly.net/toner/'
-      }), 
+      }), */
       timeline: false,
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
@@ -101,6 +102,10 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
     });
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+    /*viewer.scene.imageryLayers.removeAll();
+    viewer.scene.globe.baseColor=Cesium.Color.GREY;*/
+    viewer.scene.backgroundColor = Cesium.Color.GREY;
+    console.log(viewer.scene.globe.baseColor);
     if(this.data!==undefined){
       this.viewer=viewer;
       this.dataService.viewer=this.viewer;
@@ -145,6 +150,7 @@ export class ViewerComponent extends DataSubscriber {
       if(this.dataService.ColorValue===undefined){
         this.ColorValue=this.propertyNames.sort()[0];
         this.dataService.ColorValue=this.ColorValue;
+        
       }else if(this.propertyNames.indexOf(this.dataService.ColorValue)===-1){
         this.ColorValue=this.propertyNames.sort()[0];
         this.dataService.ColorValue=this.ColorValue;
@@ -254,25 +260,28 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   select(){
+    event.stopPropagation();
     var viewer=this.viewer;
-    if(this.selectEntity!==undefined&&this.selectEntity!==null) {this.ColorSelect(this.selectEntity);}
-    if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
-      this.dataService.SelectedEntity=viewer.selectedEntity;
-      var material;
-      if(viewer.selectedEntity.polygon!==undefined){
-        material=viewer.selectedEntity.polygon.material;
-        viewer.selectedEntity.polygon.material=Cesium.Color.WHITE;
+    if(this.data!==undefined){
+      if(this.selectEntity!==undefined&&this.selectEntity!==null) {this.ColorSelect(this.selectEntity);}
+      if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
+        this.dataService.SelectedEntity=viewer.selectedEntity;
+        var material;
+        if(viewer.selectedEntity.polygon!==undefined){
+          material=viewer.selectedEntity.polygon.material;
+          viewer.selectedEntity.polygon.material=Cesium.Color.WHITE;
+        }
+        if(viewer.selectedEntity.polyline!==undefined){
+          material=viewer.selectedEntity.polyline.material;
+          viewer.selectedEntity.polyline.material=Cesium.Color.WHITE;
+        }
+        this.selectEntity=viewer.selectedEntity;
+        this.material=material;
+      }else{
+        this.dataService.SelectedEntity=undefined;
+        this.selectEntity=undefined;
+        this.material=undefined;
       }
-      if(viewer.selectedEntity.polyline!==undefined){
-        material=viewer.selectedEntity.polyline.material;
-        viewer.selectedEntity.polyline.material=Cesium.Color.WHITE;
-      }
-      this.selectEntity=viewer.selectedEntity;
-      this.material=material;
-    }else{
-      this.dataService.SelectedEntity=undefined;
-      this.selectEntity=undefined;
-      this.material=undefined;
     }
   }
 
@@ -374,23 +383,25 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   showAttribs(event){
-    if(this.data["crs"]!==undefined&&this.data["crs"].cesium!==undefined){
-      if(this.data["crs"].cesium.select!==undefined){
-        if(this.viewer.selectedEntity!==undefined){
-          var pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
-          this.pickupArrs=[];
-          this.pickupArrs.push({name:"ID",data:pickup.id.id});
-          for(var i=0;i<this.data["crs"].cesium.select.length;i++){
-            var propertyName:string=this.data["crs"].cesium.select[i];
-            this.pickupArrs.push({name:propertyName,data:this.dataService.SelectedEntity.properties[propertyName]._value})
+    if(this.data!==undefined){
+      if(this.data["crs"]!==undefined&&this.data["crs"].cesium!==undefined){
+        if(this.data["crs"].cesium.select!==undefined){
+          if(this.viewer.selectedEntity!==undefined){
+            var pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
+            this.pickupArrs=[];
+            this.pickupArrs.push({name:"ID",data:pickup.id.id});
+            for(var i=0;i<this.data["crs"].cesium.select.length;i++){
+              var propertyName:string=this.data["crs"].cesium.select[i];
+              this.pickupArrs.push({name:propertyName,data:this.dataService.SelectedEntity.properties[propertyName]._value})
+            }
+            var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
+            this.viewer.container.appendChild(nameOverlay);
+            nameOverlay.style.bottom = this.viewer.canvas.clientHeight - event.clientY + 'px';
+            nameOverlay.style.left = event.clientX + 'px';
+            nameOverlay.style.display= 'block';
+          }else{
+            document.getElementById("cesium-infoBox-defaultTable").style.display= 'none';
           }
-          var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
-          this.viewer.container.appendChild(nameOverlay);
-          nameOverlay.style.bottom = this.viewer.canvas.clientHeight - event.clientY + 'px';
-          nameOverlay.style.left = event.clientX + 'px';
-          nameOverlay.style.display= 'block';
-        }else{
-          document.getElementById("cesium-infoBox-defaultTable").style.display= 'none';
         }
       }
     }

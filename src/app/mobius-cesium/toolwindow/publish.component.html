@@ -1,9 +1,9 @@
-<div id="toolwindow">
-      <div id="SettingView" style="margin-left: 5px;margin-top: 5px;" *ngIf="ceisumData!==undifined">
-        <div *ngIf="ceisumData.colorDefault!==undifined">
+<div id="publishwindow">
+      <div id="PublishView" style="margin-left: 5px;margin-top: 5px;" *ngIf="ceisumData!==undefined">
+        <div *ngIf="ceisumData.colorDefault!==undefined">
         <table >
           <tr>
-          <th class="colorkey" style="width: 100px" *ngIf="ceisumData.colorDescr!==undifined"><div style="width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal">{{ceisumData.colorDescr}}</div></th></tr>
+          <th class="colorkey" style="width: 100px" *ngIf="ceisumData.colorDescr!==undefined"><div style="width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal">{{ceisumData.colorDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
@@ -16,11 +16,11 @@
           </tr>
           </table>
     </div>
-    <div *ngIf="ceisumData.heightDefault!==undifined">
+    <div *ngIf="ceisumData.heightDefault!==undefined">
         <hr>
           <table >
           <tr>
-          <th class="colorkey" style="width: 100px" *ngIf="ceisumData.heightDescr!==undifined"><div style="width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">{{ceisumData.heightDescr}}</div></th></tr>
+          <th class="colorkey" style="width: 100px" *ngIf="ceisumData.heightDescr!==undefined"><div style="width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">{{ceisumData.heightDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
@@ -34,13 +34,13 @@
         </table>
         <table>
           <tr ><th style="width:40px;height: 25px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min&nbsp;&nbsp;:</div></th>
-          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMin!==undifined">{{ceisumData.heightMin}}</div></th>
+          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMin!==undefined">{{ceisumData.heightMin}}</div></th>
 
           <th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max&nbsp;&nbsp;:</div></th>
-          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMax!==undifined">{{ceisumData.heightMax}}</div></th></tr>
+          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMax!==undefined">{{ceisumData.heightMax}}</div></th></tr>
       </table>
     </div>
-    <div *ngIf="ceisumData.filter!==undifined">
+    <div *ngIf="ceisumData.filter!==undefined">
       <hr>
       <div class="hide-container" style="margin-top:5px;">
         <div *ngFor="let item of hideElementArr;" id={{item.divid}}>
