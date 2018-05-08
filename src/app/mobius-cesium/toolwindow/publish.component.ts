@@ -551,9 +551,15 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     var text:any=[];
     var scale:number=this.ScaleValue;
     var Max:number;
+    var Min:number;
     if(this.ceisumData["heightMax"]!==undefined){
       Max=this.ceisumData["heightMax"];
     }else{Max=0}
+    if(this.ceisumData["heightMin"]!==undefined){
+      if(this.ceisumData["heightMin"]<0){
+        Min=Math.abs(this.ceisumData["heightMin"])
+      }else{Min=0}
+    }
     for(var j=0;j<this.hideElementArr.length;j++){
       if(this.hideElementArr[j]!==undefined){
         propertyname.push(this.hideElementArr[j].HeightHide);
@@ -588,7 +594,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
@@ -596,14 +602,14 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                     }else{
                       if(entity.polyline!==undefined&&entity.polyline.show!==undefined) entity.polyline.show=false;
                         if(self.HeightValue!==undefined){
-                          entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
+                          entity.polygon.extrudedHeight =((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;
                         }else{entity.polygon.extrudedHeight =0;}
                     }
                   }else{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
@@ -611,7 +617,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                     }else{
                       if(entity.polyline!==undefined&&entity.polyline.show!==undefined) entity.polyline.show=false;
                         if(self.HeightValue!==undefined){
-                          entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
+                          entity.polygon.extrudedHeight =((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;
                         }else{entity.polygon.extrudedHeight =0;}
                     }
                   }
@@ -635,7 +641,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                       entity.polygon.extrudedHeight =0;
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
@@ -643,7 +649,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                     }else{
                       if(entity.polyline!==undefined&&entity.polyline.show!==undefined) entity.polyline.show=false;
                         if(self.HeightValue!==undefined){
-                          entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
+                          entity.polygon.extrudedHeight =((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;
                         }else{entity.polygon.extrudedHeight =0;}
                     }
                   }else{
@@ -651,7 +657,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                       entity.polygon.extrudedHeight =0;
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
@@ -659,7 +665,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                     }else{
                       if(entity.polyline!==undefined&&entity.polyline.show!==undefined) entity.polyline.show=false;
                       if(self.HeightValue!==undefined){
-                        entity.polygon.extrudedHeight =Math.min((entity.properties[self.HeightValue]._value),Max)*scale;
+                        entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max)+Min)*scale;
                       }else{entity.polygon.extrudedHeight =0;}
                     }
                   }

@@ -680,6 +680,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     var text:any=[];
     var scale:number=this.ScaleValue;
     var Max=this.HeightMax;
+    var Min=this.HeightMin;
+    if(Min<0){Min=Math.abs(Min);}else{Min=0;}
     for(var j=0;j<this.hideElementArr.length;j++){
       if(this.hideElementArr[j]!==undefined){
         propertyname.push(this.hideElementArr[j].HeightHide);
@@ -698,7 +700,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         var entity = entities[i];
         for (let j = 0; j < propertyname.length; j++) {
           const value = entity.properties[propertyname[j]]._value;   
-
           if(value !== undefined){
             if(typeof(value)==="number"){
               if (self._compare(value, text[j], relation[j])) {
@@ -718,25 +719,25 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((Max-entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min((Max-entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(Math.min((Max-entity.properties[self.HeightValue]._value),Max))*scale;//(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
+                        entity.polygon.extrudedHeight =((Math.min((Max-entity.properties[self.HeightValue]._value),Max))+Min)*scale;                   
                     }
                   }else{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max))*scale;//entity.properties[self.HeightValue]._value*scale;
+                      entity.polygon.extrudedHeight =((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;//entity.properties[self.HeightValue]._value*scale;
                     }
                   }
                 }
@@ -745,26 +746,26 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((Max-entity.properties[self.HeightValue]._value),Max))]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((Max-entity.properties[self.HeightValue]._value)+Min,Max))]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(Math.min((Max-entity.properties[self.HeightValue]._value),Max));//self.HeightMax-entity.properties[self.HeightValue]._value;
+                      entity.polygon.extrudedHeight =(Math.min((Max-entity.properties[self.HeightValue]._value)+Min,Max));//self.HeightMax-entity.properties[self.HeightValue]._value;
                     }
                     
                   }else{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((entity.properties[self.HeightValue]._value),Max))]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((entity.properties[self.HeightValue]._value),Max))+Min]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max));
+                      entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max))+Min;
                     }
                     
                   }
@@ -788,25 +789,25 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((Max-entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min((Max-entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                    entity.polygon.extrudedHeight =(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
+                    entity.polygon.extrudedHeight =((self.HeightMax-entity.properties[self.HeightValue]._value)+Min)*scale;
                     }
                   }else{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((entity.properties[self.HeightValue]._value),Max))*scale]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =Math.min((entity.properties[self.HeightValue]._value),Max)*scale;
+                      entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max)+Min)*scale;
                     }
                   }
                 }
@@ -815,25 +816,25 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((Max-entity.properties[self.HeightValue]._value),Max))]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min((Max-entity.properties[self.HeightValue]._value),Max))+Min]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(Math.min((Max-entity.properties[self.HeightValue]._value),Max));//self.HeightMax-entity.properties[self.HeightValue]._value;
+                      entity.polygon.extrudedHeight =(Math.min((Max-entity.properties[self.HeightValue]._value),Max))+Min;//self.HeightMax-entity.properties[self.HeightValue]._value;
                     }
                   }else{
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
-                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min(entity.properties[self.HeightValue]._value,Max))]),
+                        positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min(entity.properties[self.HeightValue]._value,Max))+Min]),
                         width:center[2],
                         material:entity.polygon.material,
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =Math.min(entity.properties[self.HeightValue]._value,Max);//entity.properties[self.HeightValue]._value;
+                      entity.polygon.extrudedHeight =Math.min(entity.properties[self.HeightValue]._value,Max)+Min;//entity.properties[self.HeightValue]._value;
                     }
                   }
                 }
@@ -969,6 +970,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }
     //var Max=Math.max.apply(Math, this.texts);
     var Max=this.HeightMax;
+    var Min=this.HeightMin;
+    if(Min<0){Min=Math.abs(Min);}else{Min=0;}
     var scale:number=Number(this.ScaleValue);
     if(this.CheckExtrude===true){
       if(this.CheckScale===true){
@@ -982,7 +985,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               entity.polygon.extrudedHeight=0;
               var center=self.dataService.poly_center[i];
               entity.polyline=new Cesium.PolylineGraphics({
-                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale]),
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
                 width:center[2],
                 material:entity.polygon.material,
                 show:true
@@ -999,7 +1002,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               entity.polygon.extrudedHeight=0;
               var center=self.dataService.poly_center[i];
               entity.polyline=new Cesium.PolylineGraphics({
-                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min(entity.properties[self.HeightValue]._value,Max))*scale]),
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min(entity.properties[self.HeightValue]._value,Max))+Min)*scale]),
                 width:center[2],
                 material:entity.polygon.material,
                 show:true
@@ -1018,7 +1021,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               entity.polygon.extrudedHeight=0;
               var center=self.dataService.poly_center[i];
               entity.polyline=new Cesium.PolylineGraphics({
-                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Max-Math.min((entity.properties[self.HeightValue]._value),Max))]),
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min]),
                 width:center[2],
                 material:entity.polygon.material,
                 show:true
@@ -1035,7 +1038,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               entity.polygon.extrudedHeight=0;
               var center=self.dataService.poly_center[i];
               entity.polyline=new Cesium.PolylineGraphics({
-                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min(entity.properties[self.HeightValue]._value,Max))]),
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],(Math.min(entity.properties[self.HeightValue]._value,Max))+Min]),
                 width:center[2],
                 material:entity.polygon.material,
                 show:true
@@ -1060,7 +1063,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                 for (var i = 0; i < entities.length; i++) {
                   var entity=entities[i];
                   if(entity.polyline!==undefined) entity.polyline.show=false;
-                  entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))*scale;
+                  entity.polygon.extrudedHeight =((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;
                 }
               });
             }else{
@@ -1069,7 +1072,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                 for (var i = 0; i < entities.length; i++) {
                   var entity=entities[i];
                   if(entity.polyline!==undefined) entity.polyline.show=false;
-                  entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max))*scale;
+                  entity.polygon.extrudedHeight =((Math.min(entity.properties[self.HeightValue]._value,Max))+Min)*scale;
                 }
               });
             }
@@ -1081,7 +1084,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                 for (var i = 0; i < entities.length; i++) {
                   var entity=entities[i];
                   if(entity.polyline!==undefined) entity.polyline.show=false;
-                  entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max));
+                  entity.polygon.extrudedHeight =(Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min;
                 }
               });
             }else{
@@ -1090,7 +1093,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                 for (var i = 0; i < entities.length; i++) {
                   var entity=entities[i];
                   if(entity.polyline!==undefined) entity.polyline.show=false;
-                  entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max));
+                  entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max))+Min;
                 }
               });
             }
