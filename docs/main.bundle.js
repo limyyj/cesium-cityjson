@@ -27,7 +27,7 @@ module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  ma
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 100%\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.13&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 100%\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.14&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\"></mobius-cesium>\r\n</div>"
 
 /***/ }),
 
@@ -227,7 +227,7 @@ module.exports = "<div id=\"mobiuscesium\" style=\"height: 100%\">\r\n\t<!-- <sp
 /***/ "./src/app/mobius-cesium/mobius-cesium.component.scss":
 /***/ (function(module, exports) {
 
-module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\");\n@font-face {\n  font-family: \"FontAwesome\"; }\n.font-awesome-hand {\n  font-family: FontAwesome; }\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\n#mobiuscesium {\n  height: 101%;\n  font-family: sans-serif !important;\n  margin: 0px !important;\n  padding: 0px !important;\n  font-size: 14px; }\n#button {\n  position: absolute;\n  z-index: 99; }\n#Toggle {\n  position: absolute;\n  top: calc(50% - 40px);\n  z-index: 100;\n  width: 30px;\n  height: 100px;\n  font-family: sans-serif;\n  background-color: gray;\n  opacity: 0.8;\n  border: 1px solid gray; }\n/* split-area{\r\n  overflow-y: hidden !important;\r\n  height: 100% !important;\r\n}\r\n\r\nsplit-gutter{\r\n  border-right: 1px solid #8aa8c0 !important;\r\n  border-top: 1px solid #8aa8c0 !important;\r\n  background-color: #8aa8c0 !important;\r\n} */\n"
+module.exports = "@import url(\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\");\n@font-face {\n  font-family: \"FontAwesome\"; }\n.font-awesome-hand {\n  font-family: FontAwesome; }\n.font-awesome-hand::after {\n  font-family: FontAwesome; }\n#mobiuscesium {\n  height: 101%;\n  font-family: sans-serif !important;\n  margin: 0px !important;\n  padding: 0px !important;\n  font-size: 14px; }\n#button {\n  position: absolute;\n  z-index: 99; }\n#Toggle {\n  position: absolute;\n  top: calc(50% - 40px);\n  z-index: 100;\n  width: 30px;\n  height: 100px;\n  font-family: sans-serif;\n  border-radius: 4px;\n  background-color: gray;\n  border: 1px solid gray; }\n/* split-area{\r\n  overflow-y: hidden !important;\r\n  height: 100% !important;\r\n}\r\n\r\nsplit-gutter{\r\n  border-right: 1px solid #8aa8c0 !important;\r\n  border-top: 1px solid #8aa8c0 !important;\r\n  background-color: #8aa8c0 !important;\r\n} */\n"
 
 /***/ }),
 
@@ -399,14 +399,14 @@ var MobiusCesium = /** @class */ (function () {
 /***/ "./src/app/mobius-cesium/toolwindow/publish.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "#publishwindow{\r\n  position: relative;\r\n  /*background-color: #F1F1F1 !important;*/\r\n  background-color: rgba(20,20,20,0.5);\r\n  height: 100%;\r\n  width: 100%;\r\n  color:#ddd !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#ddd !important;;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-labels{\r\n  margin-left: 5px;\r\n}\r\n\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  color: #395D73;\r\n  font-family:sans-serif !important;\r\n  color: #395D73;\r\n  background-color: #F1F1F1;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  opacity: 0.8;\r\n  color: #395D73;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ddd !important;\r\n  padding: 0; \r\n  color:#ddd !important;\r\n  width: 100%;\r\n  background-color: #ddd !important;\r\n}"
+module.exports = "#publishwindow{\r\n  position: relative;\r\n  /*background-color: #F1F1F1 !important;*/\r\n  background-color: rgba(20,20,20,0.5);\r\n  height: 100%;\r\n  width: 100%;\r\n  color:#ddd !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#ddd !important;;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-labels{\r\n  margin-left: 5px;\r\n}\r\n\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  color: #395D73;\r\n  font-family:sans-serif !important;\r\n  color: #395D73;\r\n  background-color: #F1F1F1;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  /*opacity: 0.8;*/\r\n  color: #395D73;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ddd !important;\r\n  padding: 0; \r\n  color:#ddd !important;\r\n  width: 100%;\r\n  background-color: #ddd !important;\r\n}"
 
 /***/ }),
 
 /***/ "./src/app/mobius-cesium/toolwindow/publish.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"publishwindow\">\r\n      <div id=\"PublishView\" style=\"margin-left: 5px;margin-top: 5px;\" *ngIf=\"ceisumData!==undefined\">\r\n        <div *ngIf=\"ceisumData.colorDefault!==undefined\">\r\n        <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 100px\" *ngIf=\"ceisumData.colorDescr!==undefined\"><div style=\"width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal\">{{ceisumData.colorDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Color&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"ColorValue\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.heightDefault!==undefined\">\r\n        <hr>\r\n          <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 100px\" *ngIf=\"ceisumData.heightDescr!==undefined\"><div style=\"width: 100px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">{{ceisumData.heightDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Extrude&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"HeightValue\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:40px;height: 25px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Min&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"ceisumData.heightMin!==undefined\">{{ceisumData.heightMin}}</div></th>\r\n\r\n          <th style=\"width:40px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Max&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"ceisumData.heightMax!==undefined\">{{ceisumData.heightMax}}</div></th></tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.filter!==undefined\">\r\n      <hr>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr >\r\n          <th style=\"width:100px;height: 25px;\"><div style=\"width:100px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.descr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th style=\"width:90px;height: 25px;\"><div style=\"width:90px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">></div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\"><</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">=</div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">none</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\">=</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">!=</div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;color:#395D73 !important;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;color:#395D73 !important;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      <button style=\"background-color: #ddd ;color:#395D73;\" (click)=\"reset()\">Reset</button>\r\n      </div>\r\n    </div>\r\n</div>"
+module.exports = "<div id=\"publishwindow\">\r\n      <div id=\"PublishView\" style=\"margin-left: 5px;margin-top: 5px;\" *ngIf=\"ceisumData!==undefined\">\r\n        <div *ngIf=\"ceisumData.colorDefault!==undefined\">\r\n        <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 230px\" *ngIf=\"ceisumData.colorDescr!==undefined\"><div style=\"width: 230px;color:#ddd !important;border:0;text-align: left;font-weight: normal\">{{ceisumData.colorDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Color&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeColor($event.target.value)\" [ngModel]=\"ColorValue\">\r\n              <option class=\"cesium-option\"  *ngFor=\"let ColorName of ColorNames\" value={{ColorName}}>{{ColorName}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n          </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.heightDefault!==undefined\">\r\n        <hr>\r\n          <table >\r\n          <tr>\r\n          <th class=\"colorkey\" style=\"width: 230px\" *ngIf=\"ceisumData.heightDescr!==undefined\"><div style=\"width: 230px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">{{ceisumData.heightDescr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th class=\"colorkey\" style=\"width: 60px\"><div class=\"Hide\" style=\"width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;\">Extrude&nbsp;&nbsp;:</div></th>\r\n          <th><div>\r\n            <select class=\"cesium-button\" (change)=\"onChangeHeight($event.target.value)\" [ngModel]=\"HeightValue\">\r\n               <option class=\"cesium-option\"  *ngFor=\"let Height of HeightKey\" value={{Height}}>{{Height}}</option>\r\n            </select>\r\n          </div></th>\r\n          </tr>\r\n        </table>\r\n        <table>\r\n          <tr ><th style=\"width:40px;height: 25px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Min&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"ceisumData.heightMin!==undefined\">{{ceisumData.heightMin}}</div></th>\r\n\r\n          <th style=\"width:40px;\"><div style=\"width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\">Max&nbsp;&nbsp;:</div></th>\r\n          <th style=\"width:60px;\"><div style=\"width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;\" *ngIf=\"ceisumData.heightMax!==undefined\">{{ceisumData.heightMax}}</div></th></tr>\r\n      </table>\r\n    </div>\r\n    <div *ngIf=\"ceisumData.filter!==undefined\">\r\n      <hr>\r\n      <div class=\"hide-container\" style=\"margin-top:5px;\">\r\n        <div *ngFor=\"let item of hideElementArr;\" id={{item.divid}}>\r\n      <table>\r\n        <tr >\r\n          <th style=\"width:100px;height: 25px;\"><div style=\"width:100px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.descr}}</div></th></tr>\r\n        </table>\r\n        <table>\r\n          <tr>\r\n            <th style=\"width:90px;height: 25px;\"><div style=\"width:90px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;\">{{item.HeightHide}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">></div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\"><</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">=</div></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:40px;height: 25px;\">\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 0\">none</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 1\">=</div>\r\n          <div style=\"width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;\" *ngIf=\"item.RelaHide === 2\">!=</div></th>\r\n          <th *ngIf=\"item.type === 'number'\" style=\"width:70px;height: 20px;color:#395D73 !important;\"><input type=\"text\" id={{item.id}} value={{item.textHide}} (change)=\"Changetext($event.target.value,item.id)\" style=\"width:70px;height: 20px;color:#395D73 !important;\"></th>\r\n          <th *ngIf=\"item.type === 'category'\" style=\"width:73px;height: 25px;\"><div style=\"width:73px;height: 25px;\">\r\n          <select class=\"cesium-button-select\" [ngModel]=\"item.CategaryHide\" (change)=\"ChangeCategory($event.target.value,item.id,1)\" style=\"width:73px;height: 25px;\">\r\n            <option class=\"cesium-option\" *ngFor=\"let caty of item.Category\" value={{caty}}>{{caty}}</option>\r\n          </select></div></th></tr>\r\n      </table>\r\n      <table>\r\n        <tr>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;\">{{item.HideMin}}</div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:150px;height: 25px;\"><div style=\"font-weight: normal;display: inline-block;width:150px;\"><mat-slider class=\"slider\" name=\"range\" id=\"0\" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)=\"Changetext(textscale.value.toPrecision(2),item.id)\" >\r\n        </mat-slider></div></th>\r\n        <th *ngIf=\"item.type === 'number'\" style=\"width:30px;height: 25px;;padding-top: 10px;\"><div style=\"font-weight: normal;display: inline-block;color:#ddd !important;width:30px;text-align: left;\">{{item.HideMax}}</div></th></tr>\r\n      </table><hr>\r\n        </div>\r\n      </div>\r\n      <button style=\"background-color: #ddd ;color:#395D73;\" (click)=\"reset()\">Reset</button>\r\n      </div>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -470,7 +470,7 @@ var PublishComponent = /** @class */ (function (_super) {
             this.data = this.dataService.getGsModel();
             try {
                 if (this.data !== undefined && this.data["features"] !== undefined) {
-                    if (this.data["crs"] !== undefined && this.data["crs"]["cesium"] !== undefined) {
+                    if (this.data["cesium"] !== undefined) {
                         this.LoadData(this.data);
                         this.InitialTool = false;
                     }
@@ -489,26 +489,26 @@ var PublishComponent = /** @class */ (function (_super) {
             this.PropertyNames = Object.getOwnPropertyNames(data["features"][0].properties);
             this.PropertyNames.sort();
             this.viewer = this.dataService.viewer;
-            if (this.data.crs.cesium !== undefined) {
+            if (this.data["cesium"] !== undefined) {
                 this.LoadJSONData();
             }
         }
     };
     PublishComponent.prototype.LoadJSONData = function () {
-        var cesiumData = this.data.crs.cesium;
+        var cesiumData = this.data["cesium"];
         var data = [];
         this.ceisumData = [];
         this.ColorNames = [];
         this.HeightKey = [];
         if (cesiumData["colour"] !== undefined && cesiumData["colour"]["attribs"] !== undefined) {
             for (var i = 0; i < cesiumData["colour"]["attribs"].length; i++) {
-                this.ColorNames.push(cesiumData["colour"]["attribs"][i]["default"]);
+                this.ColorNames.push(cesiumData["colour"]["attribs"][i]["name"]);
             }
             this.ColorValue = this.ColorNames[0];
         }
         if (cesiumData["extrude"] !== undefined && cesiumData["extrude"]["attribs"] !== undefined) {
             for (var i = 0; i < cesiumData["extrude"]["attribs"].length; i++) {
-                this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["default"]);
+                this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["name"]);
             }
             this.HeightValue = this.HeightKey[0];
         }
@@ -516,7 +516,7 @@ var PublishComponent = /** @class */ (function (_super) {
             if (cesiumData["colour"].descr !== undefined)
                 data.colorDescr = cesiumData["colour"].descr;
             if (cesiumData["colour"]["attribs"] !== undefined) {
-                data.colorDefault = cesiumData["colour"]["attribs"][0]["default"];
+                data.colorDefault = cesiumData["colour"]["attribs"][0]["name"];
                 if (cesiumData["colour"]["attribs"][0]["min"] !== undefined) {
                     data.colorMin = cesiumData["colour"]["attribs"][0]["min"];
                 }
@@ -562,7 +562,7 @@ var PublishComponent = /** @class */ (function (_super) {
             if (cesiumData["extrude"].descr !== undefined)
                 data.heightDescr = cesiumData["extrude"].descr;
             if (cesiumData["extrude"]["attribs"] !== undefined) {
-                data.heightDefault = cesiumData["extrude"]["attribs"][0]["default"];
+                data.heightDefault = cesiumData["extrude"]["attribs"][0]["name"];
                 if (cesiumData["extrude"]["attribs"][0]["min"] !== undefined) {
                     data.heightMin = cesiumData["extrude"]["attribs"][0]["min"];
                 }
@@ -687,33 +687,33 @@ var PublishComponent = /** @class */ (function (_super) {
                 });
             }
         }
-        for (var i = 0; i < this.data.crs.cesium["extrude"]["attribs"].length; i++) {
-            if (this.data.crs.cesium["extrude"]["attribs"][i]["default"] === this.HeightValue) {
-                if (this.data.crs.cesium["extrude"]["attribs"][i]["min"] !== undefined) {
-                    this.ceisumData["heightMin"] = this.data.crs.cesium["extrude"]["attribs"][i]["min"];
+        for (var i = 0; i < this.data["cesium"]["extrude"]["attribs"].length; i++) {
+            if (this.data["cesium"]["extrude"]["attribs"][i]["name"] === this.HeightValue) {
+                if (this.data["cesium"]["extrude"]["attribs"][i]["min"] !== undefined) {
+                    this.ceisumData["heightMin"] = this.data["cesium"]["extrude"]["attribs"][i]["min"];
                 }
                 else {
                     this.ceisumData["heightMin"] = Math.min.apply(Math, texts);
                 }
-                if (this.data.crs.cesium["extrude"]["attribs"][i]["max"] !== undefined) {
-                    this.ceisumData["heightMax"] = this.data.crs.cesium["extrude"]["attribs"][i]["max"];
+                if (this.data["cesium"]["extrude"]["attribs"][i]["max"] !== undefined) {
+                    this.ceisumData["heightMax"] = this.data["cesium"]["extrude"]["attribs"][i]["max"];
                 }
                 else {
                     this.ceisumData["heightMax"] = Math.max.apply(Math, texts);
                 }
-                if (this.data.crs.cesium["extrude"]["attribs"][i]["scale"] !== undefined) {
-                    this.ceisumData["heightScale"] = this.data.crs.cesium["extrude"]["attribs"][i]["scale"];
+                if (this.data["cesium"]["extrude"]["attribs"][i]["scale"] !== undefined) {
+                    this.ceisumData["heightScale"] = this.data["cesium"]["extrude"]["attribs"][i]["scale"];
                 }
                 else {
                     this.ceisumData["heightScale"] = 1;
                 }
-                if (this.data.crs.cesium["extrude"]["attribs"][i]["invert"] === true) {
+                if (this.data["cesium"]["extrude"]["attribs"][i]["invert"] === true) {
                     this.ceisumData["heightInvert"] = true;
                 }
                 else {
                     this.ceisumData["heightInvert"] = false;
                 }
-                if (this.data.crs.cesium["extrude"]["attribs"][i]["line"] === true) {
+                if (this.data["cesium"]["extrude"]["attribs"][i]["line"] === true) {
                     this.ceisumData["heightLine"] = true;
                 }
                 else {
@@ -739,18 +739,18 @@ var PublishComponent = /** @class */ (function (_super) {
     PublishComponent.prototype.onChangeColor = function (ColorValue) {
         this.ColorValue = ColorValue;
         this.ceisumData["colorDefault"] = this.ColorValue;
-        if (this.data.crs.cesium["colour"] !== undefined) {
-            for (var i = 0; i < this.data.crs.cesium["colour"]["attribs"].length; i++) {
-                if (this.data.crs.cesium["colour"]["attribs"][i]["default"] === this.ColorValue) {
-                    if (this.data.crs.cesium["colour"]["attribs"][i]["min"] !== undefined && this.data.crs.cesium["colour"]["attribs"][i]["max"] !== undefined) {
-                        this.ceisumData["colorMin"] = this.data.crs.cesium["colour"]["attribs"][i]["min"];
-                        this.ceisumData["colorMax"] = this.data.crs.cesium["colour"]["attribs"][i]["max"];
+        if (this.data["cesium"]["colour"] !== undefined) {
+            for (var i = 0; i < this.data["cesium"]["colour"]["attribs"].length; i++) {
+                if (this.data["cesium"]["colour"]["attribs"][i]["name"] === this.ColorValue) {
+                    if (this.data["cesium"]["colour"]["attribs"][i]["min"] !== undefined && this.data["cesium"]["colour"]["attribs"][i]["max"] !== undefined) {
+                        this.ceisumData["colorMin"] = this.data["cesium"]["colour"]["attribs"][i]["min"];
+                        this.ceisumData["colorMax"] = this.data["cesium"]["colour"]["attribs"][i]["max"];
                     }
                     else {
                         this.ceisumData["colorMin"] = null;
                         this.ceisumData["colorMax"] = null;
                     }
-                    if (this.data.crs.cesium["colour"]["attribs"][i]["invert"] === true) {
+                    if (this.data["cesium"]["colour"]["attribs"][i]["invert"] === true) {
                         this.ceisumData["colorInvert"] = true;
                         this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
                     }
@@ -805,17 +805,17 @@ var PublishComponent = /** @class */ (function (_super) {
                 this.texts = texts;
                 var max = this.dataService.MaxColor; //Math.max.apply(Math, texts);
                 var min = this.dataService.MinColor; //Math.min.apply(Math, texts);
-                var range = 12;
-                var Colortext = [];
-                Colortext.push(">=" + (min + ((range - 1) / range) * (max - min)).toFixed(2));
-                for (var i = range - 2; i > 0; i--) {
-                    Colortext.push((min + (i / range) * (max - min)).toFixed(2) + " - " + (min + ((i + 1) / range) * (max - min)).toFixed(2));
+                //var range:number=82;//12;
+                /*var Colortext:any=[];
+                Colortext.push(">="+(min+((range-1)/range)*(max-min)).toFixed(2));
+                for(var i=range-2;i>0;i--){
+                  Colortext.push((min+(i/range)*(max-min)).toFixed(2)+" - "+(min+((i+1)/range)*(max-min)).toFixed(2));
                 }
-                Colortext.push("<=" + (min + (1 / range) * (max - min)).toFixed(2));
-                for (var j = 0; j < Colortext.length; j++) {
+                Colortext.push("<="+(min+(1/range)*(max-min)).toFixed(2))*/
+                for (var j = 0; j < texts.length; j++) {
                     var ColorKey = [];
-                    ColorKey.text = Colortext[j];
-                    var Color = this.ChromaScale((j / Colortext.length).toFixed(2));
+                    ColorKey.text = texts[j];
+                    var Color = this.ChromaScale(Number(((max - texts[j]) / (max - min)).toFixed(2)));
                     ColorKey.color = Color;
                     this.ColorKey.push(ColorKey);
                 }
@@ -874,16 +874,21 @@ var PublishComponent = /** @class */ (function (_super) {
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
                 if (entity.properties[self.ColorValue] !== undefined) {
-                    for (var j = 1; j < range; j++) {
-                        if (entity.properties[self.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
-                            var rgb = ColorKey[range - j].color._rgb;
-                            entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        }
-                        else if (entity.properties[self.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
-                            var rgb = ColorKey[range - 1].color._rgb;
-                            entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        }
-                    }
+                    /*for(var j=1;j<range;j++){
+                      if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
+                      var rgb=ColorKey[range-j].color._rgb;
+                      entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                      }else if(entity.properties[self.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
+                        var rgb=ColorKey[range-1].color._rgb;
+                        entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                      }
+                    }*/
+                    var texts = entity.properties[self.ColorValue]._value;
+                    var rgb = self.ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
+                    if (entity.polygon !== undefined)
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    if (entity.polyline !== undefined)
+                        entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                 }
             }
         });
@@ -921,7 +926,7 @@ var PublishComponent = /** @class */ (function (_super) {
         var lastnumber;
         this.hideElementArr = [];
         this.HideNum = [];
-        if (this.data.crs.cesium !== undefined && this.data.crs.cesium.length !== 0) {
+        if (this.data["cesium"] !== undefined && this.data["cesium"].length !== 0) {
             for (var i = 0; i < this.ceisumData.filter.length; i++) {
                 if (this.HideNum.length === 0) {
                     this.HideNum[0] = "0";
@@ -1026,11 +1031,20 @@ var PublishComponent = /** @class */ (function (_super) {
         var text = [];
         var scale = this.ScaleValue;
         var Max;
+        var Min;
         if (this.ceisumData["heightMax"] !== undefined) {
             Max = this.ceisumData["heightMax"];
         }
         else {
             Max = 0;
+        }
+        if (this.ceisumData["heightMin"] !== undefined) {
+            if (this.ceisumData["heightMin"] < 0) {
+                Min = Math.abs(this.ceisumData["heightMin"]);
+            }
+            else {
+                Min = 0;
+            }
         }
         for (var j = 0; j < this.hideElementArr.length; j++) {
             if (this.hideElementArr[j] !== undefined) {
@@ -1069,7 +1083,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
@@ -1079,7 +1093,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                             if (entity.polyline !== undefined && entity.polyline.show !== undefined)
                                                 entity.polyline.show = false;
                                             if (self.HeightValue !== undefined) {
-                                                entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale;
+                                                entity.polygon.extrudedHeight = ((Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale;
                                             }
                                             else {
                                                 entity.polygon.extrudedHeight = 0;
@@ -1090,7 +1104,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
@@ -1100,7 +1114,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                             if (entity.polyline !== undefined && entity.polyline.show !== undefined)
                                                 entity.polyline.show = false;
                                             if (self.HeightValue !== undefined) {
-                                                entity.polygon.extrudedHeight = (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale;
+                                                entity.polygon.extrudedHeight = ((Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale;
                                             }
                                             else {
                                                 entity.polygon.extrudedHeight = 0;
@@ -1129,7 +1143,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                                 entity.polygon.extrudedHeight = 0;
                                                 var center = self.dataService.poly_center[i];
                                                 entity.polyline = new Cesium.PolylineGraphics({
-                                                    positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                    positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                     width: center[2],
                                                     material: entity.polygon.material,
                                                     show: true
@@ -1139,7 +1153,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                                 if (entity.polyline !== undefined && entity.polyline.show !== undefined)
                                                     entity.polyline.show = false;
                                                 if (self.HeightValue !== undefined) {
-                                                    entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale;
+                                                    entity.polygon.extrudedHeight = ((Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale;
                                                 }
                                                 else {
                                                     entity.polygon.extrudedHeight = 0;
@@ -1151,7 +1165,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                                 entity.polygon.extrudedHeight = 0;
                                                 var center = self.dataService.poly_center[i];
                                                 entity.polyline = new Cesium.PolylineGraphics({
-                                                    positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                    positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                     width: center[2],
                                                     material: entity.polygon.material,
                                                     show: true
@@ -1161,7 +1175,7 @@ var PublishComponent = /** @class */ (function (_super) {
                                                 if (entity.polyline !== undefined && entity.polyline.show !== undefined)
                                                     entity.polyline.show = false;
                                                 if (self.HeightValue !== undefined) {
-                                                    entity.polygon.extrudedHeight = Math.min((entity.properties[self.HeightValue]._value), Max) * scale;
+                                                    entity.polygon.extrudedHeight = (Math.min((entity.properties[self.HeightValue]._value), Max) + Min) * scale;
                                                 }
                                                 else {
                                                     entity.polygon.extrudedHeight = 0;
@@ -1181,22 +1195,27 @@ var PublishComponent = /** @class */ (function (_super) {
         if (this.ColorKey !== undefined) {
             var ChromaScale = this.ChromaScale;
             var ColorKey = this.ColorKey;
-            var range = ColorKey.length;
+            //var range=ColorKey.length;
             var self = this;
             if (typeof (self.texts[0]) === "number") {
                 var max = self.dataService.MaxColor;
                 var min = self.dataService.MinColor;
                 var ChromaScale = self.ChromaScale;
-                for (var j = 1; j < range; j++) {
-                    if (entity.properties[self.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
-                        var rgb = ColorKey[range - j].color._rgb;
-                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                    }
-                    else if (entity.properties[self.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
-                        var rgb = ColorKey[range - 1].color._rgb;
-                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                    }
-                }
+                var texts = entity.properties[self.ColorValue]._value;
+                var rgb = self.ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
+                if (entity.polygon !== undefined)
+                    entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                if (entity.polyline !== undefined)
+                    entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                /*for(var j=1;j<range;j++){
+                  if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
+                  var rgb=ColorKey[range-j].color._rgb;
+                  entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                  }else if(entity.properties[self.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
+                    var rgb=ColorKey[range-1].color._rgb;
+                    entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                  }
+                }*/
             }
             else {
                 var Colortexts = self.dataService.Colortexts;
@@ -1218,7 +1237,7 @@ var PublishComponent = /** @class */ (function (_super) {
         }
     };
     PublishComponent.prototype.reset = function () {
-        if (this.data.crs.cesium !== undefined) {
+        if (this.data["cesium"] !== undefined) {
             this.LoadData(this.data);
         }
     };
@@ -1240,7 +1259,7 @@ var PublishComponent = /** @class */ (function (_super) {
 /***/ "./src/app/mobius-cesium/toolwindow/toolwindow.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "#toolwindow{\r\n  position: relative;\r\n  /*background-color: #F1F1F1 !important;*/\r\n  background-color: rgba(20,20,20,0.5);\r\n  opacity:0.8;\r\n  height: 100%;\r\n  width: 100%;\r\n  color:#ddd !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#ddd !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-labels{\r\n  margin-left: 5px;\r\n}\r\n\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  opacity: 0.8;\r\n  color: #395D73;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ddd !important;\r\n  padding: 0; \r\n  color:#ddd !important;\r\n  width: 100%;\r\n  background-color: #ddd !important;\r\n}"
+module.exports = "#toolwindow{\r\n  position: relative;\r\n  /*background-color: #F1F1F1 !important;*/\r\n  background-color: rgba(20,20,20,0.5);\r\n  height: 100%;\r\n  width: 100%;\r\n  color:#ddd !important;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  font-size: 14px !important;\r\n  line-height: 14px;\r\n  overflow-x: hidden !important;\r\n}\r\n\r\n/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-width: 60px!important;\r\n  padding: 3px!important;\r\n  margin: 3px!important;\r\n  color:#ddd !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-label{\r\n  height: 30px !important;\r\n  width: 60px !important;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/.mat-tab-labels{\r\n  margin-left: 5px;\r\n}\r\n\r\n/deep/.mat-tab-header{\r\n  width: 700px !important;\r\n}\r\n\r\n/deep/.mat-tab-header-pagination-controls-enabled{\r\n  display: none !important;\r\n}\r\n\r\n/deep/.mat-ink-bar{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-tab{\r\n  min-width: 30px !important;\r\n}\r\n\r\n/deep/.mat-tab-body-content{\r\n  overflow: hidden !important;\r\n}\r\n\r\n/deep/.mat-header{\r\n  -webkit-box-orient: horizontal;\r\n  -webkit-box-direction: normal;\r\n      -ms-flex-direction: row;\r\n          flex-direction: row;\r\n  font-family: Roboto,\"Helvetica Neue\",sans-serif;\r\n  margin-left: 0px;\r\n  color:#395d73;\r\n  border: 0;\r\n  height: 20px;\r\n  background-color: transparent !important;\r\n}\r\n\r\n/deep/split-gutter{\r\n  background-color:rgb(138, 168, 192) !important;\r\n}\r\n\r\n/deep/.mat-accent .mat-slider-thumb {\r\n    background-color: #395d73 !important;\r\n    cursor: -webkit-grab;\r\n}\r\n\r\n/deep/.mat-slider-track-fill{\r\n  background-color: #395d73 !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label-text {\r\n    color: #395d73 !important;\r\n    font-size: 12px !important;\r\n}\r\n\r\n/deep/.mat-slider-thumb-label{\r\n    height: 15px !important;\r\n    width: 15px !important;\r\n    top: -20px !important;\r\n    right: -7px !important;\r\n    background-color: white !important;\r\n    border: 1px solid #395d73 !important;\r\n}\r\n\r\n.mat-slider{\r\n    width: 150px !important;\r\n}\r\n\r\n.cesium-button {\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-button-select{\r\n  display: inline-block;\r\n  position: relative;\r\n  border: 1px solid #8AA8C0;\r\n  color: #395D73;\r\n  fill: #395D73;\r\n  border-radius: 0px;\r\n  padding: 3px 0px;\r\n  margin: 0px 0px;\r\n  cursor: pointer;\r\n  overflow: hidden;\r\n  -moz-user-select: none;\r\n  -webkit-user-select: none;\r\n  -ms-user-select: none;\r\n  user-select: none;\r\n  width: 80px;\r\n  font-family:sans-serif !important;\r\n  background: #F1F1F1;\r\n}\r\n\r\n.cesium-option{\r\n  background-color: #F1F1F1;\r\n  /*opacity: 0.8;*/\r\n  color: #395D73;\r\n  border: 1px solid #8AA8C0;\r\n}\r\n\r\nhr {\r\n  display: block;\r\n  height: 1px;\r\n  border: 0;\r\n  border-top: 1px solid #ddd !important;\r\n  padding: 0; \r\n  color:#ddd !important;\r\n  width: 100%;\r\n  background-color: #ddd !important;\r\n}"
 
 /***/ }),
 
@@ -1309,7 +1328,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.data = this.dataService.getGsModel();
             try {
                 if (this.data !== undefined && this.data["features"] !== undefined) {
-                    if (this.data["crs"] === undefined || this.data["crs"]["cesium"] === undefined) {
+                    if (this.data["cesium"] === undefined) {
                         this.LoadData(this.data);
                         this.InitialTool = true;
                     }
@@ -1460,19 +1479,11 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             this.texts = texts;
             var max = Math.max.apply(Math, texts);
             var min = Math.min.apply(Math, texts);
-            var range = 12;
-            var Colortext = [];
-            Colortext.push(">=" + (min + ((range - 1) / range) * (max - min)).toFixed(2));
-            for (var i = range - 2; i > 0; i--) {
-                Colortext.push((min + (i / range) * (max - min)).toFixed(2) + " - " + (min + ((i + 1) / range) * (max - min)).toFixed(2));
-            }
-            Colortext.push("<=" + (min + (1 / range) * (max - min)).toFixed(2));
-            for (var j = 0; j < Colortext.length; j++) {
+            for (var j = 0; j < texts.length; j++) {
                 var ColorKey = [];
-                ColorKey.text = Colortext[j];
-                //ColorKey.color=this.ColorStore[j];
-                var Color = this.ChromaScale((j / Colortext.length).toFixed(2));
+                var Color = this.ChromaScale(Number(((max - texts[j]) / (max - min)).toFixed(2)));
                 ColorKey.color = Color;
+                ColorKey.text = texts[j];
                 this.ColorKey.push(ColorKey);
             }
             this.dataService.Colortexts = this.ColorKey;
@@ -1487,7 +1498,6 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             for (var j = 0; j < texts.length; j++) {
                 var ColorKey = [];
                 ColorKey.text = texts[j];
-                //ColorKey.color=this.ColorStore[j];
                 var Color = this.ChromaScale((j / texts.length).toFixed(2));
                 ColorKey.color = Color;
                 this.ColorKey.push(ColorKey);
@@ -1566,30 +1576,21 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         var min = this.dataService.MinColor;
         var promise = this.dataService.cesiumpromise;
         var ChromaScale = this.ChromaScale;
-        var ColorKey = this.ColorKey;
-        var range = ColorKey.length;
+        //var ColorKey=this.ColorKey;
+        //var range=ColorKey.length;
         var self = this;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
+            //console.log(entities);
             for (var i = 0; i < entities.length; i++) {
                 var entity = entities[i];
                 if (entity.properties[self.ColorValue] !== undefined) {
-                    for (var j = 1; j < range; j++) {
-                        if (entity.properties[self.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
-                            var rgb = ColorKey[range - j].color._rgb;
-                            if (entity.polygon !== undefined)
-                                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                            if (entity.polyline !== undefined)
-                                entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        }
-                        else if (entity.properties[self.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
-                            var rgb = ColorKey[range - 1].color._rgb;
-                            if (entity.polygon !== undefined)
-                                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                            if (entity.polyline !== undefined)
-                                entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        }
-                    }
+                    var texts = entity.properties[self.ColorValue]._value;
+                    var rgb = self.ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
+                    if (entity.polygon !== undefined)
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    if (entity.polyline !== undefined)
+                        entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                 }
             }
         });
@@ -1961,6 +1962,13 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         var text = [];
         var scale = this.ScaleValue;
         var Max = this.HeightMax;
+        var Min = this.HeightMin;
+        if (Min < 0) {
+            Min = Math.abs(Min);
+        }
+        else {
+            Min = 0;
+        }
         for (var j = 0; j < this.hideElementArr.length; j++) {
             if (this.hideElementArr[j] !== undefined) {
                 propertyname.push(this.hideElementArr[j].HeightHide);
@@ -2002,28 +2010,28 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((Max - entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Math.min((Max - entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (Math.min((Max - entity.properties[self.HeightValue]._value), Max)) * scale; //(self.HeightMax-entity.properties[self.HeightValue]._value)*scale;
+                                            entity.polygon.extrudedHeight = ((Math.min((Max - entity.properties[self.HeightValue]._value), Max)) + Min) * scale;
                                         }
                                     }
                                     else {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale; //entity.properties[self.HeightValue]._value*scale;
+                                            entity.polygon.extrudedHeight = ((Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale; //entity.properties[self.HeightValue]._value*scale;
                                         }
                                     }
                                 }
@@ -2032,28 +2040,28 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((Max - entity.properties[self.HeightValue]._value), Max))]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((Max - entity.properties[self.HeightValue]._value) + Min, Max))]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (Math.min((Max - entity.properties[self.HeightValue]._value), Max)); //self.HeightMax-entity.properties[self.HeightValue]._value;
+                                            entity.polygon.extrudedHeight = (Math.min((Max - entity.properties[self.HeightValue]._value) + Min, Max)); //self.HeightMax-entity.properties[self.HeightValue]._value;
                                         }
                                     }
                                     else {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((entity.properties[self.HeightValue]._value), Max))]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((entity.properties[self.HeightValue]._value), Max)) + Min]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (Math.min(entity.properties[self.HeightValue]._value, Max));
+                                            entity.polygon.extrudedHeight = (Math.min(entity.properties[self.HeightValue]._value, Max)) + Min;
                                         }
                                     }
                                 }
@@ -2080,28 +2088,28 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((Max - entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Math.min((Max - entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (self.HeightMax - entity.properties[self.HeightValue]._value) * scale;
+                                            entity.polygon.extrudedHeight = ((self.HeightMax - entity.properties[self.HeightValue]._value) + Min) * scale;
                                         }
                                     }
                                     else {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = Math.min((entity.properties[self.HeightValue]._value), Max) * scale;
+                                            entity.polygon.extrudedHeight = (Math.min((entity.properties[self.HeightValue]._value), Max) + Min) * scale;
                                         }
                                     }
                                 }
@@ -2110,28 +2118,28 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((Max - entity.properties[self.HeightValue]._value), Max))]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min((Max - entity.properties[self.HeightValue]._value), Max)) + Min]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = (Math.min((Max - entity.properties[self.HeightValue]._value), Max)); //self.HeightMax-entity.properties[self.HeightValue]._value;
+                                            entity.polygon.extrudedHeight = (Math.min((Max - entity.properties[self.HeightValue]._value), Max)) + Min; //self.HeightMax-entity.properties[self.HeightValue]._value;
                                         }
                                     }
                                     else {
                                         if (self.CheckExtrude === true) {
                                             var center = self.dataService.poly_center[i];
                                             entity.polyline = new Cesium.PolylineGraphics({
-                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min(entity.properties[self.HeightValue]._value, Max))]),
+                                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min(entity.properties[self.HeightValue]._value, Max)) + Min]),
                                                 width: center[2],
                                                 material: entity.polygon.material,
                                                 show: true
                                             });
                                         }
                                         else {
-                                            entity.polygon.extrudedHeight = Math.min(entity.properties[self.HeightValue]._value, Max); //entity.properties[self.HeightValue]._value;
+                                            entity.polygon.extrudedHeight = Math.min(entity.properties[self.HeightValue]._value, Max) + Min; //entity.properties[self.HeightValue]._value;
                                         }
                                     }
                                 }
@@ -2153,16 +2161,21 @@ var ToolwindowComponent = /** @class */ (function (_super) {
             var max = this.dataService.MaxColor;
             var min = this.dataService.MinColor;
             var ChromaScale = self.ChromaScale;
-            for (var j = 1; j < range; j++) {
-                if (entity.properties[self.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
-                    var rgb = ColorKey[range - j].color._rgb;
-                    entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                }
-                else if (entity.properties[self.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
-                    var rgb = ColorKey[range - 1].color._rgb;
-                    entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                }
-            }
+            var texts = entity.properties[self.ColorValue]._value;
+            var rgb = self.ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
+            if (entity.polygon !== undefined)
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            if (entity.polyline !== undefined)
+                entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            /*for(var j=1;j<range;j++){
+              if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
+              var rgb=ColorKey[range-j].color._rgb;
+              entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+              }else if(entity.properties[self.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
+                var rgb=ColorKey[range-1].color._rgb;
+                entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+              }
+            }*/
         }
         else {
             var Colortexts = self.dataService.Colortexts;
@@ -2256,6 +2269,13 @@ var ToolwindowComponent = /** @class */ (function (_super) {
         }
         //var Max=Math.max.apply(Math, this.texts);
         var Max = this.HeightMax;
+        var Min = this.HeightMin;
+        if (Min < 0) {
+            Min = Math.abs(Min);
+        }
+        else {
+            Min = 0;
+        }
         var scale = Number(this.ScaleValue);
         if (this.CheckExtrude === true) {
             if (this.CheckScale === true) {
@@ -2269,7 +2289,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             entity.polygon.extrudedHeight = 0;
                             var center = self.dataService.poly_center[i];
                             entity.polyline = new Cesium.PolylineGraphics({
-                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale]),
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale]),
                                 width: center[2],
                                 material: entity.polygon.material,
                                 show: true
@@ -2287,7 +2307,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             entity.polygon.extrudedHeight = 0;
                             var center = self.dataService.poly_center[i];
                             entity.polyline = new Cesium.PolylineGraphics({
-                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min(entity.properties[self.HeightValue]._value, Max)) * scale]),
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], ((Math.min(entity.properties[self.HeightValue]._value, Max)) + Min) * scale]),
                                 width: center[2],
                                 material: entity.polygon.material,
                                 show: true
@@ -2307,7 +2327,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             entity.polygon.extrudedHeight = 0;
                             var center = self.dataService.poly_center[i];
                             entity.polyline = new Cesium.PolylineGraphics({
-                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Max - Math.min((entity.properties[self.HeightValue]._value), Max))]),
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min]),
                                 width: center[2],
                                 material: entity.polygon.material,
                                 show: true
@@ -2325,7 +2345,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             entity.polygon.extrudedHeight = 0;
                             var center = self.dataService.poly_center[i];
                             entity.polyline = new Cesium.PolylineGraphics({
-                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min(entity.properties[self.HeightValue]._value, Max))]),
+                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1], (Math.min(entity.properties[self.HeightValue]._value, Max)) + Min]),
                                 width: center[2],
                                 material: entity.polygon.material,
                                 show: true
@@ -2351,7 +2371,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             var entity = entities[i];
                             if (entity.polyline !== undefined)
                                 entity.polyline.show = false;
-                            entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) * scale;
+                            entity.polygon.extrudedHeight = ((Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min) * scale;
                         }
                     });
                 }
@@ -2362,7 +2382,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             var entity = entities[i];
                             if (entity.polyline !== undefined)
                                 entity.polyline.show = false;
-                            entity.polygon.extrudedHeight = (Math.min(entity.properties[self.HeightValue]._value, Max)) * scale;
+                            entity.polygon.extrudedHeight = ((Math.min(entity.properties[self.HeightValue]._value, Max)) + Min) * scale;
                         }
                     });
                 }
@@ -2375,7 +2395,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             var entity = entities[i];
                             if (entity.polyline !== undefined)
                                 entity.polyline.show = false;
-                            entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max));
+                            entity.polygon.extrudedHeight = (Max - Math.min((entity.properties[self.HeightValue]._value), Max)) + Min;
                         }
                     });
                 }
@@ -2386,7 +2406,7 @@ var ToolwindowComponent = /** @class */ (function (_super) {
                             var entity = entities[i];
                             if (entity.polyline !== undefined)
                                 entity.polyline.show = false;
-                            entity.polygon.extrudedHeight = (Math.min(entity.properties[self.HeightValue]._value, Max));
+                            entity.polygon.extrudedHeight = (Math.min(entity.properties[self.HeightValue]._value, Max)) + Min;
                         }
                     });
                 }
@@ -2426,7 +2446,7 @@ module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event);\">\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n     </div>\r\n</div>"
+module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event);\">\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n   <div id=\"ColorBar\" *ngIf=\"CatNumtexts!==undefined\" >\r\n        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n       <tr >\r\n          <th *ngFor=\"let cattext of CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let cattext of CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n     </div>\r\n</div>"
 
 /***/ }),
 
@@ -2536,6 +2556,9 @@ var ViewerComponent = /** @class */ (function (_super) {
             viewer.zoomTo(promise);
         });
         document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+        /*viewer.scene.imageryLayers.removeAll();
+        console.log(viewer.scene.imageryLayers);
+        viewer.scene.globe.baseColor = Cesium.Color.GRAY;*/
         if (this.data !== undefined) {
             this.viewer = viewer;
             this.dataService.viewer = this.viewer;
@@ -2570,7 +2593,6 @@ var ViewerComponent = /** @class */ (function (_super) {
                 }
                 if (entities[0].polygon !== undefined) {
                     self.ShowColorBar = true;
-                    console.log(self.ShowColorBar);
                 }
                 else {
                     self.ShowColorBar = false;
@@ -2620,7 +2642,9 @@ var ViewerComponent = /** @class */ (function (_super) {
     };
     ViewerComponent.prototype.Colortext = function () {
         this.texts = undefined;
-        this.Cattexts = undefined;
+        //this.Cattexts=undefined;
+        this.Cattexts = [];
+        this.CatNumtexts = [];
         var propertyname = this.ColorValue;
         var texts = [];
         var promise = this.dataService.cesiumpromise;
@@ -2709,13 +2733,33 @@ var ViewerComponent = /** @class */ (function (_super) {
             }
         }
         if (typeof (texts[0]) === "string") {
-            this.Cattexts = [];
-            for (var j = 0; j < texts.length; j++) {
-                var ColorKey = [];
-                ColorKey.text = texts[j];
-                this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
-                ColorKey.color = this.ChromaScale((j / texts.length).toFixed(2));
-                this.Cattexts.push(ColorKey);
+            if (texts.length <= 12) {
+                for (var j = 0; j < texts.length; j++) {
+                    var ColorKey = [];
+                    ColorKey.text = texts[j];
+                    this.ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
+                    ColorKey.color = this.ChromaScale((j / texts.length).toFixed(2));
+                    this.Cattexts.push(ColorKey);
+                }
+            }
+            else {
+                texts = texts.sort();
+                for (var j = 0; j < this.Colorbar.length; j++) {
+                    var ColorKey = [];
+                    if (j === 0) {
+                        ColorKey.text = texts[j];
+                    }
+                    else if (j === this.Colorbar.length - 1) {
+                        ColorKey.text = texts[texts.length - 1];
+                    }
+                    else {
+                        ColorKey.text = null;
+                    }
+                    //ColorKey.text=texts[j];
+                    //this.ChromaScale=chroma.scale("SPECTRAL");
+                    ColorKey.color = this.Colorbar[j]; //this.ChromaScale((j/texts.length).toFixed(2));
+                    this.CatNumtexts.push(ColorKey);
+                }
             }
         }
         if (this.ShowColorBar === false) {
@@ -2761,22 +2805,23 @@ var ViewerComponent = /** @class */ (function (_super) {
                     var max = this.dataService.MaxColor;
                     var min = this.dataService.MinColor;
                     var ChromaScale = this.ChromaScale;
-                    for (var j = 1; j < range; j++) {
-                        if (entity.properties[this.ColorValue]._value >= (min + (j / range) * (max - min)).toFixed(2)) {
-                            var rgb = ColorKey[range - j].color._rgb;
-                            if (entity.polygon !== undefined)
-                                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                            if (entity.polyline !== undefined)
-                                entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        }
-                        else if (entity.properties[this.ColorValue]._value < (min + (1 / range) * (max - min)).toFixed(2)) {
-                            var rgb = ColorKey[range - 1].color._rgb;
-                            if (entity.polygon !== undefined)
-                                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                            if (entity.polyline !== undefined)
-                                entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
-                        }
-                    }
+                    var texts = entity.properties[this.ColorValue]._value;
+                    var rgb = this.ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
+                    if (entity.polygon !== undefined)
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    if (entity.polyline !== undefined)
+                        entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                    /*for(var j=1;j<range;j++){
+                      if(entity.properties[this.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
+                      var rgb=ColorKey[range-j].color._rgb;
+                      if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                      if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                      }else if(entity.properties[this.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
+                        var rgb=ColorKey[range-1].color._rgb;
+                        if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                        if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+                      }
+                    }*/
                 }
                 else {
                     var ChromaScale = this.ChromaScale;
@@ -2864,14 +2909,14 @@ var ViewerComponent = /** @class */ (function (_super) {
     };
     ViewerComponent.prototype.showAttribs = function (event) {
         if (this.data !== undefined) {
-            if (this.data["crs"] !== undefined && this.data["crs"].cesium !== undefined) {
-                if (this.data["crs"].cesium.select !== undefined) {
+            if (this.data["cesium"] !== undefined) {
+                if (this.data["cesium"].select !== undefined) {
                     if (this.viewer.selectedEntity !== undefined) {
                         var pickup = this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX, event.clientY));
                         this.pickupArrs = [];
                         this.pickupArrs.push({ name: "ID", data: pickup.id.id });
-                        for (var i = 0; i < this.data["crs"].cesium.select.length; i++) {
-                            var propertyName = this.data["crs"].cesium.select[i];
+                        for (var i = 0; i < this.data["cesium"].select.length; i++) {
+                            var propertyName = this.data["cesium"].select[i];
                             this.pickupArrs.push({ name: propertyName, data: this.dataService.SelectedEntity.properties[propertyName]._value });
                         }
                         var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
