@@ -186,7 +186,9 @@ export class ViewerComponent extends DataSubscriber {
 
   Colortext(){
     this.texts=undefined;
-    this.Cattexts=undefined;
+    //this.Cattexts=undefined;
+    this.Cattexts=[];
+    this.CatNumtexts=[];
     var propertyname=this.ColorValue;
     var texts=[];
     var promise=this.dataService.cesiumpromise;
@@ -259,8 +261,6 @@ export class ViewerComponent extends DataSubscriber {
       }
     }
     if(typeof(texts[0])==="string"){
-      this.Cattexts=[];
-      this.CatNumtexts=[];
       if(texts.length<=12){
         for(var j=0;j<texts.length;j++){
           var ColorKey:any=[];
