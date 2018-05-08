@@ -74,7 +74,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.data = this.dataService.getGsModel();
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
-          if(this.data["crs"]!==undefined&&this.data["crs"]["cesium"]!==undefined){
+          if(this.data["cesium"]!==undefined){
             this.LoadData(this.data);
             this.InitialTool=false;
 
@@ -95,34 +95,34 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
       this.PropertyNames.sort();
       this.viewer=this.dataService.viewer;
-      if(this.data.crs.cesium!==undefined){
+      if(this.data["cesium"]!==undefined){
         this.LoadJSONData();
       }     
     } 
   }
 
   LoadJSONData(){
-    var cesiumData=this.data.crs.cesium;
+    var cesiumData=this.data["cesium"];
     var data:any=[];
     this.ceisumData=[];
     this.ColorNames=[];
     this.HeightKey=[];
     if(cesiumData["colour"]!==undefined&&cesiumData["colour"]["attribs"]!==undefined){
       for(var i=0;i<cesiumData["colour"]["attribs"].length;i++){
-        this.ColorNames.push(cesiumData["colour"]["attribs"][i]["default"]);
+        this.ColorNames.push(cesiumData["colour"]["attribs"][i]["name"]);
       }
       this.ColorValue=this.ColorNames[0];
     }
     if(cesiumData["extrude"]!==undefined&&cesiumData["extrude"]["attribs"]!==undefined){
       for(var i=0;i<cesiumData["extrude"]["attribs"].length;i++){
-        this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["default"]);
+        this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["name"]);
       }
       this.HeightValue=this.HeightKey[0];
     }
     if(cesiumData["colour"]!==undefined){
       if(cesiumData["colour"].descr!==undefined) data.colorDescr=cesiumData["colour"].descr;
       if(cesiumData["colour"]["attribs"]!==undefined){
-        data.colorDefault=cesiumData["colour"]["attribs"][0]["default"];
+        data.colorDefault=cesiumData["colour"]["attribs"][0]["name"];
         if(cesiumData["colour"]["attribs"][0]["min"]!==undefined) {data.colorMin=cesiumData["colour"]["attribs"][0]["min"];}
         if(cesiumData["colour"]["attribs"][0]["max"]!==undefined) {data.colorMax=cesiumData["colour"]["attribs"][0]["max"];}
         if(cesiumData["colour"]["attribs"][0]["invert"]===true){data.colorInvert=true;this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);}else{data.colorInvert=false;this.ChromaScale=chroma.scale("SPECTRAL").domain([0,1]);}
@@ -151,7 +151,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     if(cesiumData["extrude"]!==undefined){
       if(cesiumData["extrude"].descr!==undefined) data.heightDescr=cesiumData["extrude"].descr;
       if(cesiumData["extrude"]["attribs"]!==undefined){
-        data.heightDefault=cesiumData["extrude"]["attribs"][0]["default"];
+        data.heightDefault=cesiumData["extrude"]["attribs"][0]["name"];
       if(cesiumData["extrude"]["attribs"][0]["min"]!==undefined) {data.heightMin=cesiumData["extrude"]["attribs"][0]["min"];}else{data.heightMin=Math.min.apply(Math, texts);}
         if(cesiumData["extrude"]["attribs"][0]["max"]!==undefined) {data.heightMax=cesiumData["extrude"]["attribs"][0]["max"];}else{data.heightMax=Math.max.apply(Math, texts);}
         if(cesiumData["extrude"]["attribs"][0]["invert"]===true) {data.heightInvert=true;}else{data.heightInvert=false;}
@@ -239,21 +239,21 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       });
       }
     }
-    for(var i=0;i<this.data.crs.cesium["extrude"]["attribs"].length;i++){
-      if(this.data.crs.cesium["extrude"]["attribs"][i]["default"]===this.HeightValue){
-        if(this.data.crs.cesium["extrude"]["attribs"][i]["min"]!==undefined){
-          this.ceisumData["heightMin"]=this.data.crs.cesium["extrude"]["attribs"][i]["min"];
+    for(var i=0;i<this.data["cesium"]["extrude"]["attribs"].length;i++){
+      if(this.data["cesium"]["extrude"]["attribs"][i]["name"]===this.HeightValue){
+        if(this.data["cesium"]["extrude"]["attribs"][i]["min"]!==undefined){
+          this.ceisumData["heightMin"]=this.data["cesium"]["extrude"]["attribs"][i]["min"];
         }else{this.ceisumData["heightMin"]=Math.min.apply(Math, texts);}
-        if(this.data.crs.cesium["extrude"]["attribs"][i]["max"]!==undefined){  
-          this.ceisumData["heightMax"]=this.data.crs.cesium["extrude"]["attribs"][i]["max"];
+        if(this.data["cesium"]["extrude"]["attribs"][i]["max"]!==undefined){  
+          this.ceisumData["heightMax"]=this.data["cesium"]["extrude"]["attribs"][i]["max"];
         }else{this.ceisumData["heightMax"]=Math.max.apply(Math, texts);}
-        if(this.data.crs.cesium["extrude"]["attribs"][i]["scale"]!==undefined){
-          this.ceisumData["heightScale"]=this.data.crs.cesium["extrude"]["attribs"][i]["scale"];
+        if(this.data["cesium"]["extrude"]["attribs"][i]["scale"]!==undefined){
+          this.ceisumData["heightScale"]=this.data["cesium"]["extrude"]["attribs"][i]["scale"];
         }else{this.ceisumData["heightScale"]=1;}
-        if(this.data.crs.cesium["extrude"]["attribs"][i]["invert"]===true){
+        if(this.data["cesium"]["extrude"]["attribs"][i]["invert"]===true){
           this.ceisumData["heightInvert"]=true;
         }else{this.ceisumData["heightInvert"]=false;}
-        if(this.data.crs.cesium["extrude"]["attribs"][i]["line"]===true){
+        if(this.data["cesium"]["extrude"]["attribs"][i]["line"]===true){
           this.ceisumData["heightLine"]=true;
         }else{this.ceisumData["heightLine"]=false;}
         this.dataService.MinHeight=this.ceisumData["heightMin"];
@@ -277,14 +277,14 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   onChangeColor(ColorValue){
     this.ColorValue=ColorValue;
     this.ceisumData["colorDefault"]=this.ColorValue;
-    if(this.data.crs.cesium["colour"]!==undefined){
-      for(var i=0;i<this.data.crs.cesium["colour"]["attribs"].length;i++){
-        if(this.data.crs.cesium["colour"]["attribs"][i]["default"]===this.ColorValue){
-          if(this.data.crs.cesium["colour"]["attribs"][i]["min"]!==undefined&&this.data.crs.cesium["colour"]["attribs"][i]["max"]!==undefined){
-            this.ceisumData["colorMin"]=this.data.crs.cesium["colour"]["attribs"][i]["min"];
-            this.ceisumData["colorMax"]=this.data.crs.cesium["colour"]["attribs"][i]["max"];
+    if(this.data["cesium"]["colour"]!==undefined){
+      for(var i=0;i<this.data["cesium"]["colour"]["attribs"].length;i++){
+        if(this.data["cesium"]["colour"]["attribs"][i]["name"]===this.ColorValue){
+          if(this.data["cesium"]["colour"]["attribs"][i]["min"]!==undefined&&this.data["cesium"]["colour"]["attribs"][i]["max"]!==undefined){
+            this.ceisumData["colorMin"]=this.data["cesium"]["colour"]["attribs"][i]["min"];
+            this.ceisumData["colorMax"]=this.data["cesium"]["colour"]["attribs"][i]["max"];
           }else{this.ceisumData["colorMin"]=null;this.ceisumData["colorMax"]=null;}
-          if(this.data.crs.cesium["colour"]["attribs"][i]["invert"]===true){
+          if(this.data["cesium"]["colour"]["attribs"][i]["invert"]===true){
             this.ceisumData["colorInvert"]=true;
             this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);
           }else{
@@ -333,17 +333,17 @@ export class PublishComponent extends DataSubscriber implements OnInit{
         this.texts=texts;
         var max = this.dataService.MaxColor;//Math.max.apply(Math, texts);
         var min = this.dataService.MinColor;//Math.min.apply(Math, texts);
-        var range:number=12;
-        var Colortext:any=[];
+        //var range:number=82;//12;
+        /*var Colortext:any=[];
         Colortext.push(">="+(min+((range-1)/range)*(max-min)).toFixed(2));
         for(var i=range-2;i>0;i--){
           Colortext.push((min+(i/range)*(max-min)).toFixed(2)+" - "+(min+((i+1)/range)*(max-min)).toFixed(2));
         }
-        Colortext.push("<="+(min+(1/range)*(max-min)).toFixed(2))
-        for(var j=0;j<Colortext.length;j++){
+        Colortext.push("<="+(min+(1/range)*(max-min)).toFixed(2))*/
+        for(var j=0;j<texts.length;j++){
           var ColorKey:any=[];
-          ColorKey.text=Colortext[j];
-          var Color=this.ChromaScale((j/Colortext.length).toFixed(2));
+          ColorKey.text=texts[j];
+          var Color=this.ChromaScale(Number(((max-texts[j])/(max-min)).toFixed(2)));
           ColorKey.color=Color;
           this.ColorKey.push(ColorKey);
         }
@@ -397,7 +397,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       for (var i = 0; i < entities.length; i++) {
         var entity=entities[i];
         if(entity.properties[self.ColorValue]!==undefined){
-          for(var j=1;j<range;j++){
+          /*for(var j=1;j<range;j++){
             if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
             var rgb=ColorKey[range-j].color._rgb;
             entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
@@ -405,7 +405,11 @@ export class PublishComponent extends DataSubscriber implements OnInit{
               var rgb=ColorKey[range-1].color._rgb;
               entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             }
-          }
+          }*/
+          var texts=entity.properties[self.ColorValue]._value;
+          var rgb=self.ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
+          if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+          if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
         }
       }
     });
@@ -447,7 +451,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     var lastnumber:string;
     this.hideElementArr=[];
     this.HideNum=[];
-    if(this.data.crs.cesium!==undefined&&this.data.crs.cesium.length!==0){
+    if(this.data["cesium"]!==undefined&&this.data["cesium"].length!==0){
       for(var i=0;i<this.ceisumData.filter.length;i++){
         if(this.HideNum.length===0) {this.HideNum[0]="0";lastnumber=this.HideNum[0]}
         else{
@@ -675,13 +679,17 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     if(this.ColorKey!==undefined){
       var ChromaScale=this.ChromaScale;
       var ColorKey=this.ColorKey;
-      var range=ColorKey.length;
+      //var range=ColorKey.length;
       var self=this;
       if(typeof(self.texts[0])==="number") {
         var max = self.dataService.MaxColor;
         var min=self.dataService.MinColor;
         var ChromaScale=self.ChromaScale;
-        for(var j=1;j<range;j++){
+        var texts=entity.properties[self.ColorValue]._value;
+        var rgb=self.ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
+        if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+        if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+        /*for(var j=1;j<range;j++){
           if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
           var rgb=ColorKey[range-j].color._rgb;
           entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
@@ -689,7 +697,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
             var rgb=ColorKey[range-1].color._rgb;
             entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
           }
-        }
+        }*/
 
       }else{
         var Colortexts=self.dataService.Colortexts;
@@ -712,7 +720,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   }
 
   reset(){
-    if(this.data.crs.cesium!==undefined){
+    if(this.data["cesium"]!==undefined){
       this.LoadData(this.data);
     }
   }

@@ -71,7 +71,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.data = this.dataService.getGsModel(); 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
-          if(this.data["crs"]===undefined||this.data["crs"]["cesium"]===undefined){
+          if(this.data["cesium"]===undefined){
               this.LoadData(this.data);
               this.InitialTool=true;
           }else{
@@ -213,19 +213,11 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.texts=texts;
       var max = Math.max.apply(Math, texts);
       var min = Math.min.apply(Math, texts);
-      var range:number=12;
-      var Colortext:any=[];
-      Colortext.push(">="+(min+((range-1)/range)*(max-min)).toFixed(2));
-      for(var i=range-2;i>0;i--){
-        Colortext.push((min+(i/range)*(max-min)).toFixed(2)+" - "+(min+((i+1)/range)*(max-min)).toFixed(2));
-      }
-      Colortext.push("<="+(min+(1/range)*(max-min)).toFixed(2))
-      for(var j=0;j<Colortext.length;j++){
+      for(var j=0;j<texts.length;j++){
         var ColorKey:any=[];
-        ColorKey.text=Colortext[j];
-        //ColorKey.color=this.ColorStore[j];
-        var Color=this.ChromaScale((j/Colortext.length).toFixed(2));
+        var Color=this.ChromaScale(Number(((max-texts[j])/(max-min)).toFixed(2)));
         ColorKey.color=Color;
+        ColorKey.text=texts[j];
         this.ColorKey.push(ColorKey);
       }
       this.dataService.Colortexts=this.ColorKey;
@@ -239,7 +231,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       for(var j=0;j<texts.length;j++){
         var ColorKey:any=[];
         ColorKey.text=texts[j];
-        //ColorKey.color=this.ColorStore[j];
         var Color=this.ChromaScale((j/texts.length).toFixed(2));
         ColorKey.color=Color;
         this.ColorKey.push(ColorKey);
@@ -317,25 +308,19 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     var min=this.dataService.MinColor;
     var promise=this.dataService.cesiumpromise;
     var ChromaScale=this.ChromaScale;
-    var ColorKey=this.ColorKey;
-    var range=ColorKey.length;
+    //var ColorKey=this.ColorKey;
+    //var range=ColorKey.length;
     var self= this;
     promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
+      //console.log(entities);
       for (var i = 0; i < entities.length; i++) {
         var entity=entities[i];
         if(entity.properties[self.ColorValue]!==undefined){
-          for(var j=1;j<range;j++){
-            if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
-            var rgb=ColorKey[range-j].color._rgb;
-            if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
-            if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
-            }else if(entity.properties[self.ColorValue]._value<(min+(1/range)*(max-min)).toFixed(2)){
-              var rgb=ColorKey[range-1].color._rgb;
-              if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
-              if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
-            }
-          }
+          var texts=entity.properties[self.ColorValue]._value;
+          var rgb=self.ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
+          if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+          if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
         }
       }
     });
@@ -873,7 +858,11 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       var max = this.dataService.MaxColor;
       var min=this.dataService.MinColor;
       var ChromaScale=self.ChromaScale;
-      for(var j=1;j<range;j++){
+      var texts=entity.properties[self.ColorValue]._value;
+      var rgb=self.ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
+      if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+      if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+      /*for(var j=1;j<range;j++){
         if(entity.properties[self.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
         var rgb=ColorKey[range-j].color._rgb;
         entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
@@ -881,7 +870,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           var rgb=ColorKey[range-1].color._rgb;
           entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
         }
-      }
+      }*/
+
     }else{
       var Colortexts=self.dataService.Colortexts;
       var initial:boolean=false;

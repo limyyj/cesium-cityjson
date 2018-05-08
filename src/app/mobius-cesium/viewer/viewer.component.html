@@ -21,6 +21,18 @@
           </tr>
         </table>
   </div>
+   <div id="ColorBar" *ngIf="CatNumtexts!==undefined" >
+        <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 88%;margin-left: 9%">
+       <tr >
+          <th *ngFor="let cattext of CatNumtexts;" style="text-align:right;width: 7%"><div  style="width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{cattext.text}}</div></th><!-- writing-mode:vertical-lr; -->
+        </tr>
+    </table>
+  <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;">
+       <tr>
+          <th  *ngFor="let cattext of CatNumtexts;let indx=index" style="width: 0.5px;" ><div [ngStyle]="{ 'background-color': cattext.color}" ><div style="border-color: black">&nbsp;</div></div></th>
+        </tr>
+    </table>
+  </div>
   <div>
     <table id="cesium-infoBox-defaultTable" style="width: 140px;position:absolute;padding:4px;background-color:white;display: none;">
        <tr *ngFor="let pickupArr of pickupArrs"><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px"><div matTooltip={{pickupArr.name}} style="width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.name}}</div></th><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px"><div matTooltip={{pickupArr.data}} style="width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.data}}</div></th></tr>

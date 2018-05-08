@@ -25,6 +25,7 @@ export class ViewerComponent extends DataSubscriber {
   Min:number;
   texts:Array<any>;
   Cattexts:Array<any>;
+  CatNumtexts:Array<any>;
   pickupArrs:Array<any>;
   ShowColorBar:boolean=false;
 
@@ -66,9 +67,6 @@ export class ViewerComponent extends DataSubscriber {
   notify(message: string): void{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
-
-
-
       /*if(this.data!==undefined){
         for(var i=0;i<this.data["features"].length;i++){
           for(var j=0;j<this.data["features"][i]["geometry"].coordinates[0].length;j++){
@@ -262,12 +260,26 @@ export class ViewerComponent extends DataSubscriber {
     }
     if(typeof(texts[0])==="string"){
       this.Cattexts=[];
-      for(var j=0;j<texts.length;j++){
-        var ColorKey:any=[];
-        ColorKey.text=texts[j];
-        this.ChromaScale=chroma.scale("SPECTRAL");
-        ColorKey.color=this.ChromaScale((j/texts.length).toFixed(2));
-        this.Cattexts.push(ColorKey);
+      this.CatNumtexts=[];
+      if(texts.length<=12){
+        for(var j=0;j<texts.length;j++){
+          var ColorKey:any=[];
+          ColorKey.text=texts[j];
+          this.ChromaScale=chroma.scale("SPECTRAL");
+          ColorKey.color=this.ChromaScale((j/texts.length).toFixed(2));
+          this.Cattexts.push(ColorKey);
+        }
+      }else{
+        texts=texts.sort();
+        for(var j=0;j<this.Colorbar.length;j++){
+          var ColorKey:any=[];
+          if(j===0){ColorKey.text=texts[j];}else if(j===this.Colorbar.length-1) {ColorKey.text=texts[texts.length-1];}
+          else{ColorKey.text=null;}
+          //ColorKey.text=texts[j];
+          //this.ChromaScale=chroma.scale("SPECTRAL");
+          ColorKey.color=this.Colorbar[j]//this.ChromaScale((j/texts.length).toFixed(2));
+          this.CatNumtexts.push(ColorKey);
+        }
       }
     }
     if(this.ShowColorBar===false){
@@ -312,7 +324,11 @@ export class ViewerComponent extends DataSubscriber {
           var max=this.dataService.MaxColor;
           var min=this.dataService.MinColor;
           var ChromaScale=this.ChromaScale;
-          for(var j=1;j<range;j++){
+          var texts=entity.properties[this.ColorValue]._value;
+          var rgb=this.ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
+          if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+          if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+          /*for(var j=1;j<range;j++){
             if(entity.properties[this.ColorValue]._value>=(min+(j/range)*(max-min)).toFixed(2)){
             var rgb=ColorKey[range-j].color._rgb;
             if(entity.polygon!==undefined) entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
@@ -322,7 +338,7 @@ export class ViewerComponent extends DataSubscriber {
               if(entity.polygon!==undefined)  entity.polygon.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
               if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             }
-          }
+          }*/
         }else{
           var ChromaScale=this.ChromaScale;
           var Colortexts=this.dataService.Colortexts;
@@ -401,14 +417,14 @@ export class ViewerComponent extends DataSubscriber {
 
   showAttribs(event){
     if(this.data!==undefined){
-      if(this.data["crs"]!==undefined&&this.data["crs"].cesium!==undefined){
-        if(this.data["crs"].cesium.select!==undefined){
+      if(this.data["cesium"]!==undefined){
+        if(this.data["cesium"].select!==undefined){
           if(this.viewer.selectedEntity!==undefined){
             var pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
             this.pickupArrs=[];
             this.pickupArrs.push({name:"ID",data:pickup.id.id});
-            for(var i=0;i<this.data["crs"].cesium.select.length;i++){
-              var propertyName:string=this.data["crs"].cesium.select[i];
+            for(var i=0;i<this.data["cesium"].select.length;i++){
+              var propertyName:string=this.data["cesium"].select[i];
               this.pickupArrs.push({name:propertyName,data:this.dataService.SelectedEntity.properties[propertyName]._value})
             }
             var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
