@@ -36,7 +36,7 @@ export class ViewerComponent extends DataSubscriber {
     this.ChromaScale=chroma.scale("SPECTRAL");
     for(var i=79;i>-1;i--){
         this.Colorbar.push(this.ChromaScale(i/80));
-      }
+    }
   }
   ngDoCheck(){
     if(this.ColorValue!==this.dataService.ColorValue){
@@ -46,6 +46,7 @@ export class ViewerComponent extends DataSubscriber {
       for(var i=79;i>-1;i--){
         this.Colorbar.push(this.ChromaScale(i/80));
       }
+
       this.Colortext();
     }
     if(this.Max!==this.dataService.MaxColor){
@@ -65,6 +66,8 @@ export class ViewerComponent extends DataSubscriber {
   notify(message: string): void{
     if(message == "model_update" ){
       this.data = this.dataService.getGsModel(); 
+
+
 
       /*if(this.data!==undefined){
         for(var i=0;i<this.data["features"].length;i++){
@@ -103,6 +106,9 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
     });
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
+    /*viewer.scene.imageryLayers.removeAll();
+    console.log(viewer.scene.imageryLayers);
+    viewer.scene.globe.baseColor = Cesium.Color.GRAY;*/
     if(this.data!==undefined){
       this.viewer=viewer;
       this.dataService.viewer=this.viewer;
@@ -136,7 +142,7 @@ export class ViewerComponent extends DataSubscriber {
             });
           }
         }
-        if(entities[0].polygon!==undefined) {self.ShowColorBar=true;console.log(self.ShowColorBar);}else{self.ShowColorBar=false;}
+        if(entities[0].polygon!==undefined) {self.ShowColorBar=true;}else{self.ShowColorBar=false;}
         self.dataService.poly_center=self.poly_center;
         self.propertyNames=entities[0].properties.propertyNames;
         for(var i=0;i<self.propertyNames.length;i++){

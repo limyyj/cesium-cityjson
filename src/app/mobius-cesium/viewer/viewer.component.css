@@ -19,7 +19,7 @@ body{
   padding: 2px 5px;
   position: absolute;
   display:inline-block;
-  bottom: 1px;
+  bottom: 40px;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   table-layout:fixed !important;
