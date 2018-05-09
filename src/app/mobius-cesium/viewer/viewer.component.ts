@@ -104,9 +104,6 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
     });
     document.getElementsByClassName('cesium-viewer-bottom')[0].remove();
-    /*viewer.scene.imageryLayers.removeAll();
-    console.log(viewer.scene.imageryLayers);
-    viewer.scene.globe.baseColor = Cesium.Color.GRAY;*/
     if(this.data!==undefined){
       this.viewer=viewer;
       this.dataService.viewer=this.viewer;
@@ -323,6 +320,7 @@ export class ViewerComponent extends DataSubscriber {
         if(typeof(entity.properties[this.ColorValue]._value)==="number"){
           var max=this.dataService.MaxColor;
           var min=this.dataService.MinColor;
+
           var ChromaScale=this.ChromaScale;
           var texts=entity.properties[this.ColorValue]._value;
           var rgb=this.ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
@@ -340,8 +338,9 @@ export class ViewerComponent extends DataSubscriber {
             }
           }*/
         }else{
-          var ChromaScale=this.ChromaScale;
+          var ChromaScale;
           var Colortexts=this.dataService.Colortexts;
+          if(Colortexts.length>12){ChromaScale=this.ChromaScale.domain([1,0]);}else{ChromaScale=this.ChromaScale;}
           var initial:boolean=false;
           for(var j=0;j<Colortexts.length;j++){
             if(entity.properties[this.ColorValue]._value===Colortexts[j].text) {
