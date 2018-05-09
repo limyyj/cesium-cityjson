@@ -1,21 +1,17 @@
 <div id="toolwindow">
-  <mat-tab-group class="mat-tab-group">
-    
-    <!-- <mat-tab label="&nbsp;&nbsp;&nbsp;&nbsp;Key&nbsp;&nbsp;&nbsp;&nbsp;" >
-      <div id="KeyView" style="margin-left: 5px;margin-top: 5px;">
-        <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-          <tr *ngFor="let Key of ColorKey">
-            <th  style="width: 40px;"><div [ngStyle]="{ 'background-color': Key.color}" >&nbsp;&nbsp;&nbsp;</div></th>
-            <th  style="font-size: 10px;font-weight: normal;color:#395d73;width: 130px;height: 14px"><div matTooltip={{Key.text}}  style="width: 130px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{Key.text}}</div></th>
-          </tr>
-        </table>
-    </div>
-    </mat-tab> -->
+  <mat-tab-group class="mat-tab-group" style="height: 100%;">
     <mat-tab label="&nbsp;Visualise&nbsp;">
-      <div id="SettingView" style="margin-left: 5px;margin-top: 5px;" >
+      <div id="SettingView" style="background-color: rgba(20,20,20,0.5);height: 100%;" >
         <table>
           <tr>
-          <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color</div></th>
+          <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Imagery</div></th>
+          <th style="width:80px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="button" value="Disable" style="color:#395d73;width: 80px;height: 25px;" (click)="changeImagery()"></div></th>
+        </tr>
+      </table>
+      <hr>
+        <table>
+          <tr>
+          <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color</div></th>
           <th><div>
             <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="selectColor">
               <option class="cesium-option"  *ngFor="let ColorName of ColorNames" value={{ColorName}}>{{ColorName}}</option>
@@ -24,17 +20,17 @@
           </tr>
           </table>
           <table>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
-          <th style="width:60px;height: 25px;"><input type="text"  value={{Min}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeColorMin($event.target.value)"></th></tr>  
+          <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
+          <th style="width:80px;height: 25px;"><input type="text"  value={{Min}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeColorMin($event.target.value)"></th></tr>  
           </table>
           <table >
-          <tr ><th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
-          <th style="width:60px;"><input type="text" value={{Max}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeColorMax($event.target.value)"></th></tr>
+          <tr ><th style="width:80px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
+          <th style="width:80px;"><input type="text" value={{Max}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeColorMax($event.target.value)"></th></tr>
       </table>
         <hr>
           <table>
           <tr>
-          <th class="colorkey" style="width: 60px"><div class="Hide" style="width: 60px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Height</div></th>
+          <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Extrude</div></th>
           <th><div>
             <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="selectHeight">
                <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
@@ -43,26 +39,27 @@
           </tr>
         </table>
         <table>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
-          <th style="width:60px;height: 25px;"><input type="text"  value={{HeightMin}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMin($event.target.value)"></th></tr>  
+          <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min</div></th>
+          <th style="width:80px;height: 25px;"><input type="text"  value={{HeightMin}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMin($event.target.value)"></th></tr>  
           </table>
           <table >
-          <tr ><th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
-          <th style="width:60px;"><input type="text" value={{HeightMax}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMax($event.target.value)"></th></tr>
+          <tr ><th style="width:80px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
+          <th style="width:80px;"><input type="text" value={{HeightMax}} style="width: 80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMax($event.target.value)"></th></tr>
       </table>
        <table>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Scale</div></th>
-          <th style="width:80px;height: 25px;"><div style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;"><input type="text" value={{ScaleValue}} (change)="changescale($event.target.value)" style="width:80px;color:#395d73;"></div></th>
-          <th style="width:85px;height: 25px;"><div style="width:85px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th></tr>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Invert</div></th>
+          <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Scale</div></th>
+            <!-- <th style="width:80px;height: 25px;"><input type="text"  value={{HeightMin}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMin($event.target.value)"></th> -->
+          <th style="width:80px;height: 25px;"><input type="text" value={{ScaleValue}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changescale($event.target.value)" ></th>
+          <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th></tr>
+          <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Invert</div></th>
           <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckOpp" (click)="checkopp();changeopp()"></div></th></tr>
-          <tr ><th style="width:60px;height: 25px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Height Chart</div></th>
-          <th style="width:85px;height: 25px;"><div style="width:85px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckExtrude" (click)="checkExtrude();changeExtrude();Hide()"></div></th></tr>  
+          <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Height Chart</div></th>
+          <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckExtrude" (click)="checkExtrude();changeExtrude();Hide()"></div></th></tr>  
       </table>
       <hr>
       <table>
         <tr>
-        <th class="colorkey" style="width: 80px;height: 25px;"><div class="Hide" style="width: 80px;height: 25px;color:#ddd !important;border-color:#395d73;border:0;text-align: left;font-weight: normal;"><input type="button" value="Add Filter" style="color:#395d73;width: 80px;height: 25px;" (click)="addHide()"></div></th>
+        <th class="colorkey" style="width: 75px;height: 25px;"><div class="Hide" style="width: 75px;height: 25px;color:#ddd !important;border-color:#395d73;border:0;text-align: left;font-weight: normal;"><input type="button" value="Add Filter" style="color:#395d73;width: 75px;height: 25px;" (click)="addHide()"></div></th>
         <th style="width:20px;height: 25px;"><div style="width:20px;height: 25px;margin-left: 10px">
           <select class="cesium-button-select"  (change)="ChangeHeight($event.target.value)">
              <option class="cesium-option"  *ngFor="let ColorName of ColorNames" value={{ColorName}}>{{ColorName}}</option>
@@ -72,7 +69,7 @@
       <div class="hide-container" style="margin-top:5px;">
         <div *ngFor="let item of hideElementArr;" id={{item.divid}}>
       <table>
-        <tr ><th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
+        <tr ><th style="width:85px;height: 25px;"><div style="width:85px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
         <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;"><div style="width:40px;height: 25px;">
           <select class="cesium-button-select" [ngModel]="item.RelaHide" (change)="Changerelation($event.target.value,item.id)" style="width:40px;height: 25px;">
              <option class="cesium-option" value=0>></option>
@@ -90,7 +87,8 @@
           <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
             <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
           </select></div></th>
-        <th style="width:30px;height: 25px;" id={{item.id}}><button class="button"  style="width:30px;height: 25px;" (click)="deleteHide(item.id)"><span id={{item.id}} ><i class="fa fa-trash"  style="color:#395d73;"></i></span></button></th></tr>
+        <th style="width:20px;height: 25px;" id={{item.id}}><span id={{item.id}} (click)="deleteHide(item.id)" style="width:20px;height: 25px;cursor:pointer;"><i class="material-icons" style="color:#ddd;font-size:16px">delete</i></span></th>
+        <th style="width:20px;height: 25px;" id={{item.id}}><span id={{item.id}} (click)="Disable(item.id)" style="width:20px;height: 25px;cursor:pointer;"><i class="material-icons" style="color:#ddd;font-size:16px">check_circle</i></span></th></tr>
       </table>
       <table>
         <tr>
@@ -104,7 +102,7 @@
       </div>
     </mat-tab>
     <mat-tab label="Attributes" >
-      <div id="AttribsView"  style="margin-left: 5px;margin-top: 5px;" >
+      <div id="AttribsView"  style="background-color: rgba(20,20,20,0.5);height: 100%;" >
         <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
           <tr >
             <th style="font-size: 10px;font-weight: normal;width: 85px;"><div style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">ID</div></th>
@@ -120,7 +118,7 @@
       </div>
     </mat-tab>
     <mat-tab label="&nbsp;Publish&nbsp;" >
-      <app-publish ></app-publish>
+      <div style="background-color: rgba(20,20,20,0.5);height: 100%;" ><app-publish  ></app-publish></div>
     </mat-tab>
   </mat-tab-group>
 </div>

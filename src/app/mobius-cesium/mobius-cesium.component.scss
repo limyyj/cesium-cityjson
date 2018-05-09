@@ -25,15 +25,30 @@
 
 }
 #Toggle{
-  position: absolute;
+  /* position: absolute;
   top: calc(50% - 40px);
   z-index: 100;
   width: 30px;
   height:100px;
   font-family:sans-serif;
   border-radius: 4px;
-  background-color: gray;
-  border: 1px solid gray;
+  background-color: rgba(20,20,20,0.5); */
+  /* border: 1px solid gray; */
+  position: absolute;
+  top: 50%;
+  z-index: 200;
+  width: 30px;
+  height: 70px;
+  border-top: 1px solid gray;
+  border-right: 1px solid gray;
+  border-bottom: 1px solid gray;
+  border-radius: 4px;
+  background-color: rgba(20, 20, 20, 0.5);
+  color: #ddd;
+  text-align: center;
+  font-size: 32px;
+  line-height: 70px;
+  cursor: pointer;
 }
 
 /* split-area{

@@ -1,7 +1,7 @@
 #toolwindow{
   position: relative;
   /*background-color: #F1F1F1 !important;*/
-  background-color: rgba(20,20,20,0.5);
+  /*background-color: rgba(20,20,20,0.5);*/
   height: 100%;
   width: 100%;
   color:#ddd !important;
@@ -9,6 +9,7 @@
   font-size: 14px !important;
   line-height: 14px;
   overflow-x: hidden !important;
+  border-right: 1px solid gray;
 }
 
 /deep/.mat-tab-label, /deep/.mat-tab-label-active{
@@ -24,7 +25,7 @@
   background-color: transparent !important;
 }
 /deep/.mat-tab-labels{
-  margin-left: 5px;
+  background-color: rgba(20,20,20,0.5) !important;
 }
 /deep/.mat-tab-header{
   width: 700px !important;
@@ -51,8 +52,13 @@
   color:#395d73;
   border: 0;
   height: 20px;
-  background-color: transparent !important;
+  background-color: rgba(20,20,20,0.5) !important;
 }
+/deep/.mat-tab-body-wrapper{
+  height:100% !important;
+
+}
+
 
 /deep/split-gutter{
   background-color:rgb(138, 168, 192) !important;
@@ -78,6 +84,9 @@
     right: -7px !important;
     background-color: white !important;
     border: 1px solid #395d73 !important;
+}
+/deep/.mat-slider-track-background{
+  background-color: #ddd !important;
 }
 .mat-slider{
     width: 150px !important;

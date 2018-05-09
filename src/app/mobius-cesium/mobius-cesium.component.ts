@@ -9,7 +9,7 @@ import { trigger, state, style, transition, animate, keyframes } from '@angular/
   animations: [
     trigger('slide_in_out', [
       state('slide_in', style({
-        width: '250px',
+        width: '280px',
         // css styles when the element is in slide_in
       })),
       state('slide_out', style({
@@ -54,8 +54,11 @@ export class MobiuscesiumComponent {
     	var toggle=document.getElementById("Toggle");
     	if(this.slider_state === 'slide_out'){
     	  toggle.style.left="0px";
+        toggle.innerHTML="▹";
     	}else if(this.slider_state === 'slide_in'){
-    	  toggle.style.left="250px";
+    	  toggle.style.left="280px";
+        toggle.innerHTML="◃";
+
     	}
   	}
 }

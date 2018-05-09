@@ -50,6 +50,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   HeightInti:boolean=false;
   ColorInti:boolean=false;
   InitialTool:boolean=false;
+  CheckDisable:boolean=false;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -469,7 +470,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
         var descr=this.ceisumData.filter[i]["descr"];
         if(typeof(text)==="number"){this.HideType="number";var texts=this.Initial(propertyname);}else if(typeof(text)==="string"){this.HideType="category";var texts=this.Initial(propertyname);texts=["None"].concat(texts);}
         this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:propertyname,type:this.HideType,Category:texts,CategaryHide:text,descr:descr,RelaHide:relation,textHide: text,
-                              HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
+                              HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100,Disabletext:null});
       }
 
       
@@ -478,6 +479,38 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.dataService.HideNum=this.HideNum;
     this.Hide();
 
+  }
+
+  Disable(event){
+    var index=this.HideNum.indexOf(event);
+    var divid=String("addHide".concat(String(event)));
+    var addHide=document.getElementById(divid);
+    if(this.hideElementArr[index].Disabletext===null) {this.CheckDisable=true;}else{this.CheckDisable=false;}
+    if(this.CheckDisable===true){
+      addHide.style.background="grey";
+      if(this.hideElementArr[index].type==="number"){
+        const textHide=this.hideElementArr[index].textHide;
+        this.hideElementArr[index].Disabletext=Number(textHide);
+        if(this.hideElementArr[index].RelaHide==="0"||this.hideElementArr[index].RelaHide===0) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMin;
+        if(this.hideElementArr[index].RelaHide==="1"||this.hideElementArr[index].RelaHide===1) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMax;
+      }else if(this.hideElementArr[index].type==="category"){
+        const textHide=this.hideElementArr[index].RelaHide;
+        this.hideElementArr[index].Disabletext=Number(textHide);
+        this.hideElementArr[index].RelaHide=0;
+      }
+    }else{
+      addHide.style.background=null;
+      if(this.hideElementArr[index].type==="number"){
+        this.hideElementArr[index].textHide=this.hideElementArr[index].Disabletext;
+        this.hideElementArr[index].Disabletext=null;
+      }else if(this.hideElementArr[index].type==="category"){
+        this.hideElementArr[index].RelaHide=this.hideElementArr[index].Disabletext;
+        this.hideElementArr[index].Disabletext=null;
+      }
+    }
+    this.Hide();
+    this.dataService.hideElementArr=this.hideElementArr;
+    this.dataService.HideNum=this.HideNum;
   }
 
   Initial(HideValue):Array<any>{

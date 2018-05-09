@@ -125,7 +125,7 @@ export class ViewerComponent extends DataSubscriber {
           if(entity.polygon!==undefined) {
             entity.polygon.outlineColor = Cesium.Color.Black;                            
             var center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-            var radius=Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius/100);
+            var radius=Math.min(Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius/100),10);
             var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).longitude).toFixed(10); 
             var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).latitude).toFixed(10); 
             poly_center=[longitudeString,latitudeString,radius];

@@ -47,6 +47,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   HeightMin:number;
   HeightMax:number;
   InitialTool:boolean=false;
+  CheckDisable:boolean=false;
+  CheckImagery:boolean;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -54,6 +56,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.HideNum=[];
     this.ScaleValue=this.dataService.ScaleValue;
     this.CheckScale=this.dataService.CheckScale;
+    this.CheckImagery=this.dataService.CheckImagery;
     this.CheckOpp=this.dataService.CheckOpp;
     if(this.dataService.HideNum!==undefined) {
       this.HideNum=this.dataService.HideNum;
@@ -551,7 +554,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       var texts=this.Initial(this.HideValue);
       if(typeof(texts[0])==="number"){this.HideType="number"}else if(typeof(texts[0])==="string"){this.HideType="category";}
       this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:this.HideValue,type:this.HideType,Category:texts,CategaryHide:texts[0],RelaHide:0,textHide: Math.round(Math.min.apply(Math, texts)*100)/100,
-                                HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100});
+                                HideMax:Math.ceil(Math.max.apply(Math, texts)),HideMin:Math.round(Math.min.apply(Math, texts)*100)/100,Disabletext:null});
       
       //return;
     //}
@@ -575,6 +578,38 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.Hide();
     this.hideElementArr.splice(index,1);
     this.HideNum.splice(index,1);
+    this.dataService.hideElementArr=this.hideElementArr;
+    this.dataService.HideNum=this.HideNum;
+  }
+
+  Disable(event){
+    var index=this.HideNum.indexOf(event);
+    var divid=String("addHide".concat(String(event)));
+    var addHide=document.getElementById(divid);
+    if(this.hideElementArr[index].Disabletext===null) {this.CheckDisable=true;}else{this.CheckDisable=false;}
+    if(this.CheckDisable===true){
+      addHide.style.background="grey";
+      if(this.hideElementArr[index].type==="number"){
+        const textHide=this.hideElementArr[index].textHide;
+        this.hideElementArr[index].Disabletext=Number(textHide);
+        if(this.hideElementArr[index].RelaHide==="0"||this.hideElementArr[index].RelaHide===0) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMin;
+        if(this.hideElementArr[index].RelaHide==="1"||this.hideElementArr[index].RelaHide===1) this.hideElementArr[index].textHide=this.hideElementArr[index].HideMax;
+      }else if(this.hideElementArr[index].type==="category"){
+        const textHide=this.hideElementArr[index].RelaHide;
+        this.hideElementArr[index].Disabletext=Number(textHide);
+        this.hideElementArr[index].RelaHide=0;
+      }
+    }else{
+      addHide.style.background=null;
+      if(this.hideElementArr[index].type==="number"){
+        this.hideElementArr[index].textHide=this.hideElementArr[index].Disabletext;
+        this.hideElementArr[index].Disabletext=null;
+      }else if(this.hideElementArr[index].type==="category"){
+        this.hideElementArr[index].RelaHide=this.hideElementArr[index].Disabletext;
+        this.hideElementArr[index].Disabletext=null;
+      }
+    }
+    this.Hide();
     this.dataService.hideElementArr=this.hideElementArr;
     this.dataService.HideNum=this.HideNum;
   }
@@ -893,58 +928,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
 
   changeopp(){
-    /*var Max=this.HeightMax;
-    var scale:number=Number(this.ScaleValue);
-    if(this.CheckOpp===true){
-      var promise=this.dataService.cesiumpromise;
-      var self= this;
-      if(self.CheckScale===true){
-        //var scale:number=self.ScaleValue;
-        if(self.CheckExtrude===false){
-          promise.then(function(dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-              var entity=entities[i];
-              entity.polylin.show=false;
-              if(entity.properties[self.HeightValue]!==undefined){
-                if(entity.properties[self.HeightValue]._value!==" "){
-                  entity.polygon.extrudedHeight =(Math.min((self.HeightMax-entity.properties[self.HeightValue]._value),Max))*scale;
-                }
-              }
-            }
-          });
-        }else{
-          promise.then(function(dataSource) {
-            var entities = dataSource.entities.values;
-            for (var i = 0; i < entities.length; i++) {
-              var entity=entities[i];
-              if(entity.properties[self.HeightValue]!==undefined){
-                if(entity.properties[self.HeightValue]._value!==" "){
-                  entity.polygon.extrudedHeight =(Math.min(Max-entity.properties[self.HeightValue]._value,Max))*scale;
-                }
-              }
-            }
-          });
-        }
-      }else{
-        promise.then(function(dataSource) {
-          var entities = dataSource.entities.values;
-          for (var i = 0; i < entities.length; i++) {
-            var entity=entities[i];
-            if(entity.properties[self.HeightValue]!==undefined){
-            if(entity.properties[self.HeightValue]._value!==" "){
-              entity.polygon.extrudedHeight =Math.min(Max-entity.properties[self.HeightValue]._value,Max);
-            }
-            }
-          }
-        });
-      }
-    }else{
-      this.changescale(this.ScaleValue);
-    }*/
-    
-    //this.changeExtrude();
-    //this.Hide();
     if(this.dataService.hideElementArr===undefined||this.dataService.hideElementArr.length===0){
       this.changeExtrude();
     }else{
@@ -1109,6 +1092,13 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   checkExtrude(){
     this.CheckExtrude=!this.CheckExtrude;
     this.dataService.CheckExtrude=this.CheckExtrude;
+
+  }
+  changeImagery(){
+    if(this.viewer!==undefined){
+      this.viewer.scene.imageryLayers.removeAll();
+      this.viewer.scene.globe.baseColor = Cesium.Color.GRAY;
+    }
 
   }
 

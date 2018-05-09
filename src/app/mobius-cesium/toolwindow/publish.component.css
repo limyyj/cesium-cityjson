@@ -1,7 +1,5 @@
 #publishwindow{
   position: relative;
-  /*background-color: #F1F1F1 !important;*/
-  background-color: rgba(20,20,20,0.5);
   height: 100%;
   width: 100%;
   color:#ddd !important;
@@ -11,7 +9,7 @@
   overflow-x: hidden !important;
 }
 
-/deep/.mat-tab-label, /deep/.mat-tab-label-active{
+/*/deep/.mat-tab-label, /deep/.mat-tab-label-active{
   min-width: 60px!important;
   padding: 3px!important;
   margin: 3px!important;
@@ -24,7 +22,7 @@
   background-color: transparent !important;
 }
 /deep/.mat-tab-labels{
-  margin-left: 5px;
+  background-color: rgba(20,20,20,0.5) !important;
 }
 /deep/.mat-tab-header{
   width: 700px !important;
@@ -51,9 +49,10 @@
   color:#395d73;
   border: 0;
   height: 20px;
-  background-color: transparent !important;
+  background-color: rgba(20,20,20,0.5)  !important;
 }
 
+*/
 /deep/split-gutter{
   background-color:rgb(138, 168, 192) !important;
 }
@@ -78,6 +77,9 @@
     right: -7px !important;
     background-color: white !important;
     border: 1px solid #395d73 !important;
+}
+/deep/.mat-slider-track-background{
+  background-color: #ddd !important;
 }
 .mat-slider{
     width: 150px !important;
