@@ -182,13 +182,13 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.dataService.HeightKey=this.HeightKey;
     this.dataService.HeightValue=this.HeightValue;
 
-    if(cesiumData["Filter"]!==undefined&&cesiumData["Filter"].length!==0){
-      data.filter=cesiumData["Filter"];
+    if(cesiumData["filters"]!==undefined&&cesiumData["filters"].length!==0){
+      data.filter=cesiumData["filters"];
     }
     this.ceisumData=data;
     this.dataService.ceisumData=this.ceisumData;
     this.onChangeColor(this.ColorValue);
-    if(cesiumData["Filter"]!==undefined){
+    if(cesiumData["filters"]!==undefined){
       this.addHide();
     }
     
@@ -466,7 +466,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
         }
         var propertyname=this.ceisumData.filter[i]["name"];
         var relation=Number(this.ceisumData.filter[i]["relation"]);
-        var text=this.ceisumData.filter[i]["text"];
+        var text=this.ceisumData.filter[i]["value"];
         var descr=this.ceisumData.filter[i]["descr"];
         if(typeof(text)==="number"){this.HideType="number";var texts=this.Initial(propertyname);}else if(typeof(text)==="string"){this.HideType="category";var texts=this.Initial(propertyname);texts=["None"].concat(texts);}
         this.hideElementArr.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:propertyname,type:this.HideType,Category:texts,CategaryHide:text,descr:descr,RelaHide:relation,textHide: text,
