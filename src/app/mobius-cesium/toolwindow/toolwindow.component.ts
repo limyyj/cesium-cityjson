@@ -56,7 +56,6 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.HideNum=[];
     this.ScaleValue=this.dataService.ScaleValue;
     this.CheckScale=this.dataService.CheckScale;
-    this.CheckImagery=this.dataService.CheckImagery;
     this.CheckOpp=this.dataService.CheckOpp;
     if(this.dataService.HideNum!==undefined) {
       this.HideNum=this.dataService.HideNum;
