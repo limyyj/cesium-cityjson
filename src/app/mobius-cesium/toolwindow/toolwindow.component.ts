@@ -229,6 +229,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.Min=min;
       this.colorByNum();
     }else if(typeof(texts[0])==="string"){
+      if(texts.length>12) {texts=texts.sort();}
       this.texts=texts;
       for(var j=0;j<texts.length;j++){
         var ColorKey:any=[];
@@ -331,10 +332,11 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   colorByCat(){
     var Name=this.ColorValue;
     var texts=[];
+    var ChromaScale;
     for(var i=0;i<this.ColorKey.length;i++){
       texts.push(this.ColorKey[i].text)
     }
-    var ChromaScale=this.ChromaScale;
+    if(texts.length>12) {ChromaScale=this.ChromaScale.domain([1,0]);}else{ChromaScale=this.ChromaScale;}
     var promise=this.dataService.cesiumpromise;
     promise.then(function(dataSource) {
     var self= this;
@@ -712,7 +714,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     var propertyname:any=[];
     var relation:any=[];
     var text:any=[];
-    var scale:number=this.ScaleValue;
+    var scale:number
+    if(this.CheckScale===true){scale=this.ScaleValue;}else{scale=1;}
     var Max=this.HeightMax;
     var Min=this.HeightMin;
     if(Min<0){Min=Math.abs(Min);}else{Min=0;}
@@ -807,6 +810,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
               }
             }else if(typeof(value)==="string"){
               if (self._compareCat(value, text[j], relation[j])) {
+
                 if(entity.polygon!==undefined){
                   entity.polygon.extrudedHeight = 0;
                   entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
@@ -818,7 +822,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                 if(entity.polyline!==undefined) entity.polyline.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
               }else{
                 self.ColorByNumCat(entity);
-                if(self.CheckScale===true){
+                //if(self.CheckScale===true){
                   if(self.CheckOpp===true){
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
@@ -829,7 +833,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                    entity.polygon.extrudedHeight =((self.HeightMax-entity.properties[self.HeightValue]._value)+Min)*scale;
+                      if(self.HeightValue!==undefined&&entity.properties[self.HeightValue]._value!==undefined)
+                        entity.polygon.extrudedHeight =((self.HeightMax-entity.properties[self.HeightValue]._value)+Min)*scale;
                     }
                   }else{
                     if(self.CheckExtrude===true){
@@ -841,12 +846,13 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                      entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max)+Min)*scale;
+                      if(self.HeightValue!==undefined&&entity.properties[self.HeightValue]._value!==undefined)
+                        entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max)+Min)*scale;
                     }
                   }
-                }
+                /*}
                 else{
-                  if(self.CheckOpp===true){
+                  /*if(self.CheckOpp===true){
                     if(self.CheckExtrude===true){
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
@@ -871,7 +877,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                       entity.polygon.extrudedHeight =Math.min(entity.properties[self.HeightValue]._value,Max)+Min;//entity.properties[self.HeightValue]._value;
                     }
                   }
-                }
+                }*/
               }
 
             }

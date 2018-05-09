@@ -357,6 +357,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
         this.Min=min;
         this.colorByNum();
       }else if(typeof(texts[0])==="string"){
+        if(texts.length>12) {texts=texts.sort();}
         this.texts=texts;
         for(var j=0;j<texts.length;j++){
           var ColorKey:any=[];
@@ -419,10 +420,11 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   colorByCat(){
     var Name=this.ColorValue;
     var texts=[];
+    var ChromaScale;
     for(var i=0;i<this.ColorKey.length;i++){
       texts.push(this.ColorKey[i].text)
     }
-    var ChromaScale=this.ChromaScale;
+    if(texts.length>12) {ChromaScale=this.ChromaScale.domain([1,0]);}else{ChromaScale=this.ChromaScale;}
     var promise=this.dataService.cesiumpromise;
     promise.then(function(dataSource) {
     var self= this;
