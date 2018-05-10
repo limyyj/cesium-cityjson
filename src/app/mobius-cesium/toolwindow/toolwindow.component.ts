@@ -221,6 +221,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       var min = Math.min.apply(Math, texts);
       for(var j=0;j<texts.length;j++){
         var ColorKey:any=[];
+        this.ChromaScale=chroma.scale("SPECTRAL");
         var Color=this.ChromaScale(Number(((max-texts[j])/(max-min)).toFixed(2)));
         ColorKey.color=Color;
         ColorKey.text=texts[j];
@@ -894,6 +895,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
 
   ColorByNumCat(entity){
     var ChromaScale=this.ChromaScale;
+    //console.log(this.ChromaScale(0))
     var ColorKey=this.ColorKey;
     var range=ColorKey.length;
     var self=this;
