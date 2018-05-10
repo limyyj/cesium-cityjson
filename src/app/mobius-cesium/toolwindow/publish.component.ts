@@ -585,7 +585,6 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     var relation:any=[];
     var text:any=[];
     var scale:number=this.ScaleValue;
-    console.log(scale,this.CheckScale);
     var Max:number;
     var Min:number;
     if(this.ceisumData["heightMax"]!==undefined){
