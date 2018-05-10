@@ -41,6 +41,8 @@ export class MobiuscesiumComponent {
 	}
 	ngOnInit() {
 		this.setModel(this.data);
+    //this.mode="viewer";
+    this.dataService.setMode(this.mode);
 
 	}
 	ngDoCheck(){
