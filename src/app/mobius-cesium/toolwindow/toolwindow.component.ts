@@ -49,6 +49,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   InitialTool:boolean=false;
   CheckDisable:boolean=false;
   CheckImagery:boolean;
+  mode:string;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -70,7 +71,8 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(message == "model_update" ){
       this.data=undefined;
       this.viewer=undefined;
-      this.data = this.dataService.getGsModel(); 
+      this.data = this.dataService.getGsModel();
+      this.mode=this.dataService.mode; 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
           if(this.data["cesium"]===undefined){

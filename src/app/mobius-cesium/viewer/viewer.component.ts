@@ -416,7 +416,8 @@ export class ViewerComponent extends DataSubscriber {
 
   showAttribs(event){
     if(this.data!==undefined){
-      if(this.data["cesium"]!==undefined){
+      //if(this.data["cesium"]!==undefined){
+        if(this.data["cesium"]!==undefined){
         if(this.data["cesium"].select!==undefined){
           if(this.viewer.selectedEntity!==undefined){
             var pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));

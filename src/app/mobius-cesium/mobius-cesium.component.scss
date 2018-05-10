@@ -35,7 +35,7 @@
   background-color: rgba(20,20,20,0.5); */
   /* border: 1px solid gray; */
   position: absolute;
-  top: 50%;
+  top: calc(50% - 60px);
   z-index: 200;
   width: 30px;
   height: 70px;
