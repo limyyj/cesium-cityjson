@@ -35,6 +35,7 @@ export class DataService {
   InitialTool:boolean;
   InitialPub:boolean;
   mode:string;
+  CheckInvert:boolean=false;
 
 
   sendMessage(message?: string) {

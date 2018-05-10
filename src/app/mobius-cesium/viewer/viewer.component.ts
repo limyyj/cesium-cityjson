@@ -31,12 +31,16 @@ export class ViewerComponent extends DataSubscriber {
   pickupArrs:Array<any>;
   ShowColorBar:boolean=false;
   darkStyleEsri:any;
+  CheckInvert:boolean;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
     super(injector);
     this.myElement = myElement;
     this.Colorbar=[];
+    this.CheckInvert=this.dataService.CheckInvert;
+    /*if(this.dataService.CheckInvert!==true) {this.ChromaScale=chroma.scale("SPECTRAL");}
+    else{this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);}*/
     this.ChromaScale=chroma.scale("SPECTRAL");
     for(var i=79;i>-1;i--){
         this.Colorbar.push(this.ChromaScale(i/80));
@@ -62,6 +66,12 @@ export class ViewerComponent extends DataSubscriber {
       this.Min=this.dataService.MinColor;
       this.Colortext();
     }
+    /*if(this.CheckInvert!==this.dataService.CheckInvert){
+      this.CheckInvert=this.dataService.CheckInvert;
+      if(this.dataService.CheckInvert!==true) {this.ChromaScale=chroma.scale("SPECTRAL");}
+      else{this.ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);}
+      this.Colortext();
+    }*/
   }
 
   ngOnInit() {

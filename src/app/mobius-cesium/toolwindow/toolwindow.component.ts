@@ -50,6 +50,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   CheckDisable:boolean=false;
   CheckImagery:boolean;
   mode:string;
+  CheckInvert:boolean;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -58,6 +59,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     this.ScaleValue=this.dataService.ScaleValue;
     this.CheckScale=this.dataService.CheckScale;
     this.CheckOpp=this.dataService.CheckOpp;
+    this.CheckInvert=this.dataService.CheckInvert;
     if(this.dataService.HideNum!==undefined) {
       this.HideNum=this.dataService.HideNum;
       this.hideElementArr=this.dataService.hideElementArr;
@@ -1108,5 +1110,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }
 
   }
+
+  /*changeinvert(){
+    this.CheckInvert=this.dataService.CheckInvert;
+    this.CheckInvert=!this.CheckInvert;
+    if(this.CheckInvert===true){
+      
+    }
+    console.log(this.CheckInvert);
+    this.dataService.CheckInvert=this.CheckInvert;
+  }*/
 
 }
