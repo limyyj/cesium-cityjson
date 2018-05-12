@@ -70,6 +70,9 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
  
   ngOnInit() {
+    this.data = this.dataService.getGsModel();
+    this.mode=this.dataService.mode; 
+    this.LoadData(this.data);
   }
 
   notify(message: string): void{

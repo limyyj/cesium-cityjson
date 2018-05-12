@@ -67,6 +67,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   }
  
   ngOnInit() {
+    this.data = this.dataService.getGsModel();
+    this.mode=this.dataService.mode; 
+    this.LoadData(this.data);
   }
 
   notify(message: string): void{
@@ -78,7 +81,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
           //if(this.data["cesium"]!==undefined){
-            if(this.mode==="viewer")
+            //if(this.mode==="viewer")
             this.LoadData(this.data);
             /*this.InitialTool=false;
 
