@@ -10,6 +10,7 @@ import * as chroma from "chroma-js";
   styleUrls: ['./toolwindow.component.css']
 })
 export class ToolwindowComponent extends DataSubscriber implements OnInit{
+  //@Output() selectChange
   myElement;
   data:any;
   viewer:any;
@@ -51,6 +52,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   CheckImagery:boolean;
   mode:string;
   CheckInvert:boolean;
+  //MatTab:string;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -64,6 +66,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.HideNum=this.dataService.HideNum;
       this.hideElementArr=this.dataService.hideElementArr;
     }
+    //this.MatTab=
   }
  
   ngOnInit() {
@@ -77,12 +80,13 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       this.mode=this.dataService.mode; 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
-          if(this.data["cesium"]===undefined){
+          //if(this.data["cesium"]===undefined){
+            if(this.mode==="editor")
               this.LoadData(this.data);
-              this.InitialTool=true;
+              /*this.InitialTool=true;
           }else{
             this.InitialTool=false;
-          }
+          }*/
         }
       }
       catch(ex){
@@ -102,7 +106,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   ngDoCheck(){
-    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined&&this.InitialTool===true){
+    if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined){
        if(this.ID!==this.dataService.SelectedEntity._id){
           this.ID=this.dataService.SelectedEntity._id;
           this.Properties=[];
@@ -114,7 +118,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           }
         }
     }
-    if(this.viewer!==undefined&&this.InitialTool===true){
+    if(this.viewer!==undefined){
      if(this.ColorValue!==this.dataService.ColorValue||this.ColorNames!==this.dataService.propertyNames){
         this.ColorValue=this.dataService.ColorValue;
         this.ColorNames=this.dataService.propertyNames;
