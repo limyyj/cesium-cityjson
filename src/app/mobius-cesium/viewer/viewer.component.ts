@@ -314,6 +314,8 @@ export class ViewerComponent extends DataSubscriber {
         var Max=this.Max;
         var Min=this.Min;
       }
+      Min=Number(Min);
+      Max=Number(Max);
       if(Max<=1){
         this.texts=[Min];
         for(var i=1;i<10;i++){
@@ -348,9 +350,9 @@ export class ViewerComponent extends DataSubscriber {
         var number=String((Max/1000000000).toFixed(2)).concat("B");
         this.texts.push(number);
       }else if(Max>=1&&Max<=1000){
-        this.texts=[Math.round(Min)];
+        this.texts=[Number(Min).toFixed(3)];
         for(var i=1;i<10;i++){
-          this.texts.push(Math.round(Min+(Max-Min)*(i/10)));
+          this.texts.push(Number(Min+(Max-Min)*(i/10)).toFixed(3));
         }
         this.texts.push(Math.round(Max));
       }
