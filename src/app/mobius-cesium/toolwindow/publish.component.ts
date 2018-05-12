@@ -126,6 +126,10 @@ export class PublishComponent extends DataSubscriber implements OnInit{
         this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["name"]);
       }
       this.HeightValue=this.HeightKey[0];
+      let self=this;
+      setTimeout(function(){
+        self.onChangeHeight(self.HeightKey[0]);
+      },3000)
     }
     if(cesiumData["colour"]!==undefined){
       if(cesiumData["colour"].descr!==undefined) data.colorDescr=cesiumData["colour"].descr;
