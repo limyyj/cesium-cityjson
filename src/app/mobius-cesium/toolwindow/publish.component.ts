@@ -51,6 +51,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   ColorInti:boolean=false;
   InitialTool:boolean=false;
   CheckDisable:boolean=false;
+  mode:string;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
@@ -73,15 +74,17 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.data=undefined;
       this.viewer=undefined;
       this.data = this.dataService.getGsModel();
+      this.mode=this.dataService.mode; 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
-          if(this.data["cesium"]!==undefined){
+          //if(this.data["cesium"]!==undefined){
+            if(this.mode==="viewer")
             this.LoadData(this.data);
-            this.InitialTool=false;
+            /*this.InitialTool=false;
 
           }else{
             this.InitialTool=true;
-          }
+          }*/
           
         }
       }
@@ -92,6 +95,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   }
 
   LoadData(data:JSON){
+    //console.log(data);
     if(data["features"]!==undefined){
       this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
       this.PropertyNames.sort();
@@ -185,6 +189,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     if(cesiumData["filters"]!==undefined&&cesiumData["filters"].length!==0){
       data.filter=cesiumData["filters"];
     }
+    //console.log(data.filter);
     this.ceisumData=data;
     this.dataService.ceisumData=this.ceisumData;
     this.onChangeColor(this.ColorValue);
@@ -606,17 +611,19 @@ export class PublishComponent extends DataSubscriber implements OnInit{
         }
       }
     }
+
     var self=this;
     promise.then(function(dataSource) {
       var entities = dataSource.entities.values;
       for (var i = 0; i < entities.length; i++) {
         var entity = entities[i];
-        if(propertyname.length!==0){
+        //if(propertyname.length!==0){
         for (let j = 0; j < propertyname.length; j++) {
           const value = entity.properties[propertyname[j]]._value;
           if(value !== undefined){
             if(typeof(value)==="number"){
-              if (self._compare(value, text[j], relation[j])&&self.hideElementArr.length!==0) {
+              if (self._compare(value, text[j], relation[j])) {
+                
                 entity.polygon.extrudedHeight = 0;
                 entity.polygon.material=Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
                 if(self.CheckExtrude===true){
@@ -626,9 +633,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
               }else{
                 self.ColorByNumCat(entity);
                 //if(self.CheckScale===true){
+
                   if(self.CheckOpp===true){
                     if(self.CheckExtrude===true){
-                      console.log("1");
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
                         positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
@@ -637,7 +644,6 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                      console.log("2");
                       if(entity.polyline!==undefined&&entity.polyline.show!==undefined) entity.polyline.show=false;
                         if(self.HeightValue!==undefined){
                           entity.polygon.extrudedHeight =((Max-Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;
@@ -645,7 +651,6 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                     }
                   }else{
                     if(self.CheckExtrude===true){
-                      console.log("3");
                       var center=self.dataService.poly_center[i];
                       entity.polyline=new Cesium.PolylineGraphics({
                         positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale]),
@@ -654,10 +659,10 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
-                      console.log("4");
+
                       if(entity.polyline!==undefined&&entity.polyline.show!==undefined) entity.polyline.show=false;
                         if(self.HeightValue!==undefined){
-
+                          //console.log(((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale);
                           entity.polygon.extrudedHeight =((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;
                         }else{entity.polygon.extrudedHeight =0;}
                     }
@@ -718,7 +723,9 @@ export class PublishComponent extends DataSubscriber implements OnInit{
 
           }
         }
-      }else{
+      //}
+      //console.log(propertyname);
+      if(propertyname.length===0){
         if(typeof(entity.properties[self.HeightValue]._value)==="number"){
           self.ColorByNumCat(entity);
             if(self.CheckOpp===true){
@@ -804,7 +811,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       var ColorKey=this.ColorKey;
       //var range=ColorKey.length;
       var self=this;
-      if(typeof(self.texts[0])==="number") {
+      if(typeof(entity.properties[self.ColorValue]._value)==="number") {
         var max = self.dataService.MaxColor;
         var min=self.dataService.MinColor;
         var ChromaScale=self.ChromaScale;
