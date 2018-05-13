@@ -84,7 +84,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
           //if(this.data["cesium"]===undefined){
-            if(this.mode==="editor")
+            if(this.mode==="editor"&&this.data["cesium"]===undefined)
               this.LoadData(this.data);
               /*this.InitialTool=true;
           }else{
@@ -109,6 +109,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   ngDoCheck(){
+
     if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined){
        if(this.ID!==this.dataService.SelectedEntity._id){
           this.ID=this.dataService.SelectedEntity._id;
@@ -138,7 +139,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.HeightKey=["None"].concat(this.HeightKey);
         this.dataService.HeightKey=this.HeightKey;
         this.selectHeight=this.HeightValue;
-        this.onChangeHeight(this.HeightValue);
+        //this.onChangeHeight(this.HeightValue);
       }
     }
     
