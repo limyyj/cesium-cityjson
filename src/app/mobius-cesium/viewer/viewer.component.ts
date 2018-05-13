@@ -311,8 +311,8 @@ export class ViewerComponent extends DataSubscriber {
         var Max=this.Max;
         var Min=this.Min;
       }else{
-        var Max=this.Max;
-        var Min=this.Min;
+        var Max=this.dataService.MaxColor;//this.Max;
+        var Min=this.dataService.MinColor;//this.Min;
       }
       Min=Number(Min);
       Max=Number(Max);
@@ -354,7 +354,7 @@ export class ViewerComponent extends DataSubscriber {
         for(var i=1;i<10;i++){
           this.texts.push(Number(Min+(Max-Min)*(i/10)).toFixed(3));
         }
-        this.texts.push(Math.round(Max));
+        this.texts.push(Number(Max).toFixed(3));
       }
     }
     if(typeof(texts[0])==="string"){
