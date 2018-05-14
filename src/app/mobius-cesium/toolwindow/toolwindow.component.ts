@@ -139,7 +139,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
         this.HeightKey=["None"].concat(this.HeightKey);
         this.dataService.HeightKey=this.HeightKey;
         this.selectHeight=this.HeightValue;
-        //this.onChangeHeight(this.HeightValue);
+        this.onChangeHeight(this.HeightValue);
       }
     }
     
