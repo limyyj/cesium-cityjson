@@ -3,11 +3,11 @@
         <div *ngIf="ceisumData.colorDefault!==undefined">
         <table >
           <tr>
-          <th class="colorkey" style="width: 280px" *ngIf="ceisumData.colorDescr!==undefined"><div style="width: 280px;color:#ddd !important;border:0;text-align: left;font-weight: normal">{{ceisumData.colorDescr}}</div></th></tr>
+          <th class="colorkey" style="width: 280px" *ngIf="ceisumData.colorDescr!==undefined"><div style="color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{ceisumData.colorDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
-            <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color&nbsp;&nbsp;:</div></th>
+            <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;">Color&nbsp;&nbsp;:</div></th>
           <th><div>
             <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="ColorValue">
               <option class="cesium-option"  *ngFor="let ColorName of ColorNames" value={{ColorName}}>{{ColorName}}</option>
@@ -20,11 +20,11 @@
         <hr>
           <table >
           <tr>
-          <th class="colorkey" style="width: 280px" *ngIf="ceisumData.heightDescr!==undefined"><div style="width: 280px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">{{ceisumData.heightDescr}}</div></th></tr>
+          <th class="colorkey" style="width: 280px" *ngIf="ceisumData.heightDescr!==undefined"><div style="color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{ceisumData.heightDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
-            <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Extrude&nbsp;&nbsp;:</div></th>
+            <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;">Extrude&nbsp;&nbsp;:</div></th>
           <th><div>
             <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="HeightValue">
                <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
@@ -33,11 +33,11 @@
           </tr>
         </table>
         <table>
-          <tr ><th style="width:40px;height: 25px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Min&nbsp;&nbsp;:</div></th>
-          <th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMin!==undefined">{{ceisumData.heightMin}}</div></th></tr>
+          <tr ><th style="width:40px;height: 25px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;">Min&nbsp;&nbsp;:</div></th>
+          <th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="ceisumData.heightMin!==undefined">{{ceisumData.heightMin}}</div></th></tr>
 
-          <tr><th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max&nbsp;&nbsp;:</div></th>
-          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;" *ngIf="ceisumData.heightMax!==undefined">{{ceisumData.heightMax}}</div></th></tr>
+          <tr><th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;">Max&nbsp;&nbsp;:</div></th>
+          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="ceisumData.heightMax!==undefined">{{ceisumData.heightMax}}</div></th></tr>
       </table>
     </div>
     <div *ngIf="ceisumData.filter!==undefined">
@@ -46,11 +46,11 @@
         <div *ngFor="let item of hideElementArr;" id={{item.divid}}>
       <table>
         <tr >
-          <th style="width:280px;height: 25px;"><div style="width:280px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.descr}}</div></th></tr>
+          <th style="width:280px;height: 25px;"><div style="width:280px;color:#ddd !important;text-align: justify;vertical-align: middle;font-weight: normal;padding: 10px 10px 0px 10px;">{{item.descr}}</div></th></tr>
         </table>
         <table>
           <tr>
-            <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
+            <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;text-align: left;vertical-align: middle;font-weight: normal;padding: 10px 10px 0px 10px;">{{item.HeightHide}}</div></th>
         <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;">
           <div style="width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">></div>
           <div style="width:40px;height: 25px;color:#ddd !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1"><</div>
@@ -76,7 +76,8 @@
       </table><hr>
         </div>
       </div>
-      <button style="background-color: #ddd ;color:#395D73;" (click)="reset()">Reset</button>
+      <div style="padding: 10px 10px 0px 10px;">
+      <button style="background-color: #ddd ;color:#395D73;" (click)="reset()">Reset</button></div>
       </div>
     <!-- </div> -->
 </div>
