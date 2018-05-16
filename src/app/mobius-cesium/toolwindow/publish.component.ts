@@ -164,8 +164,8 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       if(cesiumData["extrude"].descr!==undefined) data.heightDescr=cesiumData["extrude"].descr;
       if(cesiumData["extrude"]["attribs"]!==undefined){
         data.heightDefault=cesiumData["extrude"]["attribs"][0]["name"];
-      if(cesiumData["extrude"]["attribs"][0]["min"]!==undefined) {data.heightMin=Number(cesiumData["extrude"]["attribs"][0]["min"]).toFixed(4);}else{data.heightMin=Math.min.apply(Math, texts);}
-        if(cesiumData["extrude"]["attribs"][0]["max"]!==undefined) {data.heightMax=Number(cesiumData["extrude"]["attribs"][0]["max"]).toFixed(4);}else{data.heightMax=Math.max.apply(Math, texts);}
+      if(cesiumData["extrude"]["attribs"][0]["min"]!==undefined) {data.heightMin=Math.round(Number(cesiumData["extrude"]["attribs"][0]["min"])*1000)/1000;}else{data.heightMin=Math.min.apply(Math, texts);}
+        if(cesiumData["extrude"]["attribs"][0]["max"]!==undefined) {data.heightMax=Math.round(Number(cesiumData["extrude"]["attribs"][0]["max"])*1000)/1000;}else{data.heightMax=Math.max.apply(Math, texts);}
         if(cesiumData["extrude"]["attribs"][0]["invert"]===true) {data.heightInvert=true;}else{data.heightInvert=false;}
         if(cesiumData["extrude"]["attribs"][0]["line"]===true) {data.heightLine=true;}else{data.heightLine=false;}
         if(cesiumData["extrude"]["attribs"][0]["scale"]!==undefined) {data.heightScale=cesiumData["extrude"]["attribs"][0]["scale"];}else{data.heightScale=1;}
@@ -255,10 +255,10 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     for(var i=0;i<this.data["cesium"]["extrude"]["attribs"].length;i++){
       if(this.data["cesium"]["extrude"]["attribs"][i]["name"]===this.HeightValue){
         if(this.data["cesium"]["extrude"]["attribs"][i]["min"]!==undefined){
-          this.ceisumData["heightMin"]=this.data["cesium"]["extrude"]["attribs"][i]["min"].toFixed(4);
+          this.ceisumData["heightMin"]=Math.round(Number(this.data["cesium"]["extrude"]["attribs"][i]["min"])*1000)/1000;
         }else{this.ceisumData["heightMin"]=Math.min.apply(Math, texts);}
         if(this.data["cesium"]["extrude"]["attribs"][i]["max"]!==undefined){  
-          this.ceisumData["heightMax"]=this.data["cesium"]["extrude"]["attribs"][i]["max"].toFixed(4);
+          this.ceisumData["heightMax"]=Math.round(Number(this.data["cesium"]["extrude"]["attribs"][i]["max"])*1000)/1000;
         }else{this.ceisumData["heightMax"]=Math.max.apply(Math, texts);}
         if(this.data["cesium"]["extrude"]["attribs"][i]["scale"]!==undefined){
           this.ceisumData["heightScale"]=this.data["cesium"]["extrude"]["attribs"][i]["scale"];
