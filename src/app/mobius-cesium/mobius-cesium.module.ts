@@ -12,9 +12,9 @@ import { MatTabsModule} from '@angular/material/tabs';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import {MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
-import { SettingComponent } from './setting/setting.component';
+/*import { SettingComponent } from './setting/setting.component';
 import { VisualiseComponent } from './setting/visualise.component';
-import { AttributesComponent } from './setting/attributes.copmponent';
+import { AttributesComponent } from './setting/attributes.copmponent';*/
 //import { PublishComponent } from './setting/publish.component';
 
 @NgModule({
@@ -33,9 +33,9 @@ import { AttributesComponent } from './setting/attributes.copmponent';
                     ViewerComponent,
                     ToolwindowComponent,
                     /*PublishComponent,*/
-                    SettingComponent,
+                    /*SettingComponent,
                     VisualiseComponent,
-                    AttributesComponent,
+                    AttributesComponent,*/
                     PublishComponent],
     providers: [DataService],
 })

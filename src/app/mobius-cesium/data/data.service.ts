@@ -70,13 +70,13 @@ export class DataService {
     }
     else{
       try{
-        this.propertyNames = Object.keys(model.features[0].properties);
+        this.propertyNames = Object.keys(model["features"][0].properties);
         this.ColorValue = this.propertyNames[0];
         this.propertyNames.sort()
         this.propertyNames.unshift("None");
 
 
-        let feature_instance = model.features[0];
+        let feature_instance = model["features"][0];
         this.HeightKey = this.propertyNames.filter(function(prop_name){
             let value =  feature_instance.properties[prop_name];
             return (typeof(value) === 'number');
