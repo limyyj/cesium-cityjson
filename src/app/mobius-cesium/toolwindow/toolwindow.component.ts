@@ -86,6 +86,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           //if(this.data["cesium"]===undefined){
             if(this.mode==="editor"&&this.data["cesium"]===undefined)
               this.LoadData(this.data);
+               // console.log("toolwindow is updating");
               /*this.InitialTool=true;
           }else{
             this.InitialTool=false;
@@ -99,13 +100,15 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   LoadData(data:JSON){
-    if(data!==undefined){
-      if(data["features"]!==undefined){
-        this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
-        this.PropertyNames.sort();
-        this.viewer=this.dataService.viewer;
-      }
-    }
+    this.PropertyNames = this.dataService.getPropertyNames();
+    this.viewer=this.dataService.viewer;
+    // if(data!==undefined){
+    //   if(data["features"]!==undefined){
+    //     this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
+    //     this.PropertyNames.sort();
+    //     this.viewer=this.dataService.viewer;
+    //   }
+    // }
   }
 
   ngDoCheck(){
@@ -126,18 +129,18 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
      if(this.ColorValue!==this.dataService.ColorValue||this.ColorNames!==this.dataService.propertyNames){
         this.ColorValue=this.dataService.ColorValue;
         this.ColorNames=this.dataService.propertyNames;
-        this.ColorNames.sort();
-        this.ColorNames=["None"].concat(this.ColorNames);
-        this.dataService.propertyNames=this.ColorNames;
+        //this.ColorNames.sort();
+        //this.ColorNames=["None"].concat(this.ColorNames);
+        //this.dataService.propertyNames=this.ColorNames;
         this.selectColor=this.ColorValue;
         this.onChangeColor(this.ColorValue);
       }
       if(this.HeightValue!==this.dataService.HeightValue||this.HeightKey!==this.dataService.HeightKey){
         this.HeightValue=this.dataService.HeightValue;
-        this.HeightKey=this.dataService.HeightKey;
-        this.HeightKey.sort();
-        this.HeightKey=["None"].concat(this.HeightKey);
-        this.dataService.HeightKey=this.HeightKey;
+        this.HeightKey= this.dataService.HeightKey;//this.dataService.HeightKey;
+        //this.HeightKey.sort();
+        //this.HeightKey=["None"].concat(this.HeightKey);
+        //this.dataService.HeightKey=this.HeightKey;
         this.selectHeight=this.HeightValue;
         this.onChangeHeight(this.HeightValue);
       }
@@ -775,6 +778,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
+
                         entity.polygon.extrudedHeight =((Math.min((Max-entity.properties[self.HeightValue]._value),Max))+Min)*scale;                   
                     }
                   }else{
@@ -787,6 +791,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
+
                       entity.polygon.extrudedHeight =((Math.min((entity.properties[self.HeightValue]._value),Max))+Min)*scale;//entity.properties[self.HeightValue]._value*scale;
                     }
                   }
@@ -802,6 +807,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
+
                       entity.polygon.extrudedHeight =(Math.min((Max-entity.properties[self.HeightValue]._value)+Min,Max));//self.HeightMax-entity.properties[self.HeightValue]._value;
                     }
                     
@@ -815,6 +821,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                         show:true
                       })
                     }else{
+
                       entity.polygon.extrudedHeight =(Math.min(entity.properties[self.HeightValue]._value,Max))+Min;
                     }
                     
@@ -847,6 +854,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                       })
                     }else{
                       if(self.HeightValue!==undefined&&entity.properties[self.HeightValue]._value!==undefined)
+                        
                         entity.polygon.extrudedHeight =((self.HeightMax-entity.properties[self.HeightValue]._value)+Min)*scale;
                     }
                   }else{
@@ -860,6 +868,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
                       })
                     }else{
                       if(self.HeightValue!==undefined&&entity.properties[self.HeightValue]._value!==undefined)
+                        
                         entity.polygon.extrudedHeight =(Math.min((entity.properties[self.HeightValue]._value),Max)+Min)*scale;
                     }
                   }

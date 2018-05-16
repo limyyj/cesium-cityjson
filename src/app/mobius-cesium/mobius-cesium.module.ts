@@ -12,6 +12,10 @@ import { MatTabsModule} from '@angular/material/tabs';
 import { MatTooltipModule} from '@angular/material/tooltip';
 import {MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
+import { SettingComponent } from './setting/setting.component';
+import { VisualiseComponent } from './setting/visualise.component';
+import { AttributesComponent } from './setting/attributes.copmponent';
+//import { PublishComponent } from './setting/publish.component';
 
 @NgModule({
     imports: [CommonModule,
@@ -28,6 +32,10 @@ import { FormsModule } from '@angular/forms';
     declarations: [MobiuscesiumComponent,
                     ViewerComponent,
                     ToolwindowComponent,
+                    /*PublishComponent,*/
+                    SettingComponent,
+                    VisualiseComponent,
+                    AttributesComponent,
                     PublishComponent],
     providers: [DataService],
 })

@@ -32,7 +32,7 @@ export class MobiuscesiumComponent {
 	setModel(data: JSON): void{
 		try{
 			this.dataService.setGsModel(data);
-      console.log("mode: ", this.mode);
+      // console.log("mode: ", this.mode);
 		}
 		catch(ex){
 			this.data = undefined;
@@ -42,16 +42,16 @@ export class MobiuscesiumComponent {
 	}
 	ngOnInit() {
 		this.setModel(this.data);
-    console.log("Setting", this.mode)
+    // console.log("Setting", this.mode)
     this.dataService.setMode(this.mode);
-    console.log(this.data);
+    // console.log(this.data);
 
 	}
 	ngDoCheck(){
 		if(this.dataService.getGsModel() !== this.data){
 			this.setModel(this.data);
-      console.log("data changed");
-      console.log("mode:", this.mode);
+      // console.log("data changed");
+      // console.log("mode:", this.mode);
 		}
 	}
 	slider_state:string = "slide_out";

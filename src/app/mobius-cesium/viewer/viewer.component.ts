@@ -32,6 +32,7 @@ export class ViewerComponent extends DataSubscriber {
   ShowColorBar:boolean=false;
   darkStyleEsri:any;
   CheckInvert:boolean;
+  mode:string;
 
 
   constructor(injector: Injector, myElement: ElementRef) { 
@@ -46,6 +47,7 @@ export class ViewerComponent extends DataSubscriber {
         this.Colorbar.push(this.ChromaScale(i/80));
     }
   }
+  
   ngDoCheck(){
     if(this.ColorValue!==this.dataService.ColorValue){
       this.ColorValue=this.dataService.ColorValue;
@@ -75,6 +77,7 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   ngOnInit() {
+    this.mode=this.dataService.mode; 
   }
 
   notify(message: string): void{
@@ -99,6 +102,8 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   LoadData(data:JSON){
+    //console.log("loading data in cesium viewer on model_update");
+
     if(document.getElementsByClassName('cesium-viewer').length!==0){
       document.getElementsByClassName('cesium-viewer')[0].remove();
     }
@@ -210,6 +215,10 @@ export class ViewerComponent extends DataSubscriber {
       var promise = Cesium.GeoJsonDataSource.load(this.data);
       var self= this;
       var HeightKey:any=[];
+
+      self.propertyNames = self.dataService.getPropertyNames();
+      // console.log("propertynames from dataservice: ", self.propertyNames.length, self.dataService.getPropertyNames().length);
+
       promise.then(function(dataSource) {
         viewer.dataSources.add(dataSource);
         var entities = dataSource.entities.values;
@@ -237,23 +246,27 @@ export class ViewerComponent extends DataSubscriber {
         }
         if(entities[0].polygon!==undefined) {self.ShowColorBar=true;}else{self.ShowColorBar=false;}
         self.dataService.poly_center=self.poly_center;
-        self.propertyNames=entities[0].properties.propertyNames;
-        for(var i=0;i<self.propertyNames.length;i++){
-          if(self.propertyNames[i].indexOf("ID")!==-1||self.propertyNames[i].indexOf("id")!==-1){
-            self.propertyNames.splice(i,1);
-            i=i-1;
-          }else{
-            if(typeof(entity.properties[self.propertyNames[i]]._value)==="number"){
-              HeightKey.push(self.propertyNames[i]);
-            }
-          }
-        }
+        //console.log("prop names from ds", self.dataService.propertyNames);
+        
+        //console.log(self.propertyNames, Object.keys(self.data.features[0].properties));
+        // for(var i=0;i<self.propertyNames.length;i++){
+        //   if(self.propertyNames[i].indexOf("ID")!==-1||self.propertyNames[i].indexOf("id")!==-1){
+        //     self.propertyNames.splice(i,1);
+        //     i=i-1;
+        //   }else{
+        //     if(typeof(entity.properties[self.propertyNames[i]]._value)==="number"){
+        //       HeightKey.push(self.propertyNames[i]);
+        //     }
+        //   }
+        // }
       });
       
       this.dataService.cesiumpromise=promise;
-      this.dataService.propertyNames=this.propertyNames;
-      this.dataService.HeightKey=HeightKey;
-      if(this.dataService.ColorValue===undefined){
+      
+      //this.dataService.propertyNames=this.propertyNames;
+      //this.dataService.HeightKey=HeightKey;
+
+      /*if(this.dataService.ColorValue===undefined){
         this.ColorValue=this.propertyNames.sort()[0];
         this.dataService.ColorValue=this.ColorValue;
         
@@ -262,17 +275,18 @@ export class ViewerComponent extends DataSubscriber {
         this.dataService.ColorValue=this.ColorValue;
       }else{
         this.ColorValue=this.dataService.ColorValue;
-      }
+      }*/
 
-      if(this.dataService.HeightValue===undefined){
-        this.HeightValue=HeightKey.sort()[0];
-        this.dataService.HeightValue=this.HeightValue;
-      }else if(HeightKey.indexOf(this.dataService.HeightValue)===-1){
-        this.HeightValue=HeightKey.sort()[0];
-        this.dataService.HeightValue=this.HeightValue;
-      }else{
-        this.HeightValue=this.dataService.HeightValue;
-      }
+      // if(this.dataService.HeightValue===undefined){
+      //   this.HeightValue=HeightKey.sort()[0];
+      //   this.dataService.HeightValue=this.HeightValue;
+      // }else if(HeightKey.indexOf(this.dataService.HeightValue)===-1){
+      //   this.HeightValue=HeightKey.sort()[0];
+      //   this.dataService.HeightValue=this.HeightValue;
+      // }else{
+
+      //   this.HeightValue=this.dataService.HeightValue;
+      // }
       viewer.zoomTo(promise);
       this.Colortext();
     }
@@ -316,6 +330,61 @@ export class ViewerComponent extends DataSubscriber {
       }
       Min=Number(Min);
       Max=Number(Max);
+
+      /*let letter_map = ["", "K", "M", "B"];
+      function getLetter(number){
+        let power = 0;
+        while(number > 0){
+          number = number / Math.pow(10, power);
+          power = power + 1;
+        }
+
+        return letter_map[power];
+      }
+      function rangeMap(Min, Max){
+        let range_values = [Min]
+        for(var i=1;i<10;i++){
+           range_values.push((Min+((Max-Min)/10)*(i)));
+        }
+        range_values.push(Max)
+
+        let texts = range_values.map(function(value){
+
+          let number_of_digits = numOfDigits(value)
+          let letter = letter_map[number_of_digits];
+          if(number_of_digits < 4){
+            // do nothing
+          }
+          else if(number_of_digits > 3 && number_of_digits < 6){
+            scale_factor = Math.pow(10, 3);
+          }
+          else if(number_of_digits > 6)
+          let scaled_value = value / Math.pow(10, number_of_digits);
+          return value.toFixed(0).concat(letter);
+        });
+
+        return texts; 
+      }
+
+      
+
+
+
+      function formatNumber(num){
+        let letter_map = ["K", "M", "B"];
+        let max_scale = Math.floor(num/1000);
+        
+        if(max_scale == 0){
+          return num.toFixed(2); 
+        }
+
+        let scaled_down_number = num / (10000*max_scale);
+        return scaled_down_number + letter_map[max_scale];
+      }*/
+        
+
+
+
       if(Max<=1){
         this.texts=[Min];
         for(var i=1;i<10;i++){
@@ -410,6 +479,8 @@ export class ViewerComponent extends DataSubscriber {
       }
     }
   }
+
+
 
   ColorSelect(entity){
     this.ColorValue=this.dataService.ColorValue;

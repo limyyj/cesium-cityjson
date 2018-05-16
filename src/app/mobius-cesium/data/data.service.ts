@@ -36,6 +36,7 @@ export class DataService {
   InitialPub:boolean;
   mode:string;
   CheckInvert:boolean=false;
+  ViData:object;
 
 
   sendMessage(message?: string) {
@@ -63,13 +64,47 @@ export class DataService {
 
   setGsModel(model: JSON){
     this._jsonModel = model;
+
     if(this._jsonModel===undefined){
       var viewer = new Cesium.Viewer(document.createElement("div"));
-    }/*else{
-      if(this._jsonModel["cesium"]!==undefined) {this.mode="viewer";}else{this.mode="editor";}
-    }*/
-    //if()
+    }
+    else{
+      try{
+        this.propertyNames = Object.keys(model.features[0].properties);
+        this.ColorValue = this.propertyNames[0];
+        this.propertyNames.sort()
+        this.propertyNames.unshift("None");
+
+
+        let feature_instance = model.features[0];
+        this.HeightKey = this.propertyNames.filter(function(prop_name){
+            let value =  feature_instance.properties[prop_name];
+            return (typeof(value) === 'number');
+        });
+        this.HeightValue = this.HeightKey[0];
+        this.HeightKey.sort()
+        this.HeightKey.unshift("None");
+
+
+        // console.log(this.propertyNames);
+        // this.HeightKey = this.propertyNames.filter(function(prop_name){
+        //   console.log(prop_name);
+        //   let value =  feature_instance.properties[prop_name];
+        //   console.log(value);
+        //   return (typeof(value) === 'number');
+        // });
+        // console.log(this.HeightKey);
+      }
+      catch(ex){
+        console.log("property names errored");
+      }
+    }
+
     this.sendMessage("model_update");
+  }
+
+  getPropertyNames(){
+    return this.propertyNames;
   }
 
   getColorValue(ColorValue):void{
@@ -77,6 +112,14 @@ export class DataService {
   }
   getHeightValue(HeightValue):void{
     this.HeightValue=HeightValue;
+  }
+
+  getViData(ColorProperty:Array<any>,ColorMin:number,ColorMax:number,
+            ExtrudeProperty:Array<any>,ExtrudeMin:number,ExtrudeMax:number,
+            Scale:number,Invert:boolean,HeightChart:boolean){
+    this.ViData={ColorProperty:ColorProperty,ColorMin:ColorMin,ColorMax:ColorMax,
+                 ExtrudeProperty:ExtrudeProperty,ExtrudeMin:ExtrudeMin,ExtrudeMax:ExtrudeMax,
+                 Scale:Scale,Invert:Invert,HeightChart:HeightChart}
   }
 
 }
