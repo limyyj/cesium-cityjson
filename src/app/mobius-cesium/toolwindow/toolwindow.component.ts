@@ -52,11 +52,12 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   CheckImagery:boolean;
   mode:string;
   CheckInvert:boolean;
+  ViType:string;
   //MatTab:string;
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
-    this.ChromaScale=chroma.scale("SPECTRAL");
+    /*this.ChromaScale=chroma.scale("SPECTRAL");
     this.HideNum=[];
     this.ScaleValue=this.dataService.ScaleValue;
     this.CheckScale=this.dataService.CheckScale;
@@ -65,14 +66,19 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     if(this.dataService.HideNum!==undefined) {
       this.HideNum=this.dataService.HideNum;
       this.hideElementArr=this.dataService.hideElementArr;
-    }
-    //this.MatTab=
+    }*/
   }
  
   ngOnInit() {
     this.data = this.dataService.getGsModel();
     this.mode=this.dataService.mode; 
-    this.LoadData(this.data);
+    /*if(this.mode==="editor"){
+      this.LoadData(this.data);
+      this.ViType=" Visualise ";
+    }else if(this.mode==="viewer"){
+      this.ViType=" Publish ";
+      this.dataService.LoadJSONData();
+    }*/
   }
 
   notify(message: string): void{
@@ -84,8 +90,14 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
           //if(this.data["cesium"]===undefined){
-            if(this.mode==="editor"&&this.data["cesium"]===undefined)
+            //if(this.mode==="editor"&&this.data["cesium"]===undefined)
+            if(this.mode==="editor"){
               this.LoadData(this.data);
+              this.ViType=" Visualise ";
+            }else if(this.mode==="viewer"){
+              this.dataService.LoadJSONData();
+              this.ViType=" Publish ";
+            }
                // console.log("toolwindow is updating");
               /*this.InitialTool=true;
           }else{
@@ -99,9 +111,34 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }
   }
 
+  changedata(event){
+    if(event===" Visualise "){
+      this.ViType=event;
+      /*this.dataService.ScaleValue=1;
+      this.ScaleValue=1;*/
+      this.dataService.getValue(this.data);
+      this.LoadData(this.data);
+    }else if(event===" Publish "){
+      this.ViType=event;
+      this.dataService.LoadJSONData();
+    }
+  }
+
   LoadData(data:JSON){
     this.PropertyNames = this.dataService.getPropertyNames();
+    //this.ColorValue=this.dataService.ColorValue;
+    //this.HeightValue=this.dataService.HeightValue;
     this.viewer=this.dataService.viewer;
+    this.ChromaScale=chroma.scale("SPECTRAL");
+    this.HideNum=[];
+    this.ScaleValue=this.dataService.ScaleValue;
+    this.CheckScale=this.dataService.CheckScale;
+    this.CheckOpp=this.dataService.CheckOpp;
+    this.CheckInvert=this.dataService.CheckInvert;
+    if(this.dataService.HideNum!==undefined) {
+      this.HideNum=this.dataService.HideNum;
+      this.hideElementArr=this.dataService.hideElementArr;
+    }
     // if(data!==undefined){
     //   if(data["features"]!==undefined){
     //     this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
@@ -112,37 +149,41 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
   }
 
   ngDoCheck(){
-
     if(this.viewer!==undefined&&this.dataService.SelectedEntity!==undefined){
        if(this.ID!==this.dataService.SelectedEntity._id){
           this.ID=this.dataService.SelectedEntity._id;
           this.Properties=[];
           for(var i=0;i<this.PropertyNames.length;i++){
-            var Properties:any=[];
-            Properties.Name=this.PropertyNames[i];
-            Properties.Value=this.dataService.SelectedEntity.properties[this.PropertyNames[i]]._value;
-            this.Properties.push(Properties);
+            if(this.PropertyNames[i]!=="None"){
+              var Properties:any=[];
+              Properties.Name=this.PropertyNames[i];
+              Properties.Value=this.dataService.SelectedEntity.properties[Properties.Name]._value;
+              this.Properties.push(Properties);
+            }
           }
         }
     }
-    if(this.viewer!==undefined){
-     if(this.ColorValue!==this.dataService.ColorValue||this.ColorNames!==this.dataService.propertyNames){
-        this.ColorValue=this.dataService.ColorValue;
-        this.ColorNames=this.dataService.propertyNames;
-        //this.ColorNames.sort();
-        //this.ColorNames=["None"].concat(this.ColorNames);
-        //this.dataService.propertyNames=this.ColorNames;
-        this.selectColor=this.ColorValue;
-        this.onChangeColor(this.ColorValue);
-      }
-      if(this.HeightValue!==this.dataService.HeightValue||this.HeightKey!==this.dataService.HeightKey){
-        this.HeightValue=this.dataService.HeightValue;
-        this.HeightKey= this.dataService.HeightKey;//this.dataService.HeightKey;
-        //this.HeightKey.sort();
-        //this.HeightKey=["None"].concat(this.HeightKey);
-        //this.dataService.HeightKey=this.HeightKey;
-        this.selectHeight=this.HeightValue;
-        this.onChangeHeight(this.HeightValue);
+    if(this.ViType===" Visualise "){
+      if(this.viewer!==undefined){
+       if(this.ColorValue!==this.dataService.ColorValue||this.ColorNames!==this.dataService.propertyNames){
+          this.ColorValue=this.dataService.ColorValue;
+          this.ColorNames=this.dataService.propertyNames;
+          //this.ColorNames.sort();
+          //this.ColorNames=["None"].concat(this.ColorNames);
+          //this.dataService.propertyNames=this.ColorNames;
+          this.selectColor=this.ColorValue;
+          this.onChangeColor(this.ColorValue);
+        }
+        if(this.HeightValue!==this.dataService.HeightValue||this.HeightKey!==this.dataService.HeightKey){
+          this.HeightValue=this.dataService.HeightValue;
+          this.HeightKey= this.dataService.HeightKey;//this.dataService.HeightKey;
+          //console.log(this.HeightValue);
+          //this.HeightKey.sort();
+          //this.HeightKey=["None"].concat(this.HeightKey);
+          //this.dataService.HeightKey=this.HeightKey;
+          this.selectHeight=this.HeightValue;
+          this.onChangeHeight(this.HeightValue);
+        }
       }
     }
     
@@ -391,6 +432,7 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     //var Max=Math.max.apply(Math, this.texts);
     var Max=this.HeightMax;
     this.ScaleValue=Number(ScaleValue);
+    
     /*var scale:number=this.ScaleValue;
     if(this.CheckScale===true){
       var promise=this.dataService.cesiumpromise;
@@ -520,8 +562,9 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
     }else{
       this.Hide();
     }
-    //this.Hide();
     this.dataService.ScaleValue=this.ScaleValue;
+    //this.Hide();
+    
   }
   checkscale(){
     this.CheckScale=!this.CheckScale;

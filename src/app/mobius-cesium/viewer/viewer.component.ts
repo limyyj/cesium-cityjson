@@ -216,8 +216,8 @@ export class ViewerComponent extends DataSubscriber {
       var self= this;
       var HeightKey:any=[];
 
-      self.propertyNames = self.dataService.getPropertyNames();
-      // console.log("propertynames from dataservice: ", self.propertyNames.length, self.dataService.getPropertyNames().length);
+      //self.propertyNames = self.dataService.getPropertyNames();
+      //console.log("propertynames from dataservice: ", self.propertyNames.length, self.dataService.getPropertyNames().length);
 
       promise.then(function(dataSource) {
         viewer.dataSources.add(dataSource);
@@ -262,7 +262,11 @@ export class ViewerComponent extends DataSubscriber {
       });
       
       this.dataService.cesiumpromise=promise;
-      
+      if(this.mode==="editor"){ 
+        this.dataService.getValue(this.data);
+      }else if(this.mode==="viewer"){
+        this.dataService.LoadJSONData();
+      }
       //this.dataService.propertyNames=this.propertyNames;
       //this.dataService.HeightKey=HeightKey;
 
@@ -485,6 +489,7 @@ export class ViewerComponent extends DataSubscriber {
   ColorSelect(entity){
     this.ColorValue=this.dataService.ColorValue;
     var ColorKey=this.dataService.Colortexts;
+    this.propertyNames=this.dataService.propertyNames;
     var range=ColorKey.length;
     for(var i=0;i<this.propertyNames.length;i++){
       if(this.ColorValue===this.propertyNames[i]){

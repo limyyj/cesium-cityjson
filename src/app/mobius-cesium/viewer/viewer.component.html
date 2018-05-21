@@ -37,5 +37,10 @@
     <table id="cesium-infoBox-defaultTable" style="width: 140px;position:absolute;padding:4px;background-color:white;display: none;">
        <tr *ngFor="let pickupArr of pickupArrs"><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px"><div matTooltip={{pickupArr.name}} style="width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.name}}</div></th><th style="font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px"><div matTooltip={{pickupArr.data}} style="width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{pickupArr.data}}</div></th></tr>
        </table>
+        
      </div>
+     <!-- <div id="Colortext" *ngIf="mode==='viewer'" >
+          <div>Color: </div>
+        </div> -->
+     
 </div>

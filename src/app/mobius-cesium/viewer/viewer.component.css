@@ -26,6 +26,20 @@ body{
   white-space: nowrap !important;
 }
 
+#Colortext{
+  z-index:99;
+  margin: 5px;
+  width: 100%;
+  padding: 2px 5px;
+  position: absolute;
+  display:inline-block;
+  bottom: 30px;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  table-layout:fixed !important;
+  white-space: nowrap !important;
+}
+
 /*.cesium-button {
   display: inline-block;
   position: relative;

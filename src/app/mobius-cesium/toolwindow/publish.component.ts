@@ -32,7 +32,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   Max:number;
   Min:number;
   SelectedEntity:object;
-  ScaleValue:number;
+  PuScaleValue:number;
   CheckScale:boolean;
   CheckExtrude:boolean;
   HideNum:Array<string>;
@@ -55,7 +55,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
 
   constructor(injector: Injector, myElement: ElementRef){
     super(injector);
-    this.ChromaScale=chroma.scale("SPECTRAL");
+    /*this.ChromaScale=chroma.scale("SPECTRAL");
     this.HideNum=[];
     this.ScaleValue=this.dataService.ScaleValue;
     this.CheckScale=this.dataService.CheckScale;
@@ -63,7 +63,8 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     if(this.dataService.HideNum!==undefined) {
       this.HideNum=this.dataService.HideNum;
       this.hideElementArr=this.dataService.hideElementArr;
-    }
+    }*/
+
   }
  
   ngOnInit() {
@@ -80,14 +81,16 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       this.mode=this.dataService.mode; 
       try{
         if(this.data!==undefined&&this.data["features"]!==undefined){
-          //if(this.data["cesium"]!==undefined){
-            //if(this.mode==="viewer")
-            this.LoadData(this.data);
+          if(this.data["cesium"]!==undefined){
+            if(this.mode==="viewer"){
+              this.LoadData(this.data);
+            }
+            
             /*this.InitialTool=false;
 
           }else{
-            this.InitialTool=true;
-          }*/
+            this.InitialTool=true;*/
+          }
           
         }
       }
@@ -98,7 +101,6 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   }
 
   LoadData(data:JSON){
-    //console.log(data);
     if(data["features"]!==undefined){
       this.PropertyNames=Object.getOwnPropertyNames(data["features"][0].properties);
       this.PropertyNames.sort();
@@ -115,7 +117,11 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.ceisumData=[];
     this.ColorNames=[];
     this.HeightKey=[];
-    if(cesiumData["colour"]!==undefined&&cesiumData["colour"]["attribs"]!==undefined){
+    this.ColorNames=this.dataService.propertyNames;
+    this.HeightKey=this.dataService.HeightKey;
+    this.ColorValue=this.dataService.ColorValue;
+    this.HeightValue=this.dataService.HeightValue;
+    /*if(cesiumData["colour"]!==undefined&&cesiumData["colour"]["attribs"]!==undefined){
       for(var i=0;i<cesiumData["colour"]["attribs"].length;i++){
         this.ColorNames.push(cesiumData["colour"]["attribs"][i]["name"]);
       }
@@ -130,7 +136,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       setTimeout(function(){
         self.onChangeHeight(self.HeightKey[0]);
       },3000)
-    }
+    }*/
     if(cesiumData["colour"]!==undefined){
       if(cesiumData["colour"].descr!==undefined) data.colorDescr=cesiumData["colour"].descr;
       if(cesiumData["colour"]["attribs"]!==undefined){
@@ -185,13 +191,14 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     }else{this.CheckOpp=false;}
     this.dataService.CheckOpp=this.CheckOpp;
     if(data.heightScale!==undefined){
-      this.ScaleValue=data.heightScale;
-    }else{this.ScaleValue=1;}
-    this.dataService.ScaleValue=this.ScaleValue;
-    this.dataService.propertyNames=this.ColorNames;
+      this.PuScaleValue=data.heightScale;
+    }else{this.PuScaleValue=1;}
+    this.dataService.PuScaleValue=this.PuScaleValue;
+    /*this.dataService.propertyNames=this.ColorNames;
     this.dataService.ColorValue=this.ColorValue;
     this.dataService.HeightKey=this.HeightKey;
-    this.dataService.HeightValue=this.HeightValue;
+    //console.log(this.dataService.HeightKey);
+    this.dataService.HeightValue=this.HeightValue;*/
 
     if(cesiumData["filters"]!==undefined&&cesiumData["filters"].length!==0){
       data.filter=cesiumData["filters"];
@@ -200,6 +207,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.ceisumData=data;
     this.dataService.ceisumData=this.ceisumData;
     this.onChangeColor(this.ColorValue);
+    //this.onChangeHeight(this.HeightValue);
     if(cesiumData["filters"]!==undefined){
       this.addHide();
     }
@@ -280,8 +288,8 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     this.dataService.CheckExtrude=this.CheckExtrude;
     this.CheckOpp=this.ceisumData["heightInvert"];
     this.dataService.CheckOpp=this.CheckOpp;
-    this.ScaleValue=this.ceisumData["heightScale"];
-    this.dataService.ScaleValue=this.ScaleValue;
+    this.PuScaleValue=this.ceisumData["heightScale"];
+    this.dataService.PuScaleValue=this.PuScaleValue;
     this.dataService.ceisumData=this.ceisumData;
     this.Hide();
     this.dataService.getHeightValue(this.HeightValue);
@@ -396,6 +404,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
       }
     });
     }
+    
   }
 
   colorByNum(){
@@ -547,7 +556,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
   }
 
   ChangeCategory(categary,id,type){
-    var scale:number=this.ScaleValue/this.Max;
+    var scale:number=this.PuScaleValue;///this.Max;
     var index=this.HideNum.indexOf(id);
     var promise=this.dataService.cesiumpromise;
     if(type===1){
@@ -596,7 +605,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
     var propertyname:any=[];
     var relation:any=[];
     var text:any=[];
-    var scale:number=this.ScaleValue;
+    var scale:number=this.PuScaleValue;
     var Max:number;
     var Min:number;
     if(this.ceisumData["heightMax"]!==undefined){
@@ -760,6 +769,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
                   show:true
                 })
               }else{
+
                 if(entity.polyline!==undefined&&entity.polyline.show!==undefined) entity.polyline.show=false;
                   if(self.HeightValue!==undefined){
 
@@ -858,6 +868,7 @@ export class PublishComponent extends DataSubscriber implements OnInit{
 
   reset(){
     if(this.data["cesium"]!==undefined){
+      this.dataService.LoadJSONData();
       this.LoadData(this.data);
     }
   }

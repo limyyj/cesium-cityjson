@@ -25,6 +25,7 @@ export class DataService {
   MinHeight:number;
   MaxHeight:number;
   ScaleValue:number=1;
+  PuScaleValue:number;
   CheckScale:boolean=true;
   CheckExtrude:boolean=false;
   hideElementArr:Array<any>;
@@ -37,6 +38,7 @@ export class DataService {
   mode:string;
   CheckInvert:boolean=false;
   ViData:object;
+  PuData:object;
 
 
   sendMessage(message?: string) {
@@ -70,7 +72,7 @@ export class DataService {
     }
     else{
       try{
-        this.propertyNames = Object.keys(model["features"][0].properties);
+        /*this.propertyNames = Object.keys(model["features"][0].properties);
         this.ColorValue = this.propertyNames[0];
         this.propertyNames.sort()
         this.propertyNames.unshift("None");
@@ -83,7 +85,7 @@ export class DataService {
         });
         this.HeightValue = this.HeightKey[0];
         this.HeightKey.sort()
-        this.HeightKey.unshift("None");
+        this.HeightKey.unshift("None");*/
 
 
         // console.log(this.propertyNames);
@@ -103,6 +105,49 @@ export class DataService {
     this.sendMessage("model_update");
   }
 
+  getValue(model: JSON){
+    this.propertyNames = Object.keys(model["features"][0].properties);
+    this.ColorValue = this.propertyNames[0];
+    this.propertyNames.sort()
+    this.propertyNames.unshift("None");
+
+
+    let feature_instance = model["features"][0];
+    this.HeightKey = this.propertyNames.filter(function(prop_name){
+        let value =  feature_instance.properties[prop_name];
+        return (typeof(value) === 'number');
+    });
+    this.HeightValue = this.HeightKey[0];
+    this.HeightKey.sort()
+    this.HeightKey.unshift("None");
+
+  }
+  LoadJSONData(){
+    var cesiumData=this._jsonModel["cesium"];
+    var data:any=[];
+    this.ceisumData=[];
+    this.propertyNames=[];
+    this.HeightKey=[];
+    if(cesiumData["colour"]!==undefined&&cesiumData["colour"]["attribs"]!==undefined){
+      for(var i=0;i<cesiumData["colour"]["attribs"].length;i++){
+        this.propertyNames.push(cesiumData["colour"]["attribs"][i]["name"]);
+      }
+      this.ColorValue=this.propertyNames[0];
+    }
+    if(cesiumData["extrude"]!==undefined&&cesiumData["extrude"]["attribs"]!==undefined){
+      for(var i=0;i<cesiumData["extrude"]["attribs"].length;i++){
+        this.HeightKey.push(cesiumData["extrude"]["attribs"][i]["name"]);
+      }
+      this.HeightValue=this.HeightKey[0];
+      this.PuScaleValue=undefined;
+      /*let self=this;
+      setTimeout(function(){
+        self.onChangeHeight(self.HeightKey[0]);
+      },3000)*/
+    }
+
+  }
+
   getPropertyNames(){
     return this.propertyNames;
   }
@@ -116,10 +161,17 @@ export class DataService {
 
   getViData(ColorProperty:Array<any>,ColorMin:number,ColorMax:number,
             ExtrudeProperty:Array<any>,ExtrudeMin:number,ExtrudeMax:number,
-            Scale:number,Invert:boolean,HeightChart:boolean){
+            Scale:number,Invert:boolean,HeightChart:boolean,Filter:Array<any>){
     this.ViData={ColorProperty:ColorProperty,ColorMin:ColorMin,ColorMax:ColorMax,
                  ExtrudeProperty:ExtrudeProperty,ExtrudeMin:ExtrudeMin,ExtrudeMax:ExtrudeMax,
-                 Scale:Scale,Invert:Invert,HeightChart:HeightChart}
+                 Scale:Scale,Invert:Invert,HeightChart:HeightChart,Filter:Filter}
+  }
+  getPuData(ColorProperty:Array<any>,ColorMin:number,ColorMax:number,ColorInvert:boolean,
+            ExtrudeProperty:Array<any>,ExtrudeMin:number,ExtrudeMax:number,
+            Scale:number,Invert:boolean,HeightChart:boolean,Filter:Array<any>){
+    this.PuData={ColorProperty:ColorProperty,ColorMin:ColorMin,ColorMax:ColorMax,ColorInvert:ColorInvert,
+                 ExtrudeProperty:ExtrudeProperty,ExtrudeMin:ExtrudeMin,ExtrudeMax:ExtrudeMax,
+                 Scale:Scale,Invert:Invert,HeightChart:HeightChart,Filter:Filter}
   }
 
 }

@@ -1,7 +1,7 @@
 <div id="toolwindow">
-  <mat-tab-group class="mat-tab-group" style="height: 100%;">
+  <mat-tab-group class="mat-tab-group" style="height: 100%;"  (click)="changedata($event.target.innerText)">
     <mat-tab label="&nbsp;Visualise&nbsp;" *ngIf="mode==='editor'">
-      <div id="SettingView" style="background-color: rgba(20,20,20,0.5);height: 100%;" >
+      <div id="SettingView" style="background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;" >
         <table>
           <tr>
           <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Imagery</div></th>
@@ -13,7 +13,7 @@
           <tr>
           <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Color</div></th>
           <th><div>
-            <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="selectColor">
+            <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="ColorValue">
               <option class="cesium-option"  *ngFor="let ColorName of ColorNames" value={{ColorName}}>{{ColorName}}</option>
             </select>
           </div></th>
@@ -34,7 +34,7 @@
           <tr>
           <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;">Extrude</div></th>
           <th><div>
-            <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="selectHeight">
+            <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="HeightValue">
                <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
             </select>
           </div></th>
@@ -104,7 +104,7 @@
       </div>
     </mat-tab>
     <mat-tab label="Attributes" *ngIf="mode==='editor'">
-      <div id="AttribsView"  style="background-color: rgba(20,20,20,0.5);height: 100%;"  >
+      <div id="AttribsView"  style="background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;"  >
         <table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
           <tr >
             <th style="font-size: 10px;font-weight: normal;width: 85px;"><div style="width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">ID</div></th>
@@ -120,7 +120,7 @@
       </div>
     </mat-tab>
     <mat-tab label="&nbsp;Publish&nbsp;" >
-      <div style="background-color: rgba(20,20,20,0.5);height: 100%;" ><app-publish  ></app-publish></div>
+      <div style="background-color: rgba(20,20,20,0.5);height: 100%;" ><app-publish *ngIf="ViType==='&nbsp;Publish&nbsp;'"></app-publish></div>
     </mat-tab>
   </mat-tab-group>
 </div>

@@ -14,8 +14,8 @@ import {MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
 /*import { SettingComponent } from './setting/setting.component';
 import { VisualiseComponent } from './setting/visualise.component';
-import { AttributesComponent } from './setting/attributes.copmponent';*/
-//import { PublishComponent } from './setting/publish.component';
+import { AttributesComponent } from './setting/attributes.copmponent';
+import { PublishComponent } from './setting/publish.component';*/
 
 @NgModule({
     imports: [CommonModule,
