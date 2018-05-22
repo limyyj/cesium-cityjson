@@ -71,7 +71,12 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
  
   ngOnInit() {
     this.data = this.dataService.getGsModel();
-    this.mode=this.dataService.mode; 
+    this.mode=this.dataService.mode;
+    if(this.mode==="editor"){
+      this.changedata(" Visualise ");
+    }else if(this.mode==="viewer"){
+      this.changedata(" Publish ");
+    } 
     /*if(this.mode==="editor"){
       this.LoadData(this.data);
       this.ViType=" Visualise ";
@@ -92,11 +97,13 @@ export class ToolwindowComponent extends DataSubscriber implements OnInit{
           //if(this.data["cesium"]===undefined){
             //if(this.mode==="editor"&&this.data["cesium"]===undefined)
             if(this.mode==="editor"){
-              this.LoadData(this.data);
-              this.ViType=" Visualise ";
+              /*this.LoadData(this.data);
+              this.ViType=" Visualise ";*/
+              this.changedata(" Visualise ");
             }else if(this.mode==="viewer"){
-              this.dataService.LoadJSONData();
-              this.ViType=" Publish ";
+              /*this.dataService.LoadJSONData();
+              this.ViType=" Publish ";*/
+              this.changedata(" Publish ");
             }
                // console.log("toolwindow is updating");
               /*this.InitialTool=true;
