@@ -1,49 +1,51 @@
-<div id="publishwindow" *ngIf="ceisumData!==undefined">
+<div id="publish" style="background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;"  >
+
+<div id="publishwindow" *ngIf="dataArr!==undefined">
      <!--  <div id="PublishView" style="margin-left: 5px;margin-top: 5px;" *ngIf="ceisumData!==undefined"> -->
-        <div *ngIf="ceisumData.colorDefault!==undefined">
+        <div *ngIf="_ColorKey!==undefined">
         <table >
           <tr>
-          <th class="colorkey" style="width: 280px" *ngIf="ceisumData.colorDescr!==undefined"><div style="color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{ceisumData.colorDescr}}</div></th></tr>
+          <th class="colorkey" style="width: 280px" *ngIf="_ColorDescr!==undefined"><div style="color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{_ColorDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
             <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;">Color&nbsp;&nbsp;:</div></th>
           <th><div>
-            <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="ColorValue">
-              <option class="cesium-option"  *ngFor="let ColorName of ColorNames" value={{ColorName}}>{{ColorName}}</option>
+            <select class="cesium-button" (change)="onChangeColor($event.target.value)" [ngModel]="_ColorKey">
+              <option class="cesium-option"  *ngFor="let ColorName of _ColorProperty" value={{ColorName}}>{{ColorName}}</option>
             </select>
           </div></th>
           </tr>
           </table>
     </div>
-    <div *ngIf="ceisumData.heightDefault!==undefined">
+    <div *ngIf="_ExtrudeKey!==undefined">
         <hr>
           <table >
           <tr>
-          <th class="colorkey" style="width: 280px" *ngIf="ceisumData.heightDescr!==undefined"><div style="color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{ceisumData.heightDescr}}</div></th></tr>
+          <th class="colorkey" style="width: 280px" *ngIf="_ExtrudeDescr!==undefined"><div style="color:#ddd !important;border:0;text-align: justify;font-weight: normal;padding: 10px 10px 0px 10px;">{{_ExtrudeDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
             <th class="colorkey" style="width: 80px"><div class="Hide" style="width: 80px;color:#ddd !important;border:0;text-align: left;font-weight: normal;padding: 10px 10px 0px 10px;">Extrude&nbsp;&nbsp;:</div></th>
           <th><div>
-            <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="HeightValue">
-               <option class="cesium-option"  *ngFor="let Height of HeightKey" value={{Height}}>{{Height}}</option>
+            <select class="cesium-button" (change)="onChangeHeight($event.target.value)" [ngModel]="_ExtrudeKey">
+               <option class="cesium-option"  *ngFor="let Height of _ExtrudeProperty" value={{Height}}>{{Height}}</option>
             </select>
           </div></th>
           </tr>
         </table>
         <table>
           <tr ><th style="width:40px;height: 25px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;">Min&nbsp;&nbsp;:</div></th>
-          <th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="ceisumData.heightMin!==undefined">{{ceisumData.heightMin}}</div></th></tr>
+          <th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="_ExtrudeMin!==undefined">{{_ExtrudeMin}}</div></th></tr>
 
           <tr><th style="width:40px;"><div style="width: 40px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;">Max&nbsp;&nbsp;:</div></th>
-          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="ceisumData.heightMax!==undefined">{{ceisumData.heightMax}}</div></th></tr>
+          <th style="width:60px;"><div style="width: 60px;color:#ddd !important;font-weight: normal;text-align: left;border:0;padding: 10px 10px 0px 10px;" *ngIf="_ExtrudeMax!==undefined">{{_ExtrudeMax}}</div></th></tr>
       </table>
     </div>
-    <div *ngIf="ceisumData.filter!==undefined">
+    <div *ngIf="_Filter!==undefined">
       <hr>
       <div class="hide-container" style="margin-top:5px;">
-        <div *ngFor="let item of hideElementArr;" id={{item.divid}}>
+        <div *ngFor="let item of _Filter;" id={{item.divid}}>
       <table>
         <tr >
           <th style="width:280px;height: 25px;"><div style="width:280px;color:#ddd !important;text-align: justify;vertical-align: middle;font-weight: normal;padding: 10px 10px 0px 10px;">{{item.descr}}</div></th></tr>
@@ -64,7 +66,6 @@
           <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
             <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
           </select></div></th>
-         <!--  <th style="width:30px;height: 25px;" id={{item.id}}><button class="button"  style="width:30px;height: 25px;background-color: rgba(0,0,0,0);border:0px;" (click)="Disable(item.id)"><span id={{item.id}} ><i class="material-icons" style="color:#ddd;">check_circle</i></span></button></th> -->
         <th style="width:20px;height: 25px;" id={{item.id}}><span id={{item.id}} (click)="Disable(item.id)" style="width:20px;height: 25px;cursor:pointer;"><i class="material-icons" style="color:#ddd;font-size:16px">check_circle</i></span></th></tr>
       </table>
       <table>
@@ -81,3 +82,5 @@
       </div>
     <!-- </div> -->
 </div>
+
+  
