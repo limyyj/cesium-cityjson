@@ -603,7 +603,7 @@ module.exports = "/*#attributes{\r\n  position: relative;\r\n  height: 100%;\r\n
 /***/ "./src/app/mobius-cesium/setting/attributes.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!-- <div id=\"attributes\">\r\n\tAttributes\r\n</div> -->\r\n<div id=\"AttribsView\"  style=\"background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;\"  >\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr >\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr *ngFor=\"let Property of Properties\">\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Name}}</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;\">{{Property.Value}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n</div>\r\n  "
+module.exports = "\r\n<div id=\"AttribsView\"  style=\"background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;\"  >\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr >\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr *ngFor=\"let Property of _Properties\">\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Name}}</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Value}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n</div>\r\n  "
 
 /***/ }),
 
@@ -641,14 +641,42 @@ var AttributesComponent = /** @class */ (function (_super) {
         return _super.call(this, injector) || this;
     }
     AttributesComponent.prototype.ngOnInit = function () {
+        this.data = this.dataService.getGsModel();
+        this.mode = this.dataService.mode;
+        this.viewer = this.dataService.viewer;
+        this.dataArr = this.dataService._ViData;
     };
     AttributesComponent.prototype.notify = function (message) {
+        if (message === "model_update") {
+            this.data = this.dataService.getGsModel();
+            this.mode = this.dataService.mode;
+            this.viewer = this.dataService.viewer;
+            this.dataArr = this.dataService._ViData;
+        }
+    };
+    AttributesComponent.prototype.ngDoCheck = function () {
+        if (this.viewer !== undefined && this.dataService._SelectedEntity !== undefined && this.mode === "editor") {
+            if (this.ID !== this.dataService._SelectedEntity._id) {
+                var _Property = void 0;
+                this.ID = this.dataService._SelectedEntity._id;
+                this._Properties = [];
+                for (var _i = 0, _a = this.dataArr["ColorProperty"]; _i < _a.length; _i++) {
+                    var _ColorPro = _a[_i];
+                    if (_ColorPro !== "None") {
+                        _Property = [];
+                        _Property.Name = _ColorPro;
+                        _Property.Value = this.dataService._SelectedEntity.properties[_Property.Name]._value;
+                        this._Properties.push(_Property);
+                    }
+                }
+            }
+        }
     };
     AttributesComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'app-attributes',
+            selector: "app-attributes",
             template: __webpack_require__("./src/app/mobius-cesium/setting/attributes.component.html"),
-            styles: [__webpack_require__("./src/app/mobius-cesium/setting/attributes.component.css")]
+            styles: [__webpack_require__("./src/app/mobius-cesium/setting/attributes.component.css")],
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_core__["B" /* Injector */], __WEBPACK_IMPORTED_MODULE_0__angular_core__["t" /* ElementRef */]])
     ], AttributesComponent);
@@ -1049,6 +1077,7 @@ var SettingComponent = /** @class */ (function (_super) {
         }
     };
     SettingComponent.prototype.changedata = function (id) {
+        this.dataService._index = id;
         if (id === 0) {
             this.dataArr = this.dataService._ViData;
         }
@@ -1613,7 +1642,7 @@ module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event);\">\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n   <div id=\"ColorBar\" *ngIf=\"CatNumtexts!==undefined\" >\r\n        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n       <tr >\r\n          <th *ngFor=\"let cattext of CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n    </table>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let cattext of CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n        \r\n     </div>\r\n     <!-- <div id=\"Colortext\" *ngIf=\"mode==='viewer'\" >\r\n          <div>Color: </div>\r\n        </div> -->\r\n     \r\n</div>"
+module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event);Colortext();\" >\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of _Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"_Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of _Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n   <div id=\"ColorBar\" *ngIf=\"_CatNumtexts!==undefined\" >\r\n        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n       <tr >\r\n          <th *ngFor=\"let cattext of _CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n    </table>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let cattext of _CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n        \r\n     </div>\r\n     <!-- <div id=\"Colortext\" *ngIf=\"mode==='viewer'\" >\r\n          <div>Color: </div>\r\n        </div> -->\r\n     \r\n</div>"
 
 /***/ }),
 
@@ -1624,8 +1653,9 @@ module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($ev
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewerComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js__ = __webpack_require__("./node_modules/chroma-js/chroma.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_chroma_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3_array__ = __webpack_require__("./node_modules/d3-array/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_chroma_js__ = __webpack_require__("./node_modules/chroma-js/chroma.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_chroma_js__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1648,6 +1678,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var ViewerComponent = /** @class */ (function (_super) {
     __extends(ViewerComponent, _super);
     function ViewerComponent(injector, myElement) {
@@ -1655,33 +1686,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         _this.selectEntity = null;
         _this._ShowColorBar = false;
         _this.myElement = myElement;
-        _this._Colorbar = [];
-        _this._CheckInvert = _this.dataService._CheckInvert;
-        _this._ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
-        for (var i = 79; i > -1; i--) {
-            _this._Colorbar.push(_this._ChromaScale(i / 80));
-        }
         return _this;
     }
-    ViewerComponent.prototype.ngDoCheck = function () {
-        if (this._ColorValue !== this.dataService._ColorValue) {
-            this._ColorValue = this.dataService._ColorValue;
-            this._ChromaScale = this.dataService._ChromaScale;
-            this._Colorbar = [];
-            for (var i = 79; i > -1; i--) {
-                this._Colorbar.push(this._ChromaScale(i / 80));
-            }
-            this.Colortext();
-        }
-        if (this._Max !== this.dataService._MaxColor) {
-            this._Max = this.dataService._MaxColor;
-            this.Colortext();
-        }
-        if (this._Min !== this.dataService._MinColor) {
-            this._Min = this.dataService._MinColor;
-            this.Colortext();
-        }
-    };
     ViewerComponent.prototype.ngOnInit = function () {
         this.mode = this.dataService.mode;
     };
@@ -1781,9 +1787,6 @@ var ViewerComponent = /** @class */ (function (_super) {
         }));
         var viewer = new Cesium.Viewer("cesiumContainer", {
             infoBox: false,
-            /*imageryProvider : Cesium.createOpenStreetMapImageryProvider({
-             url : 'https://stamen-tiles.a.ssl.fastly.net/toner/'
-            }), */
             imageryProviderViewModels: imageryViewModels,
             selectedImageryProviderViewModel: imageryViewModels[0],
             timeline: false,
@@ -1791,28 +1794,20 @@ var ViewerComponent = /** @class */ (function (_super) {
             automaticallyTrackDataSourceClocks: false,
             animation: false,
         });
-        viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
-            e.cancel = true;
-            viewer.zoomTo(this.dataService.cesiumpromise);
-        });
         document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
         if (this.data !== undefined) {
             this.viewer = viewer;
             this.dataService.viewer = this.viewer;
             this.data = data;
             this.poly_center = [];
-            var promise = Cesium.GeoJsonDataSource.load(this.data);
+            var promise_1 = Cesium.GeoJsonDataSource.load(this.data);
             var self_1 = this;
             var _HeightKey = [];
-            // self.propertyNames = self.dataService.getPropertyNames();
-            // console.log("propertynames from dataservice: ",
-            // self.propertyNames.length, self.dataService.getPropertyNames().length);
-            promise.then(function (dataSource) {
+            promise_1.then(function (dataSource) {
                 viewer.dataSources.add(dataSource);
                 var entities = dataSource.entities.values;
                 for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
                     var entity = entities_1[_i];
-                    // let texts: any[];
                     var poly_center = [];
                     if (entity.polygon !== undefined) {
                         entity.polygon.outlineColor = Cesium.Color.Black;
@@ -1840,232 +1835,105 @@ var ViewerComponent = /** @class */ (function (_super) {
                     self_1._ShowColorBar = false;
                 }
                 self_1.dataService.poly_center = self_1.poly_center;
-                // console.log("prop names from ds", self.dataService.propertyNames);
-                // console.log(self.propertyNames, Object.keys(self.data.features[0].properties));
-                // for(var i=0;i<self.propertyNames.length;i++){
-                //   if(self.propertyNames[i].indexOf("ID")!==-1||self.propertyNames[i].indexOf("id")!==-1){
-                //     self.propertyNames.splice(i,1);
-                //     i=i-1;
-                //   }else{
-                //     if(typeof(entity.properties[self.propertyNames[i]]._value)==="number"){
-                //       HeightKey.push(self.propertyNames[i]);
-                //     }
-                //   }
-                // }
             });
-            this.dataService.cesiumpromise = promise;
+            this.dataService.cesiumpromise = promise_1;
             if (this.mode === "editor") {
                 this.dataService.getValue(this.data);
-            }
-            if (this.mode === "viewer" || this.mode === "editor") {
                 this.dataService.LoadJSONData();
+                this.dataArr = this.dataService._ViData;
+                this._index = 0;
             }
-            // this.dataService.propertyNames=this.propertyNames;
-            // this.dataService.HeightKey=HeightKey;
-            /*if(this.dataService.ColorValue===undefined){
-              this.ColorValue=this.propertyNames.sort()[0];
-              this.dataService.ColorValue=this.ColorValue;
-            }else if(this.propertyNames.indexOf(this.dataService.ColorValue)===-1){
-              this.ColorValue=this.propertyNames.sort()[0];
-              this.dataService.ColorValue=this.ColorValue;
-            }else{
-              this.ColorValue=this.dataService.ColorValue;
-            }*/
-            // if(this.dataService.HeightValue===undefined){
-            //   this.HeightValue=HeightKey.sort()[0];
-            //   this.dataService.HeightValue=this.HeightValue;
-            // }else if(HeightKey.indexOf(this.dataService.HeightValue)===-1){
-            //   this.HeightValue=HeightKey.sort()[0];
-            //   this.dataService.HeightValue=this.HeightValue;
-            // }else{
-            //   this.HeightValue=this.dataService.HeightValue;
-            // }
-            viewer.zoomTo(promise);
+            if (this.mode === "viewer") {
+                this._index = 2;
+            }
+            viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
+                e.cancel = true;
+                viewer.zoomTo(promise_1);
+            });
+            viewer.zoomTo(promise_1);
             this.Colortext();
         }
     };
     ViewerComponent.prototype.Colortext = function () {
         this.texts = undefined;
-        // this.Cattexts=undefined;
         this._Cattexts = [];
         this._CatNumtexts = [];
-        var propertyname = this._ColorValue;
-        var texts = [];
-        var promise = this.dataService.cesiumpromise;
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-                var entity = entities_2[_i];
-                if (entity.properties[propertyname] !== undefined) {
-                    if (entity.properties[propertyname]._value !== " " && typeof (entity.properties[propertyname]._value) === "number") {
-                        if (texts.length === 0) {
-                            texts[0] = entity.properties[propertyname]._value;
-                        }
-                        else {
-                            if (texts.indexOf(entity.properties[propertyname]._value) === -1) {
-                                texts.push(entity.properties[propertyname]._value);
-                            }
-                        }
-                    }
-                    else if (entity.properties[propertyname]._value !== " " &&
-                        typeof (entity.properties[propertyname]._value) === "string") {
-                        if (texts.length === 0) {
-                            texts[0] = entity.properties[propertyname]._value;
-                        }
-                        else {
-                            if (texts.indexOf(entity.properties[propertyname]._value) === -1) {
-                                texts.push(entity.properties[propertyname]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        var _Max;
-        var _Min;
+        var _ColorKey;
+        var propertyname = this.dataArr["ColorKey"];
+        var texts = this.dataArr["ColorText"].sort();
+        var _Max = this.dataArr["ColorMax"];
+        var _Min = this.dataArr["ColorMin"];
+        var _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL");
+        if (this.dataArr["ColorInvert"] === true) {
+            _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
+        }
+        this._Colorbar = [];
+        for (var i = 79; i > -1; i--) {
+            this._Colorbar.push(_ChromaScale(i / 80));
+        }
         if (typeof (texts[0]) === "number") {
-            this._ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
-            if (this.dataService._MaxColor === undefined) {
-                this._Max = Math.max.apply(Math, texts);
-                this._Min = Math.min.apply(Math, texts);
-                _Max = this._Max;
-                _Min = this._Min;
-            }
-            else {
-                _Max = this.dataService._MaxColor;
-                _Min = this.dataService._MinColor;
-            }
-            _Min = Number(_Min);
-            _Max = Number(_Max);
-            /*let letter_map = ["", "K", "M", "B"];
-            function getLetter(number){
-              let power = 0;
-              while(number > 0){
-                number = number / Math.pow(10, power);
-                power = power + 1;
-              }
-      
-              return letter_map[power];
-            }
-            function rangeMap(Min, Max){
-              let range_values = [Min]
-              for(var i=1;i<10;i++){
-                 range_values.push((Min+((Max-Min)/10)*(i)));
-              }
-              range_values.push(Max)
-      
-              let texts = range_values.map(function(value){
-      
-                let number_of_digits = numOfDigits(value)
-                let letter = letter_map[number_of_digits];
-                if(number_of_digits < 4){
-                  // do nothing
-                }
-                else if(number_of_digits > 3 && number_of_digits < 6){
-                  scale_factor = Math.pow(10, 3);
-                }
-                else if(number_of_digits > 6)
-                let scaled_value = value / Math.pow(10, number_of_digits);
-                return value.toFixed(0).concat(letter);
-              });
-      
-              return texts;
-            }
-      
-            function formatNumber(num){
-              let letter_map = ["K", "M", "B"];
-              let max_scale = Math.floor(num/1000);
-              if(max_scale == 0){
-                return num.toFixed(2);
-              }
-      
-              let scaled_down_number = num / (10000*max_scale);
-              return scaled_down_number + letter_map[max_scale];
-            }*/
-            var num = void 0;
-            if (_Max <= 1) {
+            if (_Max < 20) {
                 this.texts = [_Min];
                 for (var i = 1; i < 10; i++) {
-                    this.texts.push((_Min + (_Max - _Min) * (i / 10)).toFixed(3));
+                    this.texts.push(Number((_Min + (_Max - _Min) * (i / 10)).toFixed(2)));
                 }
                 this.texts.push(_Max);
             }
-            else if (_Max > 1000) {
-                num = String((_Min / 1000).toFixed(2)).concat("K");
-                this.texts = [num];
-                for (var i = 1; i < 10; i++) {
-                    num = String(((_Min + (_Max - _Min) * (i / 10)) / 1000).toFixed(2)).concat("K");
-                    this.texts.push(num);
-                }
-                num = String((_Max / 1000).toFixed(2)).concat("K");
-                this.texts.push(num);
+            else {
+                this.texts = __WEBPACK_IMPORTED_MODULE_2_d3_array__["a" /* ticks */](_Min, _Max, 10);
             }
-            else if (_Max > 1000000) {
-                num = String((_Min / 1000000).toFixed(2)).concat("M");
-                this.texts = [num];
-                for (var i = 1; i < 10; i++) {
-                    num = String(((_Min + (_Max - _Min) * (i / 10)) / 1000000).toFixed(2)).concat("M");
-                    this.texts.push(num);
+            for (var i = 0; i < this.texts.length; i++) {
+                if (this.texts[i] / 1000000000 > 1) {
+                    this.texts[i] = String(Number((this.texts[i] / 1000000000).toFixed(3))).concat("B");
                 }
-                num = String((_Max / 1000000).toFixed(2)).concat("M");
-                this.texts.push(num);
-            }
-            else if (_Max > 1000000000) {
-                num = String((_Min / 1000000000).toFixed(2)).concat("B");
-                this.texts = [num];
-                for (var i = 1; i < 10; i++) {
-                    num = String(((_Min + (_Max - _Min) * (i / 10)) / 1000000000).toFixed(2)).concat("B");
-                    this.texts.push(num);
+                else if (this.texts[i] / 1000000 > 1) {
+                    this.texts[i] = String(Number((this.texts[i] / 1000000).toFixed(3))).concat("M");
                 }
-                num = String((_Max / 1000000000).toFixed(2)).concat("B");
-                this.texts.push(num);
-            }
-            else if (_Max >= 1 && _Max <= 1000) {
-                this.texts = [Number(_Min).toFixed(3)];
-                for (var i = 1; i < 10; i++) {
-                    this.texts.push(Number(_Min + (_Max - _Min) * (i / 10)).toFixed(3));
+                else if (this.texts[i] / 1000 > 1) {
+                    this.texts[i] = String(Number(((this.texts[i] / 1000)).toFixed(3))).concat("K");
                 }
-                this.texts.push(Number(_Max).toFixed(3));
             }
         }
         if (typeof (texts[0]) === "string") {
             if (texts.length <= 12) {
                 for (var j = 0; j < texts.length; j++) {
-                    var ColorKey = [];
-                    ColorKey.text = texts[j];
-                    this._ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
-                    ColorKey.color = this._ChromaScale((j / texts.length).toFixed(2));
-                    this._Cattexts.push(ColorKey);
+                    _ColorKey = [];
+                    _ColorKey.text = texts[j];
+                    _ColorKey.color = _ChromaScale(j / texts.length);
+                    this._Cattexts.push(_ColorKey);
                 }
             }
             else {
-                texts = texts.sort();
                 for (var j = 0; j < this._Colorbar.length; j++) {
-                    var ColorKey = [];
+                    _ColorKey = [];
                     if (j === 0) {
-                        ColorKey.text = texts[j];
+                        _ColorKey.text = texts[j];
                     }
                     else if (j === this._Colorbar.length - 1) {
-                        ColorKey.text = texts[texts.length - 1];
+                        if (texts[texts.length - 1] !== null) {
+                            _ColorKey.text = texts[texts.length - 1];
+                        }
+                        else {
+                            _ColorKey.text = texts[texts.length - 2];
+                        }
                     }
                     else {
-                        ColorKey.text = null;
+                        _ColorKey.text = null;
                     }
-                    ColorKey.color = this._Colorbar[j];
-                    this._CatNumtexts.push(ColorKey);
+                    _ColorKey.color = this._Colorbar[j];
+                    this._CatNumtexts.push(_ColorKey);
                 }
             }
         }
-        if (this._ShowColorBar === false) {
-            this._Cattexts = undefined;
-            this._Colorbar = undefined;
-        }
+        /*if(this._ShowColorBar===false) {
+          this._Cattexts=undefined;
+          this._Colorbar=undefined;
+        }*/
     };
     ViewerComponent.prototype.select = function () {
         event.stopPropagation();
         var viewer = this.viewer;
-        if (this.data !== undefined) {
+        if (this.dataArr !== undefined) {
             if (this.selectEntity !== undefined && this.selectEntity !== null) {
                 this.ColorSelect(this.selectEntity);
             }
@@ -2091,104 +1959,69 @@ var ViewerComponent = /** @class */ (function (_super) {
         }
     };
     ViewerComponent.prototype.ColorSelect = function (entity) {
-        this._ColorValue = this.dataService._ColorValue;
-        var _ColorKey = this.dataService._Colortexts;
-        this.propertyNames = this.dataService.propertyNames;
-        var range = _ColorKey.length;
-        for (var _i = 0, _a = this.propertyNames; _i < _a.length; _i++) {
-            var propertyName = _a[_i];
-            if (this._ColorValue === propertyName) {
-                if (typeof (entity.properties[this._ColorValue]._value) === "number") {
-                    var max = this.dataService._MaxColor;
-                    var min = this.dataService._MinColor;
-                    var _ChromaScale = this._ChromaScale;
-                    var _texts = entity.properties[this._ColorValue]._value;
-                    var rgbAr = this._ChromaScale(Number(((max - _texts) / (max - min)).toFixed(2)))._rgb;
-                    if (entity.polygon !== undefined) {
-                        entity.polygon.material = Cesium.Color.fromBytes(rgbAr[0], rgbAr[1], rgbAr[2]);
-                    }
-                    if (entity.polyline !== undefined) {
-                        entity.polyline.material = Cesium.Color.fromBytes(rgbAr[0], rgbAr[1], rgbAr[2]);
-                    }
-                }
-                else {
-                    var _ChromaScale = void 0;
-                    var _Colortexts = this.dataService._Colortexts;
-                    if (_Colortexts.length > 12) {
-                        _ChromaScale = this._ChromaScale.domain([1, 0]);
-                    }
-                    else {
-                        _ChromaScale = this._ChromaScale;
-                    }
-                    var initial = false;
-                    for (var j = 0; j < _Colortexts.length; j++) {
-                        if (entity.properties[this._ColorValue]._value === _Colortexts[j].text) {
-                            var rgbAr = _ChromaScale((j / _Colortexts.length).toFixed(2));
-                            if (entity.polygon !== undefined) {
-                                entity.polygon.material = Cesium.Color.fromBytes(rgbAr._rgb[0], rgbAr._rgb[1], rgbAr._rgb[2]);
-                            }
-                            if (entity.polyline !== undefined) {
-                                entity.polyline.material = Cesium.Color.fromBytes(rgbAr._rgb[0], rgbAr._rgb[1], rgbAr._rgb[2]);
-                            }
-                            initial = true;
-                        }
-                    }
-                    if (initial === false) {
-                        if (entity.polygon !== undefined) {
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                        }
+        var promise = this.dataService.cesiumpromise;
+        var _ColorKey = this.dataArr["ColorKey"];
+        var _ColorMax = this.dataArr["ColorMax"];
+        var _ColorMin = this.dataArr["ColorMin"];
+        var _ColorText = this.dataArr["ColorText"];
+        var _ColorInvert = this.dataArr["ColorInvert"];
+        var _ExtrudeKey = this.dataArr["ExtrudeKey"];
+        var _ExtrudeMax = this.dataArr["ExtrudeMax"];
+        var _ExtrudeMin = this.dataArr["ExtrudeMin"];
+        var _HeightChart = this.dataArr["HeightChart"];
+        var _Invert = this.dataArr["Invert"];
+        var _Scale = this.dataArr["Scale"];
+        var _Filter = this.dataArr["Filter"];
+        var _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL");
+        if (_ColorInvert === true) {
+            _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
+        }
+        var _CheckHide;
+        if (_Filter.length !== 0) {
+            _CheckHide = this.Hide(_Filter, entity, _HeightChart);
+            if (_CheckHide === true) {
+                if (entity.polygon !== undefined) {
+                    entity.polygon.extrudedHeight = 0;
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    if (_HeightChart === true) {
                         if (entity.polyline !== undefined) {
-                            entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                            entity.polyline.show = false;
                         }
+                    }
+                }
+                if (entity.polyline !== undefined) {
+                    entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+            }
+        }
+        if (_Filter.length === 0 || _CheckHide === false) {
+            if (typeof (_ColorText[0]) === "number") {
+                this.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+            }
+            else {
+                this.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+            }
+        }
+    };
+    ViewerComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
+        var _CheckHide = false;
+        for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
+            var filter = _Filter_1[_i];
+            var value = entity.properties[filter.HeightHide]._value;
+            if (value !== undefined) {
+                if (typeof (value) === "number") {
+                    if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
+                        _CheckHide = true;
+                    }
+                }
+                else if (typeof (value) === "string") {
+                    if (this._compareCat(value, filter.textHide, Number(filter.RelaHide))) {
+                        _CheckHide = true;
                     }
                 }
             }
         }
-        if (this.dataService.hideElementArr !== undefined && this.dataService.hideElementArr.length !== 0) {
-            var propertyname = [];
-            var relation = [];
-            var text = [];
-            for (var _b = 0, _c = this.dataService.hideElementArr; _b < _c.length; _b++) {
-                var filter = _c[_b];
-                if (filter !== undefined) {
-                    propertyname.push(filter.HeightHide);
-                    relation.push(Number(filter.RelaHide));
-                    if (filter.type === "number") {
-                        text.push(Number(filter.textHide));
-                    }
-                    else if (filter.type === "category") {
-                        text.push(String(filter.CategaryHide));
-                    }
-                }
-            }
-            for (var j = 0; j < propertyname.length; j++) {
-                var value = entity.properties[propertyname[j]]._value;
-                if (value !== undefined) {
-                    if (typeof (value) === "number") {
-                        if (this._compare(value, text[j], relation[j])) {
-                            if (entity.polygon !== undefined) {
-                                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                            }
-                            if (entity.polyline !== undefined) {
-                                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                            }
-                        }
-                    }
-                    else if (typeof (value) === "string") {
-                        if (text[j] !== "None") {
-                            if (this._compareCat(value, text[j], relation[j])) {
-                                if (entity.polygon !== undefined) {
-                                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                }
-                                if (entity.polyline !== undefined) {
-                                    entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        return _CheckHide;
     };
     ViewerComponent.prototype._compare = function (value, slider, relation) {
         switch (relation) {
@@ -2210,9 +2043,35 @@ var ViewerComponent = /** @class */ (function (_super) {
                 return value === _Categary;
         }
     };
+    ViewerComponent.prototype.colorByNum = function (entity, max, min, _ColorKey, _ChromaScale) {
+        if (entity.properties[_ColorKey] !== undefined) {
+            var texts = entity.properties[_ColorKey]._value;
+            var rgb = _ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
+            if (entity.polygon !== undefined) {
+                entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+            if (entity.polyline !== undefined) {
+                entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+            }
+        }
+    };
+    ViewerComponent.prototype.colorByCat = function (entity, _ColorText, _ColorKey, _ChromaScale) {
+        if (entity.properties[_ColorKey] !== undefined) {
+            var initial = false;
+            for (var j = 0; j < _ColorText.length; j++) {
+                if (entity.properties[_ColorKey]._value === _ColorText[j]) {
+                    var rgb = _ChromaScale((j / _ColorText.length).toFixed(2));
+                    entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                    initial = true;
+                }
+            }
+            if (initial === false) {
+                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+        }
+    };
     ViewerComponent.prototype.showAttribs = function (event) {
-        if (this.data !== undefined) {
-            // if(this.data["cesium"]!==undefined){
+        if (this.data !== undefined && this.mode === "viewer") {
             if (this.data["cesium"] !== undefined) {
                 if (this.data["cesium"].select !== undefined) {
                     if (this.viewer.selectedEntity !== undefined) {
