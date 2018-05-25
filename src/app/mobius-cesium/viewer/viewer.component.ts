@@ -34,6 +34,7 @@ export class ViewerComponent extends DataSubscriber {
   private mode: string;
   private _index: number;
 
+
   constructor(injector: Injector, myElement: ElementRef) {
     super(injector);
     this.myElement = myElement;
