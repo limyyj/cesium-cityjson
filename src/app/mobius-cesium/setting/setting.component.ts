@@ -53,6 +53,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     }
   }
   public changedata(id: number) {
+    this.dataService._index=id;
     if(id===0) {
       this.dataArr=this.dataService._ViData;
     } else if(id===2) {

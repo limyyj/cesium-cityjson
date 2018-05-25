@@ -25,6 +25,7 @@ export class DataService {
   public _CheckInvert: boolean=false;
   public _ViData: object;
   public _PuData: object;
+  public _index: number;
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});

@@ -1,6 +1,4 @@
-<!-- <div id="attributes">
-	Attributes
-</div> -->
+
 <div id="AttribsView"  style="background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;"  >
 	<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
 	  <tr >
@@ -9,9 +7,9 @@
 	  </tr>
 	</table>
 	<table border="1" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0">
-	  <tr *ngFor="let Property of Properties">
-	    <th style="font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px"><div matTooltip={{Property.Name}} style="width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Name}}</div></th>
-	    <th style="font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px"><div matTooltip={{Property.Value}} style="width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;ccursor:pointer;">{{Property.Value}}</div></th>
+	  <tr *ngFor="let Property of _Properties">
+	    <th style="font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px"><div matTooltip={{Property.Name}} style="width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{Property.Name}}</div></th>
+	    <th style="font-size: 10px;font-weight: normal;color:#ddd ;width: 85px;height: 14px"><div matTooltip={{Property.Value}} style="width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{Property.Value}}</div></th>
 	  </tr>
 	</table>
 </div>
