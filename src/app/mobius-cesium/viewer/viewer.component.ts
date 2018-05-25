@@ -13,24 +13,16 @@ export class ViewerComponent extends DataSubscriber {
   private data: JSON;
   private myElement;
   private dataArr: object;
-  private _ColorValue: string;
-  private _HeightValue: string;
-  private _ChromaScale: any;
-  private propertyNames: any[];
   private viewer: any;
   private selectEntity: any=null;
   private material: object;
   private poly_center: any[];
   private _Colorbar: any[];
-  private _Max: number;
-  private _Min: number;
   private texts: any[];
   private _Cattexts: any[];
   private _CatNumtexts: any[];
   private pickupArrs: any[];
   private _ShowColorBar: boolean=false;
-  private darkStyleEsri: any;
-  private _CheckInvert: boolean;
   private mode: string;
   private _index: number;
 

@@ -7,22 +7,14 @@ import * as chroma from "chroma-js";
 export class DataService {
   private _jsonModel: JSON;
   private subject = new Subject<any>();
-  public _ColorValue: string;
   public viewer: any;
   public _SelectedEntity: any;
   public cesiumpromise: any;
-  public propertyNames: any[];
-  public selectEntity: object;
-  public _Colortexts: any[];
-  public _MinColor: number;
-  public _MaxColor: number;
   public hideElementArr: any[];
   public _HideNum: any[];
   public poly_center: any[];
-  public _ChromaScale: any;
   public ceisumData: any[];
   public mode: string;
-  public _CheckInvert: boolean=false;
   public _ViData: object;
   public _PuData: object;
   public _index: number;
@@ -190,18 +182,6 @@ export class DataService {
 
     }
   }
-
-  /*public getPropertyNames() {
-    return this.propertyNames;
-  }
-
-  public getColorValue(_ColorValue: string): void {
-    this.ColorValue=_ColorValue;
-  }
-  public getHeightValue(_HeightValue: string): void {
-    this.HeightValue=_HeightValue;
-  }*/
-
   public getViData(_ColorProperty: any[],_ColorText: any[],_ColorKey: string,
                    _ColorMin: number,_ColorMax: number,_ColorInvert: boolean,
                    _ExtrudeProperty: any[],_ExtrudeText: any[],_ExturdeValue: string,
