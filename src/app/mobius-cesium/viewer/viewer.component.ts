@@ -22,7 +22,6 @@ export class ViewerComponent extends DataSubscriber {
   private _Cattexts: any[];
   private _CatNumtexts: any[];
   private pickupArrs: any[];
-  private _ShowColorBar: boolean=false;
   private mode: string;
   private _index: number;
 
@@ -32,14 +31,14 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public ngOnInit() {
-    this.mode=this.dataService.mode;
+    this.mode=this.dataService.getmode();
   }
 
   public notify(message: string): void {
     if(message === "model_update" ) {
       this.data = this.dataService.getGsModel();
       try {
-          this.LoadData(this.data);
+        this.LoadData(this.data);
       }
       catch(ex) {
         console.log(ex);
@@ -144,10 +143,10 @@ export class ViewerComponent extends DataSubscriber {
       animation:false,
     });
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
-
+    
     if(this.data!==undefined) {
       this.viewer=viewer;
-      this.dataService.viewer=this.viewer;
+      this.dataService.setViewer(this.viewer);
       this.data=data;
       this.poly_center=[];
       const promise = Cesium.GeoJsonDataSource.load(this.data);
@@ -180,14 +179,14 @@ export class ViewerComponent extends DataSubscriber {
           }
         }
         if(entities[0].polygon!==undefined) {self._ShowColorBar=true;} else {self._ShowColorBar=false;}
-        self.dataService.poly_center=self.poly_center;
+        self.dataService.setpoly_center(self.poly_center);
       });
 
-      this.dataService.cesiumpromise=promise;
+      this.dataService.setcesiumpromise(promise);
       if(this.mode==="editor") {
         this.dataService.getValue(this.data);
         this.dataService.LoadJSONData();
-        this.dataArr=this.dataService._ViData;
+        this.dataArr=this.dataService.get_ViData();
         this._index= 0;
       }
       if(this.mode==="viewer") {
@@ -203,61 +202,61 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public Colortext() {
-    this.texts=undefined;
-    this._Cattexts=[];
-    this._CatNumtexts=[];
-    let _ColorKey: any;
-    const propertyname=this.dataArr["ColorKey"];
-    const texts= this.dataArr["ColorText"].sort();
-    const _Max: number=this.dataArr["ColorMax"];
-    const _Min: number=this.dataArr["ColorMin"];
-    let _ChromaScale=chroma.scale("SPECTRAL");
-    if(this.dataArr["ColorInvert"]===true) {_ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);}
-    this._Colorbar=[];
-    for(let i=79;i>-1;i--) {
-      this._Colorbar.push(_ChromaScale(i/80));
-    }
-    if(typeof(texts[0])==="number") {
-      if(_Max<20) {
-        this.texts=[_Min];
+    if(this.dataArr!==undefined) {
+      if(this._index!==this.dataService.get_index()) {
+        this._index=this.dataService.get_index();
+        if(this._index===0) {this.dataArr=this.dataService.get_ViData();
+        } else if(this._index===2) {this.dataArr=this.dataService.get_PuData();}
+      }
+      const propertyname=this.dataArr["ColorKey"];
+      const texts= this.dataArr["ColorText"].sort();
+      const _Max: number=this.dataArr["ColorMax"];
+      const _Min: number=this.dataArr["ColorMin"];
+      this.texts=undefined;
+      this._Cattexts=[];
+      this._CatNumtexts=[];
+      let _ColorKey: any;
+      let _ChromaScale=chroma.scale("SPECTRAL");
+      if(this.dataArr["ColorInvert"]===true) {_ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);}
+      this._Colorbar=[];
+      for(let i=79;i>-1;i--) {
+        this._Colorbar.push(_ChromaScale(i/80));
+      }
+      if(typeof(texts[0])==="number") {
+        this.texts=[Number(_Min.toFixed(2))];
         for(let i=1;i<10;i++) {
           this.texts.push(Number((_Min+(_Max-_Min)*(i/10)).toFixed(2)));
         }
-        this.texts.push(_Max);
-      } else {this.texts=d3.ticks(_Min, _Max, 10);}
-      for(let i=0;i<this.texts.length;i++) {
-        if(this.texts[i]/1000000000>1) {
-          this.texts[i]=String(Number((this.texts[i]/1000000000).toFixed(3))).concat("B");
-        } else if(this.texts[i]/1000000>1) {
-          this.texts[i]=String(Number((this.texts[i]/1000000).toFixed(3))).concat("M");
-        } else if(this.texts[i]/1000>1) {this.texts[i]=String(Number(((this.texts[i]/1000)).toFixed(3))).concat("K");}
-      }
-
-    }
-    if(typeof(texts[0])==="string") {
-      if(texts.length<=12) {
-        for(let j=0;j<texts.length;j++) {
-          _ColorKey=[];
-          _ColorKey.text=texts[j];
-          _ColorKey.color=_ChromaScale(j/texts.length);
-          this._Cattexts.push(_ColorKey);
-        }
-      } else {
-        for(let j=0;j<this._Colorbar.length;j++) {
-          _ColorKey=[];
-          if(j===0) {_ColorKey.text=texts[j];} else if(j===this._Colorbar.length-1) {
-            if(texts[texts.length-1]!==null) {_ColorKey.text=texts[texts.length-1];
-            } else {_ColorKey.text=texts[texts.length-2];}
-          } else { _ColorKey.text=null;}
-          _ColorKey.color=this._Colorbar[j];
-          this._CatNumtexts.push(_ColorKey);
+        this.texts.push(Number(_Max.toFixed(2)));
+        for(let i=0;i<this.texts.length;i++) {
+          if(this.texts[i]/1000000000>1) {
+            this.texts[i]=String(Number((this.texts[i]/1000000000).toFixed(3))).concat("B");
+          } else if(this.texts[i]/1000000>1) {
+            this.texts[i]=String(Number((this.texts[i]/1000000).toFixed(3))).concat("M");
+          } else if(this.texts[i]/1000>1) {this.texts[i]=String(Number(((this.texts[i]/1000)).toFixed(3))).concat("K");}
         }
       }
+      if(typeof(texts[0])==="string") {
+        if(texts.length<=12) {
+          for(let j=0;j<texts.length;j++) {
+            _ColorKey=[];
+            _ColorKey.text=texts[j];
+            _ColorKey.color=_ChromaScale(j/texts.length);
+            this._Cattexts.push(_ColorKey);
+          }
+        } else {
+          for(let j=0;j<this._Colorbar.length;j++) {
+            _ColorKey=[];
+            if(j===0) {_ColorKey.text=texts[j];} else if(j===this._Colorbar.length-1) {
+              if(texts[texts.length-1]!==null) {_ColorKey.text=texts[texts.length-1];
+              } else {_ColorKey.text=texts[texts.length-2];}
+            } else { _ColorKey.text=null;}
+            _ColorKey.color=this._Colorbar[j];
+            this._CatNumtexts.push(_ColorKey);
+          }
+        }
+      }
     }
-    /*if(this._ShowColorBar===false) {
-      this._Cattexts=undefined;
-      this._Colorbar=undefined;
-    }*/
   }
 
   public select() {
@@ -266,7 +265,7 @@ export class ViewerComponent extends DataSubscriber {
     if(this.dataArr!==undefined) {
       if(this.selectEntity!==undefined&&this.selectEntity!==null) {this.ColorSelect(this.selectEntity);}
       if(viewer.selectedEntity!==undefined&&viewer.selectedEntity.polygon!==null) {
-        this.dataService._SelectedEntity=viewer.selectedEntity;
+        this.dataService.set_SelectedEntity(viewer.selectedEntity);
         let material;
         if(viewer.selectedEntity.polygon!==undefined) {
           material=viewer.selectedEntity.polygon.material;
@@ -279,7 +278,7 @@ export class ViewerComponent extends DataSubscriber {
         this.selectEntity=viewer.selectedEntity;
         this.material=material;
       } else {
-        this.dataService._SelectedEntity=undefined;
+        this.dataService.set_SelectedEntity(undefined);
         this.selectEntity=undefined;
         this.material=undefined;
       }
@@ -287,7 +286,7 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public ColorSelect(entity) {
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const _ColorKey: string=this.dataArr["ColorKey"];
     const _ColorMax: number=this.dataArr["ColorMax"];
     const _ColorMin: number=this.dataArr["ColorMin"];
@@ -391,26 +390,26 @@ export class ViewerComponent extends DataSubscriber {
   public showAttribs(event) {
     if(this.data!==undefined&&this.mode==="viewer") {
       if(this.data["cesium"]!==undefined) {
-      if(this.data["cesium"].select!==undefined) {
-        if(this.viewer.selectedEntity!==undefined) {
-          const pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
-          this.pickupArrs=[];
-          this.pickupArrs.push({name:"ID",data:pickup.id.id});
-          for(let i=0;i<this.data["cesium"].select.length;i++){
-            const propertyName: string=this.data["cesium"].select[i];
-            this.pickupArrs.push({name:propertyName,data:
-                                  this.dataService._SelectedEntity.properties[propertyName]._value});
+        if(this.data["cesium"].select!==undefined) {
+          if(this.viewer.selectedEntity!==undefined) {
+            const pickup=this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
+            this.pickupArrs=[];
+            this.pickupArrs.push({name:"ID",data:pickup.id.id});
+            for(let i=0;i<this.data["cesium"].select.length;i++) {
+              const propertyName: string=this.data["cesium"].select[i];
+              this.pickupArrs.push({name:propertyName,data:
+                                    this.dataService.get_SelectedEntity().properties[propertyName]._value});
+            }
+            const nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
+            this.viewer.container.appendChild(nameOverlay);
+            nameOverlay.style.bottom = this.viewer.canvas.clientHeight - event.clientY + "px";
+            nameOverlay.style.left = event.clientX + "px";
+            nameOverlay.style.display= "block";
+          } else {
+            document.getElementById("cesium-infoBox-defaultTable").style.display= "none";
           }
-          const nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
-          this.viewer.container.appendChild(nameOverlay);
-          nameOverlay.style.bottom = this.viewer.canvas.clientHeight - event.clientY + "px";
-          nameOverlay.style.left = event.clientX + "px";
-          nameOverlay.style.display= "block";
-        } else {
-          document.getElementById("cesium-infoBox-defaultTable").style.display= "none";
         }
       }
-    }
     }
   }
 }

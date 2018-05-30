@@ -24,8 +24,8 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   }
   public ngOnInit() {
     this.data = this.dataService.getGsModel();
-    this.mode=this.dataService.mode;
-    this.viewer=this.dataService.viewer;
+    this.mode=this.dataService.getmode();
+    this.viewer=this.dataService.getViewer();
     if(this.mode==="viewer") {
       this.changedata(2);
     } else if(this.mode==="editor") {
@@ -36,8 +36,8 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   public notify(message: string): void {
     if(message === "model_update" ) {
       this.data = this.dataService.getGsModel();
-      this.mode=this.dataService.mode;
-      this.viewer=this.dataService.viewer;
+      this.mode=this.dataService.getmode();
+      this.viewer=this.dataService.getViewer();
       try {
         if(this.data!==undefined&&this.data["features"]!==undefined) {
           if(this.mode==="viewer") {
@@ -53,21 +53,21 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     }
   }
   public changedata(id: number) {
-    this.dataService._index=id;
+    this.dataService.set_index(id);
     if(id===0) {
-      this.dataArr=this.dataService._ViData;
+      this.dataArr=this.dataService.get_ViData();
     } else if(id===2) {
-      this.dataArr=this.dataService._PuData;
+      this.dataArr=this.dataService.get_PuData();
     }
     if(this.dataArr!==undefined) {this.LoadViewer();}
   }
 
   public Reset() {
-    this.dataArr=this.dataService._PuData;
+    this.dataArr=this.dataService.get_PuData();
   }
 
   public LoadViewer() {
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const _ColorKey: string=this.dataArr["ColorKey"];
     const _ColorMax: number=this.dataArr["ColorMax"];
     const _ColorMin: number=this.dataArr["ColorMin"];
@@ -114,7 +114,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
                                                               _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
           } else {
             entity.polygon.extrudedHeight =0;
-            const center=self.dataService.poly_center[i];
+            const center=self.dataService.getpoly_center()[i];
             entity.polyline=new Cesium.PolylineGraphics({
               positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],
                     self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,_ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
@@ -196,7 +196,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       let initial: boolean=false;
       for(let j=0;j<_ColorText.length; j++) {
         if(entity.properties[_ColorKey]._value===_ColorText[j]) {
-          const rgb=_ChromaScale((j/_ColorText.length).toFixed(2));
+          const rgb=_ChromaScale(1-(j/_ColorText.length));
           entity.polygon.material=entity.polygon.material=Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
           initial=true;
         }

@@ -34,13 +34,13 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   super(injector);
   }
   public ngOnInit() {
-    this.dataArr=this.dataService._PuData;
+    this.dataArr=this.dataService.get_PuData();
     if(this.dataArr!==undefined) {this.LoadData();this.addHide();}
   }
   public notify(message: string): void {
     if(message === "model_update" ) {
       try {
-        this.dataArr=this.dataService._PuData;
+        this.dataArr=this.dataService.get_PuData();
         if(this.dataArr!==undefined) {this.LoadData();this.addHide();}
       }
       catch (ex) {
@@ -108,7 +108,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     }
     this.dataArr["Filter"]=this._Filter;
     this.dataArr["HideNum"]=this._HideNum;
-    this.dataService._PuData=this.dataArr;
+    this.dataService.set_PuData(this.dataArr);
   }
 
   public Disable(event) {
@@ -146,12 +146,12 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     }
     this.dataArr["Filter"]=this._Filter;
     this.dataArr["HideNum"]=this._HideNum;
-    this.dataService._PuData=this.dataArr;
+    this.dataService.set_PuData(this.dataArr);
   }
 
   public Initial(_HideValue: string): any[] {
     const texts: any[] =[];
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const self= this;
     promise.then( function(dataSource) {
       const entities = dataSource.entities.values;
@@ -194,7 +194,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
         this.dataArr["ColorInvert"]=_data["invert"];
       }
     }
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const _Colortexts: any[]=[];
     const self= this;
     promise.then( function(dataSource) {
@@ -211,7 +211,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
       }
     });
     this.dataArr["ColorText"]=_Colortexts.sort();
-    this.dataService._PuData=this.dataArr;
+    this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
 
@@ -227,7 +227,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
         this.dataArr["Scale"]=_data["scale"];
       }
     }
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const _Heighttexts=[];
     const self= this;
     promise.then(function(dataSource) {
@@ -244,13 +244,13 @@ export class PublishComponent extends DataSubscriber implements OnInit {
       }
     });
     this.dataArr["ExtrudeText"]=_Heighttexts.sort();
-    this.dataService._PuData=this.dataArr;
+    this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
 
   public reset() {
     this.dataService.LoadJSONData();
-    this.dataArr=this.dataService._PuData;
+    this.dataArr=this.dataService.get_PuData();
     if(this.dataArr!==undefined) {this.LoadData();this.addHide();}
   }
 }

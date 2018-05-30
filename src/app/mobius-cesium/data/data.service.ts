@@ -7,17 +7,17 @@ import * as chroma from "chroma-js";
 export class DataService {
   private _jsonModel: JSON;
   private subject = new Subject<any>();
-  public viewer: any;
-  public _SelectedEntity: any;
-  public cesiumpromise: any;
-  public hideElementArr: any[];
-  public _HideNum: any[];
-  public poly_center: any[];
-  public ceisumData: any[];
-  public mode: string;
-  public _ViData: object;
-  public _PuData: object;
-  public _index: number;
+  private viewer: any;
+  private _SelectedEntity: any;
+  private cesiumpromise: any;
+  private hideElementArr: any[];
+  private _HideNum: any[];
+  private poly_center: any[];
+  // private ceisumData: any[];
+  private mode: string;
+  private _ViData: object;
+  private _PuData: object;
+  private _index: number;
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -44,6 +44,45 @@ export class DataService {
       const viewer = new Cesium.Viewer(document.createElement("div"));
     }
     this.sendMessage("model_update");
+  }
+  public getViewer(): any {
+    return this.viewer;
+  }
+  public setViewer(_viewer): void {
+    this.viewer=_viewer;
+  }
+  public get_SelectedEntity(): any {
+    return this._SelectedEntity;
+  }
+  public set_SelectedEntity(_SelectedEntity): void {
+    this._SelectedEntity=_SelectedEntity;
+  }
+  public getcesiumpromise(): any {
+    return this.cesiumpromise;
+  }
+  public setcesiumpromise(cesiumpromise): void {
+    this.cesiumpromise=cesiumpromise;
+  }
+  public gethideElementArr(): any {
+    return this.hideElementArr;
+  }
+  public get_HideNum(): any[] {
+    return this._HideNum;
+  }
+  public getpoly_center(): any[] {
+    return this.poly_center;
+  }
+  public setpoly_center(poly_center): void {
+    this.poly_center=poly_center;
+  }
+  public getmode(): string {
+    return this.mode;
+  }
+  public get_index(): number {
+    return this._index;
+  }
+  public set_index(_index): void {
+    this._index=_index;
   }
 
   public getValue(model: JSON) {
@@ -94,6 +133,12 @@ export class DataService {
     this.getViData(propertyNames,_Colortexts.sort(),_ColorValue,_MinColor,_MaxColor,false,
                    _HeightKey,_Heighttexts.sort(),_HeightValue,_MinHeight,_MaxHeight,1,
                    false,false,_Filter,_HideNum);
+  }
+  public get_ViData(): object {
+    return this._ViData;
+  }
+  public set_ViData(_ViData): void {
+    this._ViData=_ViData;
   }
 
   public LoadJSONData() {
@@ -181,6 +226,13 @@ export class DataService {
                         _HeightScale,_HeightInvert,_HeightLine,_filters,_HideNum);
 
     }
+  }
+
+  public get_PuData(): object {
+    return this._PuData;
+  }
+  public set_PuData(_PuData): void {
+    this._PuData=_PuData;
   }
   public getViData(_ColorProperty: any[],_ColorText: any[],_ColorKey: string,
                    _ColorMin: number,_ColorMax: number,_ColorInvert: boolean,

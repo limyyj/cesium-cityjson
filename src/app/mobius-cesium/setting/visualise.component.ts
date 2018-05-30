@@ -32,13 +32,13 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
   super(injector);
   }
   public ngOnInit() {
-    this.dataArr=this.dataService._ViData;
+    this.dataArr=this.dataService.get_ViData();
     if(this.dataArr!==undefined) {this.LoadData();}
   }
   public notify(message: string): void {
     if(message === "model_update" ) {
       try {
-        this.dataArr=this.dataService._ViData;
+        this.dataArr=this.dataService.get_ViData();
         if(this.dataArr!==undefined) {this.LoadData();}
       }
       catch(ex) {
@@ -65,7 +65,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
 
   public onChangeColor(value) {
     this.dataArr["ColorKey"]=value;
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const _Colortexts=[];
     const self= this;
     promise.then(function(dataSource) {
@@ -84,26 +84,26 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     this.dataArr["ColorMin"]=Math.min.apply(Math, _Colortexts);
     this.dataArr["ColorMax"]=Math.max.apply(Math, _Colortexts);
     this.dataArr["ColorText"]=_Colortexts.sort();
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
     this.LoadData();
   }
 
   public changeColorMin(_Min: number) {
     this.dataArr["ColorMin"]=Number(_Min);
     this._ColorMin=this.dataArr["ColorMin"];
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public changeColorMax(_Max: number) {
     this.dataArr["ColorMax"]=Number(_Max);
     this._ColorMax=this.dataArr["ColorMax"];
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
 
   }
 
   public onChangeHeight(value) {
     this.dataArr["ExtrudeKey"]=value;
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const _Heighttexts=[];
     const self= this;
     promise.then(function(dataSource) {
@@ -122,38 +122,38 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     this.dataArr["ExtrudeMin"]=Math.min.apply(Math, _Heighttexts);
     this.dataArr["ExtrudeMax"]=Math.max.apply(Math, _Heighttexts);
     this.dataArr["ExtrudeText"]=_Heighttexts.sort();
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
     this.LoadData();
   }
 
   public changeHeightMin(_Min: number) {
     this.dataArr["ExtrudeMin"]=Number(_Min);
     this._ExtrudeMin=this.dataArr["ExtrudeMin"];
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public changeHeightMax(_Max: number) {
     this.dataArr["ExtrudeMax"]=Number(_Max);
     this._ExtrudeMax=this.dataArr["ExtrudeMax"];
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public changescale(_ScaleValue: number) {
     this.dataArr["Scale"]=Number(_ScaleValue);
     this._Scale=this.dataArr["Scale"];
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public changeopp() {
     this._Invert=!this._Invert;
     this.dataArr["Invert"]=this._Invert;
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public changeExtrude() {
     this._HeightChart=!this._HeightChart;
     this.dataArr["HeightChart"]=this._HeightChart;
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public addHide() {
@@ -181,7 +181,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
                        HideMin:Math.round(Math.min.apply(Math, texts)*100)/100,Disabletext:null});
     this.dataArr["Filter"]=this._Filter;
     this.dataArr["HideNum"]=this._HideNum;
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public deleteHide(event) {
@@ -205,7 +205,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     this._HideNum.splice(index,1);
     this.dataArr["Filter"]=this._Filter;
     this.dataArr["HideNum"]=this._HideNum;
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public Disable(event) {
@@ -241,7 +241,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     }
     this.dataArr["Filter"]=this._Filter;
     this.dataArr["HideNum"]=this._HideNum;
-    this.dataService._ViData=this.dataArr;
+    this.dataService.set_ViData(this.dataArr);
   }
 
   public ChangeHeight(_HeightHide: string) {
@@ -253,7 +253,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     const HeightHide=this._Filter[index].HeightHide;
     this._Filter[index].RelaHide=_RelaHide;
     const texts=[];
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const self= this;
     promise.then(function(dataSource) {
       const entities = dataSource.entities.values;
@@ -291,7 +291,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
 
   public  Initial(_HideValue: string): any[] {
     const texts=[];
-    const promise=this.dataService.cesiumpromise;
+    const promise=this.dataService.getcesiumpromise();
     const self= this;
     promise.then(function(dataSource) {
       const entities = dataSource.entities.values;
@@ -307,5 +307,12 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
       }
     });
     return texts;
+  }
+
+  public changeImagery() {
+    if(this.dataService.getViewer()!==undefined) {
+      this.dataService.getViewer().scene.imageryLayers.removeAll();
+      this.dataService.getViewer().scene.globe.baseColor = Cesium.Color.GRAY;
+    }
   }
 }
