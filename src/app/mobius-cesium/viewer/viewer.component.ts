@@ -33,6 +33,17 @@ export class ViewerComponent extends DataSubscriber {
 
   public ngOnInit() {
     this.mode=this.dataService.getmode();
+    if(this.mode==="editor") {
+      this.dataService.getValue(this.data);
+      this.dataService.LoadJSONData();
+      this.dataArr=this.dataService.get_ViData();
+      this._index= 0;
+    }
+    if(this.mode==="viewer") {
+      this.dataService.LoadJSONData();
+      this.dataArr=this.dataService.get_PuData();
+      this._index= 2;
+    }
   }
 
   public notify(message: string): void {
@@ -143,7 +154,7 @@ export class ViewerComponent extends DataSubscriber {
       automaticallyTrackDataSourceClocks:false,
       animation:false,
     });
-    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();   
+    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
     if(this.data!==undefined) {
       this.viewer=viewer;
       this.dataService.setViewer(this.viewer);

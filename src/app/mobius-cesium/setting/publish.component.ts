@@ -12,6 +12,7 @@ import * as chroma from "chroma-js";
 export class PublishComponent extends DataSubscriber implements OnInit {
   private myElement ;
   private dataArr: object;
+  private mode: string;
   private _ColorDescr: string;
   private _ColorProperty: any[];
   private _ColorKey: string;
@@ -34,14 +35,17 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   super(injector);
   }
   public ngOnInit() {
+    this.mode=this.dataService.getmode();
     this.dataArr=this.dataService.get_PuData();
-    if(this.dataArr!==undefined) {this.LoadData();this.addHide();}
+    if(this.dataArr!==undefined) {
+      this.LoadData();
+    }
   }
   public notify(message: string): void {
     if(message === "model_update" ) {
       try {
         this.dataArr=this.dataService.get_PuData();
-        if(this.dataArr!==undefined) {this.LoadData();this.addHide();}
+        if(this.dataArr!==undefined) {this.LoadData();}
       }
       catch (ex) {
         console.log(ex);
@@ -65,50 +69,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     this._Invert=this.dataArr[ "Invert"];
     this._Scale=this.dataArr[ "Scale"];
     this._HideNum=this.dataArr[ "HideNum"];
-  }
-
-   public addHide() {
-    const  _Filter=this.dataArr[ "Filter"];
-    let lastnumber: string;
-    this._Filter=[];
-    this._HideNum=[];
-    if(_Filter!==undefined&&_Filter.length!==0) {
-      for(const _filter of _Filter) {
-        if(this._HideNum.length===0) {
-          this._HideNum[0]="0";
-          lastnumber=this._HideNum[0];
-        } else {
-          for(let j=0;j<this._HideNum.length+1;j++) {
-            if(this._HideNum.indexOf(String(j))===-1) {
-              this._HideNum.push(String(j));
-              lastnumber=String(j);
-              break;
-            }
-          }
-        }
-        const _propertyname=_filter["name"];
-        const _relation=Number(_filter["relation"]);
-        const _text=_filter["value"];
-        const _descr=_filter["descr"];
-        let _HideType: string;
-        let _texts: any[];
-        if(typeof(_text)==="number") {
-          _HideType="number";
-          _texts=this.Initial(_propertyname);
-        } else if(typeof(_text)==="string") {
-          _HideType="category";
-          _texts=this.Initial(_propertyname);
-          _texts=["None"].concat(_texts);
-        }
-        this._Filter.push({ divid:String("addHide".concat(String(lastnumber))),id: lastnumber,HeightHide:_propertyname,
-                            type:_HideType,Category:_texts,CategaryHide:_text,descr:_descr,RelaHide:_relation,
-                            textHide: _text,HideMax:Math.ceil(Math.max.apply(Math, _texts)),
-                            HideMin:Math.round(Math.min.apply(Math, _texts)*100)/100,Disabletext:null});
-      }
-    }
-    this.dataArr["Filter"]=this._Filter;
-    this.dataArr["HideNum"]=this._HideNum;
-    this.dataService.set_PuData(this.dataArr);
+    this._Filter=this.dataArr[ "Filter"];
   }
 
   public Disable(event) {
@@ -147,26 +108,6 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     this.dataArr["Filter"]=this._Filter;
     this.dataArr["HideNum"]=this._HideNum;
     this.dataService.set_PuData(this.dataArr);
-  }
-
-  public Initial(_HideValue: string): any[] {
-    const texts: any[] =[];
-    const promise=this.dataService.getcesiumpromise();
-    const self= this;
-    promise.then( function(dataSource) {
-      const entities = dataSource.entities.values;
-      for (const entity of entities) {
-        if(entity.properties[_HideValue]!==undefined) {
-          if(entity.properties[_HideValue]._value!==" ") {
-            if(texts.length===0) {texts[0]=entity.properties[_HideValue]._value;
-            } else { if(texts.indexOf(entity.properties[_HideValue]._value)===-1) {
-              texts.push(entity.properties[_HideValue]._value);}
-            }
-          }
-        }
-      }
-    });
-    return texts;
   }
 
   public ChangeCategory(categary,id,type) {
@@ -251,6 +192,6 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   public reset() {
     this.dataService.LoadJSONData();
     this.dataArr=this.dataService.get_PuData();
-    if(this.dataArr!==undefined) {this.LoadData();this.addHide();}
+    if(this.dataArr!==undefined) {this.LoadData();}
   }
 }

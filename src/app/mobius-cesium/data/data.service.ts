@@ -13,11 +13,11 @@ export class DataService {
   private hideElementArr: any[];
   private _HideNum: any[];
   private poly_center: any[];
-  // private ceisumData: any[];
   private mode: string;
   private _ViData: object;
   private _PuData: object;
   private _index: number;
+  private _Filter: any[];
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -86,53 +86,55 @@ export class DataService {
   }
 
   public getValue(model: JSON) {
-    const propertyNames = Object.keys(model["features"][0].properties);
-    const _ColorValue = propertyNames[0];
-    propertyNames.sort();
-    propertyNames.unshift("None");
+    if(model!==undefined) {
+      const propertyNames = Object.keys(model["features"][0].properties);
+      const _ColorValue = propertyNames[0];
+      propertyNames.sort();
+      propertyNames.unshift("None");
 
-    const feature_instance = model["features"][0];
-    const _HeightKey = propertyNames.filter(function(prop_name) {
-      const value =  feature_instance.properties[prop_name];
-      return (typeof(value) === "number");
-    });
-    const _HeightValue = _HeightKey[0];
-    _HeightKey.sort();
-    _HeightKey.unshift("None");
+      const feature_instance = model["features"][0];
+      const _HeightKey = propertyNames.filter(function(prop_name) {
+        const value =  feature_instance.properties[prop_name];
+        return (typeof(value) === "number");
+      });
+      const _HeightValue = _HeightKey[0];
+      _HeightKey.sort();
+      _HeightKey.unshift("None");
 
-    const promise=this.cesiumpromise;
-    const _Heighttexts: any[]=[];
-    const _Colortexts: any[]=[];
-    promise.then(function(dataSource) {
-      const entities = dataSource.entities.values;
-      for (const entity of entities) {
-        if(entity.properties[_HeightValue]!==undefined) {
-          if(entity.properties[_HeightValue]._value!==" ") {
-            if(_Heighttexts.length===0) {_Heighttexts[0]=entity.properties[_HeightValue]._value;
-            } else { if(_Heighttexts.indexOf(entity.properties[_HeightValue]._value)===-1) {
-             _Heighttexts.push(entity.properties[_HeightValue]._value);}
+      const promise=this.cesiumpromise;
+      const _Heighttexts: any[]=[];
+      const _Colortexts: any[]=[];
+      promise.then(function(dataSource) {
+        const entities = dataSource.entities.values;
+        for (const entity of entities) {
+          if(entity.properties[_HeightValue]!==undefined) {
+            if(entity.properties[_HeightValue]._value!==" ") {
+              if(_Heighttexts.length===0) {_Heighttexts[0]=entity.properties[_HeightValue]._value;
+              } else { if(_Heighttexts.indexOf(entity.properties[_HeightValue]._value)===-1) {
+               _Heighttexts.push(entity.properties[_HeightValue]._value);}
+              }
+            }
+          }
+          if(entity.properties[_ColorValue]!==undefined) {
+            if(entity.properties[_ColorValue]._value!==" ") {
+              if(_Colortexts.length===0) {_Colortexts[0]=entity.properties[_ColorValue]._value;
+              } else { if(_Colortexts.indexOf(entity.properties[_ColorValue]._value)===-1) {
+                _Colortexts.push(entity.properties[_ColorValue]._value);}
+              }
             }
           }
         }
-        if(entity.properties[_ColorValue]!==undefined) {
-          if(entity.properties[_ColorValue]._value!==" ") {
-            if(_Colortexts.length===0) {_Colortexts[0]=entity.properties[_ColorValue]._value;
-            } else { if(_Colortexts.indexOf(entity.properties[_ColorValue]._value)===-1) {
-              _Colortexts.push(entity.properties[_ColorValue]._value);}
-            }
-          }
-        }
-      }
-    });
-    const _MinColor=Math.min.apply(Math, _Colortexts);
-    const _MaxColor=Math.max.apply(Math, _Colortexts);
-    const _MinHeight=Math.min.apply(Math, _Heighttexts);
-    const _MaxHeight=Math.max.apply(Math, _Heighttexts);
-    const _Filter: any[]=[];
-    const _HideNum: any[]=[];
-    this.getViData(propertyNames,_Colortexts.sort(),_ColorValue,_MinColor,_MaxColor,false,
-                   _HeightKey,_Heighttexts.sort(),_HeightValue,_MinHeight,_MaxHeight,1,
-                   false,false,_Filter,_HideNum);
+      });
+      const _MinColor=Math.min.apply(Math, _Colortexts);
+      const _MaxColor=Math.max.apply(Math, _Colortexts);
+      const _MinHeight=Math.min.apply(Math, _Heighttexts);
+      const _MaxHeight=Math.max.apply(Math, _Heighttexts);
+      const _Filter: any[]=[];
+      const _HideNum: any[]=[];
+      this.getViData(propertyNames,_Colortexts.sort(),_ColorValue,_MinColor,_MaxColor,false,
+                     _HeightKey,_Heighttexts.sort(),_HeightValue,_MinHeight,_MaxHeight,1,
+                     false,false,_Filter,_HideNum);
+    }
   }
   public get_ViData(): object {
     return this._ViData;
@@ -142,7 +144,7 @@ export class DataService {
   }
 
   public LoadJSONData() {
-    if(this._jsonModel["cesium"]!==undefined) {
+    if(this._jsonModel!==undefined&&this._jsonModel["cesium"]!==undefined) {
       const cesiumData=this._jsonModel["cesium"];
       let _ColorDescr: string;
       let _ColorValue: string;
@@ -194,9 +196,6 @@ export class DataService {
           } else {_HeightScale=1;}
         }
       }
-      if(cesiumData["filters"]!==undefined) {
-        _filters=cesiumData["filters"];
-      }
       const promise=this.cesiumpromise;
       const _Heighttexts=[];
       const _Colortexts=[];
@@ -221,11 +220,74 @@ export class DataService {
           }
         }
       });
+      if(cesiumData["filters"]!==undefined) {
+        _filters=cesiumData["filters"];
+        let lastnumber: string;
+        this._Filter=[];
+        this._HideNum=[];
+        if(_filters!==undefined&&_filters.length!==0) {
+          for(const _filter of _filters) {
+            if(this._HideNum.length===0) {
+              this._HideNum[0]="0";
+              lastnumber=this._HideNum[0];
+            } else {
+              for(let j=0;j<this._HideNum.length+1;j++) {
+                if(this._HideNum.indexOf(String(j))===-1) {
+                  this._HideNum.push(String(j));
+                  lastnumber=String(j);
+                  break;
+                }
+              }
+            }
+            if(_filter["name"]!==undefined) {
+              const _propertyname=_filter["name"];
+              const _relation=Number(_filter["relation"]);
+              const _text=_filter["value"];
+              const _descr=_filter["descr"];
+              let _HideType: string;
+              let _texts: any[];
+              if(typeof(_text)==="number") {
+                _HideType="number";
+                _texts=this.Initial(_propertyname);
+              } else if(typeof(_text)==="string") {
+                _HideType="category";
+                _texts=this.Initial(_propertyname);
+                _texts=["None"].concat(_texts);
+              }
+              this._Filter.push({ divid:String("addHide".concat(String(lastnumber))),id: lastnumber,
+                                  HeightHide:_propertyname,type:_HideType,Category:_texts,
+                                  CategaryHide:_text,descr:_descr,RelaHide:_relation,
+                                  textHide: _text,HideMax:Math.ceil(Math.max.apply(Math, _texts)),
+                                  HideMin:Math.floor(Math.min.apply(Math, _texts)*100)/100,Disabletext:null});
+            }
+          }
+        }
+      } else {this._Filter=[];this._HideNum=[];}
       this.getPuData(_ColorDescr,_propertyNames,_Colortexts.sort(),_ColorValue,_MinColor,_MaxColor,_ColorInvert,
                         _HeightDescr,_HeightKey,_Heighttexts.sort(),_HeightValue,_MinHeight,_MaxHeight,
-                        _HeightScale,_HeightInvert,_HeightLine,_filters,_HideNum);
+                        _HeightScale,_HeightInvert,_HeightLine,this._Filter,this._HideNum);
 
     }
+
+  }
+   public  Initial(_HideValue: string): any[] {
+    const texts=[];
+    const promise=this.getcesiumpromise();
+    const self= this;
+    promise.then(function(dataSource) {
+      const entities = dataSource.entities.values;
+      for (const entity of entities) {
+        if(entity.properties[_HideValue]!==undefined) {
+          if(entity.properties[_HideValue]._value!==" ") {
+            if(texts.length===0) {texts[0]=entity.properties[_HideValue]._value;
+            } else { if(texts.indexOf(entity.properties[_HideValue]._value)===-1) {
+              texts.push(entity.properties[_HideValue]._value);}
+            }
+          }
+        }
+      }
+    });
+    return texts;
   }
 
   public get_PuData(): object {

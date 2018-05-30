@@ -18,6 +18,8 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   private propertyname: any[];
   private relation: any[];
   private text: any[];
+  private _Filter: any[];
+  private _HideNum: any[];
 
   constructor(injector: Injector, myElement: ElementRef) {
   super(injector);
@@ -27,6 +29,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     this.mode=this.dataService.getmode();
     this.viewer=this.dataService.getViewer();
     if(this.mode==="viewer") {
+      // this.addHide();
       this.changedata(2);
     } else if(this.mode==="editor") {
       this.changedata(0);
@@ -41,6 +44,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       try {
         if(this.data!==undefined&&this.data["features"]!==undefined) {
           if(this.mode==="viewer") {
+            // this.addHide();
             this.changedata(2);
           } else if(this.mode==="editor") {
             this.changedata(0);
@@ -59,7 +63,12 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     } else if(id===2) {
       this.dataArr=this.dataService.get_PuData();
     }
-    if(this.dataArr!==undefined) {this.LoadViewer();}
+    if(this.dataArr!==undefined) {
+      if(this.mode==="viewer") {
+        // this.addHide();
+      }
+      this.LoadViewer();
+    }
   }
 
   public Reset() {
@@ -80,7 +89,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     const _Invert: boolean=this.dataArr["Invert"];
     const _Scale: number=this.dataArr["Scale"];
     let _Filter: any[];
-    if(this.dataArr["Filter"]===undefined) {_Filter=[];} else {_Filter=this.dataArr["Filter"];}
+    if(this.dataArr["Filter"]!==undefined&&this.dataArr["Filter"].length!==0) {
+      _Filter=this.dataArr["Filter"];
+    } else {_Filter=[];}
     let _ChromaScale=chroma.scale("SPECTRAL");
     if(_ColorInvert===true) {_ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);}
     const self= this;
