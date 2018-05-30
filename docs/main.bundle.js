@@ -27,7 +27,7 @@ module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  ma
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 100%\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.14&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\" [mode]=\"'editor'\"></mobius-cesium>\r\n</div>"
+module.exports = "<!--The content below is only a placeholder and can be replaced.-->\r\n<!-- <body> -->\r\n<!-- <div id=\"cesiumContainer\"></div>\r\n<div> -->\r\n  <!-- <div id=\"cesiumContainer\">\r\n  \t<div id=\"loadfile\">\r\n\t    <div class=\"version\" style=\"font-family:sans-serif;color:white;\"> v0.0.1</div>\r\n\t    <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n\t</div>\r\n  </div> -->\r\n<!-- </div> -->\r\n<!-- </body> -->\r\n\r\n<div style=\"height: 100%\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.14&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\" [mode]=\"'viewer'\"></mobius-cesium>\r\n</div>"
 
 /***/ }),
 
@@ -169,7 +169,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var DataService = /** @class */ (function () {
     function DataService() {
         this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
-        this._CheckInvert = false;
     }
     DataService.prototype.sendMessage = function (message) {
         this.subject.next({ text: message });
@@ -193,142 +192,66 @@ var DataService = /** @class */ (function () {
         }
         this.sendMessage("model_update");
     };
-    DataService.prototype.getValue = function (model) {
-        var propertyNames = Object.keys(model["features"][0].properties);
-        var _ColorValue = propertyNames[0];
-        propertyNames.sort();
-        propertyNames.unshift("None");
-        var feature_instance = model["features"][0];
-        var _HeightKey = propertyNames.filter(function (prop_name) {
-            var value = feature_instance.properties[prop_name];
-            return (typeof (value) === "number");
-        });
-        var _HeightValue = _HeightKey[0];
-        _HeightKey.sort();
-        _HeightKey.unshift("None");
-        var promise = this.cesiumpromise;
-        var _Heighttexts = [];
-        var _Colortexts = [];
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
-                var entity = entities_1[_i];
-                if (entity.properties[_HeightValue] !== undefined) {
-                    if (entity.properties[_HeightValue]._value !== " ") {
-                        if (_Heighttexts.length === 0) {
-                            _Heighttexts[0] = entity.properties[_HeightValue]._value;
-                        }
-                        else {
-                            if (_Heighttexts.indexOf(entity.properties[_HeightValue]._value) === -1) {
-                                _Heighttexts.push(entity.properties[_HeightValue]._value);
-                            }
-                        }
-                    }
-                }
-                if (entity.properties[_ColorValue] !== undefined) {
-                    if (entity.properties[_ColorValue]._value !== " ") {
-                        if (_Colortexts.length === 0) {
-                            _Colortexts[0] = entity.properties[_ColorValue]._value;
-                        }
-                        else {
-                            if (_Colortexts.indexOf(entity.properties[_ColorValue]._value) === -1) {
-                                _Colortexts.push(entity.properties[_ColorValue]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        var _MinColor = Math.min.apply(Math, _Colortexts);
-        var _MaxColor = Math.max.apply(Math, _Colortexts);
-        var _MinHeight = Math.min.apply(Math, _Heighttexts);
-        var _MaxHeight = Math.max.apply(Math, _Heighttexts);
-        var _Filter = [];
-        var _HideNum = [];
-        this.getViData(propertyNames, _Colortexts.sort(), _ColorValue, _MinColor, _MaxColor, false, _HeightKey, _Heighttexts.sort(), _HeightValue, _MinHeight, _MaxHeight, 1, false, false, _Filter, _HideNum);
+    DataService.prototype.getViewer = function () {
+        return this.viewer;
     };
-    DataService.prototype.LoadJSONData = function () {
-        if (this._jsonModel["cesium"] !== undefined) {
-            var cesiumData = this._jsonModel["cesium"];
-            var _ColorDescr = void 0;
-            var _ColorValue_1;
-            var _MinColor = void 0;
-            var _MaxColor = void 0;
-            var _ColorInvert = void 0;
-            var _HeightDescr = void 0;
-            var _HeightKey = [];
-            var _HeightValue_1;
-            var _MinHeight = void 0;
-            var _MaxHeight = void 0;
-            var _HeightInvert = void 0;
-            var _HeightScale = void 0;
-            var _HeightLine = void 0;
-            var _filters = void 0;
-            var _ceisumData = [];
-            var _propertyNames = [];
-            var _HideNum = [];
-            if (cesiumData["colour"] !== undefined) {
-                if (cesiumData["colour"]["descr"] !== undefined) {
-                    _ColorDescr = cesiumData["colour"]["descr"];
-                }
-                if (cesiumData["colour"]["attribs"] !== undefined) {
-                    for (var _i = 0, _a = cesiumData["colour"]["attribs"]; _i < _a.length; _i++) {
-                        var data = _a[_i];
-                        _propertyNames.push(data["name"]);
-                    }
-                    _ColorValue_1 = _propertyNames[0];
-                    _MinColor = cesiumData["colour"]["attribs"][0]["min"];
-                    _MaxColor = cesiumData["colour"]["attribs"][0]["max"];
-                    if (cesiumData["colour"]["attribs"][0]["invert"] === true) {
-                        _ColorInvert = true;
-                    }
-                    else {
-                        _ColorInvert = false;
-                    }
-                }
-            }
-            if (cesiumData["extrude"] !== undefined) {
-                if (cesiumData["extrude"]["descr"] !== undefined) {
-                    _HeightDescr = cesiumData["extrude"]["descr"];
-                }
-                if (cesiumData["extrude"]["attribs"] !== undefined) {
-                    for (var _b = 0, _c = cesiumData["extrude"]["attribs"]; _b < _c.length; _b++) {
-                        var data = _c[_b];
-                        _HeightKey.push(data["name"]);
-                    }
-                    _HeightValue_1 = _HeightKey[0];
-                    _MinHeight = cesiumData["extrude"]["attribs"][0]["min"];
-                    _MaxHeight = cesiumData["extrude"]["attribs"][0]["max"];
-                    if (cesiumData["extrude"]["attribs"][0]["invert"] === true) {
-                        _HeightInvert = true;
-                    }
-                    else {
-                        _HeightInvert = false;
-                    }
-                    if (cesiumData["extrude"]["attribs"][0]["line"] === true) {
-                        _HeightLine = true;
-                    }
-                    else {
-                        _HeightLine = false;
-                    }
-                    if (cesiumData["extrude"]["attribs"][0]["scale"] !== undefined) {
-                        _HeightScale = cesiumData["extrude"]["attribs"][0]["scale"];
-                    }
-                    else {
-                        _HeightScale = 1;
-                    }
-                }
-            }
-            if (cesiumData["filters"] !== undefined) {
-                _filters = cesiumData["filters"];
-            }
+    DataService.prototype.setViewer = function (_viewer) {
+        this.viewer = _viewer;
+    };
+    DataService.prototype.get_SelectedEntity = function () {
+        return this._SelectedEntity;
+    };
+    DataService.prototype.set_SelectedEntity = function (_SelectedEntity) {
+        this._SelectedEntity = _SelectedEntity;
+    };
+    DataService.prototype.getcesiumpromise = function () {
+        return this.cesiumpromise;
+    };
+    DataService.prototype.setcesiumpromise = function (cesiumpromise) {
+        this.cesiumpromise = cesiumpromise;
+    };
+    DataService.prototype.gethideElementArr = function () {
+        return this.hideElementArr;
+    };
+    DataService.prototype.get_HideNum = function () {
+        return this._HideNum;
+    };
+    DataService.prototype.getpoly_center = function () {
+        return this.poly_center;
+    };
+    DataService.prototype.setpoly_center = function (poly_center) {
+        this.poly_center = poly_center;
+    };
+    DataService.prototype.getmode = function () {
+        return this.mode;
+    };
+    DataService.prototype.get_index = function () {
+        return this._index;
+    };
+    DataService.prototype.set_index = function (_index) {
+        this._index = _index;
+    };
+    DataService.prototype.getValue = function (model) {
+        if (model !== undefined) {
+            var propertyNames = Object.keys(model["features"][0].properties);
+            var _ColorValue_1 = propertyNames[0];
+            propertyNames.sort();
+            propertyNames.unshift("None");
+            var feature_instance_1 = model["features"][0];
+            var _HeightKey = propertyNames.filter(function (prop_name) {
+                var value = feature_instance_1.properties[prop_name];
+                return (typeof (value) === "number");
+            });
+            var _HeightValue_1 = _HeightKey[0];
+            _HeightKey.sort();
+            _HeightKey.unshift("None");
             var promise = this.cesiumpromise;
             var _Heighttexts_1 = [];
             var _Colortexts_1 = [];
             promise.then(function (dataSource) {
                 var entities = dataSource.entities.values;
-                for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-                    var entity = entities_2[_i];
+                for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                    var entity = entities_1[_i];
                     if (entity.properties[_HeightValue_1] !== undefined) {
                         if (entity.properties[_HeightValue_1]._value !== " ") {
                             if (_Heighttexts_1.length === 0) {
@@ -355,19 +278,209 @@ var DataService = /** @class */ (function () {
                     }
                 }
             });
-            this.getPuData(_ColorDescr, _propertyNames, _Colortexts_1.sort(), _ColorValue_1, _MinColor, _MaxColor, _ColorInvert, _HeightDescr, _HeightKey, _Heighttexts_1.sort(), _HeightValue_1, _MinHeight, _MaxHeight, _HeightScale, _HeightInvert, _HeightLine, _filters, _HideNum);
+            var _MinColor = Math.min.apply(Math, _Colortexts_1);
+            var _MaxColor = Math.max.apply(Math, _Colortexts_1);
+            var _MinHeight = Math.min.apply(Math, _Heighttexts_1);
+            var _MaxHeight = Math.max.apply(Math, _Heighttexts_1);
+            var _Filter = [];
+            var _HideNum = [];
+            this.getViData(propertyNames, _Colortexts_1.sort(), _ColorValue_1, _MinColor, _MaxColor, false, _HeightKey, _Heighttexts_1.sort(), _HeightValue_1, _MinHeight, _MaxHeight, 1, false, false, _Filter, _HideNum);
         }
     };
-    /*public getPropertyNames() {
-      return this.propertyNames;
-    }
-  
-    public getColorValue(_ColorValue: string): void {
-      this.ColorValue=_ColorValue;
-    }
-    public getHeightValue(_HeightValue: string): void {
-      this.HeightValue=_HeightValue;
-    }*/
+    DataService.prototype.get_ViData = function () {
+        return this._ViData;
+    };
+    DataService.prototype.set_ViData = function (_ViData) {
+        this._ViData = _ViData;
+    };
+    DataService.prototype.LoadJSONData = function () {
+        if (this._jsonModel !== undefined && this._jsonModel["cesium"] !== undefined) {
+            var cesiumData = this._jsonModel["cesium"];
+            var _ColorDescr = void 0;
+            var _ColorValue_2;
+            var _MinColor = void 0;
+            var _MaxColor = void 0;
+            var _ColorInvert = void 0;
+            var _HeightDescr = void 0;
+            var _HeightKey = [];
+            var _HeightValue_2;
+            var _MinHeight = void 0;
+            var _MaxHeight = void 0;
+            var _HeightInvert = void 0;
+            var _HeightScale = void 0;
+            var _HeightLine = void 0;
+            var _filters = void 0;
+            var _ceisumData = [];
+            var _propertyNames = [];
+            var _HideNum = [];
+            if (cesiumData["colour"] !== undefined) {
+                if (cesiumData["colour"]["descr"] !== undefined) {
+                    _ColorDescr = cesiumData["colour"]["descr"];
+                }
+                if (cesiumData["colour"]["attribs"] !== undefined) {
+                    for (var _i = 0, _a = cesiumData["colour"]["attribs"]; _i < _a.length; _i++) {
+                        var data = _a[_i];
+                        _propertyNames.push(data["name"]);
+                    }
+                    _ColorValue_2 = _propertyNames[0];
+                    _MinColor = cesiumData["colour"]["attribs"][0]["min"];
+                    _MaxColor = cesiumData["colour"]["attribs"][0]["max"];
+                    if (cesiumData["colour"]["attribs"][0]["invert"] === true) {
+                        _ColorInvert = true;
+                    }
+                    else {
+                        _ColorInvert = false;
+                    }
+                }
+            }
+            if (cesiumData["extrude"] !== undefined) {
+                if (cesiumData["extrude"]["descr"] !== undefined) {
+                    _HeightDescr = cesiumData["extrude"]["descr"];
+                }
+                if (cesiumData["extrude"]["attribs"] !== undefined) {
+                    for (var _b = 0, _c = cesiumData["extrude"]["attribs"]; _b < _c.length; _b++) {
+                        var data = _c[_b];
+                        _HeightKey.push(data["name"]);
+                    }
+                    _HeightValue_2 = _HeightKey[0];
+                    _MinHeight = cesiumData["extrude"]["attribs"][0]["min"];
+                    _MaxHeight = cesiumData["extrude"]["attribs"][0]["max"];
+                    if (cesiumData["extrude"]["attribs"][0]["invert"] === true) {
+                        _HeightInvert = true;
+                    }
+                    else {
+                        _HeightInvert = false;
+                    }
+                    if (cesiumData["extrude"]["attribs"][0]["line"] === true) {
+                        _HeightLine = true;
+                    }
+                    else {
+                        _HeightLine = false;
+                    }
+                    if (cesiumData["extrude"]["attribs"][0]["scale"] !== undefined) {
+                        _HeightScale = cesiumData["extrude"]["attribs"][0]["scale"];
+                    }
+                    else {
+                        _HeightScale = 1;
+                    }
+                }
+            }
+            var promise = this.cesiumpromise;
+            var _Heighttexts_2 = [];
+            var _Colortexts_2 = [];
+            promise.then(function (dataSource) {
+                var entities = dataSource.entities.values;
+                for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
+                    var entity = entities_2[_i];
+                    if (entity.properties[_HeightValue_2] !== undefined) {
+                        if (entity.properties[_HeightValue_2]._value !== " ") {
+                            if (_Heighttexts_2.length === 0) {
+                                _Heighttexts_2[0] = entity.properties[_HeightValue_2]._value;
+                            }
+                            else {
+                                if (_Heighttexts_2.indexOf(entity.properties[_HeightValue_2]._value) === -1) {
+                                    _Heighttexts_2.push(entity.properties[_HeightValue_2]._value);
+                                }
+                            }
+                        }
+                    }
+                    if (entity.properties[_ColorValue_2] !== undefined) {
+                        if (entity.properties[_ColorValue_2]._value !== " ") {
+                            if (_Colortexts_2.length === 0) {
+                                _Colortexts_2[0] = entity.properties[_ColorValue_2]._value;
+                            }
+                            else {
+                                if (_Colortexts_2.indexOf(entity.properties[_ColorValue_2]._value) === -1) {
+                                    _Colortexts_2.push(entity.properties[_ColorValue_2]._value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            if (cesiumData["filters"] !== undefined) {
+                _filters = cesiumData["filters"];
+                var lastnumber = void 0;
+                this._Filter = [];
+                this._HideNum = [];
+                if (_filters !== undefined && _filters.length !== 0) {
+                    for (var _d = 0, _filters_1 = _filters; _d < _filters_1.length; _d++) {
+                        var _filter = _filters_1[_d];
+                        if (this._HideNum.length === 0) {
+                            this._HideNum[0] = "0";
+                            lastnumber = this._HideNum[0];
+                        }
+                        else {
+                            for (var j = 0; j < this._HideNum.length + 1; j++) {
+                                if (this._HideNum.indexOf(String(j)) === -1) {
+                                    this._HideNum.push(String(j));
+                                    lastnumber = String(j);
+                                    break;
+                                }
+                            }
+                        }
+                        if (_filter["name"] !== undefined) {
+                            var _propertyname = _filter["name"];
+                            var _relation = Number(_filter["relation"]);
+                            var _text = _filter["value"];
+                            var _descr = _filter["descr"];
+                            var _HideType = void 0;
+                            var _texts = void 0;
+                            if (typeof (_text) === "number") {
+                                _HideType = "number";
+                                _texts = this.Initial(_propertyname);
+                            }
+                            else if (typeof (_text) === "string") {
+                                _HideType = "category";
+                                _texts = this.Initial(_propertyname);
+                                _texts = ["None"].concat(_texts);
+                            }
+                            this._Filter.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber,
+                                HeightHide: _propertyname, type: _HideType, Category: _texts,
+                                CategaryHide: _text, descr: _descr, RelaHide: _relation,
+                                textHide: _text, HideMax: Math.ceil(Math.max.apply(Math, _texts)),
+                                HideMin: Math.floor(Math.min.apply(Math, _texts) * 100) / 100, Disabletext: null });
+                        }
+                    }
+                }
+            }
+            else {
+                this._Filter = [];
+                this._HideNum = [];
+            }
+            this.getPuData(_ColorDescr, _propertyNames, _Colortexts_2.sort(), _ColorValue_2, _MinColor, _MaxColor, _ColorInvert, _HeightDescr, _HeightKey, _Heighttexts_2.sort(), _HeightValue_2, _MinHeight, _MaxHeight, _HeightScale, _HeightInvert, _HeightLine, this._Filter, this._HideNum);
+        }
+    };
+    DataService.prototype.Initial = function (_HideValue) {
+        var texts = [];
+        var promise = this.getcesiumpromise();
+        var self = this;
+        promise.then(function (dataSource) {
+            var entities = dataSource.entities.values;
+            for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
+                var entity = entities_3[_i];
+                if (entity.properties[_HideValue] !== undefined) {
+                    if (entity.properties[_HideValue]._value !== " ") {
+                        if (texts.length === 0) {
+                            texts[0] = entity.properties[_HideValue]._value;
+                        }
+                        else {
+                            if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
+                                texts.push(entity.properties[_HideValue]._value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        return texts;
+    };
+    DataService.prototype.get_PuData = function () {
+        return this._PuData;
+    };
+    DataService.prototype.set_PuData = function (_PuData) {
+        this._PuData = _PuData;
+    };
     DataService.prototype.getViData = function (_ColorProperty, _ColorText, _ColorKey, _ColorMin, _ColorMax, _ColorInvert, _ExtrudeProperty, _ExtrudeText, _ExturdeValue, _ExtrudeMin, _ExtrudeMax, _Scale, _Invert, _HeightChart, _Filter, _HideNum) {
         this._ViData = { ColorProperty: _ColorProperty, ColorText: _ColorText, ColorKey: _ColorKey,
             ColorMin: _ColorMin, ColorMax: _ColorMax, ColorInvert: _ColorInvert,
@@ -642,30 +755,30 @@ var AttributesComponent = /** @class */ (function (_super) {
     }
     AttributesComponent.prototype.ngOnInit = function () {
         this.data = this.dataService.getGsModel();
-        this.mode = this.dataService.mode;
-        this.viewer = this.dataService.viewer;
-        this.dataArr = this.dataService._ViData;
+        this.mode = this.dataService.getmode();
+        this.viewer = this.dataService.getViewer();
+        this.dataArr = this.dataService.get_ViData();
     };
     AttributesComponent.prototype.notify = function (message) {
         if (message === "model_update") {
             this.data = this.dataService.getGsModel();
-            this.mode = this.dataService.mode;
-            this.viewer = this.dataService.viewer;
-            this.dataArr = this.dataService._ViData;
+            this.mode = this.dataService.getmode();
+            this.viewer = this.dataService.getViewer();
+            this.dataArr = this.dataService.get_ViData();
         }
     };
     AttributesComponent.prototype.ngDoCheck = function () {
-        if (this.viewer !== undefined && this.dataService._SelectedEntity !== undefined && this.mode === "editor") {
-            if (this.ID !== this.dataService._SelectedEntity._id) {
+        if (this.viewer !== undefined && this.dataService.get_SelectedEntity() !== undefined && this.mode === "editor") {
+            if (this.ID !== this.dataService.get_SelectedEntity()._id) {
                 var _Property = void 0;
-                this.ID = this.dataService._SelectedEntity._id;
+                this.ID = this.dataService.get_SelectedEntity()._id;
                 this._Properties = [];
                 for (var _i = 0, _a = this.dataArr["ColorProperty"]; _i < _a.length; _i++) {
                     var _ColorPro = _a[_i];
                     if (_ColorPro !== "None") {
                         _Property = [];
                         _Property.Name = _ColorPro;
-                        _Property.Value = this.dataService._SelectedEntity.properties[_Property.Name]._value;
+                        _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
                         this._Properties.push(_Property);
                     }
                 }
@@ -735,19 +848,18 @@ var PublishComponent = /** @class */ (function (_super) {
         return _super.call(this, injector) || this;
     }
     PublishComponent.prototype.ngOnInit = function () {
-        this.dataArr = this.dataService._PuData;
+        this.mode = this.dataService.getmode();
+        this.dataArr = this.dataService.get_PuData();
         if (this.dataArr !== undefined) {
             this.LoadData();
-            this.addHide();
         }
     };
     PublishComponent.prototype.notify = function (message) {
         if (message === "model_update") {
             try {
-                this.dataArr = this.dataService._PuData;
+                this.dataArr = this.dataService.get_PuData();
                 if (this.dataArr !== undefined) {
                     this.LoadData();
-                    this.addHide();
                 }
             }
             catch (ex) {
@@ -771,52 +883,7 @@ var PublishComponent = /** @class */ (function (_super) {
         this._Invert = this.dataArr["Invert"];
         this._Scale = this.dataArr["Scale"];
         this._HideNum = this.dataArr["HideNum"];
-    };
-    PublishComponent.prototype.addHide = function () {
-        var _Filter = this.dataArr["Filter"];
-        var lastnumber;
-        this._Filter = [];
-        this._HideNum = [];
-        if (_Filter !== undefined && _Filter.length !== 0) {
-            for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
-                var _filter = _Filter_1[_i];
-                if (this._HideNum.length === 0) {
-                    this._HideNum[0] = "0";
-                    lastnumber = this._HideNum[0];
-                }
-                else {
-                    for (var j = 0; j < this._HideNum.length + 1; j++) {
-                        if (this._HideNum.indexOf(String(j)) === -1) {
-                            this._HideNum.push(String(j));
-                            lastnumber = String(j);
-                            break;
-                        }
-                    }
-                }
-                var _propertyname = _filter["name"];
-                var _relation = Number(_filter["relation"]);
-                var _text = _filter["value"];
-                var _descr = _filter["descr"];
-                var _HideType = void 0;
-                var _texts = void 0;
-                if (typeof (_text) === "number") {
-                    _HideType = "number";
-                    _texts = this.Initial(_propertyname);
-                }
-                else if (typeof (_text) === "string") {
-                    _HideType = "category";
-                    _texts = this.Initial(_propertyname);
-                    _texts = ["None"].concat(_texts);
-                }
-                this._Filter.push({ divid: String("addHide".concat(String(lastnumber))), id: lastnumber, HeightHide: _propertyname,
-                    type: _HideType, Category: _texts, CategaryHide: _text, descr: _descr, RelaHide: _relation,
-                    textHide: _text, HideMax: Math.ceil(Math.max.apply(Math, _texts)),
-                    HideMin: Math.round(Math.min.apply(Math, _texts) * 100) / 100, Disabletext: null });
-            }
-        }
-        this.dataArr["Filter"] = this._Filter;
-        this.dataArr["HideNum"] = this._HideNum;
-        this.dataService._PuData = this.dataArr;
+        this._Filter = this.dataArr["Filter"];
     };
     PublishComponent.prototype.Disable = function (event) {
         var index = this._HideNum.indexOf(event);
@@ -859,31 +926,7 @@ var PublishComponent = /** @class */ (function (_super) {
         }
         this.dataArr["Filter"] = this._Filter;
         this.dataArr["HideNum"] = this._HideNum;
-        this.dataService._PuData = this.dataArr;
-    };
-    PublishComponent.prototype.Initial = function (_HideValue) {
-        var texts = [];
-        var promise = this.dataService.cesiumpromise;
-        var self = this;
-        promise.then(function (dataSource) {
-            var entities = dataSource.entities.values;
-            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
-                var entity = entities_1[_i];
-                if (entity.properties[_HideValue] !== undefined) {
-                    if (entity.properties[_HideValue]._value !== " ") {
-                        if (texts.length === 0) {
-                            texts[0] = entity.properties[_HideValue]._value;
-                        }
-                        else {
-                            if (texts.indexOf(entity.properties[_HideValue]._value) === -1) {
-                                texts.push(entity.properties[_HideValue]._value);
-                            }
-                        }
-                    }
-                }
-            }
-        });
-        return texts;
+        this.dataService.set_PuData(this.dataArr);
     };
     PublishComponent.prototype.ChangeCategory = function (categary, id, type) {
         var _index = this._HideNum.indexOf(id);
@@ -909,13 +952,13 @@ var PublishComponent = /** @class */ (function (_super) {
                 this.dataArr["ColorInvert"] = _data["invert"];
             }
         }
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var _Colortexts = [];
         var self = this;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
-            for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
-                var entity = entities_2[_i];
+            for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                var entity = entities_1[_i];
                 if (entity.properties[value] !== undefined) {
                     if (entity.properties[value]._value !== " ") {
                         if (_Colortexts.length === 0) {
@@ -931,7 +974,7 @@ var PublishComponent = /** @class */ (function (_super) {
             }
         });
         this.dataArr["ColorText"] = _Colortexts.sort();
-        this.dataService._PuData = this.dataArr;
+        this.dataService.set_PuData(this.dataArr);
         this.LoadData();
     };
     PublishComponent.prototype.onChangeHeight = function (value) {
@@ -947,13 +990,13 @@ var PublishComponent = /** @class */ (function (_super) {
                 this.dataArr["Scale"] = _data["scale"];
             }
         }
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var _Heighttexts = [];
         var self = this;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
-            for (var _i = 0, entities_3 = entities; _i < entities_3.length; _i++) {
-                var entity = entities_3[_i];
+            for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
+                var entity = entities_2[_i];
                 if (entity.properties[value] !== undefined) {
                     if (entity.properties[value]._value !== " ") {
                         if (_Heighttexts.length === 0) {
@@ -969,15 +1012,14 @@ var PublishComponent = /** @class */ (function (_super) {
             }
         });
         this.dataArr["ExtrudeText"] = _Heighttexts.sort();
-        this.dataService._PuData = this.dataArr;
+        this.dataService.set_PuData(this.dataArr);
         this.LoadData();
     };
     PublishComponent.prototype.reset = function () {
         this.dataService.LoadJSONData();
-        this.dataArr = this.dataService._PuData;
+        this.dataArr = this.dataService.get_PuData();
         if (this.dataArr !== undefined) {
             this.LoadData();
-            this.addHide();
         }
     };
     PublishComponent = __decorate([
@@ -1005,7 +1047,7 @@ module.exports = "#setting{\r\n  position: relative;\r\n  height: 100%;\r\n  wid
 /***/ "./src/app/mobius-cesium/setting/setting.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"setting\" >\r\n  <mat-tab-group class=\"mat-tab-group\" style=\"height: 100%;\" (selectedTabChange)=\"changedata($event.index)\">\r\n    <mat-tab label=\"&nbsp;Visualise&nbsp;\" >\r\n      <app-visualise  (change)=\"LoadViewer()\" (click)=\"LoadViewer()\"></app-visualise>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Attributes&nbsp;\">\r\n      <app-attributes ></app-attributes>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Publish&nbsp;\" >\r\n      <app-publish  (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
+module.exports = "<div id=\"setting\" >\r\n  <mat-tab-group class=\"mat-tab-group\" style=\"height: 100%;\" (selectedTabChange)=\"changedata($event.index)\">\r\n    <mat-tab label=\"&nbsp;Visualise&nbsp;\" *ngIf=\"mode==='editor'\" >\r\n      <app-visualise (change)=\"LoadViewer()\" (click)=\"LoadViewer()\"></app-visualise>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Attributes&nbsp;\" *ngIf=\"mode==='editor'\" >\r\n      <app-attributes ></app-attributes>\r\n    </mat-tab>\r\n    <mat-tab label=\"&nbsp;Publish&nbsp;\" >\r\n      <app-publish  (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n</div>"
 
 /***/ }),
 
@@ -1047,9 +1089,10 @@ var SettingComponent = /** @class */ (function (_super) {
     }
     SettingComponent.prototype.ngOnInit = function () {
         this.data = this.dataService.getGsModel();
-        this.mode = this.dataService.mode;
-        this.viewer = this.dataService.viewer;
+        this.mode = this.dataService.getmode();
+        this.viewer = this.dataService.getViewer();
         if (this.mode === "viewer") {
+            // this.addHide();
             this.changedata(2);
         }
         else if (this.mode === "editor") {
@@ -1059,11 +1102,12 @@ var SettingComponent = /** @class */ (function (_super) {
     SettingComponent.prototype.notify = function (message) {
         if (message === "model_update") {
             this.data = this.dataService.getGsModel();
-            this.mode = this.dataService.mode;
-            this.viewer = this.dataService.viewer;
+            this.mode = this.dataService.getmode();
+            this.viewer = this.dataService.getViewer();
             try {
                 if (this.data !== undefined && this.data["features"] !== undefined) {
                     if (this.mode === "viewer") {
+                        // this.addHide();
                         this.changedata(2);
                     }
                     else if (this.mode === "editor") {
@@ -1077,22 +1121,25 @@ var SettingComponent = /** @class */ (function (_super) {
         }
     };
     SettingComponent.prototype.changedata = function (id) {
-        this.dataService._index = id;
+        this.dataService.set_index(id);
         if (id === 0) {
-            this.dataArr = this.dataService._ViData;
+            this.dataArr = this.dataService.get_ViData();
         }
         else if (id === 2) {
-            this.dataArr = this.dataService._PuData;
+            this.dataArr = this.dataService.get_PuData();
         }
         if (this.dataArr !== undefined) {
+            if (this.mode === "viewer") {
+                // this.addHide();
+            }
             this.LoadViewer();
         }
     };
     SettingComponent.prototype.Reset = function () {
-        this.dataArr = this.dataService._PuData;
+        this.dataArr = this.dataService.get_PuData();
     };
     SettingComponent.prototype.LoadViewer = function () {
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var _ColorKey = this.dataArr["ColorKey"];
         var _ColorMax = this.dataArr["ColorMax"];
         var _ColorMin = this.dataArr["ColorMin"];
@@ -1104,9 +1151,14 @@ var SettingComponent = /** @class */ (function (_super) {
         var _HeightChart = this.dataArr["HeightChart"];
         var _Invert = this.dataArr["Invert"];
         var _Scale = this.dataArr["Scale"];
-        var _Filter = this.dataArr["Filter"];
+        var _Filter;
+        if (this.dataArr["Filter"] !== undefined && this.dataArr["Filter"].length !== 0) {
+            _Filter = this.dataArr["Filter"];
+        }
+        else {
+            _Filter = [];
+        }
         var _ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
-        // const ColorNum: boolean=;
         if (_ColorInvert === true) {
             _ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
         }
@@ -1148,7 +1200,7 @@ var SettingComponent = /** @class */ (function (_super) {
                     }
                     else {
                         entity.polygon.extrudedHeight = 0;
-                        var center = self.dataService.poly_center[i];
+                        var center = self.dataService.getpoly_center()[i];
                         entity.polyline = new Cesium.PolylineGraphics({
                             positions: new Cesium.Cartesian3.fromDegreesArrayHeights([center[0], center[1], 0, center[0], center[1],
                                 self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale]),
@@ -1239,7 +1291,7 @@ var SettingComponent = /** @class */ (function (_super) {
             var initial = false;
             for (var j = 0; j < _ColorText.length; j++) {
                 if (entity.properties[_ColorKey]._value === _ColorText[j]) {
-                    var rgb = _ChromaScale((j / _ColorText.length).toFixed(2));
+                    var rgb = _ChromaScale(1 - (j / _ColorText.length));
                     entity.polygon.material = entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
                     initial = true;
                 }
@@ -1312,7 +1364,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
         return _super.call(this, injector) || this;
     }
     VisualiseComponent.prototype.ngOnInit = function () {
-        this.dataArr = this.dataService._ViData;
+        this.dataArr = this.dataService.get_ViData();
         if (this.dataArr !== undefined) {
             this.LoadData();
         }
@@ -1320,7 +1372,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
     VisualiseComponent.prototype.notify = function (message) {
         if (message === "model_update") {
             try {
-                this.dataArr = this.dataService._ViData;
+                this.dataArr = this.dataService.get_ViData();
                 if (this.dataArr !== undefined) {
                     this.LoadData();
                 }
@@ -1347,7 +1399,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
     };
     VisualiseComponent.prototype.onChangeColor = function (value) {
         this.dataArr["ColorKey"] = value;
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var _Colortexts = [];
         var self = this;
         promise.then(function (dataSource) {
@@ -1371,22 +1423,22 @@ var VisualiseComponent = /** @class */ (function (_super) {
         this.dataArr["ColorMin"] = Math.min.apply(Math, _Colortexts);
         this.dataArr["ColorMax"] = Math.max.apply(Math, _Colortexts);
         this.dataArr["ColorText"] = _Colortexts.sort();
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
         this.LoadData();
     };
     VisualiseComponent.prototype.changeColorMin = function (_Min) {
         this.dataArr["ColorMin"] = Number(_Min);
         this._ColorMin = this.dataArr["ColorMin"];
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.changeColorMax = function (_Max) {
         this.dataArr["ColorMax"] = Number(_Max);
         this._ColorMax = this.dataArr["ColorMax"];
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.onChangeHeight = function (value) {
         this.dataArr["ExtrudeKey"] = value;
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var _Heighttexts = [];
         var self = this;
         promise.then(function (dataSource) {
@@ -1410,33 +1462,33 @@ var VisualiseComponent = /** @class */ (function (_super) {
         this.dataArr["ExtrudeMin"] = Math.min.apply(Math, _Heighttexts);
         this.dataArr["ExtrudeMax"] = Math.max.apply(Math, _Heighttexts);
         this.dataArr["ExtrudeText"] = _Heighttexts.sort();
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
         this.LoadData();
     };
     VisualiseComponent.prototype.changeHeightMin = function (_Min) {
         this.dataArr["ExtrudeMin"] = Number(_Min);
         this._ExtrudeMin = this.dataArr["ExtrudeMin"];
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.changeHeightMax = function (_Max) {
         this.dataArr["ExtrudeMax"] = Number(_Max);
         this._ExtrudeMax = this.dataArr["ExtrudeMax"];
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.changescale = function (_ScaleValue) {
         this.dataArr["Scale"] = Number(_ScaleValue);
         this._Scale = this.dataArr["Scale"];
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.changeopp = function () {
         this._Invert = !this._Invert;
         this.dataArr["Invert"] = this._Invert;
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.changeExtrude = function () {
         this._HeightChart = !this._HeightChart;
         this.dataArr["HeightChart"] = this._HeightChart;
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.addHide = function () {
         var lastnumber;
@@ -1475,7 +1527,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
             HideMin: Math.round(Math.min.apply(Math, texts) * 100) / 100, Disabletext: null });
         this.dataArr["Filter"] = this._Filter;
         this.dataArr["HideNum"] = this._HideNum;
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.deleteHide = function (event) {
         var index = this._HideNum.indexOf(event);
@@ -1498,7 +1550,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
         this._HideNum.splice(index, 1);
         this.dataArr["Filter"] = this._Filter;
         this.dataArr["HideNum"] = this._HideNum;
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.Disable = function (event) {
         var index = this._HideNum.indexOf(event);
@@ -1541,7 +1593,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
         }
         this.dataArr["Filter"] = this._Filter;
         this.dataArr["HideNum"] = this._HideNum;
-        this.dataService._ViData = this.dataArr;
+        this.dataService.set_ViData(this.dataArr);
     };
     VisualiseComponent.prototype.ChangeHeight = function (_HeightHide) {
         this._HideValue = _HeightHide;
@@ -1551,7 +1603,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
         var HeightHide = this._Filter[index].HeightHide;
         this._Filter[index].RelaHide = _RelaHide;
         var texts = [];
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var self = this;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
@@ -1595,7 +1647,7 @@ var VisualiseComponent = /** @class */ (function (_super) {
     };
     VisualiseComponent.prototype.Initial = function (_HideValue) {
         var texts = [];
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var self = this;
         promise.then(function (dataSource) {
             var entities = dataSource.entities.values;
@@ -1616,6 +1668,12 @@ var VisualiseComponent = /** @class */ (function (_super) {
             }
         });
         return texts;
+    };
+    VisualiseComponent.prototype.changeImagery = function () {
+        if (this.dataService.getViewer() !== undefined) {
+            this.dataService.getViewer().scene.imageryLayers.removeAll();
+            this.dataService.getViewer().scene.globe.baseColor = Cesium.Color.GRAY;
+        }
     };
     VisualiseComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -1642,7 +1700,7 @@ module.exports = "body{\r\n  background: red;\r\n}\r\n\r\n\r\n#cesiumContainer{\
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event);Colortext();\" >\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th><!-- writing-mode:vertical-lr; -->\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of _Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"_Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of _Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n   <div id=\"ColorBar\" *ngIf=\"_CatNumtexts!==undefined\" >\r\n        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n       <tr >\r\n          <th *ngFor=\"let cattext of _CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n    </table>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let cattext of _CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n        \r\n     </div>\r\n     <!-- <div id=\"Colortext\" *ngIf=\"mode==='viewer'\" >\r\n          <div>Color: </div>\r\n        </div> -->\r\n     \r\n</div>"
+module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($event)\" (mousemove)=\"Colortext();\">\r\n  <div id=\"ColorBar\" *ngIf=\"texts!==undefined\">\r\n  \t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 88%;margin-left: 9%\">\r\n       <tr >\r\n          <th *ngFor=\"let text of texts;\" style=\"text-align:right;width: 7%\"><div  style=\"width: 8%;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{text}}</div></th>\r\n        </tr>\r\n    </table>\r\n\t<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let color of _Colorbar;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': color}\" ><div *ngIf=\"indx%8===0\" style=\"border-left: #FFFFFF 1px solid;border-color: black\">&nbsp;</div><div *ngIf=\"indx%8!==0\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div id=\"ColorBar\" *ngIf=\"_Cattexts!==undefined\" style=\"width: 100%;text-align: center\">\r\n    <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" *ngFor=\"let cattext of _Cattexts\" style=\"display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \">\r\n          <tr >\r\n            <th  style=\"width:80px;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;table-layout:fixed !important;white-space: nowrap !important; \"><div [ngStyle]=\"{ 'background-color': cattext.color}\" >&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n        <tr>\r\n            <th><div matTooltip={{cattext.text}}  style=\"width:80px;text-align: left;white-space: nowrap;display:inline-block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div></th>\r\n          </tr>\r\n        </table>\r\n  </div>\r\n   <div id=\"ColorBar\" *ngIf=\"_CatNumtexts!==undefined\" >\r\n        <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 82%;margin: 0 auto;\">\r\n       <tr >\r\n          <th *ngFor=\"let cattext of _CatNumtexts;\" style=\"text-align:left;max-width: 3%\"><div *ngIf=\"cattext.text!==null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">{{cattext.text}}</div><div *ngIf=\"cattext.text===null\" style=\"width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;\">&nbsp;&nbsp;&nbsp;</div></th>\r\n        </tr>\r\n    </table>\r\n  <table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\" style=\"width: 80%;margin: 0 auto;\">\r\n       <tr>\r\n          <th  *ngFor=\"let cattext of _CatNumtexts;let indx=index\" style=\"width: 0.5px;\" ><div [ngStyle]=\"{ 'background-color': cattext.color}\" ><div style=\"border-color: black\">&nbsp;</div></div></th>\r\n        </tr>\r\n    </table>\r\n  </div>\r\n  <div>\r\n    <table id=\"cesium-infoBox-defaultTable\" style=\"width: 140px;position:absolute;padding:4px;background-color:white;display: none;\">\r\n       <tr *ngFor=\"let pickupArr of pickupArrs\"><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 60px;height: 14px\"><div matTooltip={{pickupArr.name}} style=\"width: 60px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.name}}</div></th><th style=\"font-size: 10px;font-weight: normal;color:#395d73;width: 80px;height: 14px\"><div matTooltip={{pickupArr.data}} style=\"width: 80px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{pickupArr.data}}</div></th></tr>\r\n       </table>\r\n        \r\n     </div>\r\n</div>"
 
 /***/ }),
 
@@ -1653,9 +1711,8 @@ module.exports = "<div id=\"cesiumContainer\" (click)=\"select();showAttribs($ev
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ViewerComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__ = __webpack_require__("./src/app/mobius-cesium/data/DataSubscriber.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_d3_array__ = __webpack_require__("./node_modules/d3-array/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_chroma_js__ = __webpack_require__("./node_modules/chroma-js/chroma.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_chroma_js__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js__ = __webpack_require__("./node_modules/chroma-js/chroma.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_chroma_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_chroma_js__);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1678,18 +1735,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
 var ViewerComponent = /** @class */ (function (_super) {
     __extends(ViewerComponent, _super);
     function ViewerComponent(injector, myElement) {
         var _this = _super.call(this, injector) || this;
         _this.selectEntity = null;
-        _this._ShowColorBar = false;
         _this.myElement = myElement;
         return _this;
     }
     ViewerComponent.prototype.ngOnInit = function () {
-        this.mode = this.dataService.mode;
+        this.mode = this.dataService.getmode();
+        if (this.mode === "editor") {
+            this.dataService.getValue(this.data);
+            this.dataService.LoadJSONData();
+            this.dataArr = this.dataService.get_ViData();
+            this._index = 0;
+        }
+        if (this.mode === "viewer") {
+            this.dataService.LoadJSONData();
+            this.dataArr = this.dataService.get_PuData();
+            this._index = 2;
+        }
     };
     ViewerComponent.prototype.notify = function (message) {
         if (message === "model_update") {
@@ -1797,7 +1863,7 @@ var ViewerComponent = /** @class */ (function (_super) {
         document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
         if (this.data !== undefined) {
             this.viewer = viewer;
-            this.dataService.viewer = this.viewer;
+            this.dataService.setViewer(this.viewer);
             this.data = data;
             this.poly_center = [];
             var promise_1 = Cesium.GeoJsonDataSource.load(this.data);
@@ -1834,16 +1900,18 @@ var ViewerComponent = /** @class */ (function (_super) {
                 else {
                     self_1._ShowColorBar = false;
                 }
-                self_1.dataService.poly_center = self_1.poly_center;
+                self_1.dataService.setpoly_center(self_1.poly_center);
             });
-            this.dataService.cesiumpromise = promise_1;
+            this.dataService.setcesiumpromise(promise_1);
             if (this.mode === "editor") {
                 this.dataService.getValue(this.data);
                 this.dataService.LoadJSONData();
-                this.dataArr = this.dataService._ViData;
+                this.dataArr = this.dataService.get_ViData();
                 this._index = 0;
             }
             if (this.mode === "viewer") {
+                this.dataService.LoadJSONData();
+                this.dataArr = this.dataService.get_PuData();
                 this._index = 2;
             }
             viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
@@ -1855,80 +1923,86 @@ var ViewerComponent = /** @class */ (function (_super) {
         }
     };
     ViewerComponent.prototype.Colortext = function () {
-        this.texts = undefined;
-        this._Cattexts = [];
-        this._CatNumtexts = [];
-        var _ColorKey;
-        var propertyname = this.dataArr["ColorKey"];
-        var texts = this.dataArr["ColorText"].sort();
-        var _Max = this.dataArr["ColorMax"];
-        var _Min = this.dataArr["ColorMin"];
-        var _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL");
-        if (this.dataArr["ColorInvert"] === true) {
-            _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
-        }
-        this._Colorbar = [];
-        for (var i = 79; i > -1; i--) {
-            this._Colorbar.push(_ChromaScale(i / 80));
-        }
-        if (typeof (texts[0]) === "number") {
-            if (_Max < 20) {
-                this.texts = [_Min];
+        if (this.dataArr !== undefined) {
+            if (this._index !== this.dataService.get_index()) {
+                this._index = this.dataService.get_index();
+                if (this._index === 0) {
+                    this.dataArr = this.dataService.get_ViData();
+                }
+                else if (this._index === 2) {
+                    this.dataArr = this.dataService.get_PuData();
+                }
+            }
+            var propertyname = this.dataArr["ColorKey"];
+            var texts = this.dataArr["ColorText"].sort();
+            var _Max = this.dataArr["ColorMax"];
+            var _Min = this.dataArr["ColorMin"];
+            this.texts = undefined;
+            this._Cattexts = [];
+            this._CatNumtexts = [];
+            var _ColorKey = void 0;
+            var _ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
+            if (this.dataArr["ColorInvert"] === true) {
+                _ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
+            }
+            this._Colorbar = [];
+            for (var i = 79; i > -1; i--) {
+                this._Colorbar.push(_ChromaScale(i / 80));
+            }
+            if (typeof (texts[0]) === "number") {
+                this.texts = [Number(_Min.toFixed(2))];
                 for (var i = 1; i < 10; i++) {
                     this.texts.push(Number((_Min + (_Max - _Min) * (i / 10)).toFixed(2)));
                 }
-                this.texts.push(_Max);
-            }
-            else {
-                this.texts = __WEBPACK_IMPORTED_MODULE_2_d3_array__["a" /* ticks */](_Min, _Max, 10);
-            }
-            for (var i = 0; i < this.texts.length; i++) {
-                if (this.texts[i] / 1000000000 > 1) {
-                    this.texts[i] = String(Number((this.texts[i] / 1000000000).toFixed(3))).concat("B");
-                }
-                else if (this.texts[i] / 1000000 > 1) {
-                    this.texts[i] = String(Number((this.texts[i] / 1000000).toFixed(3))).concat("M");
-                }
-                else if (this.texts[i] / 1000 > 1) {
-                    this.texts[i] = String(Number(((this.texts[i] / 1000)).toFixed(3))).concat("K");
-                }
-            }
-        }
-        if (typeof (texts[0]) === "string") {
-            if (texts.length <= 12) {
-                for (var j = 0; j < texts.length; j++) {
-                    _ColorKey = [];
-                    _ColorKey.text = texts[j];
-                    _ColorKey.color = _ChromaScale(j / texts.length);
-                    this._Cattexts.push(_ColorKey);
-                }
-            }
-            else {
-                for (var j = 0; j < this._Colorbar.length; j++) {
-                    _ColorKey = [];
-                    if (j === 0) {
-                        _ColorKey.text = texts[j];
+                this.texts.push(Number(_Max.toFixed(2)));
+                for (var i = 0; i < this.texts.length; i++) {
+                    if (this.texts[i] / 1000000000 > 1) {
+                        this.texts[i] = String(Number((this.texts[i] / 1000000000).toFixed(3))).concat("B");
                     }
-                    else if (j === this._Colorbar.length - 1) {
-                        if (texts[texts.length - 1] !== null) {
-                            _ColorKey.text = texts[texts.length - 1];
+                    else if (this.texts[i] / 1000000 > 1) {
+                        this.texts[i] = String(Number((this.texts[i] / 1000000).toFixed(3))).concat("M");
+                    }
+                    else if (this.texts[i] / 1000 > 1) {
+                        this.texts[i] = String(Number(((this.texts[i] / 1000)).toFixed(3))).concat("K");
+                    }
+                }
+            }
+            if (typeof (texts[0]) === "string") {
+                if (texts.length <= 12) {
+                    for (var j = 0; j < texts.length; j++) {
+                        _ColorKey = [];
+                        _ColorKey.text = texts[j];
+                        _ColorKey.color = _ChromaScale(j / texts.length);
+                        this._Cattexts.push(_ColorKey);
+                    }
+                }
+                else {
+                    for (var j = 0; j < this._Colorbar.length; j++) {
+                        _ColorKey = [];
+                        if (j === 0) {
+                            _ColorKey.text = texts[j];
+                        }
+                        else if (j === this._Colorbar.length - 1) {
+                            if (texts[texts.length - 1] !== null) {
+                                _ColorKey.text = texts[texts.length - 1];
+                            }
+                            else {
+                                _ColorKey.text = texts[texts.length - 2];
+                            }
                         }
                         else {
-                            _ColorKey.text = texts[texts.length - 2];
+                            _ColorKey.text = null;
                         }
+                        _ColorKey.color = this._Colorbar[j];
+                        this._CatNumtexts.push(_ColorKey);
                     }
-                    else {
-                        _ColorKey.text = null;
-                    }
-                    _ColorKey.color = this._Colorbar[j];
-                    this._CatNumtexts.push(_ColorKey);
                 }
             }
         }
-        /*if(this._ShowColorBar===false) {
-          this._Cattexts=undefined;
-          this._Colorbar=undefined;
-        }*/
+        if (this._ShowColorBar === false) {
+            this._Cattexts = undefined;
+            this._Colorbar = undefined;
+        }
     };
     ViewerComponent.prototype.select = function () {
         event.stopPropagation();
@@ -1938,7 +2012,7 @@ var ViewerComponent = /** @class */ (function (_super) {
                 this.ColorSelect(this.selectEntity);
             }
             if (viewer.selectedEntity !== undefined && viewer.selectedEntity.polygon !== null) {
-                this.dataService._SelectedEntity = viewer.selectedEntity;
+                this.dataService.set_SelectedEntity(viewer.selectedEntity);
                 var material = void 0;
                 if (viewer.selectedEntity.polygon !== undefined) {
                     material = viewer.selectedEntity.polygon.material;
@@ -1952,14 +2026,14 @@ var ViewerComponent = /** @class */ (function (_super) {
                 this.material = material;
             }
             else {
-                this.dataService._SelectedEntity = undefined;
+                this.dataService.set_SelectedEntity(undefined);
                 this.selectEntity = undefined;
                 this.material = undefined;
             }
         }
     };
     ViewerComponent.prototype.ColorSelect = function (entity) {
-        var promise = this.dataService.cesiumpromise;
+        var promise = this.dataService.getcesiumpromise();
         var _ColorKey = this.dataArr["ColorKey"];
         var _ColorMax = this.dataArr["ColorMax"];
         var _ColorMin = this.dataArr["ColorMin"];
@@ -1972,9 +2046,9 @@ var ViewerComponent = /** @class */ (function (_super) {
         var _Invert = this.dataArr["Invert"];
         var _Scale = this.dataArr["Scale"];
         var _Filter = this.dataArr["Filter"];
-        var _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL");
+        var _ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL");
         if (_ColorInvert === true) {
-            _ChromaScale = __WEBPACK_IMPORTED_MODULE_3_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
+            _ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
         }
         var _CheckHide;
         if (_Filter.length !== 0) {
@@ -2080,7 +2154,7 @@ var ViewerComponent = /** @class */ (function (_super) {
                         this.pickupArrs.push({ name: "ID", data: pickup.id.id });
                         for (var i = 0; i < this.data["cesium"].select.length; i++) {
                             var propertyName = this.data["cesium"].select[i];
-                            this.pickupArrs.push({ name: propertyName, data: this.dataService._SelectedEntity.properties[propertyName]._value });
+                            this.pickupArrs.push({ name: propertyName, data: this.dataService.get_SelectedEntity().properties[propertyName]._value });
                         }
                         var nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
                         this.viewer.container.appendChild(nameOverlay);
