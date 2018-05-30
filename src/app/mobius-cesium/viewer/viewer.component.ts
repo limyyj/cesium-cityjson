@@ -24,6 +24,7 @@ export class ViewerComponent extends DataSubscriber {
   private pickupArrs: any[];
   private mode: string;
   private _index: number;
+  private _ShowColorBar: boolean;
 
   constructor(injector: Injector, myElement: ElementRef) {
     super(injector);
@@ -142,8 +143,7 @@ export class ViewerComponent extends DataSubscriber {
       automaticallyTrackDataSourceClocks:false,
       animation:false,
     });
-    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
-    
+    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();   
     if(this.data!==undefined) {
       this.viewer=viewer;
       this.dataService.setViewer(this.viewer);
@@ -256,6 +256,10 @@ export class ViewerComponent extends DataSubscriber {
           }
         }
       }
+    }
+    if(this._ShowColorBar===false) {
+      this._Cattexts=undefined;
+      this._Colorbar=undefined;
     }
   }
 
