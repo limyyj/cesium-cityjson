@@ -190,6 +190,8 @@ export class ViewerComponent extends DataSubscriber {
         this._index= 0;
       }
       if(this.mode==="viewer") {
+        this.dataService.LoadJSONData();
+        this.dataArr=this.dataService.get_PuData();
         this._index= 2;
       }
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {

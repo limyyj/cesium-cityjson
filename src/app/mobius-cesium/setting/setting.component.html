@@ -1,9 +1,9 @@
 <div id="setting" >
   <mat-tab-group class="mat-tab-group" style="height: 100%;" (selectedTabChange)="changedata($event.index)">
-    <mat-tab label="&nbsp;Visualise&nbsp;" >
-      <app-visualise  (change)="LoadViewer()" (click)="LoadViewer()"></app-visualise>
+    <mat-tab label="&nbsp;Visualise&nbsp;" *ngIf="mode==='editor'" >
+      <app-visualise (change)="LoadViewer()" (click)="LoadViewer()"></app-visualise>
     </mat-tab>
-    <mat-tab label="&nbsp;Attributes&nbsp;">
+    <mat-tab label="&nbsp;Attributes&nbsp;" *ngIf="mode==='editor'" >
       <app-attributes ></app-attributes>
     </mat-tab>
     <mat-tab label="&nbsp;Publish&nbsp;" >

@@ -79,9 +79,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     const _HeightChart: boolean=this.dataArr["HeightChart"];
     const _Invert: boolean=this.dataArr["Invert"];
     const _Scale: number=this.dataArr["Scale"];
-    const _Filter: any[]=this.dataArr["Filter"];
+    let _Filter: any[];
+    if(this.dataArr["Filter"]===undefined) {_Filter=[];} else {_Filter=this.dataArr["Filter"];}
     let _ChromaScale=chroma.scale("SPECTRAL");
-    // const ColorNum: boolean=;
     if(_ColorInvert===true) {_ChromaScale=chroma.scale("SPECTRAL").domain([1,0]);}
     const self= this;
     let i: number=0;
