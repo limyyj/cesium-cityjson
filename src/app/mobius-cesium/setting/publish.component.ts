@@ -35,17 +35,17 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   super(injector);
   }
   public ngOnInit() {
-    this.mode=this.dataService.getmode();
-    this.dataArr=this.dataService.get_PuData();
-    if(this.dataArr!==undefined) {
+    this.mode = this.dataService.getmode();
+    this.dataArr = this.dataService.get_PuData();
+    if(this.dataArr !== undefined) {
       this.LoadData();
     }
   }
   public notify(message: string): void {
     if(message === "model_update" ) {
       try {
-        this.dataArr=this.dataService.get_PuData();
-        if(this.dataArr!==undefined) {this.LoadData();}
+        this.dataArr = this.dataService.get_PuData();
+        if(this.dataArr !== undefined) {this.LoadData();}
       }
       catch (ex) {
         console.log(ex);
@@ -54,144 +54,144 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   }
 
   public LoadData() {
-    this._ColorDescr=this.dataArr["ColorDescr"];
-    this._ColorProperty=this.dataArr[ "ColorProperty"];
-    this._ColorKey=this.dataArr[ "ColorKey"];
-    this._ColorMax=this.dataArr[ "ColorMax"];
-    this._ColorMin=this.dataArr[ "ColorMin"];
-    this._ColorInvert=this.dataArr[ "ColorInvert"];
-    this._ExtrudeDescr=this.dataArr[ "ExtrudeDescr"];
-    this._ExtrudeProperty=this.dataArr[ "ExtrudeProperty"];
-    this._ExtrudeKey=this.dataArr[ "ExtrudeKey"];
-    this._ExtrudeMax=this.dataArr[ "ExtrudeMax"];
-    this._ExtrudeMin=this.dataArr[ "ExtrudeMin"];
-    this._HeightChart=this.dataArr[ "HeightChart"];
-    this._Invert=this.dataArr[ "Invert"];
-    this._Scale=this.dataArr[ "Scale"];
-    this._HideNum=this.dataArr[ "HideNum"];
-    this._Filter=this.dataArr[ "Filter"];
+    this._ColorDescr = this.dataArr["ColorDescr"];
+    this._ColorProperty = this.dataArr[ "ColorProperty"];
+    this._ColorKey = this.dataArr[ "ColorKey"];
+    this._ColorMax = this.dataArr[ "ColorMax"];
+    this._ColorMin = this.dataArr[ "ColorMin"];
+    this._ColorInvert = this.dataArr[ "ColorInvert"];
+    this._ExtrudeDescr = this.dataArr[ "ExtrudeDescr"];
+    this._ExtrudeProperty = this.dataArr[ "ExtrudeProperty"];
+    this._ExtrudeKey = this.dataArr[ "ExtrudeKey"];
+    this._ExtrudeMax = this.dataArr[ "ExtrudeMax"];
+    this._ExtrudeMin = this.dataArr[ "ExtrudeMin"];
+    this._HeightChart = this.dataArr[ "HeightChart"];
+    this._Invert = this.dataArr[ "Invert"];
+    this._Scale = this.dataArr[ "Scale"];
+    this._HideNum = this.dataArr[ "HideNum"];
+    this._Filter = this.dataArr[ "Filter"];
   }
 
   public Disable(event) {
-    const index=this._HideNum.indexOf(event);
-    const divid=String("addHide".concat(String(event)));
-    const addHide=document.getElementById(divid);
-    if(this._Filter[index].Disabletext===null) {
-      this._CheckDisable=true;
-    } else {this._CheckDisable=false;}
-    if(this._CheckDisable===true) {
-      addHide.style.background="grey";
-      if(this._Filter[index].type==="number") {
-        const textHide=this._Filter[index].textHide;
-        this._Filter[index].Disabletext=Number(textHide);
-        if(this._Filter[index].RelaHide==="0"||this._Filter[index].RelaHide===0) {
-          this._Filter[index].textHide=this._Filter[index].HideMin;
+    const index = this._HideNum.indexOf(event);
+    const divid = String("addHide".concat(String(event)));
+    const addHide = document.getElementById(divid);
+    if(this._Filter[index].Disabletext === null) {
+      this._CheckDisable = true;
+    } else {this._CheckDisable = false;}
+    if(this._CheckDisable === true) {
+      addHide.style.background = "grey";
+      if(this._Filter[index].type === "number") {
+        const textHide = this._Filter[index].textHide;
+        this._Filter[index].Disabletext = Number(textHide);
+        if(this._Filter[index].RelaHide === "0"||this._Filter[index].RelaHide === 0) {
+          this._Filter[index].textHide = this._Filter[index].HideMin;
         }
-        if(this._Filter[index].RelaHide==="1"||this._Filter[index].RelaHide===1) {
-          this._Filter[index].textHide=this._Filter[index].HideMax;
+        if(this._Filter[index].RelaHide === "1"||this._Filter[index].RelaHide === 1) {
+          this._Filter[index].textHide = this._Filter[index].HideMax;
         }
-      } else if(this._Filter[index].type==="category") {
-        const textHide=this._Filter[index].RelaHide;
-        this._Filter[index].Disabletext=Number(textHide);
-        this._Filter[index].RelaHide=0;
+      } else if(this._Filter[index].type === "category") {
+        const textHide = this._Filter[index].RelaHide;
+        this._Filter[index].Disabletext = Number(textHide);
+        this._Filter[index].RelaHide = 0;
       }
     } else {
-      addHide.style.background=null;
-      if(this._Filter[index].type==="number") {
-        this._Filter[index].textHide=this._Filter[index].Disabletext;
-        this._Filter[index].Disabletext=null;
-      } else if(this._Filter[index].type==="category") {
-        this._Filter[index].RelaHide=this._Filter[index].Disabletext;
-        this._Filter[index].Disabletext=null;
+      addHide.style.background = null;
+      if(this._Filter[index].type === "number") {
+        this._Filter[index].textHide = this._Filter[index].Disabletext;
+        this._Filter[index].Disabletext = null;
+      } else if(this._Filter[index].type === "category") {
+        this._Filter[index].RelaHide = this._Filter[index].Disabletext;
+        this._Filter[index].Disabletext = null;
       }
     }
-    this.dataArr["Filter"]=this._Filter;
-    this.dataArr["HideNum"]=this._HideNum;
+    this.dataArr["Filter"] = this._Filter;
+    this.dataArr["HideNum"] = this._HideNum;
     this.dataService.set_PuData(this.dataArr);
   }
 
   public ChangeCategory(categary,id,type) {
-    const _index=this._HideNum.indexOf(id);
-    if(type===1) {
-      this._Filter[_index].CategaryHide=categary;
+    const _index = this._HideNum.indexOf(id);
+    if(type === 1) {
+      this._Filter[_index].CategaryHide = categary;
     }
-    if(type===0) {
-      this._Filter[_index].RelaHide=Number(categary);
+    if(type === 0) {
+      this._Filter[_index].RelaHide = Number(categary);
     }
   }
 
   public Changetext(value,id) {
-    const _index=this._HideNum.indexOf(id);
-    this._Filter[_index].textHide=value;
+    const _index = this._HideNum.indexOf(id);
+    this._Filter[_index].textHide = value;
   }
 
   public onChangeColor(value) {
     const data = this.dataService.getGsModel()["cesium"]["colour"]["attribs"];
-    this.dataArr["ColorKey"]=value;
+    this.dataArr["ColorKey"] = value;
     for(const _data of data) {
-      if(_data["name"]===value) {
-        this.dataArr["ColorMin"]=_data["min"];
-        this.dataArr["ColorMax"]=_data["max"];
-        this.dataArr["ColorInvert"]=_data["invert"];
+      if(_data["name"] === value) {
+        this.dataArr["ColorMin"] = _data["min"];
+        this.dataArr["ColorMax"] = _data["max"];
+        this.dataArr["ColorInvert"] = _data["invert"];
       }
     }
-    const promise=this.dataService.getcesiumpromise();
-    const _Colortexts: any[]=[];
-    const self= this;
+    const promise = this.dataService.getcesiumpromise();
+    const _Colortexts: any[] = [];
+    const self = this;
     promise.then( function(dataSource) {
       const entities = dataSource.entities.values;
       for (const entity of entities) {
-        if(entity.properties[value]!==undefined) {
-        if(entity.properties[value]._value!==" ") {
-          if(_Colortexts.length===0) {_Colortexts[0]=entity.properties[value]._value;
-          } else { if(_Colortexts.indexOf(entity.properties[value]._value)===-1) {
+        if(entity.properties[value] !== undefined) {
+        if(entity.properties[value]._value !== " ") {
+          if(_Colortexts.length === 0) {_Colortexts[0] = entity.properties[value]._value;
+          } else { if(_Colortexts.indexOf(entity.properties[value]._value) === -1) {
             _Colortexts.push(entity.properties[value]._value);}
             }
           }
         }
       }
     });
-    this.dataArr["ColorText"]=_Colortexts.sort();
+    this.dataArr["ColorText"] = _Colortexts.sort();
     this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
 
   public onChangeHeight(value) {
     const data = this.dataService.getGsModel()["cesium"]["extrude"]["attribs"];
-    this.dataArr["ExtrudeKey"]=value;
+    this.dataArr["ExtrudeKey"] = value;
     for(const _data of data) {
-      if(_data["name"]===value) {
-        this.dataArr["ExtrudeMin"]=_data["min"];
-        this.dataArr["ExtrudeMax"]=_data["max"];
-        this.dataArr["HeightChart"]=_data["line"];
-        this.dataArr["Invert"]=_data["invert"];
-        this.dataArr["Scale"]=_data["scale"];
+      if(_data["name"] === value) {
+        this.dataArr["ExtrudeMin"] = _data["min"];
+        this.dataArr["ExtrudeMax"] = _data["max"];
+        this.dataArr["HeightChart"] = _data["line"];
+        this.dataArr["Invert"] = _data["invert"];
+        this.dataArr["Scale"] = _data["scale"];
       }
     }
-    const promise=this.dataService.getcesiumpromise();
-    const _Heighttexts=[];
-    const self= this;
+    const promise = this.dataService.getcesiumpromise();
+    const _Heighttexts = [];
+    const self = this;
     promise.then(function(dataSource) {
       const entities = dataSource.entities.values;
       for (const entity of entities) {
-        if(entity.properties[value]!==undefined) {
-        if(entity.properties[value]._value!==" ") {
-          if(_Heighttexts.length===0) {_Heighttexts[0]=entity.properties[value]._value;
-          } else { if(_Heighttexts.indexOf(entity.properties[value]._value)===-1) {
+        if(entity.properties[value] !== undefined) {
+        if(entity.properties[value]._value !== " ") {
+          if(_Heighttexts.length === 0) {_Heighttexts[0] = entity.properties[value]._value;
+          } else { if(_Heighttexts.indexOf(entity.properties[value]._value) === -1) {
             _Heighttexts.push(entity.properties[value]._value);}
             }
           }
         }
       }
     });
-    this.dataArr["ExtrudeText"]=_Heighttexts.sort();
+    this.dataArr["ExtrudeText"] = _Heighttexts.sort();
     this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
 
   public reset() {
     this.dataService.LoadJSONData();
-    this.dataArr=this.dataService.get_PuData();
-    if(this.dataArr!==undefined) {this.LoadData();}
+    this.dataArr = this.dataService.get_PuData();
+    if(this.dataArr !== undefined) {this.LoadData();}
   }
 }

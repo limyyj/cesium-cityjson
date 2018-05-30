@@ -23,30 +23,30 @@ export class AttributesComponent extends DataSubscriber implements OnInit {
   }
   public ngOnInit() {
     this.data = this.dataService.getGsModel();
-    this.mode=this.dataService.getmode();
-    this.viewer=this.dataService.getViewer();
-    this.dataArr=this.dataService.get_ViData();
+    this.mode = this.dataService.getmode();
+    this.viewer = this.dataService.getViewer();
+    this.dataArr = this.dataService.get_ViData();
   }
   public  notify(message: string): void {
     if(message === "model_update" ) {
       this.data = this.dataService.getGsModel();
-      this.mode=this.dataService.getmode();
-      this.viewer=this.dataService.getViewer();
-      this.dataArr=this.dataService.get_ViData();
+      this.mode = this.dataService.getmode();
+      this.viewer = this.dataService.getViewer();
+      this.dataArr = this.dataService.get_ViData();
     }
   }
 
   public ngDoCheck() {
-    if(this.viewer!==undefined&&this.dataService.get_SelectedEntity()!==undefined&&this.mode==="editor") {
-      if(this.ID!==this.dataService.get_SelectedEntity()._id) {
+    if(this.viewer !== undefined&&this.dataService.get_SelectedEntity() !== undefined&&this.mode === "editor") {
+      if(this.ID !== this.dataService.get_SelectedEntity()._id) {
         let _Property: any;
-        this.ID=this.dataService.get_SelectedEntity()._id;
-        this._Properties=[];
+        this.ID = this.dataService.get_SelectedEntity()._id;
+        this._Properties = [];
         for(const _ColorPro of this.dataArr["ColorProperty"]) {
-          if(_ColorPro!=="None") {
-            _Property=[];
-            _Property.Name=_ColorPro;
-            _Property.Value=this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
+          if(_ColorPro !== "None") {
+            _Property = [];
+            _Property.Name = _ColorPro;
+            _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
             this._Properties.push(_Property);
           }
         }
