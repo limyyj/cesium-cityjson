@@ -25,6 +25,8 @@ export class ViewerComponent extends DataSubscriber {
   private mode: string;
   private _index: number;
   private _ShowColorBar: boolean;
+  private _ColorKey: string;
+  private _ExtrudeKey: string;
 
   constructor(injector: Injector, myElement: ElementRef) {
     super(injector);
@@ -225,6 +227,10 @@ export class ViewerComponent extends DataSubscriber {
       const texts = this.dataArr["ColorText"].sort();
       const _Max: number = this.dataArr["ColorMax"];
       const _Min: number = this.dataArr["ColorMin"];
+      if(this.mode === "viewer"){
+        this._ColorKey = this.dataArr["ColorKey"];
+        this._ExtrudeKey = this.dataArr["ExtrudeKey"];
+      }
       this.texts = undefined;
       this._Cattexts = [];
       this._CatNumtexts = [];
@@ -246,7 +252,9 @@ export class ViewerComponent extends DataSubscriber {
             this.texts[i] = String(Number((this.texts[i]/1000000000).toFixed(3))).concat("B");
           } else if(this.texts[i]/1000000>1) {
             this.texts[i] = String(Number((this.texts[i]/1000000).toFixed(3))).concat("M");
-          } else if(this.texts[i]/1000>1) {this.texts[i] = String(Number(((this.texts[i]/1000)).toFixed(3))).concat("K");}
+          } else if(this.texts[i]/1000>1) {
+            this.texts[i] = String(Number(((this.texts[i]/1000)).toFixed(3))).concat("K");
+          }
         }
       }
       if(typeof(texts[0]) === "string") {
@@ -339,7 +347,7 @@ export class ViewerComponent extends DataSubscriber {
     }
   }
 
-  public Hide(_Filter: any[],entity,_HeightChart: boolean): boolean {
+  public Hide(_Filter: any[], entity, _HeightChart: boolean): boolean {
     let _CheckHide: boolean=false;
     for(const filter of _Filter) {
       const value = entity.properties[filter.HeightHide]._value;
@@ -379,7 +387,7 @@ export class ViewerComponent extends DataSubscriber {
         return value === _Categary;
     }
   }
-  public colorByNum(entity,max: number,min: number,_ColorKey: string,_ChromaScale: any) {
+  public colorByNum(entity, max: number, min: number, _ColorKey: string, _ChromaScale: any) {
     if(entity.properties[_ColorKey] !== undefined) {
       const texts = entity.properties[_ColorKey]._value;
       const rgb = _ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
@@ -405,7 +413,7 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public showAttribs(event) {
-    if(this.data !== undefined&&this.mode === "viewer") {
+    if(this.data !== undefined && this.mode === "viewer") {
       if(this.data["cesium"] !== undefined) {
         if(this.data["cesium"].select !== undefined) {
           if(this.viewer.selectedEntity !== undefined) {

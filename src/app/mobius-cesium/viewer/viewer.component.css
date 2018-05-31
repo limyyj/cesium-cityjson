@@ -1,8 +1,6 @@
 body{
   background: red;
 }
-
-
 #cesiumContainer{
  height: 100%;
  width: 100%; 
@@ -19,117 +17,23 @@ body{
   padding: 2px 5px;
   position: absolute;
   display:inline-block;
-  bottom: 60px;
+  bottom: 7%;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   table-layout:fixed !important;
   white-space: nowrap !important;
 }
-
-#Colortext{
+#ColorKey{
   z-index:99;
   margin: 5px;
   width: 100%;
   padding: 2px 5px;
   position: absolute;
   display:inline-block;
-  bottom: 30px;
+  bottom: 2%;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
   table-layout:fixed !important;
   white-space: nowrap !important;
 }
-
-/*.cesium-button {
-  display: inline-block;
-  position: relative;
-  border: 1px solid #8AA8C0;
-  color: white;
-  fill: #395D73;
-  border-radius: 0px;
-  padding: 3px 0px;
-  margin: 0px 0px;
-  cursor: pointer;
-  overflow: hidden;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  width: 80px;
-  font-family:sans-serif !important;
-  background: #395D73;
-}
-.cesium-option,.Hide{
-  background-color: #395D73;
-  color: white;
-  border: 1px solid #8AA8C0;
-}
-.Hide{
-  margin: auto;
-  width:80px;
-  height: 20px;
-  word-wrap:break-word;
-  font-weight: normal;
-  color:white;
-  font-family:sans-serif !important;
-  font-size: 14px !important;
-}
-
-.cesium-infoBox-title{
-  height:14px;
-  background: #395D73;
-}
-.cesium-viewer{
-  font-size: 14px !important;
-}
-body{
-  font-size: 10px;
-}
-
-.cesium-infoBox-description{
-  background-color: red !important;
-}
-
-.cesium-infoBox-description table{
-  background-color: #F1F1F1;
-}
-.cesium-infoBox-iframe{
-  max-height: 300px !important;
-  height:650px !important;
-}
-#ColorandHeight{
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
-  z-index: 98;
-  height: 60px;
-  display:inline-block;
-}
-#toolbar{
-  z-index:99;
-  margin: 5px;
-  width: 100%;
-  padding: 2px 5px;
-  position: absolute;
-  display:inline-block;
-  bottom: 1px;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  table-layout:fixed !important;
-  white-space: nowrap !important;
-}
-.colorkey{
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  table-layout:fixed !important;
-  white-space: nowrap !important;
-}
-.table_text{
-  margin: auto;
-  width:40px;
-  word-wrap:break-word;
-  font-weight: normal;
-  color:white;
-  text-shadow: 0px 0px 3px black;
-}*/
 

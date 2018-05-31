@@ -21,16 +21,24 @@
           </tr>
         </table>
   </div>
-   <div id="ColorBar" *ngIf="_CatNumtexts!==undefined" >
-        <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 82%;margin: 0 auto;">
-       <tr >
-          <th *ngFor="let cattext of _CatNumtexts;" style="text-align:left;max-width: 3%"><div *ngIf="cattext.text!==null" style="width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{cattext.text}}</div><div *ngIf="cattext.text===null" style="width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">&nbsp;&nbsp;&nbsp;</div></th>
-        </tr>
+  <div id="ColorBar" *ngIf="_CatNumtexts!==undefined" >
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 82%;margin: 0 auto;">
+      <tr >
+        <th *ngFor="let cattext of _CatNumtexts;" style="text-align:left;max-width: 3%"><div *ngIf="cattext.text!==null" style="width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">{{cattext.text}}</div><div *ngIf="cattext.text===null" style="width: 0.5px;vertical-align: text-top;color:white;text-shadow: 0px 0px 3px black;">&nbsp;&nbsp;&nbsp;</div></th>
+      </tr>
     </table>
-  <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;">
-       <tr>
-          <th  *ngFor="let cattext of _CatNumtexts;let indx=index" style="width: 0.5px;" ><div [ngStyle]="{ 'background-color': cattext.color}" ><div style="border-color: black">&nbsp;</div></div></th>
-        </tr>
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;">
+      <tr>
+        <th  *ngFor="let cattext of _CatNumtexts;let indx=index" style="width: 0.5px;" ><div [ngStyle]="{ 'background-color': cattext.color}" ><div style="border-color: black">&nbsp;</div></div></th>
+      </tr>
+    </table>
+  </div>
+  <div *ngIf="mode==='viewer'" id="ColorKey">
+    <table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 80%;margin: 0 auto;text-align:center;color:white;text-shadow: 0px 0px 3px black;" >
+      <tr>
+        <th  style="width: 40%;" ><div>Color:&nbsp;{{_ColorKey}}</div></th>
+        <th  style="width: 40%;" ><div>Extrude:&nbsp;{{_ExtrudeKey}}</div></th>
+      </tr>
     </table>
   </div>
   <div>

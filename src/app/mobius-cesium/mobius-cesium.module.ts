@@ -3,8 +3,6 @@ import { CommonModule } from "@angular/common";
 import { MobiuscesiumComponent} from "./mobius-cesium.component";
 import { ViewerComponent} from "./viewer/viewer.component";
 import { DataService } from "./data/data.service";
-// import { ToolwindowComponent } from './toolwindow/toolwindow.component';
-// import { PublishComponent } from './toolwindow/publish.component';
 import { AngularSplitModule } from "angular-split";
 import { BrowserAnimationsModule ,NoopAnimationsModule} from "@angular/platform-browser/animations";
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from "@angular/platform-browser";
@@ -31,8 +29,6 @@ import { PublishComponent } from "./setting/publish.component";
     exports: [ MobiuscesiumComponent ],
     declarations: [MobiuscesiumComponent,
                     ViewerComponent,
-                    /*ToolwindowComponent,
-                    PublishComponent,*/
                     SettingComponent,
                     VisualiseComponent,
                     AttributesComponent,

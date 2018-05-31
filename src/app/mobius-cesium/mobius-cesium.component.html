@@ -1,18 +1,7 @@
 <div id="mobiuscesium" style="height: 100%">
-	<!-- <split direction="horizontal" style="background-color: #8aa8c0;">
-		<split-area [size]="0.5" id="splitgroups" style="overflow:hidden;">
-		    <app-toolwindow></app-toolwindow>
-		</split-area>
-		<split-area [size]="99.5" id="splitviewer">
-			<cesium-viewer></cesium-viewer>
-		</split-area>
-	</split> -->
-
 	<cesium-viewer></cesium-viewer>
 	<div id="Toggle" (click)="toggleSlider()" ><span style="vertical-align: middle;">▹</span></div>
 	<div id="slide-nav"  [@slide_in_out]="slider_state" style="position: absolute;z-index: 101;top:0px;height: 100%">
-  		<!-- <app-toolwindow ></app-toolwindow> -->
-  		<!-- <app-publish ></app-publish> -->
   		<app-setting ></app-setting>
 	</div>
 	

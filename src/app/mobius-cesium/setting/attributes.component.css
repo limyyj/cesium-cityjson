@@ -1,14 +1,3 @@
-/*#attributes{
-  position: relative;
-  height: 100%;
-  width: 100%;
-  color:#ddd !important;
-  font-family: Roboto,"Helvetica Neue",sans-serif;
-  font-size: 14px !important;
-  line-height: 14px;
-  overflow-x: hidden !important;
-  border-right: 1px solid gray;
-}*/
 /deep/.mat-tab-label, /deep/.mat-tab-label-active{
   min-width: 60px!important;
   padding: 3px!important;

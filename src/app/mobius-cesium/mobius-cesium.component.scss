@@ -25,15 +25,6 @@
 
 }
 #Toggle{
-  /* position: absolute;
-  top: calc(50% - 40px);
-  z-index: 100;
-  width: 30px;
-  height:100px;
-  font-family:sans-serif;
-  border-radius: 4px;
-  background-color: rgba(20,20,20,0.5); */
-  /* border: 1px solid gray; */
   position: absolute;
   top: calc(50% - 30px);
   z-index: 200;
@@ -50,14 +41,3 @@
   line-height: 70px;
   cursor: pointer;
 }
-
-/* split-area{
-  overflow-y: hidden !important;
-  height: 100% !important;
-}
-
-split-gutter{
-  border-right: 1px solid #8aa8c0 !important;
-  border-top: 1px solid #8aa8c0 !important;
-  background-color: #8aa8c0 !important;
-} */

@@ -26,7 +26,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
   private _Filter: any[];
   private _HideNum: any[];
   private _HideValue: string;
-  private _CheckDisable: boolean;
+  private _CheckDisable: boolean = true;
 
   constructor(injector: Injector, myElement: ElementRef) {
   super(injector);
@@ -215,8 +215,8 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     const index = this._HideNum.indexOf(event);
     const divid = String("addHide".concat(String(event)));
     const addHide = document.getElementById(divid);
-    if(this._Filter[index].Disabletext === null) {this._CheckDisable = true;} else {this._CheckDisable = false;}
-    if(this._CheckDisable === true) {
+    if(this._Filter[index].Disabletext === null) {this._CheckDisable = false;} else {this._CheckDisable = true;}
+    if(this._CheckDisable === false) {
       addHide.style.background = "grey";
       if(this._Filter[index].type === "number") {
         const textHide = this._Filter[index].textHide;

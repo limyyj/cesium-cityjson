@@ -29,7 +29,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   private _Scale: number;
   private _Filter: any[];
   private _HideNum: any[];
-  private _CheckDisable: boolean;
+  private _CheckDisable: boolean = false;
 
   constructor(injector: Injector, myElement: ElementRef) {
   super(injector);
@@ -77,9 +77,9 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     const divid = String("addHide".concat(String(event)));
     const addHide = document.getElementById(divid);
     if(this._Filter[index].Disabletext === null) {
-      this._CheckDisable = true;
-    } else {this._CheckDisable = false;}
-    if(this._CheckDisable === true) {
+      this._CheckDisable = false;
+    } else {this._CheckDisable = true;}
+    if(this._CheckDisable === false) {
       addHide.style.background = "grey";
       if(this._Filter[index].type === "number") {
         const textHide = this._Filter[index].textHide;

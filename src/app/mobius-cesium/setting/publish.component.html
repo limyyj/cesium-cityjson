@@ -1,7 +1,6 @@
 <div id="publish" style="background-color: rgba(20,20,20,0.5);height: 100%;overflow-y:overlay;"  >
 
 <div id="publishwindow" *ngIf="dataArr!==undefined">
-     <!--  <div id="PublishView" style="margin-left: 5px;margin-top: 5px;" *ngIf="ceisumData!==undefined"> -->
         <div *ngIf="_ColorKey!==undefined">
         <table >
           <tr>
@@ -66,7 +65,7 @@
           <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
             <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
           </select></div></th>
-        <th style="width:20px;height: 25px;" id={{item.id}}><span id={{item.id}} (click)="Disable(item.id)" style="width:20px;height: 25px;cursor:pointer;"><i class="material-icons" style="color:#ddd;font-size:16px">check_circle</i></span></th></tr>
+        <th style="width:20px;height: 25px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" tyle="width:20px;height: 25px;cursor:pointer;"></th></tr>
       </table>
       <table>
         <tr>
@@ -80,7 +79,6 @@
       <div style="padding: 10px 10px 0px 10px;">
       <button style="background-color: #ddd ;color:#395D73;" (click)="reset()">Reset</button></div>
       </div>
-    <!-- </div> -->
 </div>
 
   

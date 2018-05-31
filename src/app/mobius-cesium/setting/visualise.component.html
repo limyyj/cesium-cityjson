@@ -1,4 +1,3 @@
-<!-- <div id="visualise"> -->
 <div id="SettingView" >
     <table>
       <tr>
@@ -46,9 +45,7 @@
   </table>
    <table>
       <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Scale</div></th>
-        <!-- <th style="width:80px;height: 25px;"><input type="text"  value={{HeightMin}} style="width:80px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeHeightMin($event.target.value)"></th> -->
-      <th style="width:80px;height: 18px;"><input type="text" value={{_Scale}} style="width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changescale($event.target.value)" ></th>
-      <!-- <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="CheckScale" (click)="checkscale();changescale(ScaleValue)"></div></th> --></tr>
+      <th style="width:80px;height: 18px;"><input type="text" value={{_Scale}} style="width:80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changescale($event.target.value)" ></th></tr>
       <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Invert</div></th>
       <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_Invert" (click)="changeopp()"></div></th></tr>
       <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Height Chart</div></th>
@@ -86,7 +83,7 @@
         <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
       </select></div></th>
     <th style="width:20px;height: 22px;" id={{item.id}}><span id={{item.id}} (click)="deleteHide(item.id)" style="width:20px;height: 22px;cursor:pointer;"><i class="material-icons" style="color:#ddd;font-size:16px">delete</i></span></th>
-    <th style="width:20px;height: 22px;" id={{item.id}}><span id={{item.id}} (click)="Disable(item.id)" style="width:20px;height: 22px;cursor:pointer;"><i class="material-icons" style="color:#ddd;font-size:16px">check_circle</i></span></th></tr>
+    <th style="width:20px;height: 25px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" tyle="width:20px;height: 25px;cursor:pointer;"></th></tr>
   </table>
   <table>
     <tr>
@@ -98,5 +95,4 @@
     </div>
   </div>
   </div>
-<!-- </div> -->
   
