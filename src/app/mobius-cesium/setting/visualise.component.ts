@@ -22,6 +22,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
   private _ExtrudeMin: number;
   private _HeightChart: boolean;
   private _Invert: boolean;
+  private _ColorInvert: boolean;
   private _Scale: number;
   private _Filter: any[];
   private _HideNum: any[];
@@ -52,6 +53,7 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     this._ColorKey = this.dataArr["ColorKey"];
     this._ColorMax = this.dataArr["ColorMax"];
     this._ColorMin = this.dataArr["ColorMin"];
+    this._ColorInvert = this.dataArr["ColorInvert"];
     this._ExtrudeProperty = this.dataArr["ExtrudeProperty"];
     this._ExtrudeKey = this.dataArr["ExtrudeKey"];
     this._ExtrudeMax = this.dataArr["ExtrudeMax"];
@@ -147,6 +149,11 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
   public changeopp() {
     this._Invert =! this._Invert;
     this.dataArr["Invert"] = this._Invert;
+    this.dataService.set_ViData(this.dataArr);
+  }
+  public changeColorInvert() {
+    this._ColorInvert =! this._ColorInvert;
+    this.dataArr["ColorInvert"] = this._ColorInvert;
     this.dataService.set_ViData(this.dataArr);
   }
 

@@ -111,23 +111,31 @@ export class SettingComponent extends DataSubscriber implements OnInit {
         }
 
         if(_Filter.length === 0||_CheckHide === false) {
-          if(typeof(_ColorText[0]) === "number") {
-            self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
-          } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-          if(_HeightChart === false) {
-            entity.polyline = undefined;
-            entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
-                                                              _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
+          if(_ColorKey !== "None") {
+            if(typeof(_ColorText[0]) === "number") {
+              self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
+            } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+          } else {entity.polygon.material = Cesium.Color.WHITE;}
+          if(_ExtrudeKey !== "None") {
+            if(_HeightChart === false) {
+              entity.polyline = undefined;
+              entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
+                                                                _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
+            } else {
+              entity.polygon.extrudedHeight =0;
+              const center = self.dataService.getpoly_center()[i];
+              entity.polyline = new Cesium.PolylineGraphics({
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],
+                        center[1],self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
+                        _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
+                width:center[2],
+                material:entity.polygon.material,
+                show:true,
+              });
+            }
           } else {
-            entity.polygon.extrudedHeight =0;
-            const center = self.dataService.getpoly_center()[i];
-            entity.polyline = new Cesium.PolylineGraphics({
-              positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],center[1],
-                    self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,_ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
-              width:center[2],
-              material:entity.polygon.material,
-              show:true,
-            });
+            entity.polyline = undefined;
+            entity.polygon.extrudedHeight = 0;
           }
         }
       }

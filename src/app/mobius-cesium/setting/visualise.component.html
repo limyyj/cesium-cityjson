@@ -24,6 +24,10 @@
       <tr ><th style="width:80px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Max</div></th>
       <th style="width:80px;height: 18px;"><input type="text" value={{_ColorMax}} style="width: 80px;height: 18px;color:#395d73;font-weight: normal;text-align: left;border:0;" (change)="changeColorMax($event.target.value)"></th></tr>
   </table>
+    <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;">Invert</div></th>
+      <th style="width:80px;height: 25px;"><div style="width:80px;color:#ddd !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_ColorInvert" (click)="changeColorInvert()"></div></th></tr>
+    </table>
     <hr>
       <table>
       <tr>
