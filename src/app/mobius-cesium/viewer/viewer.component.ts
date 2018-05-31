@@ -61,7 +61,7 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public LoadData(data: JSON) {
-    if(document.getElementsByClassName("cesium-viewer").length!==0) {
+    if(document.getElementsByClassName("cesium-viewer").length !== 0) {
       document.getElementsByClassName("cesium-viewer")[0].remove();
     }
     const imageryViewModels = [];
@@ -396,7 +396,7 @@ export class ViewerComponent extends DataSubscriber {
     }
   }
 
-  public  colorByCat(entity,_ColorText: any[],_ColorKey: string,_ChromaScale: any) {
+  public  colorByCat(entity, _ColorText: any[], _ColorKey: string, _ChromaScale: any) {
     if(entity.properties[_ColorKey] !== undefined) {
       let initial: boolean = false;
       for(let j = 0;j<_ColorText.length; j++) {
