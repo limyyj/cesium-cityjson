@@ -271,7 +271,7 @@ export class DataService {
     }
 
   }
-   public  Initial(_HideValue: string): any[] {
+  public  Initial(_HideValue: string): any[] {
     const texts=[];
     const promise = this.getcesiumpromise();
     const self = this;
