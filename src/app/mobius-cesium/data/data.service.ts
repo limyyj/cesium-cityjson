@@ -189,7 +189,8 @@ export class DataService {
           _HeightValue = _HeightKey[0];
           _MinHeight = cesiumData["extrude"]["attribs"][0]["min"];
           _MaxHeight = cesiumData["extrude"]["attribs"][0]["max"];
-          if(cesiumData["extrude"]["attribs"][0]["invert"] === true) {_HeightInvert = true;} else {_HeightInvert = false;}
+          if(cesiumData["extrude"]["attribs"][0]["invert"] === true) {
+            _HeightInvert = true;} else {_HeightInvert = false;}
           if(cesiumData["extrude"]["attribs"][0]["line"] === true) {_HeightLine = true;} else {_HeightLine = false;}
           if(cesiumData["extrude"]["attribs"][0]["scale"] !== undefined) {
             _HeightScale = cesiumData["extrude"]["attribs"][0]["scale"];
