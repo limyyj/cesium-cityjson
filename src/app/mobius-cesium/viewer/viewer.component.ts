@@ -1,7 +1,7 @@
 import { Component, OnInit, Injector, ElementRef } from "@angular/core";
 import {DataSubscriber} from "../data/DataSubscriber";
 import {SettingComponent} from "../setting/setting.component";
-import * as d3 from "d3-array";
+// import * as d3 from "d3-array";
 import * as chroma from "chroma-js";
 
 @Component({
@@ -163,11 +163,11 @@ export class ViewerComponent extends DataSubscriber {
       this.data = data;
       this.poly_center = [];
       const promise = Cesium.GeoJsonDataSource.load(this.data);
+      viewer.dataSources.add(promise);
       const self = this;
       const _HeightKey: any[] = [];
 
       promise.then(function(dataSource) {
-        viewer.dataSources.add(dataSource);
         const entities = dataSource.entities.values;
         for (const entity of entities) {
           let poly_center = [];
@@ -227,7 +227,7 @@ export class ViewerComponent extends DataSubscriber {
       const texts = this.dataArr["ColorText"].sort();
       const _Max: number = this.dataArr["ColorMax"];
       const _Min: number = this.dataArr["ColorMin"];
-      if(this.mode === "viewer"){
+      if(this.mode === "viewer") {
         this._ColorKey = this.dataArr["ColorKey"];
         this._ExtrudeKey = this.dataArr["ExtrudeKey"];
       }
