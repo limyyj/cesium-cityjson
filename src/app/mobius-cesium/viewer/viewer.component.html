@@ -1,4 +1,5 @@
 <div id="cesiumContainer" (click)="select();showAttribs($event)" (mousemove)="Colortext();">
+  <button class="cesium-button cesium-button-toolbar" (click)="save_geojson()" id="Download"><i class="fa fa-download"></i></button>
   <div id="ColorBar" *ngIf="texts!==undefined">
   	<table border="0" cellspacing="0" cellpadding="0" bordercolor="#d0d0d0" style="width: 88%;margin-left: 9%">
        <tr >

@@ -36,4 +36,17 @@ body{
   table-layout:fixed !important;
   white-space: nowrap !important;
 }
+#Download{
+  z-index: 99;
+  top: 5px;
+  position: absolute;
+  right: 200px;
+  width: 32px;
+  height: 32px;
+  font-size: 16px;
+  box-sizing: border-box;
+  border-radius: 14%;
+  padding: 0;
+  vertical-align: middle;
+}
 

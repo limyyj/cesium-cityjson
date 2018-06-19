@@ -214,6 +214,33 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
       this.Colortext();
     }
+    /*console.log(this.data);
+    this.viewer = viewer;
+    var dataSource = Cesium.CzmlDataSource.load(this.data);
+    viewer.dataSources.add(dataSource);
+    dataSource.then(function(dataSource) {
+      const entities = dataSource.entities.values;
+      console.log(entities)
+    });
+    viewer.zoomTo(dataSource);*/
+
+    /*var viewer = new Cesium.Viewer('cesiumContainer', {
+      // terrainProvider : Cesium.createWorldTerrain(),
+      // baseLayerPicker : false,
+      shouldAnimate : true,
+      infoBox:false,
+      imageryProviderViewModels : imageryViewModels,
+      selectedImageryProviderViewModel : imageryViewModels[0],
+      timeline: false,
+      fullscreenButton:false,
+      // automaticallyTrackDataSourceClocks:false,
+      animation:false,
+    });
+
+    viewer.dataSources.add(Cesium.CzmlDataSource.load(this.data)).then(function(ds) {
+      viewer.trackedEntity = ds.entities.getById('path');
+    });*/
+    
   }
 
   public Colortext() {
@@ -434,6 +461,32 @@ export class ViewerComponent extends DataSubscriber {
           }
         }
       }
+    }
+  }
+    // save the geojson
+  save_geojson(): void{
+    let fileString = JSON.stringify(this.data);
+    let blob = new Blob([fileString], {type: 'application/json'});
+    FileUtils.downloadContent(blob, "output.geojson");
+  }
+}
+
+
+abstract class FileUtils{
+  public static downloadContent(blob, filename) {
+    if (window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveOrOpenBlob(blob, filename);
+    } else {
+        const a = document.createElement('a');
+        document.body.appendChild(a);
+        const url = window.URL.createObjectURL(blob);
+        a.href = url;
+        a.download = filename;
+        a.click();
+        setTimeout(() => {
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        }, 0)
     }
   }
 }
