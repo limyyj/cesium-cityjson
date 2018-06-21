@@ -156,6 +156,8 @@ export class ViewerComponent extends DataSubscriber {
       automaticallyTrackDataSourceClocks:false,
       animation:false,
     });
+    // viewer.scene.globe.enableLighting = true;
+
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
     if(this.data !== undefined) {
       this.viewer = viewer;
@@ -214,13 +216,11 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
       this.Colortext();
     }
-    /*console.log(this.data);
-    this.viewer = viewer;
+    /*this.viewer = viewer;
     var dataSource = Cesium.CzmlDataSource.load(this.data);
     viewer.dataSources.add(dataSource);
     dataSource.then(function(dataSource) {
       const entities = dataSource.entities.values;
-      console.log(entities)
     });
     viewer.zoomTo(dataSource);*/
 
