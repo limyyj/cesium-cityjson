@@ -14,12 +14,16 @@
 }
 
 /deep/.mat-accent .mat-slider-thumb {
-    background-color: #395d73 !important;
+    background-color: #8AA8C0 !important;
     cursor: -webkit-grab;
-} 
+}
+/deep/.mat-slider-thumb{
+  width: 5px !important;
+  right: -5px !important;
+}
 
 /deep/.mat-slider-track-fill{
-  background-color: #395d73 !important;
+  background-color: #F0BFA0 !important;
 }
 
 /deep/.mat-slider-thumb-label-text {

@@ -155,10 +155,13 @@ export class ViewerComponent extends DataSubscriber {
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
       animation:false,
+      shadows : false,
+      // baseLayerPicker : false,
+      // shouldAnimate : true,
     });
     // viewer.scene.globe.enableLighting = true;
-
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
+
     if(this.data !== undefined) {
       this.viewer = viewer;
       this.dataService.setViewer(this.viewer);
@@ -223,7 +226,14 @@ export class ViewerComponent extends DataSubscriber {
       const entities = dataSource.entities.values;
     });
     viewer.zoomTo(dataSource);*/
+    /*Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjMtOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
 
+    var viewer = new Cesium.Viewer('cesiumContainer',{
+    terrainProvider : new Cesium.CesiumTerrainProvider({
+        url: Cesium.IonResource.fromAssetId(5118)
+    })
+    });
+*/
     /*var viewer = new Cesium.Viewer('cesiumContainer', {
       // terrainProvider : Cesium.createWorldTerrain(),
       // baseLayerPicker : false,

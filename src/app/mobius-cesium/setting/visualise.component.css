@@ -3,19 +3,19 @@
   padding:0px;
   height: 100%;
   width: 100%;
-  color:#ddd !important;
+  color:#D3D3D3 !important;
   font-family: Roboto,"Helvetica Neue",sans-serif;
   font-size: 14px !important;
   line-height: 14px;
   overflow-x: hidden !important;
-  background-color: rgba(20,20,20,0.5);
+  background-color: rgba(20,20,20,0.9);
   overflow-y:overlay;
 }
 /deep/.mat-tab-label, /deep/.mat-tab-label-active{
   min-width: 60px!important;
   padding: 3px!important;
   margin: 3px!important;
-  color:#ddd !important;
+  color:#D3D3D3 !important;
   background-color: transparent !important;
 }
 /deep/.mat-tab-label{
@@ -24,7 +24,7 @@
   background-color: transparent !important;
 }
 /deep/.mat-tab-labels{
-  background-color: rgba(20,20,20,0.5) !important;
+  background-color: rgba(20,20,20,0.9) !important;
 }
 /deep/.mat-tab-header{
   width: 700px !important;
@@ -51,7 +51,7 @@
   color:#395d73;
   border: 0;
   height: 20px;
-  background-color: rgba(20,20,20,0.5) !important;
+  background-color: rgba(20,20,20,0.9) !important;
 }
 /deep/.mat-tab-body-wrapper{
   height:100% !important;
@@ -64,16 +64,20 @@
 }
 
 /deep/.mat-accent .mat-slider-thumb {
-    background-color: #395d73 !important;
+    background-color: #8AA8C0 !important;
     cursor: -webkit-grab;
-} 
+}
+/deep/.mat-slider-thumb{
+  width: 5px !important;
+  right: -5px !important;
+}
 
 /deep/.mat-slider-track-fill{
-  background-color: #395d73 !important;
+  background-color: #F0BFA0 !important;
 }
 
 /deep/.mat-slider-thumb-label-text {
-    color: #395d73 !important;
+    color: #8AA8C0 !important;
     font-size: 12px !important;
 }
 /deep/.mat-slider-thumb-label{
@@ -82,10 +86,10 @@
     top: -20px !important;
     right: -7px !important;
     background-color: white !important;
-    border: 1px solid #395d73 !important;
+    border: 1px solid #8AA8C0 !important;
 }
 /deep/.mat-slider-track-background{
-  background-color: #ddd !important;
+  background-color: #D3D3D3 !important;
 }
 .mat-slider{
     width: 150px !important;
@@ -141,9 +145,9 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #ddd !important;
+  border-top: 1px solid #D3D3D3 !important;
   padding: 0; 
-  color:#ddd !important;
+  color:#D3D3D3 !important;
   width: 100%;
-  background-color: #ddd !important;
+  background-color: #8AA8C0 !important;
 }
