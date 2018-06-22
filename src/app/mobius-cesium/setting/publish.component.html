@@ -60,7 +60,7 @@
           <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">none</div>
           <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1">=</div>
           <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">!=</div></th>
-          <th *ngIf="item.type === 'number'" style="width:80px;color:#395D73 !important;"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:80px;color:#395D73 !important;"></th>
+          <th *ngIf="item.type === 'number'" style="width:80px;color:#395D73 !important;"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:80px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;"></th>
           <th *ngIf="item.type === 'category'" style="width:73px;height: 25px;"><div style="width:73px;height: 25px;">
           <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
             <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
@@ -77,7 +77,7 @@
         </div>
       </div>
       <div style="padding: 10px 10px 0px 10px;">
-      <button style="background-color: #D3D3D3 ;color:#395D73;" (click)="reset()">Reset</button></div>
+      <button style="color:#8AA8C0;border:1px solid #8AA8C0;" (click)="reset()">Reset</button></div>
       </div>
 </div>
 

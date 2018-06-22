@@ -76,7 +76,7 @@
     border: 1px solid #395d73 !important;
 }
 /deep/.mat-slider-track-background{
-  background-color: #ddd !important;
+  background-color: #D3D3D3 !important;
 }
 .mat-slider{
     width: 150px !important;
@@ -86,8 +86,8 @@
   display: inline-block;
   position: relative;
   border: 1px solid #8AA8C0;
-  color: #395D73;
-  fill: #395D73;
+  color: #D3D3D3;
+  fill: #8AA8C0;
   border-radius: 0px;
   padding: 3px 0px;
   margin: 0px 0px;
@@ -98,16 +98,14 @@
   -ms-user-select: none;
   user-select: none;
   width: 80px;
-  height:22px;
   font-family:sans-serif !important;
-  background: #F1F1F1;
+  background: transparent;
 }
 .cesium-button-select{
   display: inline-block;
   position: relative;
   border: 1px solid #8AA8C0;
-  color: #395D73;
-  fill: #395D73;
+  fill: #8AA8C0;
   border-radius: 0px;
   padding: 3px 0px;
   margin: 0px 0px;
@@ -118,14 +116,14 @@
   -ms-user-select: none;
   user-select: none;
   width: 80px;
-  height:22px;
   font-family:sans-serif !important;
-  background: #F1F1F1;
+  color: #D3D3D3;
+  background: transparent;
 }
 .cesium-option{
   background-color: #F1F1F1;
   /*opacity: 0.8;*/
-  color: #395D73;
+  color: #8AA8C0;
   border: 1px solid #8AA8C0;
 }
 hr {
