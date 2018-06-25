@@ -16,7 +16,6 @@ export class ViewerComponent extends DataSubscriber {
   private viewer: any;
   private selectEntity: any=null;
   private material: object;
-  private poly_center: any[];
   private _Colorbar: any[];
   private texts: any[];
   private _Cattexts: any[];
@@ -31,6 +30,7 @@ export class ViewerComponent extends DataSubscriber {
   constructor(injector: Injector, myElement: ElementRef) {
     super(injector);
     this.myElement = myElement;
+    this.dataService.set_imageryViewModels();
   }
 
   public ngOnInit() {
@@ -64,93 +64,11 @@ export class ViewerComponent extends DataSubscriber {
     if(document.getElementsByClassName("cesium-viewer").length !== 0) {
       document.getElementsByClassName("cesium-viewer")[0].remove();
     }
-    const imageryViewModels = [];
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Stamen Toner",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-     tooltip : "A high contrast black and white map.\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/toner/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Stamen Toner(Lite)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-     tooltip : "A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/toner-lite/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Terrain(Standard)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-     tooltip : "A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/terrain/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Terrain(Background)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-     tooltip : "A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/terrain-background/",
-         });
-     },
-    }));
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Open\u00adStreet\u00adMap",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/openStreetMap.png"),
-     tooltip : "OpenStreetMap (OSM) is a collaborative project to create a free editable \
-             map of the world.\nhttp://www.openstreetmap.org",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://a.tile.openstreetmap.org/",
-         });
-     },
-    }));
-
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Earth at Night",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/earthAtNight.png"),
-     tooltip : "The lights of cities and villages trace the outlines of civilization \
-                 in this global view of the Earth at night as seen by NASA/NOAA\'s Suomi NPP satellite.",
-     creationFunction : function() {
-         return new Cesium.IonImageryProvider({ assetId: 3812 });
-     },
-    }));
-
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Natural Earth\u00a0II",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/naturalEarthII.png"),
-     tooltip : "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
-     creationFunction : function() {
-         return Cesium.createTileMapServiceImageryProvider({
-             url : Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII"),
-         });
-     },
-    }));
-
-    imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Blue Marble",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/blueMarble.png"),
-     tooltip : "Blue Marble Next Generation July, 2004 imagery from NASA.",
-     creationFunction : function() {
-         return new Cesium.IonImageryProvider({ assetId: 3845 });
-     },
-    }));
 
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox:false,
-      imageryProviderViewModels : imageryViewModels,
-      selectedImageryProviderViewModel : imageryViewModels[0],
+      imageryProviderViewModels : this.dataService.get_imageryViewModels(),
+      selectedImageryProviderViewModel : this.dataService.get_imageryViewModels()[0],
       timeline: false,
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
@@ -166,14 +84,13 @@ export class ViewerComponent extends DataSubscriber {
       this.viewer = viewer;
       this.dataService.setViewer(this.viewer);
       this.data = data;
-      this.poly_center = [];
       const promise = Cesium.GeoJsonDataSource.load(this.data);
       viewer.dataSources.add(promise);
-      const self = this;
       const _HeightKey: any[] = [];
 
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
+        const self = this;
         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
       });
 

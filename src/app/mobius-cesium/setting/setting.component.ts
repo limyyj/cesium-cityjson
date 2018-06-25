@@ -123,12 +123,18 @@ export class SettingComponent extends DataSubscriber implements OnInit {
                                                                 _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
             } else {
               entity.polygon.extrudedHeight =0;
-              const center = self.dataService.getpoly_center()[i];
+              const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+              const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
+                                    (entity.polygon.hierarchy.getValue().positions).radius/100),10);
+              const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
+                                      cartesianToCartographic(center).longitude).toFixed(10);
+              const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
+                                      latitude).toFixed(10);
               entity.polyline = new Cesium.PolylineGraphics({
-                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([center[0],center[1],0,center[0],
-                        center[1],self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
+                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString,latitudeString,0,longitudeString,
+                        latitudeString,self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
                         _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
-                width:center[2],
+                width:radius,
                 material:entity.polygon.material,
                 show:true,
               });
