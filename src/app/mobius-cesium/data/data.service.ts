@@ -72,9 +72,6 @@ export class DataService {
   public getpoly_center(): any[] {
     return this.poly_center;
   }
-  public setpoly_center(poly_center): void {
-    this.poly_center = poly_center;
-  }
   public getmode(): string {
     return this.mode;
   }
@@ -87,6 +84,7 @@ export class DataService {
 
   public getValue(model: JSON) {
     if(model !== undefined) {
+      this.poly_center = [];
       const propertyNames = Object.keys(model["features"][0].properties);
       const _ColorValue = propertyNames[0];
       propertyNames.sort();
@@ -104,6 +102,7 @@ export class DataService {
       const promise = this.cesiumpromise;
       const _Heighttexts: any[] = [];
       const _Colortexts: any[] = [];
+      const self = this;
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
         for (const entity of entities) {
@@ -122,6 +121,24 @@ export class DataService {
                 _Colortexts.push(entity.properties[_ColorValue]._value);}
               }
             }
+          }
+          if(entity.polygon !== undefined) {
+            entity.polygon.outlineColor = Cesium.Color.Black;
+            const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+            const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
+                                  (entity.polygon.hierarchy.getValue().positions).radius/100),10);
+            const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
+                                    cartesianToCartographic(center).longitude).toFixed(10);
+            const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
+                                    latitude).toFixed(10);
+            self.poly_center.push([longitudeString,latitudeString,radius]);
+          }
+          if(entity.billboard !== undefined) {
+            entity.billboard = undefined;
+            entity.point = new Cesium.PointGraphics({
+              color: Cesium.Color.BLUE,
+              pixelSize: 10,
+            });
           }
         }
       });
@@ -145,6 +162,7 @@ export class DataService {
 
   public LoadJSONData() {
     if(this._jsonModel !== undefined&&this._jsonModel["cesium"] !== undefined) {
+      this.poly_center = [];
       const cesiumData=this._jsonModel["cesium"];
       let _ColorDescr: string;
       let _ColorValue: string;
@@ -200,6 +218,7 @@ export class DataService {
       const promise = this.cesiumpromise;
       const _Heighttexts = [];
       const _Colortexts = [];
+      const self = this;
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
         for (const entity of entities) {
@@ -218,6 +237,24 @@ export class DataService {
                 _Colortexts.push(entity.properties[_ColorValue]._value);}
               }
             }
+          }
+          if(entity.polygon !== undefined) {
+            entity.polygon.outlineColor = Cesium.Color.Black;
+            const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+            const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
+                                  (entity.polygon.hierarchy.getValue().positions).radius/100),10);
+            const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
+                                    cartesianToCartographic(center).longitude).toFixed(10);
+            const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
+                                    latitude).toFixed(10);
+            self.poly_center.push([longitudeString,latitudeString,radius]);
+          }
+          if(entity.billboard !== undefined) {
+            entity.billboard = undefined;
+            entity.point = new Cesium.PointGraphics({
+              color: Cesium.Color.BLUE,
+              pixelSize: 10,
+            });
           }
         }
       });

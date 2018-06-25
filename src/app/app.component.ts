@@ -25,4 +25,5 @@ export class AppComponent {
     };
     fr.readAsText(files[0]);
   }
+  
 }

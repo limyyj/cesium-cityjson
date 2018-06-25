@@ -174,30 +174,7 @@ export class ViewerComponent extends DataSubscriber {
 
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
-        for (const entity of entities) {
-          let poly_center = [];
-          if(entity.polygon !== undefined) {
-            entity.polygon.outlineColor = Cesium.Color.Black;
-            const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-            const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
-                                  (entity.polygon.hierarchy.getValue().positions).radius/100),10);
-            const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
-                                    cartesianToCartographic(center).longitude).toFixed(10);
-            const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
-                                    latitude).toFixed(10);
-            poly_center = [longitudeString,latitudeString,radius];
-            self.poly_center.push(poly_center);
-          }
-          if(entity.billboard !== undefined) {
-            entity.billboard = undefined;
-            entity.point = new Cesium.PointGraphics({
-              color: Cesium.Color.BLUE,
-              pixelSize: 10,
-            });
-          }
-        }
         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
-        self.dataService.setpoly_center(self.poly_center);
       });
 
       this.dataService.setcesiumpromise(promise);
