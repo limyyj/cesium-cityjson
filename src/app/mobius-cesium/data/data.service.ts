@@ -168,18 +168,19 @@ export class DataService {
   public getValue(model: JSON) {
     if(model !== undefined) {
       const propertyNames = Object.keys(model["features"][0].properties);
-      const _ColorValue = propertyNames[0];
       propertyNames.sort();
       propertyNames.unshift("None");
+      const _ColorValue = propertyNames[0];
 
       const feature_instance = model["features"][0];
       const _HeightKey = propertyNames.filter(function(prop_name) {
         const value =  feature_instance.properties[prop_name];
         return (typeof(value) === "number");
       });
-      const _HeightValue = _HeightKey[0];
+
       _HeightKey.sort();
       _HeightKey.unshift("None");
+      const _HeightValue = _HeightKey[0];
 
       const promise = this.cesiumpromise;
       const _Heighttexts: any[] = [];

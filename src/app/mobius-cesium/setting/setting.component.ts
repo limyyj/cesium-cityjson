@@ -115,7 +115,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
             if(typeof(_ColorText[0]) === "number") {
               self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
             } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-          } else {entity.polygon.material = Cesium.Color.WHITE;}
+          } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
           if(_ExtrudeKey !== "None") {
             if(_HeightChart === false) {
               entity.polyline = undefined;

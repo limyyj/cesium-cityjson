@@ -272,9 +272,11 @@ export class ViewerComponent extends DataSubscriber {
       }
     }
     if(_Filter.length === 0||_CheckHide === false) {
-      if(typeof(_ColorText[0]) === "number") {
-        this.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
-      } else {this.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+      if(_ColorKey !== "None") {
+        if(typeof(_ColorText[0]) === "number") {
+          this.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
+        } else {this.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+      } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
     }
   }
 
