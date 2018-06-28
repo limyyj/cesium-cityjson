@@ -158,7 +158,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
             _CheckHide=true;
           }
         } else if(typeof(value) === "string") {
-          if (this._compareCat(value,filter.textHide, Number(filter.RelaHide))) {
+          if (this._compareCat(value,filter.CategaryHide, Number(filter.RelaHide))) {
             _CheckHide=true;
           }
         }

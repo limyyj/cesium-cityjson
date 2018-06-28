@@ -182,8 +182,8 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
     if(this._HideValue === undefined) {this._HideValue = this._ColorProperty[0];}
     const texts = this.Initial(this._HideValue);
     let _HideType: string;
-    if(typeof(texts[0]) === "number") {_HideType = "number";
-    } else if(typeof(texts[0]) === "string") {_HideType = "category";}
+    if(typeof(texts[0]) === "number") { _HideType = "number";
+    } else if(typeof(texts[0]) === "string") { _HideType = "category"; }
     this._Filter.push({divid:String("addHide".concat(String(lastnumber))),id: lastnumber,
                        HeightHide:this._HideValue,type:_HideType,Category:texts,CategaryHide:texts[0],
                        RelaHide:0,textHide: Math.round(Math.min.apply(Math, texts)*100)/100,
