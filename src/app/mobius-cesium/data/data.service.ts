@@ -42,8 +42,18 @@ export class DataService {
 
     if(this._jsonModel === undefined) {
       const viewer = new Cesium.Viewer(document.createElement("div"));
-    }
+    }  else {this.clearAll();}
     this.sendMessage("model_update");
+    
+  }
+  public clearAll(){
+    this.viewer = null;
+    this.hideElementArr = [];
+    this._HideNum = [];
+    this._ViData =  null;
+    this._PuData = {};
+    this._index = null;
+    this._Filter = [];
   }
   public getViewer(): any {
     return this.viewer;

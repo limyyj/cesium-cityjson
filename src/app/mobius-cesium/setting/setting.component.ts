@@ -39,7 +39,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     if(message === "model_update" ) {
       this.data = this.dataService.getGsModel();
       this.mode = this.dataService.getmode();
-      this.viewer = this.dataService.getViewer();
+      /*this.viewer = this.dataService.getViewer();*/
       try {
         if(this.data !== undefined&&this.data["features"] !== undefined) {
           if(this.mode === "viewer") {

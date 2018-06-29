@@ -31,7 +31,7 @@ export class AttributesComponent extends DataSubscriber implements OnInit {
     if(message === "model_update" ) {
       this.data = this.dataService.getGsModel();
       this.mode = this.dataService.getmode();
-      this.viewer = this.dataService.getViewer();
+      /*this.viewer = this.dataService.getViewer();*/
       this.dataArr = this.dataService.get_ViData();
     }
   }
