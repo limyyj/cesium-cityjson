@@ -50,7 +50,9 @@ export class ViewerComponent extends DataSubscriber {
 
   public notify(message: string): void {
     if(message === "model_update" ) {
+
       this.data = this.dataService.getGsModel();
+      // delete this.viewer;
       try {
         this.LoadData(this.data);
       }
@@ -61,11 +63,11 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public LoadData(data: JSON) {
-    if(document.getElementsByClassName("cesium-viewer").length !== 0) {
+    /*if(document.getElementsByClassName("cesium-viewer").length !== 0) {
       document.getElementsByClassName("cesium-viewer")[0].remove();
-    }
+    }*/
 
-    const viewer = new Cesium.Viewer("cesiumContainer" , {
+   /* const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox:false,
       imageryProviderViewModels : this.dataService.get_imageryViewModels(),
       selectedImageryProviderViewModel : this.dataService.get_imageryViewModels()[0],
@@ -75,11 +77,16 @@ export class ViewerComponent extends DataSubscriber {
       animation:false,
       shadows : false,
     });
-    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
-    viewer.dataSources.removeAll();
+    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();*/
+    /*delete viewer.dataSources;//.removeAll(); 
+    delete viewer.entities;//.removeAll(); 
+    delete viewer.scene.primitives;//.removeAll(); */
+
     if(this.data !== undefined) {
-      this.viewer = viewer;;
-      this.dataService.setViewer(this.viewer)
+      const viewer = this.dataService.getViewer();
+      viewer.dataSources.removeAll(); 
+      viewer.entities.removeAll(); 
+      viewer.scene.primitives.removeAll(); 
       this.data = data;
       const promise = Cesium.GeoJsonDataSource.load(this.data);
       viewer.dataSources.add(promise);
@@ -109,6 +116,20 @@ export class ViewerComponent extends DataSubscriber {
       });
       viewer.zoomTo(promise);
       this.Colortext();
+    }else {
+      const viewer = new Cesium.Viewer("cesiumContainer" , {
+        infoBox:false,
+        imageryProviderViewModels : this.dataService.get_imageryViewModels(),
+        selectedImageryProviderViewModel : this.dataService.get_imageryViewModels()[0],
+        timeline: false,
+        fullscreenButton:false,
+        automaticallyTrackDataSourceClocks:false,
+        animation:false,
+        shadows : false,
+      });
+      document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
+      this.viewer = viewer;
+      this.dataService.setViewer(this.viewer);
     }
     /*this.viewer = viewer;
     var dataSource = Cesium.CzmlDataSource.load(this.data);

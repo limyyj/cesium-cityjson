@@ -13,7 +13,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   private myElement;
   private data: JSON;
   private mode: string;
-  private viewer: object;
+  /*private viewer: object;*/
   private dataArr: object;
   private propertyname: any[];
   private relation: any[];
@@ -27,7 +27,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   public ngOnInit() {
     this.data = this.dataService.getGsModel();
     this.mode = this.dataService.getmode();
-    this.viewer = this.dataService.getViewer();
+    /*this.viewer = this.dataService.getViewer();*/
     if(this.mode === "viewer") {
       this.changedata(2);
     } else if(this.mode==="editor") {

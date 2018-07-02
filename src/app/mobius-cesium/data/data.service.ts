@@ -38,22 +38,23 @@ export class DataService {
   }
 
   public setGsModel(model: JSON) {
+    delete this._jsonModel;
+    const json = this._jsonModel;
     this._jsonModel = model;
-
-    if(this._jsonModel === undefined) {
-      const viewer = new Cesium.Viewer(document.createElement("div"));
-    }  else {this.clearAll();}
+    if(this._jsonModel !== undefined){this.clearAll();}
     this.sendMessage("model_update");
     
   }
   public clearAll(){
-    this.viewer = null;
-    this.hideElementArr = [];
-    this._HideNum = [];
-    this._ViData =  null;
-    this._PuData = {};
-    this._index = null;
-    this._Filter = [];
+    // delete this.viewer;
+    delete this.cesiumpromise;
+    delete this.hideElementArr;
+    delete this._HideNum;
+    delete this._ViData;
+    delete this._PuData;
+    delete this._index;
+    delete this._Filter;
+
   }
   public getViewer(): any {
     return this.viewer;
@@ -71,6 +72,7 @@ export class DataService {
     return this.cesiumpromise;
   }
   public setcesiumpromise(cesiumpromise): void {
+    delete this.cesiumpromise;
     this.cesiumpromise = cesiumpromise;
   }
   public gethideElementArr(): any {
