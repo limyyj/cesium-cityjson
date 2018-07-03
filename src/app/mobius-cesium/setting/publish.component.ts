@@ -80,7 +80,6 @@ export class PublishComponent extends DataSubscriber implements OnInit {
       this._CheckDisable = false;
     } else {this._CheckDisable = true;}
     if(this._CheckDisable === false) {
-      addHide.style.background = "grey";
       if(this._Filter[index].type === "number") {
         const textHide = this._Filter[index].textHide;
         this._Filter[index].Disabletext = Number(textHide);
@@ -96,7 +95,6 @@ export class PublishComponent extends DataSubscriber implements OnInit {
         this._Filter[index].RelaHide = 0;
       }
     } else {
-      addHide.style.background = null;
       if(this._Filter[index].type === "number") {
         this._Filter[index].textHide = this._Filter[index].Disabletext;
         this._Filter[index].Disabletext = null;

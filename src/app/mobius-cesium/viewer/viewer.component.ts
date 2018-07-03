@@ -117,10 +117,11 @@ export class ViewerComponent extends DataSubscriber {
       viewer.zoomTo(promise);
       this.Colortext();
     }else {
+      const imageryViewModels = this.dataService.get_imageryViewModels();
       const viewer = new Cesium.Viewer("cesiumContainer" , {
         infoBox:false,
-        imageryProviderViewModels : this.dataService.get_imageryViewModels(),
-        selectedImageryProviderViewModel : this.dataService.get_imageryViewModels()[0],
+        imageryProviderViewModels : imageryViewModels,
+        selectedImageryProviderViewModel : imageryViewModels[0],
         timeline: false,
         fullscreenButton:false,
         automaticallyTrackDataSourceClocks:false,
@@ -128,8 +129,7 @@ export class ViewerComponent extends DataSubscriber {
         shadows : false,
       });
       document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
-      this.viewer = viewer;
-      this.dataService.setViewer(this.viewer);
+      this.dataService.setViewer(viewer);
     }
     /*this.viewer = viewer;
     var dataSource = Cesium.CzmlDataSource.load(this.data);
@@ -233,7 +233,7 @@ export class ViewerComponent extends DataSubscriber {
 
   public select() {
     event.stopPropagation();
-    const viewer = this.viewer;
+    const viewer = this.dataService.getViewer();//this.viewer;
     if(this.dataArr !== undefined) {
       if(this.selectEntity !== undefined&&this.selectEntity !== null) {this.ColorSelect(this.selectEntity);}
       if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
@@ -362,11 +362,12 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public showAttribs(event) {
+    const viewer = this.dataService.getViewer()
     if(this.data !== undefined && this.mode === "viewer") {
       if(this.data["cesium"] !== undefined) {
         if(this.data["cesium"].select !== undefined) {
-          if(this.viewer.selectedEntity !== undefined) {
-            const pickup = this.viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
+          if(viewer.selectedEntity !== undefined) {
+            const pickup = viewer.scene.pick(new Cesium.Cartesian2(event.clientX,event.clientY));
             this.pickupArrs = [];
             this.pickupArrs.push({name:"ID",data:pickup.id.id});
             for(const _propertyName of this.data["cesium"].select) {
@@ -374,8 +375,8 @@ export class ViewerComponent extends DataSubscriber {
                                     this.dataService.get_SelectedEntity().properties[_propertyName]._value});
             }
             const nameOverlay = document.getElementById("cesium-infoBox-defaultTable");
-            this.viewer.container.appendChild(nameOverlay);
-            nameOverlay.style.bottom = this.viewer.canvas.clientHeight - event.clientY + "px";
+            viewer.container.appendChild(nameOverlay);
+            nameOverlay.style.bottom = viewer.canvas.clientHeight - event.clientY + "px";
             nameOverlay.style.left = event.clientX + "px";
             nameOverlay.style.display= "block";
           } else {
