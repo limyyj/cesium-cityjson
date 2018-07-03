@@ -4,7 +4,7 @@
         <div *ngIf="_ColorKey!==undefined">
         <table >
           <tr>
-          <th class="colorkey" style="width: 280px" *ngIf="_ColorDescr!==undefined"><div style="color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;">{{_ColorDescr}}</div></th></tr>
+          <th class="colorkey" style="width: 280px" *ngIf="_ColorDescr!==undefined"><div style="color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;font-size:14px;line-height:16px;">{{_ColorDescr}}</div></th></tr>
         </table>
         <table>
           <tr>
@@ -47,7 +47,7 @@
         <div *ngFor="let item of _Filter;" id={{item.divid}}>
       <table>
         <tr >
-          <th style="width:280px;height: 25px;"><div style="color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.descr}}</div></th></tr>
+          <th style="width:280px;height: 25px;"><div style="color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;font-size:14px;line-height:16px;">{{item.descr}}</div></th></tr>
         </table>
         <table>
           <tr>
