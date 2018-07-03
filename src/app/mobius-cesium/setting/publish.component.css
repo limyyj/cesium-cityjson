@@ -5,7 +5,7 @@
   color:#D3D3D3 !important;
   font-family: Roboto,"Helvetica Neue",sans-serif;
   font-size: 14px !important;
-  line-height: 14px;
+  line-height: 16px;
   overflow-x: hidden !important;
 }
 
@@ -16,6 +16,16 @@
 /deep/.mat-accent .mat-slider-thumb {
     background-color: #8AA8C0 !important;
     cursor: -webkit-grab;
+    padding: 0px;
+    height: 24px;
+    /*min-width: 50px;*/
+    -webkit-box-flex: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 /deep/.mat-slider-thumb{
   width: 5px !important;
@@ -42,7 +52,12 @@
   background-color: #D3D3D3 !important;
 }
 .mat-slider{
-    width: 150px !important;
+    width: 100%;
+    display: inline-block;
+    position: relative;
+    box-sizing: border-box;
+    outline: 0;
+    vertical-align: middle;
 }
 
 .cesium-button {

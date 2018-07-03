@@ -51,15 +51,15 @@
         </table>
         <table>
           <tr>
-            <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
-        <th *ngIf="item.type === 'number'" style="width:40px;height: 25px;">
-          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">></div>
-          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1"><</div>
-          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">=</div></th>
-          <th *ngIf="item.type === 'category'" style="width:40px;height: 25px;">
-          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">none</div>
-          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1">=</div>
-          <div style="width:40px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">!=</div></th>
+            <th style="max-width: 80px;height: 25px;"><div style="max-width: 80px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;">
+          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">></div>
+          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1"><</div>
+          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">=</div></th>
+          <th *ngIf="item.type === 'category'" style="width:30px;height: 25px;">
+          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">none</div>
+          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1">=</div>
+          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">!=</div></th>
           <th *ngIf="item.type === 'number'" style="width:80px;color:#395D73 !important;"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:80px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;"></th>
           <th *ngIf="item.type === 'category'" style="width:73px;height: 25px;"><div style="width:73px;height: 25px;">
           <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
@@ -69,10 +69,10 @@
       </table>
       <table>
         <tr>
-        <th *ngIf="item.type === 'number'" style="width:50px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;text-align: right;">{{item.HideMin}}</div></th>
-        <th *ngIf="item.type === 'number'" style="width:150px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:150px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
+        <th *ngIf="item.type === 'number'" style="max-width: 30px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;text-align: left;max-width: 30px;">{{item.HideMin}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:200px;height: 25px;"><div style="font-weight: normal;display: inline-block;width:200px;"><mat-slider class="slider" name="range" id="0" min={{item.HideMin}} max={{item.HideMax}} step=0.01 thumbLabel=true value={{item.textHide}} #textscale (change)="Changetext(textscale.value.toPrecision(2),item.id)" >
         </mat-slider></div></th>
-        <th *ngIf="item.type === 'number'" style="width:50px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;width:30px;text-align: left;">{{item.HideMax}}</div></th></tr>
+        <th *ngIf="item.type === 'number'" style="max-width: 30px;height: 25px;vertical-align: top;padding-top: 10px;"><div style="font-weight: normal;display: inline-block;color:#D3D3D3 !important;max-width: 30px;text-align: left;">{{item.HideMax}}</div></th></tr>
       </table><hr>
         </div>
       </div>
