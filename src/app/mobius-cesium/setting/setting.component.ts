@@ -174,7 +174,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       case 1:
         return value > slider;
       case 2:
-        return value === slider;
+        return value !== slider;
     }
   }
 

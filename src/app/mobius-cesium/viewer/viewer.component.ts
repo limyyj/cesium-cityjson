@@ -46,13 +46,25 @@ export class ViewerComponent extends DataSubscriber {
       this.dataArr = this.dataService.get_PuData();
       this._index = 2;
     }
+    const imageryViewModels = this.dataService.get_imageryViewModels();
+    const viewer = new Cesium.Viewer("cesiumContainer" , {
+      infoBox:false,
+      imageryProviderViewModels : imageryViewModels,
+      selectedImageryProviderViewModel : imageryViewModels[0],
+      timeline: false,
+      fullscreenButton:false,
+      automaticallyTrackDataSourceClocks:false,
+      animation:false,
+      shadows : false,
+    });
+    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
+    this.dataService.setViewer(viewer);
   }
 
   public notify(message: string): void {
     if(message === "model_update" ) {
 
       this.data = this.dataService.getGsModel();
-      // delete this.viewer;
       try {
         this.LoadData(this.data);
       }
@@ -63,30 +75,13 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public LoadData(data: JSON) {
-    /*if(document.getElementsByClassName("cesium-viewer").length !== 0) {
-      document.getElementsByClassName("cesium-viewer")[0].remove();
-    }*/
-
-   /* const viewer = new Cesium.Viewer("cesiumContainer" , {
-      infoBox:false,
-      imageryProviderViewModels : this.dataService.get_imageryViewModels(),
-      selectedImageryProviderViewModel : this.dataService.get_imageryViewModels()[0],
-      timeline: false,
-      fullscreenButton:false,
-      automaticallyTrackDataSourceClocks:false,
-      animation:false,
-      shadows : false,
-    });
-    document.getElementsByClassName("cesium-viewer-bottom")[0].remove();*/
-    /*delete viewer.dataSources;//.removeAll(); 
-    delete viewer.entities;//.removeAll(); 
-    delete viewer.scene.primitives;//.removeAll(); */
-
     if(this.data !== undefined) {
       const viewer = this.dataService.getViewer();
       viewer.dataSources.removeAll(); 
       viewer.entities.removeAll(); 
-      viewer.scene.primitives.removeAll(); 
+      //viewer.scene.primitives.removeAll();
+      //viewer.scene.primitives.remove(window.primitive); 
+
       this.data = data;
       const promise = Cesium.GeoJsonDataSource.load(this.data);
       viewer.dataSources.add(promise);
@@ -97,6 +92,7 @@ export class ViewerComponent extends DataSubscriber {
         const self = this;
         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
       });
+      
 
       this.dataService.setcesiumpromise(promise);
       if(this.mode === "editor") {
@@ -116,51 +112,7 @@ export class ViewerComponent extends DataSubscriber {
       });
       viewer.zoomTo(promise);
       this.Colortext();
-    }else {
-      const imageryViewModels = this.dataService.get_imageryViewModels();
-      const viewer = new Cesium.Viewer("cesiumContainer" , {
-        infoBox:false,
-        imageryProviderViewModels : imageryViewModels,
-        selectedImageryProviderViewModel : imageryViewModels[0],
-        timeline: false,
-        fullscreenButton:false,
-        automaticallyTrackDataSourceClocks:false,
-        animation:false,
-        shadows : false,
-      });
-      document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
-      this.dataService.setViewer(viewer);
     }
-    /*this.viewer = viewer;
-    var dataSource = Cesium.CzmlDataSource.load(this.data);
-    viewer.dataSources.add(dataSource);
-    dataSource.then(function(dataSource) {
-      const entities = dataSource.entities.values;
-    });
-    viewer.zoomTo(dataSource);*/
-    /*Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2MGMxNGYwMS1jZjYyLTQyNjMtOGNkYy1hOTRiYTk4ZGEzZDUiLCJpZCI6MTY4MSwiaWF0IjoxNTI5NTY4OTc4fQ.lL2fzwOZ6EQuL5BqXG5qIwlBn-P_DTbClhVYCIyCgS0';
-    var viewer = new Cesium.Viewer('cesiumContainer',{
-    terrainProvider : new Cesium.CesiumTerrainProvider({
-        url: Cesium.IonResource.fromAssetId(5118)
-    })
-    });
-*/
-    /*var viewer = new Cesium.Viewer('cesiumContainer', {
-      // terrainProvider : Cesium.createWorldTerrain(),
-      // baseLayerPicker : false,
-      shouldAnimate : true,
-      infoBox:false,
-      imageryProviderViewModels : imageryViewModels,
-      selectedImageryProviderViewModel : imageryViewModels[0],
-      timeline: false,
-      fullscreenButton:false,
-      // automaticallyTrackDataSourceClocks:false,
-      animation:false,
-    });
-    viewer.dataSources.add(Cesium.CzmlDataSource.load(this.data)).then(function(ds) {
-      viewer.trackedEntity = ds.entities.getById('path');
-    });*/
-    
   }
 
   public Colortext() {
