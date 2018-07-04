@@ -48,14 +48,15 @@ export class ViewerComponent extends DataSubscriber {
     }
     const imageryViewModels = this.dataService.get_imageryViewModels();
     const viewer = new Cesium.Viewer("cesiumContainer" , {
-      infoBox:false,
+      infoBox: false,
+      showRenderLoopErrors: false,
+      orderIndependentTranslucency: false,
       imageryProviderViewModels : imageryViewModels,
       selectedImageryProviderViewModel : imageryViewModels[0],
       timeline: false,
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
-      animation:false,
-      shadows : false,
+      animation:false
     });
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
     this.dataService.setViewer(viewer);
@@ -78,9 +79,9 @@ export class ViewerComponent extends DataSubscriber {
     if(this.data !== undefined) {
       const viewer = this.dataService.getViewer();
       viewer.dataSources.removeAll(); 
-      viewer.entities.removeAll(); 
-      //viewer.scene.primitives.removeAll();
-      //viewer.scene.primitives.remove(window.primitive); 
+      viewer.scene.primitives.remove(this.dataService.getcesiumpromise());
+      const new_viewer = new Cesium.Viewer("cesiumContainer");
+      
 
       this.data = data;
       const promise = Cesium.GeoJsonDataSource.load(this.data);
@@ -93,7 +94,6 @@ export class ViewerComponent extends DataSubscriber {
         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
       });
       
-
       this.dataService.setcesiumpromise(promise);
       if(this.mode === "editor") {
         this.dataService.getValue(this.data);
@@ -226,25 +226,32 @@ export class ViewerComponent extends DataSubscriber {
     let _ChromaScale = chroma.scale("SPECTRAL");
     if(_ColorInvert === true) {_ChromaScale = chroma.scale("SPECTRAL").domain([1,0]);}
     let _CheckHide: boolean;
-    if(_Filter.length !== 0) {
-      _CheckHide = this.Hide(_Filter,entity,_HeightChart);
-      if(_CheckHide === true) {
-        if(entity.polygon !== undefined) {
-          entity.polygon.extrudedHeight = 0;
-          entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-          if(_HeightChart === true) {
-            if(entity.polyline !== undefined) {entity.polyline.show = false;}
+    if(entity.properties["TYPE"] === undefined||entity.properties["TYPE"]._value !== "STATIC"){
+      if(_Filter.length !== 0) {
+        _CheckHide = this.Hide(_Filter,entity,_HeightChart);
+        if(_CheckHide === true) {
+          if(entity.polygon !== undefined) {
+            entity.polygon.extrudedHeight = 0;
+            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            if(_HeightChart === true) {
+              if(entity.polyline !== undefined) {entity.polyline.show = false;}
+            }
           }
+          if(entity.polyline !== undefined)  {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
         }
-        if(entity.polyline !== undefined)  {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
       }
-    }
-    if(_Filter.length === 0||_CheckHide === false) {
-      if(_ColorKey !== "None") {
-        if(typeof(_ColorText[0]) === "number") {
-          this.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
-        } else {this.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-      } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
+      if(_Filter.length === 0||_CheckHide === false) {
+        if(_ColorKey !== "None") {
+          if(typeof(_ColorText[0]) === "number") {
+            this.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
+          } else {this.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+        } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
+      }
+    }else {
+      entity.polygon.height =  entity.properties["HEIGHT"];
+      entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
+      const ColorValue = entity.properties["COLOR"]._value;
+      entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
     }
   }
 

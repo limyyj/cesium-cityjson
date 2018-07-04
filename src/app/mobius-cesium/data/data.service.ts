@@ -46,8 +46,6 @@ export class DataService {
     
   }
   public clearAll(){
-    // delete this.viewer;
-    delete this.cesiumpromise;
     delete this.hideElementArr;
     delete this._HideNum;
     delete this._ViData;
@@ -179,9 +177,12 @@ export class DataService {
 
   public getValue(model: JSON) {
     if(model !== undefined) {
-      const propertyNames = Object.keys(model["features"][0].properties);
-      propertyNames.sort();
-      propertyNames.unshift("None");
+      const propertyName = Object.keys(model["features"][0].properties);
+      propertyName.sort();
+      propertyName.unshift("None");
+      const propertyNames = propertyName.filter(function(value) { 
+        return value != 'TYPE'&& value != 'COLOR'&& value != 'HEIGHT'&&value != 'EXTRUHEIGHT'
+      });
       const _ColorValue = propertyNames[0];
 
       const feature_instance = model["features"][0];
@@ -201,25 +202,32 @@ export class DataService {
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
         for (const entity of entities) {
-          if(entity.properties[_HeightValue] !== undefined) {
-            if(entity.properties[_HeightValue]._value !== " ") {
-              if(_Heighttexts.length === 0) {_Heighttexts[0]=entity.properties[_HeightValue]._value;
-              } else { if(_Heighttexts.indexOf(entity.properties[_HeightValue]._value) === -1) {
-               _Heighttexts.push(entity.properties[_HeightValue]._value);}
+          if(entity.properties["TYPE"] === undefined||entity.properties["TYPE"]._value !== "STATIC"){
+            if(entity.properties[_HeightValue] !== undefined) {
+              if(entity.properties[_HeightValue]._value !== " ") {
+                if(_Heighttexts.length === 0) {_Heighttexts[0]=entity.properties[_HeightValue]._value;
+                } else { if(_Heighttexts.indexOf(entity.properties[_HeightValue]._value) === -1) {
+                 _Heighttexts.push(entity.properties[_HeightValue]._value);}
+                }
               }
             }
-          }
-          if(entity.properties[_ColorValue] !== undefined) {
-            if(entity.properties[_ColorValue]._value !== " ") {
-              if(_Colortexts.length === 0) {_Colortexts[0] = entity.properties[_ColorValue]._value;
-              } else { if(_Colortexts.indexOf(entity.properties[_ColorValue]._value) === -1) {
-                _Colortexts.push(entity.properties[_ColorValue]._value);}
+            if(entity.properties[_ColorValue] !== undefined) {
+              if(entity.properties[_ColorValue]._value !== " ") {
+                if(_Colortexts.length === 0) {_Colortexts[0] = entity.properties[_ColorValue]._value;
+                } else { if(_Colortexts.indexOf(entity.properties[_ColorValue]._value) === -1) {
+                  _Colortexts.push(entity.properties[_ColorValue]._value);}
+                }
               }
             }
+          } else {
+            entity.polygon.height =  entity.properties["HEIGHT"];
+            entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
+            const ColorValue = entity.properties["COLOR"]._value;
+            entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
           }
           if(entity.polygon !== undefined) {
-            entity.polygon.outlineColor = Cesium.Color.Black;
-          }
+              entity.polygon.outlineColor = Cesium.Color.Black;
+            }
           if(entity.billboard !== undefined) {
             entity.billboard = undefined;
             entity.point = new Cesium.PointGraphics({
