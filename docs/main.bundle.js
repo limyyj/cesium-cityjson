@@ -194,8 +194,6 @@ var DataService = /** @class */ (function () {
         this.sendMessage("model_update");
     };
     DataService.prototype.clearAll = function () {
-        // delete this.viewer;
-        // delete this.cesiumpromise;
         delete this.hideElementArr;
         delete this._HideNum;
         delete this._ViData;
@@ -345,7 +343,6 @@ var DataService = /** @class */ (function () {
                 var entities = dataSource.entities.values;
                 for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
                     var entity = entities_1[_i];
-                    console.log(entity.properties["TYPE"]._value);
                     if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
                         if (entity.properties[_HeightValue_1] !== undefined) {
                             if (entity.properties[_HeightValue_1]._value !== " ") {
