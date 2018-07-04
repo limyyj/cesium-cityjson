@@ -195,7 +195,7 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.clearAll = function () {
         // delete this.viewer;
-        delete this.cesiumpromise;
+        // delete this.cesiumpromise;
         delete this.hideElementArr;
         delete this._HideNum;
         delete this._ViData;
@@ -322,9 +322,12 @@ var DataService = /** @class */ (function () {
     };
     DataService.prototype.getValue = function (model) {
         if (model !== undefined) {
-            var propertyNames = Object.keys(model["features"][0].properties);
-            propertyNames.sort();
-            propertyNames.unshift("None");
+            var propertyName = Object.keys(model["features"][0].properties);
+            propertyName.sort();
+            propertyName.unshift("None");
+            var propertyNames = propertyName.filter(function (value) {
+                return value != 'TYPE' && value != 'COLOR' && value != 'HEIGHT' && value != 'EXTRUHEIGHT';
+            });
             var _ColorValue_1 = propertyNames[0];
             var feature_instance_1 = model["features"][0];
             var _HeightKey = propertyNames.filter(function (prop_name) {
@@ -342,29 +345,38 @@ var DataService = /** @class */ (function () {
                 var entities = dataSource.entities.values;
                 for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
                     var entity = entities_1[_i];
-                    if (entity.properties[_HeightValue_1] !== undefined) {
-                        if (entity.properties[_HeightValue_1]._value !== " ") {
-                            if (_Heighttexts_1.length === 0) {
-                                _Heighttexts_1[0] = entity.properties[_HeightValue_1]._value;
+                    console.log(entity.properties["TYPE"]._value);
+                    if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
+                        if (entity.properties[_HeightValue_1] !== undefined) {
+                            if (entity.properties[_HeightValue_1]._value !== " ") {
+                                if (_Heighttexts_1.length === 0) {
+                                    _Heighttexts_1[0] = entity.properties[_HeightValue_1]._value;
+                                }
+                                else {
+                                    if (_Heighttexts_1.indexOf(entity.properties[_HeightValue_1]._value) === -1) {
+                                        _Heighttexts_1.push(entity.properties[_HeightValue_1]._value);
+                                    }
+                                }
                             }
-                            else {
-                                if (_Heighttexts_1.indexOf(entity.properties[_HeightValue_1]._value) === -1) {
-                                    _Heighttexts_1.push(entity.properties[_HeightValue_1]._value);
+                        }
+                        if (entity.properties[_ColorValue_1] !== undefined) {
+                            if (entity.properties[_ColorValue_1]._value !== " ") {
+                                if (_Colortexts_1.length === 0) {
+                                    _Colortexts_1[0] = entity.properties[_ColorValue_1]._value;
+                                }
+                                else {
+                                    if (_Colortexts_1.indexOf(entity.properties[_ColorValue_1]._value) === -1) {
+                                        _Colortexts_1.push(entity.properties[_ColorValue_1]._value);
+                                    }
                                 }
                             }
                         }
                     }
-                    if (entity.properties[_ColorValue_1] !== undefined) {
-                        if (entity.properties[_ColorValue_1]._value !== " ") {
-                            if (_Colortexts_1.length === 0) {
-                                _Colortexts_1[0] = entity.properties[_ColorValue_1]._value;
-                            }
-                            else {
-                                if (_Colortexts_1.indexOf(entity.properties[_ColorValue_1]._value) === -1) {
-                                    _Colortexts_1.push(entity.properties[_ColorValue_1]._value);
-                                }
-                            }
-                        }
+                    else {
+                        entity.polygon.height = entity.properties["HEIGHT"];
+                        entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
+                        var ColorValue = entity.properties["COLOR"]._value;
+                        entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
                     }
                     if (entity.polygon !== undefined) {
                         entity.polygon.outlineColor = Cesium.Color.Black;
@@ -1271,61 +1283,63 @@ var SettingComponent = /** @class */ (function (_super) {
             for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
                 var entity = entities_1[_i];
                 i = i + 1;
-                var _CheckHide = void 0;
-                if (_Filter.length !== 0) {
-                    _CheckHide = self.Hide(_Filter, entity, _HeightChart);
-                    if (_CheckHide === true) {
-                        if (entity.polygon !== undefined) {
-                            entity.polygon.extrudedHeight = 0;
-                            entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                            if (_HeightChart === true) {
-                                if (entity.polyline !== undefined) {
-                                    entity.polyline.show = false;
+                if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
+                    var _CheckHide = void 0;
+                    if (_Filter.length !== 0) {
+                        _CheckHide = self.Hide(_Filter, entity, _HeightChart);
+                        if (_CheckHide === true) {
+                            if (entity.polygon !== undefined) {
+                                entity.polygon.extrudedHeight = 0;
+                                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                                if (_HeightChart === true) {
+                                    if (entity.polyline !== undefined) {
+                                        entity.polyline.show = false;
+                                    }
                                 }
                             }
-                        }
-                        if (entity.polyline !== undefined) {
-                            entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                            if (entity.polyline !== undefined) {
+                                entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                            }
                         }
                     }
-                }
-                if (_Filter.length === 0 || _CheckHide === false) {
-                    if (_ColorKey !== "None") {
-                        if (typeof (_ColorText[0]) === "number") {
-                            self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+                    if (_Filter.length === 0 || _CheckHide === false) {
+                        if (_ColorKey !== "None") {
+                            if (typeof (_ColorText[0]) === "number") {
+                                self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+                            }
+                            else {
+                                self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+                            }
                         }
                         else {
-                            self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+                            entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);
                         }
-                    }
-                    else {
-                        entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);
-                    }
-                    if (_ExtrudeKey !== "None") {
-                        if (_HeightChart === false) {
+                        if (_ExtrudeKey !== "None") {
+                            if (_HeightChart === false) {
+                                entity.polyline = undefined;
+                                entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale;
+                            }
+                            else {
+                                entity.polygon.extrudedHeight = 0;
+                                var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+                                var radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius / 100), 10);
+                                var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
+                                    cartesianToCartographic(center).longitude).toFixed(10);
+                                var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
+                                    latitude).toFixed(10);
+                                entity.polyline = new Cesium.PolylineGraphics({
+                                    positions: new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString, latitudeString, 0, longitudeString,
+                                        latitudeString, self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale]),
+                                    width: radius,
+                                    material: entity.polygon.material,
+                                    show: true,
+                                });
+                            }
+                        }
+                        else {
                             entity.polyline = undefined;
-                            entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale;
-                        }
-                        else {
                             entity.polygon.extrudedHeight = 0;
-                            var center = Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-                            var radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).radius / 100), 10);
-                            var longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
-                                cartesianToCartographic(center).longitude).toFixed(10);
-                            var latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
-                                latitude).toFixed(10);
-                            entity.polyline = new Cesium.PolylineGraphics({
-                                positions: new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString, latitudeString, 0, longitudeString,
-                                    latitudeString, self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value, _ExtrudeMax, _ExtrudeMin, _Invert) * _Scale]),
-                                width: radius,
-                                material: entity.polygon.material,
-                                show: true,
-                            });
                         }
-                    }
-                    else {
-                        entity.polyline = undefined;
-                        entity.polygon.extrudedHeight = 0;
                     }
                 }
             }
@@ -1885,13 +1899,14 @@ var ViewerComponent = /** @class */ (function (_super) {
         var imageryViewModels = this.dataService.get_imageryViewModels();
         var viewer = new Cesium.Viewer("cesiumContainer", {
             infoBox: false,
+            showRenderLoopErrors: false,
+            orderIndependentTranslucency: false,
             imageryProviderViewModels: imageryViewModels,
             selectedImageryProviderViewModel: imageryViewModels[0],
             timeline: false,
             fullscreenButton: false,
             automaticallyTrackDataSourceClocks: false,
-            animation: false,
-            shadows: false,
+            animation: false
         });
         document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
         this.dataService.setViewer(viewer);
@@ -1911,9 +1926,8 @@ var ViewerComponent = /** @class */ (function (_super) {
         if (this.data !== undefined) {
             var viewer_1 = this.dataService.getViewer();
             viewer_1.dataSources.removeAll();
-            viewer_1.entities.removeAll();
-            //viewer.scene.primitives.removeAll();
-            //viewer.scene.primitives.remove(window.primitive); 
+            viewer_1.scene.primitives.remove(this.dataService.getcesiumpromise());
+            var new_viewer = new Cesium.Viewer("cesiumContainer");
             this.data = data;
             var promise_1 = Cesium.GeoJsonDataSource.load(this.data);
             viewer_1.dataSources.add(promise_1);
@@ -2081,35 +2095,43 @@ var ViewerComponent = /** @class */ (function (_super) {
             _ChromaScale = __WEBPACK_IMPORTED_MODULE_2_chroma_js__["scale"]("SPECTRAL").domain([1, 0]);
         }
         var _CheckHide;
-        if (_Filter.length !== 0) {
-            _CheckHide = this.Hide(_Filter, entity, _HeightChart);
-            if (_CheckHide === true) {
-                if (entity.polygon !== undefined) {
-                    entity.polygon.extrudedHeight = 0;
-                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-                    if (_HeightChart === true) {
-                        if (entity.polyline !== undefined) {
-                            entity.polyline.show = false;
+        if (entity.properties["TYPE"] === undefined || entity.properties["TYPE"]._value !== "STATIC") {
+            if (_Filter.length !== 0) {
+                _CheckHide = this.Hide(_Filter, entity, _HeightChart);
+                if (_CheckHide === true) {
+                    if (entity.polygon !== undefined) {
+                        entity.polygon.extrudedHeight = 0;
+                        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                        if (_HeightChart === true) {
+                            if (entity.polyline !== undefined) {
+                                entity.polyline.show = false;
+                            }
                         }
                     }
+                    if (entity.polyline !== undefined) {
+                        entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                    }
                 }
-                if (entity.polyline !== undefined) {
-                    entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+            if (_Filter.length === 0 || _CheckHide === false) {
+                if (_ColorKey !== "None") {
+                    if (typeof (_ColorText[0]) === "number") {
+                        this.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+                    }
+                    else {
+                        this.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+                    }
+                }
+                else {
+                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);
                 }
             }
         }
-        if (_Filter.length === 0 || _CheckHide === false) {
-            if (_ColorKey !== "None") {
-                if (typeof (_ColorText[0]) === "number") {
-                    this.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
-                }
-                else {
-                    this.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
-                }
-            }
-            else {
-                entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);
-            }
+        else {
+            entity.polygon.height = entity.properties["HEIGHT"];
+            entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
+            var ColorValue = entity.properties["COLOR"]._value;
+            entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
         }
     };
     ViewerComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
