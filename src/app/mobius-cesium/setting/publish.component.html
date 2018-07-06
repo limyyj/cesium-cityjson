@@ -65,7 +65,7 @@
           <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
             <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
           </select></div></th>
-        <th style="width:20px;height: 25px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" tyle="width:20px;height: 25px;cursor:pointer;"></th></tr>
+        <th style="width:20px;height: 25px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" style="width:20px;height: 25px;cursor:pointer;"></th></tr>
       </table>
       <table>
         <tr>
@@ -77,7 +77,7 @@
         </div>
       </div>
       <div>
-      <button style="color:#D3D3D3;border:2px solid #8AA8C0;background-color: transparent;" (click)="reset()">Reset</button></div>
+      <button style="color:#D3D3D3;border:2px solid #8AA8C0;background-color: transparent;cursor:pointer;" (click)="reset()">Reset</button></div>
       </div>
 </div>
 
