@@ -18,6 +18,7 @@ export class DataService {
   private _index: number;
   private _Filter: any[];
   private _imageryViewModels: any[] = [];
+  // private _indexArr: number[] = [];
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -198,6 +199,7 @@ export class DataService {
       const promise = this.cesiumpromise;
       const _Heighttexts: any[] = [];
       const _Colortexts: any[] = [];
+      const _indexArr: number[] = [];
       const self = this;
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
@@ -219,6 +221,7 @@ export class DataService {
                 }
               }
             }
+            _indexArr.push(entities.indexOf(entity));
           } else {
             entity.polygon.height =  entity.properties["HEIGHT"];
             entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
@@ -245,7 +248,7 @@ export class DataService {
       const _HideNum: any[] = [];
       this.getViData(propertyNames,_Colortexts.sort(),_ColorValue,_MinColor,_MaxColor,false,
                      _HeightKey,_Heighttexts.sort(),_HeightValue,_MinHeight,_MaxHeight,1,
-                     false,false,_Filter,_HideNum);
+                     false,false,_Filter,_HideNum,_indexArr);
     }
   }
   public get_ViData(): object {
@@ -275,6 +278,7 @@ export class DataService {
       const _ceisumData: any[] = [];
       const _propertyNames: any[] = [];
       const _HideNum: any[] = [];
+      const _indexArr: number[] = [];
       if(cesiumData["colour"] !== undefined) {
         if(cesiumData["colour"]["descr"] !== undefined) {
           _ColorDescr = cesiumData["colour"]["descr"];
@@ -342,6 +346,7 @@ export class DataService {
               pixelSize: 10,
             });
           }
+          _indexArr.push(entities.indexOf(entity));
         }
       });
       if(cesiumData["filters"] !== undefined) {
@@ -389,7 +394,7 @@ export class DataService {
       } else {this._Filter = [];this._HideNum = [];}
       this.getPuData(_ColorDescr,_propertyNames,_Colortexts.sort(),_ColorValue,_MinColor,_MaxColor,_ColorInvert,
                         _HeightDescr,_HeightKey,_Heighttexts.sort(),_HeightValue,_MinHeight,_MaxHeight,
-                        _HeightScale,_HeightInvert,_HeightLine,this._Filter,this._HideNum);
+                        _HeightScale,_HeightInvert,_HeightLine,this._Filter,this._HideNum,_indexArr);
 
     }
 
@@ -424,24 +429,24 @@ export class DataService {
                    _ColorMin: number,_ColorMax: number,_ColorInvert: boolean,
                    _ExtrudeProperty: any[],_ExtrudeText: any[],_ExturdeValue: string,
                    _ExtrudeMin: number,_ExtrudeMax: number,_Scale: number,_Invert: boolean,
-                   _HeightChart: boolean,_Filter: any[],_HideNum: number[]) {
+                   _HeightChart: boolean,_Filter: any[],_HideNum: number[],_indexArr: number[]) {
     this._ViData = {ColorProperty:_ColorProperty,ColorText:_ColorText,ColorKey:_ColorKey,
                     ColorMin:_ColorMin,ColorMax:_ColorMax,ColorInvert:_ColorInvert,
                     ExtrudeProperty:_ExtrudeProperty,ExtrudeText:_ExtrudeText,ExtrudeKey:_ExturdeValue,
                     ExtrudeMin:_ExtrudeMin,ExtrudeMax:_ExtrudeMax,Scale:_Scale,Invert:_Invert,
-                    HeightChart:_HeightChart,Filter:_Filter,HideNum:_HideNum};
+                    HeightChart:_HeightChart,Filter:_Filter,HideNum:_HideNum,indexArr:_indexArr};
   }
 
   public getPuData(_ColorDescr: string,_ColorProperty: any[],_ColorText: any[],_ColorKey: string,
                    _ColorMin: number,_ColorMax: number,_ColorInvert: boolean,
                    _ExtrudeDescr: string,_ExtrudeProperty: any[],_ExtrudeText: any[],
                    _ExturdeValue: string,_ExtrudeMin: number,_ExtrudeMax: number,_Scale: number,_Invert: boolean,
-                   _HeightChart: boolean,_Filter: any[],_HideNum: number[]) {
+                   _HeightChart: boolean,_Filter: any[],_HideNum: number[],_indexArr: number[]) {
     this._PuData = {ColorDescr:_ColorDescr,ColorProperty:_ColorProperty,ColorText:_ColorText,
                     ColorKey:_ColorKey,ColorMin:_ColorMin,ColorMax:_ColorMax,ColorInvert:_ColorInvert,
                     ExtrudeDescr:_ExtrudeDescr,ExtrudeProperty:_ExtrudeProperty,ExtrudeText:_ExtrudeText,
                     ExtrudeKey:_ExturdeValue,ExtrudeMin:_ExtrudeMin,ExtrudeMax:_ExtrudeMax,
-                    Scale:_Scale,Invert:_Invert,HeightChart:_HeightChart,Filter:_Filter,HideNum:_HideNum};
+                    Scale:_Scale,Invert:_Invert,HeightChart:_HeightChart,Filter:_Filter,HideNum:_HideNum,indexArr:_indexArr};
   }
 
 }

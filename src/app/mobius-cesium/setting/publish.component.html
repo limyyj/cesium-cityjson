@@ -51,21 +51,21 @@
         </table>
         <table>
           <tr>
-            <th style="max-width: 80px;height: 25px;"><div style="max-width: 80px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.HeightHide}}</div></th>
-        <th *ngIf="item.type === 'number'" style="width:30px;height: 25px;">
-          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">></div>
-          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1"><</div>
-          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">=</div></th>
+            <th style="max-width: 80px;height: 25px;"><div matTooltip={{item.HeightHide}} style="max-width: 80px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;">{{item.HeightHide}}</div></th>
+        <th *ngIf="item.type === 'number'" style="width:20px;height: 25px;">
+          <div style="width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">></div>
+          <div style="width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1"><</div>
+          <div style="width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">=</div></th>
           <th *ngIf="item.type === 'category'" style="width:30px;height: 25px;">
-          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">none</div>
-          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1">=</div>
-          <div style="width:30px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">!=</div></th>
+          <div style="width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 0">none</div>
+          <div style="width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 1">=</div>
+          <div style="width:20px;height: 25px;color:#D3D3D3 !important;vertical-align: middle;font-weight: normal;margin-top: 10px;" *ngIf="item.RelaHide === 2">!=</div></th>
           <th *ngIf="item.type === 'number'" style="width:80px;color:#395D73 !important;"><input type="text" id={{item.id}} value={{item.textHide}} (change)="Changetext($event.target.value,item.id)" style="width:80px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;"></th>
           <th *ngIf="item.type === 'category'" style="width:73px;height: 25px;"><div style="width:73px;height: 25px;">
           <select class="cesium-button-select" [ngModel]="item.CategaryHide" (change)="ChangeCategory($event.target.value,item.id,1)" style="width:73px;height: 25px;">
             <option class="cesium-option" *ngFor="let caty of item.Category" value={{caty}}>{{caty}}</option>
           </select></div></th>
-        <th style="width:20px;height: 25px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" style="width:20px;height: 25px;cursor:pointer;"></th></tr>
+        <th style="width:20px;height: 22px;" id={{item.id}}><input type="checkbox" id={{item.id}} checked="checked" (click)="Disable(item.id)" style="width:20px;height: 22px;cursor:pointer;"></th></tr>
       </table>
       <table>
         <tr>
