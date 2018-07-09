@@ -75,6 +75,8 @@ export class ViewerComponent extends DataSubscriber {
     }
   }
 
+
+// >> HERE IS THE THING << //
   public LoadData(data: JSON) {
     if(this.data !== undefined) {
       const viewer = this.dataService.getViewer();

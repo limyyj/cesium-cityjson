@@ -566,7 +566,7 @@ module.exports = function (NAME, wrapper, methods, common, IS_MAP, IS_WEAK) {
 /***/ "./node_modules/core-js/modules/_core.js":
 /***/ (function(module, exports) {
 
-var core = module.exports = { version: '2.5.7' };
+var core = module.exports = { version: '2.5.3' };
 if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
 
 
@@ -916,6 +916,7 @@ var LIBRARY = __webpack_require__("./node_modules/core-js/modules/_library.js");
 var $export = __webpack_require__("./node_modules/core-js/modules/_export.js");
 var redefine = __webpack_require__("./node_modules/core-js/modules/_redefine.js");
 var hide = __webpack_require__("./node_modules/core-js/modules/_hide.js");
+var has = __webpack_require__("./node_modules/core-js/modules/_has.js");
 var Iterators = __webpack_require__("./node_modules/core-js/modules/_iterators.js");
 var $iterCreate = __webpack_require__("./node_modules/core-js/modules/_iter-create.js");
 var setToStringTag = __webpack_require__("./node_modules/core-js/modules/_set-to-string-tag.js");
@@ -942,7 +943,7 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
   var VALUES_BUG = false;
   var proto = Base.prototype;
   var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-  var $default = $native || getMethod(DEFAULT);
+  var $default = (!BUGGY && $native) || getMethod(DEFAULT);
   var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
   var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
   var methods, key, IteratorPrototype;
@@ -953,7 +954,7 @@ module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCE
       // Set @@toStringTag to native iterators
       setToStringTag(IteratorPrototype, TAG, true);
       // fix for some old engines
-      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
+      if (!LIBRARY && !has(IteratorPrototype, ITERATOR)) hide(IteratorPrototype, ITERATOR, returnThis);
     }
   }
   // fix Array#{values, @@iterator}.name in V8 / FF
@@ -1534,18 +1535,12 @@ module.exports = function (key) {
 /***/ "./node_modules/core-js/modules/_shared.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-var core = __webpack_require__("./node_modules/core-js/modules/_core.js");
 var global = __webpack_require__("./node_modules/core-js/modules/_global.js");
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
-
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
-})('versions', []).push({
-  version: core.version,
-  mode: __webpack_require__("./node_modules/core-js/modules/_library.js") ? 'pure' : 'global',
-  copyright: '© 2018 Denis Pushkarev (zloirock.ru)'
-});
+module.exports = function (key) {
+  return store[key] || (store[key] = {});
+};
 
 
 /***/ }),
@@ -4701,7 +4696,7 @@ var Zone$1 = (function (global) {
     if (global['Zone']) {
         throw new Error('Zone already loaded.');
     }
-    var Zone = /** @class */ (function () {
+    var Zone = (function () {
         function Zone(parent, zoneSpec) {
             this._properties = null;
             this._parent = parent;
@@ -4955,9 +4950,9 @@ var Zone$1 = (function (global) {
                 zoneDelegates[i]._updateTaskCount(task.type, count);
             }
         };
-        Zone.__symbol__ = __symbol__;
         return Zone;
     }());
+    Zone.__symbol__ = __symbol__;
     var DELEGATE_ZS = {
         name: '',
         onHasTask: function (delegate, _, target, hasTaskState) {
@@ -4971,7 +4966,7 @@ var Zone$1 = (function (global) {
             return delegate.cancelTask(target, task);
         }
     };
-    var ZoneDelegate = /** @class */ (function () {
+    var ZoneDelegate = (function () {
         function ZoneDelegate(zone, parentDelegate, zoneSpec) {
             this._taskCounts = { 'microTask': 0, 'macroTask': 0, 'eventTask': 0 };
             this.zone = zone;
@@ -5133,7 +5128,7 @@ var Zone$1 = (function (global) {
         };
         return ZoneDelegate;
     }());
-    var ZoneTask = /** @class */ (function () {
+    var ZoneTask = (function () {
         function ZoneTask(type, source, callback, options, scheduleFn, cancelFn) {
             this._zone = null;
             this.runCount = 0;
@@ -5313,6 +5308,13 @@ var Zone$1 = (function (global) {
     return global['Zone'] = Zone;
 })(typeof window !== 'undefined' && window || typeof self !== 'undefined' && self || global);
 
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */
 Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
     var ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
     var ObjectDefineProperty = Object.defineProperty;
@@ -5380,9 +5382,6 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
     }
     var symbolState = __symbol__('state');
     var symbolValue = __symbol__('value');
-    var symbolFinally = __symbol__('finally');
-    var symbolParentPromiseValue = __symbol__('parentPromiseValue');
-    var symbolParentPromiseState = __symbol__('parentPromiseState');
     var source = 'Promise.then';
     var UNRESOLVED = null;
     var RESOLVED = true;
@@ -5454,15 +5453,6 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
                 promise[symbolState] = state;
                 var queue = promise[symbolValue];
                 promise[symbolValue] = value;
-                if (promise[symbolFinally] === symbolFinally) {
-                    // the promise is generated by Promise.prototype.finally          
-                    if (state === RESOLVED) {
-                        // the state is resolved, should ignore the value
-                        // and use parent promise value
-                        promise[symbolState] = promise[symbolParentPromiseState];
-                        promise[symbolValue] = promise[symbolParentPromiseValue];
-                    }
-                }
                 // record task information in value when error occurs, so we can
                 // do some additional work such as render longStackTrace
                 if (state === REJECTED && value instanceof Error) {
@@ -5525,31 +5515,20 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
     }
     function scheduleResolveOrReject(promise, zone, chainPromise, onFulfilled, onRejected) {
         clearRejectedNoCatch(promise);
-        var promiseState = promise[symbolState];
-        var delegate = promiseState ?
+        var delegate = promise[symbolState] ?
             (typeof onFulfilled === 'function') ? onFulfilled : forwardResolution :
             (typeof onRejected === 'function') ? onRejected : forwardRejection;
         zone.scheduleMicroTask(source, function () {
             try {
-                var parentPromiseValue = promise[symbolValue];
-                var isFinallyPromise = chainPromise && symbolFinally === chainPromise[symbolFinally];
-                if (isFinallyPromise) {
-                    // if the promise is generated from finally call, keep parent promise's state and value
-                    chainPromise[symbolParentPromiseValue] = parentPromiseValue;
-                    chainPromise[symbolParentPromiseState] = promiseState;
-                }
-                // should not pass value to finally callback
-                var value = zone.run(delegate, undefined, isFinallyPromise && delegate !== forwardRejection && delegate !== forwardResolution ? [] : [parentPromiseValue]);
-                resolvePromise(chainPromise, true, value);
+                resolvePromise(chainPromise, true, zone.run(delegate, undefined, [promise[symbolValue]]));
             }
             catch (error) {
-                // if error occurs, should always return this error
                 resolvePromise(chainPromise, false, error);
             }
-        }, chainPromise);
+        });
     }
     var ZONE_AWARE_PROMISE_TO_STRING = 'function ZoneAwarePromise() { [native code] }';
-    var ZoneAwarePromise = /** @class */ (function () {
+    var ZoneAwarePromise = (function () {
         function ZoneAwarePromise(executor) {
             var promise = this;
             if (!(promise instanceof ZoneAwarePromise)) {
@@ -5636,18 +5615,6 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
         ZoneAwarePromise.prototype.catch = function (onRejected) {
             return this.then(null, onRejected);
         };
-        ZoneAwarePromise.prototype.finally = function (onFinally) {
-            var chainPromise = new this.constructor(null);
-            chainPromise[symbolFinally] = symbolFinally;
-            var zone = Zone.current;
-            if (this[symbolState] == UNRESOLVED) {
-                this[symbolValue].push(zone, chainPromise, onFinally, onFinally);
-            }
-            else {
-                scheduleResolveOrReject(this, zone, chainPromise, onFinally, onFinally);
-            }
-            return chainPromise;
-        };
         return ZoneAwarePromise;
     }());
     // Protect against aggressive optimizers dropping seemingly unused properties.
@@ -5697,15 +5664,15 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
     var symbolThenPatched = __symbol__('thenPatched');
     function patchThen(Ctor) {
         var proto = Ctor.prototype;
-        var prop = ObjectGetOwnPropertyDescriptor(proto, 'then');
-        if (prop && (prop.writable === false || !prop.configurable)) {
-            // check Ctor.prototype.then propertyDescriptor is writable or not
-            // in meteor env, writable is false, we should ignore such case
-            return;
-        }
         var originalThen = proto.then;
         // Keep a reference to the original method.
         proto[symbolThen] = originalThen;
+        // check Ctor.prototype.then propertyDescriptor is writable or not
+        // in meteor env, writable is false, we have to make it to be true.
+        var prop = ObjectGetOwnPropertyDescriptor(Ctor.prototype, 'then');
+        if (prop && prop.writable === false && prop.configurable) {
+            ObjectDefineProperty(Ctor.prototype, 'then', { writable: true });
+        }
         Ctor.prototype.then = function (onResolve, onReject) {
             var _this = this;
             var wrapped = new ZoneAwarePromise(function (resolve, reject) {
@@ -5754,7 +5721,13 @@ Zone.__load_patch('ZoneAwarePromise', function (global, Zone, api) {
  */
 // issue #989, to reduce bundle size, use short name
 /** Object.getOwnPropertyDescriptor */
-var ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+/**
+ * @license
+ * Copyright Google Inc. All Rights Reserved.
+ *
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://angular.io/license
+ */ var ObjectGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 /** Object.defineProperty */
 var ObjectDefineProperty = Object.defineProperty;
 /** Object.getPrototypeOf */
@@ -6121,13 +6094,14 @@ function isIEOrEdge() {
  */
 // override Function.prototype.toString to make zone.js patched function
 // look like native function
-Zone.__load_patch('toString', function (global) {
+Zone.__load_patch('toString', function (global, Zone) {
     // patch Func.prototype.toString to let them look like native
-    var originalFunctionToString = Function.prototype.toString;
+    var originalFunctionToString = Zone['__zone_symbol__originalToString'] =
+        Function.prototype.toString;
     var ORIGINAL_DELEGATE_SYMBOL = zoneSymbol('OriginalDelegate');
     var PROMISE_SYMBOL = zoneSymbol('Promise');
     var ERROR_SYMBOL = zoneSymbol('Error');
-    var newFunctionToString = function toString() {
+    Function.prototype.toString = function () {
         if (typeof this === 'function') {
             var originalDelegate = this[ORIGINAL_DELEGATE_SYMBOL];
             if (originalDelegate) {
@@ -6153,8 +6127,6 @@ Zone.__load_patch('toString', function (global) {
         }
         return originalFunctionToString.apply(this, arguments);
     };
-    newFunctionToString[ORIGINAL_DELEGATE_SYMBOL] = originalFunctionToString;
-    Function.prototype.toString = newFunctionToString;
     // patch Object.prototype.toString to let them look like native
     var originalObjectToString = Object.prototype.toString;
     var PROMISE_OBJECT_TO_STRING = '[object Promise]';
@@ -6579,9 +6551,6 @@ function patchEventTarget(_global, apis, patchOptions) {
                             target[symbolEventName] = null;
                         }
                         existingTask.zone.cancelTask(existingTask);
-                        if (returnTarget) {
-                            return target;
-                        }
                         return;
                     }
                 }
@@ -6648,9 +6617,6 @@ function patchEventTarget(_global, apis, patchOptions) {
                         }
                     }
                 }
-            }
-            if (returnTarget) {
-                return this;
             }
         };
         // for native toString patch
@@ -7223,11 +7189,6 @@ function filterProperties(target, onProperties, ignoreProperties) {
     return onProperties.filter(function (op) { return targetIgnoreProperties.indexOf(op) === -1; });
 }
 function patchFilteredProperties(target, onProperties, ignoreProperties, prototype) {
-    // check whether target is available, sometimes target will be undefined
-    // because different browser or some 3rd party plugin.
-    if (!target) {
-        return;
-    }
     var filteredProperties = filterProperties(target, onProperties, ignoreProperties);
     patchOnProperties(target, filteredProperties, prototype);
 }

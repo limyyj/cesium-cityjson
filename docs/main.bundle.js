@@ -1919,6 +1919,7 @@ var ViewerComponent = /** @class */ (function (_super) {
             }
         }
     };
+    // >> HERE IS THE THING << //
     ViewerComponent.prototype.LoadData = function (data) {
         if (this.data !== undefined) {
             var viewer_1 = this.dataService.getViewer();
