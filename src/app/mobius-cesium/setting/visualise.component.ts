@@ -5,11 +5,11 @@ import {ViewerComponent} from "../viewer/viewer.component";
 import * as chroma from "chroma-js";
 
 @Component({
-  selector: "app-visualise",
+  selector: "app-data",
   templateUrl: "./visualise.component.html",
   styleUrls: ["./visualise.component.css"],
 })
-export class VisualiseComponent extends DataSubscriber implements OnInit {
+export class DataComponent extends DataSubscriber implements OnInit {
   private myElement;
   private dataArr: object;
   private _ColorProperty: any[];
@@ -315,12 +315,5 @@ export class VisualiseComponent extends DataSubscriber implements OnInit {
       }
     });
     return texts;
-  }
-
-  public changeImagery() {
-    if(this.dataService.getViewer() !== undefined) {
-      this.dataService.getViewer().scene.imageryLayers.removeAll();
-      this.dataService.getViewer().scene.globe.baseColor = Cesium.Color.GRAY;
-    }
   }
 }

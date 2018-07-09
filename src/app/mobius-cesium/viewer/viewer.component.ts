@@ -30,7 +30,6 @@ export class ViewerComponent extends DataSubscriber {
   constructor(injector: Injector, myElement: ElementRef) {
     super(injector);
     this.myElement = myElement;
-    this.dataService.set_imageryViewModels();
   }
 
   public ngOnInit() {
@@ -46,18 +45,19 @@ export class ViewerComponent extends DataSubscriber {
       this.dataArr = this.dataService.get_PuData();
       this._index = 2;
     }
-    const imageryViewModels = this.dataService.get_imageryViewModels();
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox: false,
       showRenderLoopErrors: false,
       orderIndependentTranslucency: false,
-      imageryProviderViewModels : imageryViewModels,
-      selectedImageryProviderViewModel : imageryViewModels[0],
+      baseLayerPicker: false,
       timeline: false,
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
       animation:false
     });
+    viewer.scene.globe.depthTestAgainstTerrain = true;
+    viewer.scene.imageryLayers.removeAll();
+    viewer.scene.globe.baseColor = Cesium.Color.GRAY;
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
     this.dataService.setViewer(viewer);
   }
@@ -81,7 +81,6 @@ export class ViewerComponent extends DataSubscriber {
       viewer.dataSources.removeAll(); 
       viewer.scene.primitives.remove(this.dataService.getcesiumpromise());
       const new_viewer = new Cesium.Viewer("cesiumContainer");
-      
 
       this.data = data;
       const promise = Cesium.GeoJsonDataSource.load(this.data);

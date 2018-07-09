@@ -11,9 +11,11 @@ import { MatTooltipModule} from "@angular/material/tooltip";
 import {MatSliderModule } from "@angular/material/slider";
 import { FormsModule } from "@angular/forms";
 import { SettingComponent } from "./setting/setting.component";
-import { VisualiseComponent } from "./setting/visualise.component";
-import { AttributesComponent } from "./setting/attributes.copmponent";
+import { DataComponent } from "./setting/visualise.component";
+import { SelectComponent } from "./setting/attributes.copmponent";
 import { PublishComponent } from "./setting/publish.component";
+import { DisplayComponent } from "./setting/display.copmponent";
+
 
 @NgModule({
     imports: [CommonModule,
@@ -24,15 +26,16 @@ import { PublishComponent } from "./setting/publish.component";
               BrowserModule,
               MatTooltipModule,
               MatSliderModule,
-              FormsModule,
+              FormsModule
        ],
     exports: [ MobiuscesiumComponent ],
     declarations: [MobiuscesiumComponent,
                     ViewerComponent,
                     SettingComponent,
-                    VisualiseComponent,
-                    AttributesComponent,
-                    PublishComponent],
+                    DataComponent,
+                    SelectComponent,
+                    PublishComponent,
+                    DisplayComponent],
     providers: [DataService],
 })
 export class MobiusCesium {

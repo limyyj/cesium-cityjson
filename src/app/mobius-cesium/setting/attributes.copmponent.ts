@@ -5,11 +5,11 @@ import {ViewerComponent} from "../viewer/viewer.component";
 import * as chroma from "chroma-js";
 
 @Component({
-  selector: "app-attributes",
+  selector: "app-select",
   templateUrl: "./attributes.component.html",
   styleUrls: ["./attributes.component.css"],
 })
-export class AttributesComponent extends DataSubscriber implements OnInit {
+export class SelectComponent extends DataSubscriber implements OnInit {
   private myElement;
   private data: JSON;
   private mode: string;

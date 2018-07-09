@@ -17,8 +17,7 @@ export class DataService {
   private _PuData: object;
   private _index: number;
   private _Filter: any[];
-  private _imageryViewModels: any[] = [];
-  // private _indexArr: number[] = [];
+  private _Imagery: string;
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -89,7 +88,7 @@ export class DataService {
   public set_index(_index): void {
     this._index = _index;
   }
-  public set_imageryViewModels() :void{
+  /*public set_imageryViewModels() :void{
     this._imageryViewModels.push(new Cesium.ProviderViewModel({
      name : "Stamen Toner",
      iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
@@ -174,6 +173,12 @@ export class DataService {
   }
   public get_imageryViewModels(): any[] {
     return this._imageryViewModels;
+  }*/
+  public set_Imagery(_Imagery): void {
+    this._Imagery = _Imagery;
+  }
+  public get_Imagery(): string {
+    return this._Imagery;
   }
 
   public getValue(model: JSON) {
