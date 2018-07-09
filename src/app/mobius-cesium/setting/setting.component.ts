@@ -27,9 +27,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     this.data = this.dataService.getGsModel();
     this.mode = this.dataService.getmode();
     if(this.mode === "viewer") {
-      this.changedata(2);
+      this.changedata(3);
     } else if(this.mode==="editor") {
-      this.changedata(0);
+      this.changedata(1);
     }
   }
 
@@ -40,9 +40,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       try {
         if(this.data !== undefined&&this.data["features"] !== undefined) {
           if(this.mode === "viewer") {
-            this.changedata(2);
+            this.changedata(3);
           } else if(this.mode === "editor") {
-            this.changedata(0);
+            this.changedata(1);
           }
         }
       }
@@ -53,9 +53,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   }
   public changedata(id: number) {
     this.dataService.set_index(id);
-    if(id === 0) {
+    if(id === 1) {
       this.dataArr = this.dataService.get_ViData();
-    } else if(id === 2) {
+    } else if(id === 3) {
       this.dataArr = this.dataService.get_PuData();
     }
     if(this.dataArr !== undefined) {

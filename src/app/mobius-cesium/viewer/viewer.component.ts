@@ -38,22 +38,23 @@ export class ViewerComponent extends DataSubscriber {
       this.dataService.getValue(this.data);
       this.dataService.LoadJSONData();
       this.dataArr = this.dataService.get_ViData();
-      this._index = 0;
+      this._index = 1;
     }
     if(this.mode === "viewer") {
       this.dataService.LoadJSONData();
       this.dataArr = this.dataService.get_PuData();
-      this._index = 2;
+      this._index = 3;
     }
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox: false,
       showRenderLoopErrors: false,
       orderIndependentTranslucency: false,
       baseLayerPicker: false,
-      timeline: false,
+      //timeline: false,
       fullscreenButton:false,
-      automaticallyTrackDataSourceClocks:false,
-      animation:false
+      // automaticallyTrackDataSourceClocks:false,
+      animation:false,
+      shadows:true
     });
     viewer.scene.globe.depthTestAgainstTerrain = true;
     viewer.scene.imageryLayers.removeAll();
@@ -98,12 +99,12 @@ export class ViewerComponent extends DataSubscriber {
         this.dataService.getValue(this.data);
         this.dataService.LoadJSONData();
         this.dataArr = this.dataService.get_ViData();
-        this._index = 0;
+        this._index = 1;
       }
       if(this.mode === "viewer") {
         this.dataService.LoadJSONData();
         this.dataArr = this.dataService.get_PuData();
-        this._index = 2;
+        this._index = 3;
       }
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
         e.cancel = true;
@@ -118,8 +119,8 @@ export class ViewerComponent extends DataSubscriber {
     if(this.dataArr !== undefined) {
       if(this._index !== this.dataService.get_index()) {
         this._index = this.dataService.get_index();
-        if(this._index === 0) {this.dataArr = this.dataService.get_ViData();
-        } else if(this._index === 2) {this.dataArr = this.dataService.get_PuData();}
+        if(this._index === 1) {this.dataArr = this.dataService.get_ViData();
+        } else if(this._index === 3) {this.dataArr = this.dataService.get_PuData();}
       }
       const propertyname = this.dataArr["ColorKey"];
       const texts = this.dataArr["ColorText"].sort();
