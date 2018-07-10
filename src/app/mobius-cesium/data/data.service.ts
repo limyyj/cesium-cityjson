@@ -401,19 +401,30 @@ export class DataService {
 
   }
 
-  public genCityJSONGeom(file: JSON) {
+  public projectPtsToWGS84(coords, proj_epsg): number[] {
+    const projcoords = proj_epsg([coords[0],coords[1]]);
+    const newcoords = [projcoords[0],projcoords[1],coords[2]];
+    return newcoords;
+  }
+
+  public genCityJSONGeom(file: JSON): object {
     // Initialise arrays to contain primitives to display in viewer
     const inst_Filled = [];
     const inst_Outline = [];
     const dataSource = new Cesium.CustomDataSource();
 
     if (file !== undefined) {
-      // TODO: Initialise epsg projector (proj4js)
-      proj4.defs("WGS84", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees");
-      proj4.defs("EPSG:31467", "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs");
+      // TODO: Initialise epsg projector (proj4js) link to Spatial References
+      const proj1 = "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs";
+      const WGS84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees";
+      const proj_epsg = proj4(proj1,WGS84).forward;
 
-      // Pull out array of vertices
-      const vertices = file["vertices"];
+      // Pull out array of vertices and project to WGS84
+      const vertices = [];
+      file["vertices"].forEach((point) => {
+        const coords = this.projectPtsToWGS84(point,proj_epsg);
+        vertices.push(coords);
+      });
 
       // Loop through CityObjects and search for type "Building"
       const city_object_keys = Object.keys(file["CityObjects"]);
@@ -436,39 +447,75 @@ export class DataService {
               values = geom["semantics"]["values"];
               surfaces = geom["semantics"]["surfaces"];
             }
-            
-            // Extract vertices + corresponding surface type for each surface
+
+            // Extract vertices
             const boundaries = geom["boundaries"];
             if (boundaries === undefined) {
               continue;
             }
             for (let srf_index = 0 ; srf_index < boundaries.length ; srf_index ++) {
-              const extRing = boundaries[srf_index][0];
-              const extRing_points = [];
-              
-              // Convert coordinates for each vertice and add to array
+              const rings = boundaries[srf_index];
+              const extRing = rings[0];
+              let extRing_points = [];
+
+              // Obtain coordinates for each vertice and create p_hierarchy for outer ring
               if (extRing === undefined) {
                 continue;
               }
               extRing.forEach((pt_index) => {
-                const proj_pt = proj4("EPSG:31467", "WGS84", [vertices[pt_index][0],vertices[pt_index][1]]);
-                extRing_points.push(proj_pt[0],proj_pt[1],(vertices[pt_index][2]));
+                extRing_points.push(vertices[pt_index][0],vertices[pt_index][1],vertices[pt_index][2]);
               });
-              
+
+              const ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
+              let p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
+
+              // If boundaries contain inner rings for holes, create p_hierarchy with holes
+              if (rings.length > 0) {
+                const int_cartesian3 = [];
+                // Create p_hierarchy for each hole and push to int_cartesian3
+                for (let ring_index = 1 ; ring_index < rings.length ; ring_index++) {
+                  const temp_pts = [];
+                  rings[ring_index].forEach((pt_index) => {
+                    temp_pts.push(vertices[pt_index][0],vertices[pt_index][1],vertices[pt_index][2]);
+                  });
+                  int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
+                }
+                // Create p_hierarchy with holes (as array of p_hierarchies)
+                p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
+              }
+
+              // Extract surface type
               let surface_type = undefined;
               if (values !== undefined) {
-                surface_type = surfaces[values[srf_index]];
+                surface_type = surfaces[values[srf_index]]["type"];
               }
-              console.log(extRing_points);
+              
+              console.log(srf_index,p_hierarchy,surface_type);
 
-              var poly = dataSource.entities.add({
+              // Set colour based on surface_type
+              let colour = Cesium.Color.WHITE;
+              if (surface_type === "Window") {
+                colour = Cesium.Color.LIGHTBLUE;
+              }
+              if (surface_type === "RoofSurface") {
+                colour = Cesium.Color.CRIMSON;
+              }
+
+              // Create property bag
+              const property_bag = new Cesium.PropertyBag();
+              property_bag.addProperty("Name", city_object_keys[obj_index]);
+              property_bag.addProperty("Surface Type", surface_type);
+
+              // Create polygon
+              const poly = dataSource.entities.add({
                 name : city_object_keys[obj_index],
                 polygon : {
-                  hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points),
+                  hierarchy : p_hierarchy,
                   perPositionHeight : true,
-                  material : Cesium.Color.WHITE,
+                  material : colour,
                   outline : false,
-                  outlineColor : Cesium.Color.BLACK,
+                  //outlineColor : Cesium.Color.BLACK,
+                  properties : property_bag,
                 },
               });
             }
