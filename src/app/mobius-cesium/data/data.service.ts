@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import {Observable} from "rxjs";
 import {Subject} from "rxjs/Subject";
 import * as chroma from "chroma-js";
+import proj4 from "proj4";
 
 @Injectable()
 export class DataService {
@@ -399,6 +400,86 @@ export class DataService {
     }
 
   }
+
+  public genCityJSONGeom(file: JSON) {
+    // Initialise arrays to contain primitives to display in viewer
+    const inst_Filled = [];
+    const inst_Outline = [];
+    const dataSource = new Cesium.CustomDataSource();
+
+    if (file !== undefined) {
+      // TODO: Initialise epsg projector (proj4js)
+      proj4.defs("WGS84", "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees");
+      proj4.defs("EPSG:31467", "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs");
+
+      // Pull out array of vertices
+      const vertices = file["vertices"];
+
+      // Loop through CityObjects and search for type "Building"
+      const city_object_keys = Object.keys(file["CityObjects"]);
+      for (let obj_index = 0 ; obj_index < city_object_keys.length ; obj_index ++) {
+        const obj =  file["CityObjects"][city_object_keys[obj_index]];
+        if (1) {
+
+          // Loop through geometry
+          for (let geom_index = 0 ; geom_index < obj["geometry"].length ; geom_index ++) {
+            const geom = obj["geometry"][geom_index];
+
+            if (geom == undefined) {
+              continue;
+            }
+
+            // Pull out array of semantics values & surfaces
+            let values = undefined;
+            let surfaces = undefined;
+            if (geom["semantics"] !== undefined) {
+              values = geom["semantics"]["values"];
+              surfaces = geom["semantics"]["surfaces"];
+            }
+            
+            // Extract vertices + corresponding surface type for each surface
+            const boundaries = geom["boundaries"];
+            if (boundaries === undefined) {
+              continue;
+            }
+            for (let srf_index = 0 ; srf_index < boundaries.length ; srf_index ++) {
+              const extRing = boundaries[srf_index][0];
+              const extRing_points = [];
+              
+              // Convert coordinates for each vertice and add to array
+              if (extRing === undefined) {
+                continue;
+              }
+              extRing.forEach((pt_index) => {
+                const proj_pt = proj4("EPSG:31467", "WGS84", [vertices[pt_index][0],vertices[pt_index][1]]);
+                extRing_points.push(proj_pt[0],proj_pt[1],(vertices[pt_index][2]));
+              });
+              
+              let surface_type = undefined;
+              if (values !== undefined) {
+                surface_type = surfaces[values[srf_index]];
+              }
+              console.log(extRing_points);
+
+              var poly = dataSource.entities.add({
+                name : city_object_keys[obj_index],
+                polygon : {
+                  hierarchy : Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points),
+                  perPositionHeight : true,
+                  material : Cesium.Color.WHITE,
+                  outline : false,
+                  outlineColor : Cesium.Color.BLACK,
+                },
+              });
+            }
+          }
+        }
+      }
+
+    }
+    return dataSource;
+  }
+
   public  Initial(_HideValue: string): any[] {
     const texts=[];
     const promise = this.getcesiumpromise();

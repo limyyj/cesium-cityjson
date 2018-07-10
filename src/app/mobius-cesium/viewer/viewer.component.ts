@@ -75,39 +75,45 @@ export class ViewerComponent extends DataSubscriber {
     }
   }
 
-
-// >> HERE IS THE THING << //
   public LoadData(data: JSON) {
     if(this.data !== undefined) {
+      /////// INITIALISING VIEWER ////////
       const viewer = this.dataService.getViewer();
-      viewer.dataSources.removeAll(); 
+      viewer.dataSources.removeAll();
       viewer.scene.primitives.remove(this.dataService.getcesiumpromise());
       const new_viewer = new Cesium.Viewer("cesiumContainer");
       
-
+      /////// LOADING DATA ///////
       this.data = data;
-      const promise = Cesium.GeoJsonDataSource.load(this.data);
+      const promise = this.dataService.genCityJSONGeom(this.data);
+      // const promise = Cesium.GeoJsonDataSource.load(this.data);
       viewer.dataSources.add(promise);
       const _HeightKey: any[] = [];
 
-      promise.then(function(dataSource) {
-        const entities = dataSource.entities.values;
-        const self = this;
-        if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
-      });
+      /////// ALL THE STUFF BELOW IS FOR GENERATING HEIGHTS AND KEY BARS FROM PROPERTIES ///////
+
+      // promise.then(function(dataSource) {
+      //   const entities = dataSource.entities.values;
+      //   const self = this;
+      //   // if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {
+      //   self._ShowColorBar = false;
+      //   // }
+      // });
       
-      this.dataService.setcesiumpromise(promise);
-      if(this.mode === "editor") {
-        this.dataService.getValue(this.data);
-        this.dataService.LoadJSONData();
-        this.dataArr = this.dataService.get_ViData();
-        this._index = 0;
-      }
-      if(this.mode === "viewer") {
-        this.dataService.LoadJSONData();
-        this.dataArr = this.dataService.get_PuData();
-        this._index = 2;
-      }
+      // this.dataService.setcesiumpromise(promise);
+      // if(this.mode === "editor") {
+      //   //this.dataService.getValue(this.data);
+      //   this.dataService.LoadCityJSONData();
+      //   //this.dataArr = this.dataService.get_ViData();
+      //   //this._index = 0;
+      // }
+      // if(this.mode === "viewer") {
+      //   this.dataService.LoadCityJSONData();
+      //   //this.dataArr = this.dataService.get_PuData();
+      //   //this._index = 2;
+      // }
+
+      /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
         e.cancel = true;
         viewer.zoomTo(promise);
@@ -203,6 +209,7 @@ export class ViewerComponent extends DataSubscriber {
         }
         this.selectEntity = viewer.selectedEntity;
         this.material = material;
+        console.log("Selected something", this.selectEntity);
       } else {
         this.dataService.set_SelectedEntity(undefined);
         this.selectEntity = undefined;
