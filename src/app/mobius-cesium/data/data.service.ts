@@ -426,6 +426,16 @@ export class DataService {
         vertices.push(coords);
       });
 
+      // Pull out array of material definitions and create cesium materials
+      const materials = [];
+      if (file["appearance"]["materials"] !== undefined) {
+        file["appearance"]["materials"].forEach((mat) => {
+          const color = mat["diffuseColor"];
+          color.push(mat["transparency"]);
+          materials.push(new Cesium.Color(...color));
+        });
+      }
+
       // Loop through CityObjects and search for type "Building"
       const city_object_keys = Object.keys(file["CityObjects"]);
       for (let obj_index = 0 ; obj_index < city_object_keys.length ; obj_index ++) {
@@ -448,6 +458,12 @@ export class DataService {
               surfaces = geom["semantics"]["surfaces"];
             }
 
+            // Pull out materials values
+            let mats = undefined;
+            if (geom["material"] !== undefined) {
+              mats = geom["material"][""]["values"];
+            }
+
             // Extract vertices
             const boundaries = geom["boundaries"];
             if (boundaries === undefined) {
@@ -456,7 +472,7 @@ export class DataService {
             for (let srf_index = 0 ; srf_index < boundaries.length ; srf_index ++) {
               const rings = boundaries[srf_index];
               const extRing = rings[0];
-              let extRing_points = [];
+              const extRing_points = [];
 
               // Obtain coordinates for each vertice and create p_hierarchy for outer ring
               if (extRing === undefined) {
@@ -489,22 +505,31 @@ export class DataService {
               if (values !== undefined) {
                 surface_type = surfaces[values[srf_index]]["type"];
               }
-              
-              console.log(srf_index,p_hierarchy,surface_type);
 
-              // Set colour based on surface_type
+              // Extract materials
               let colour = Cesium.Color.WHITE;
-              if (surface_type === "Window") {
-                colour = Cesium.Color.LIGHTBLUE;
-              }
-              if (surface_type === "RoofSurface") {
+              if (mats !== undefined && mats[srf_index] !== null) {
+                colour = materials[mats[srf_index]];
+              } else if (surface_type === "RoofSurface") {
                 colour = Cesium.Color.CRIMSON;
               }
+              
+              // console.log(srf_index,p_hierarchy,surface_type,colour);
+
+              // // Set colour based on surface_type
+              // let colour = Cesium.Color.WHITE;
+              // if (surface_type === "Window") {
+              //   colour = Cesium.Color.LIGHTBLUE;
+              // }
+              // if (surface_type === "RoofSurface") {
+              //   colour = Cesium.Color.CRIMSON;
+              // }
 
               // Create property bag
               const property_bag = new Cesium.PropertyBag();
               property_bag.addProperty("Name", city_object_keys[obj_index]);
               property_bag.addProperty("Surface Type", surface_type);
+              // console.log(property_bag)
 
               // Create polygon
               const poly = dataSource.entities.add({
@@ -515,9 +540,11 @@ export class DataService {
                   material : colour,
                   outline : false,
                   //outlineColor : Cesium.Color.BLACK,
-                  properties : property_bag,
+                  // properties : property_bag,
                 },
               });
+              poly.properties = property_bag;
+              // console.log(poly);
             }
           }
         }

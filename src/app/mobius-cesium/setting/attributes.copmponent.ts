@@ -37,19 +37,24 @@ export class AttributesComponent extends DataSubscriber implements OnInit {
 
   public ngDoCheck() {
     if(this.viewer !== undefined&&this.dataService.get_SelectedEntity() !== undefined&&this.mode === "editor") {
-      if(this.ID !== this.dataService.get_SelectedEntity()._id) {
+      const selected = this.dataService.get_SelectedEntity();
+      if(this.ID !== selected._id) {
         let _Property: any;
-        this.ID = this.dataService.get_SelectedEntity()._id;
+        this.ID = selected._id;
         this._Properties = [];
-        for(const _ColorPro of this.dataArr["ColorProperty"]) {
-          if(_ColorPro !== "None") {
+        const prop_names = selected.properties.propertyNames;
+        for(const name of prop_names) {
+          if(name !== "None") {
             _Property = [];
-            _Property.Name = _ColorPro;
-            _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
+            _Property.Name = name;
+            _Property.Value = selected.properties[name]._value;
             this._Properties.push(_Property);
           }
         }
       }
+    } else if (this.viewer !== undefined&&this.dataService.get_SelectedEntity() === undefined) {
+      this.ID = undefined;
+      this._Properties = [];
     }
   }
 }
