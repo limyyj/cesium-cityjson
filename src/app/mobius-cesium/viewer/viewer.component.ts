@@ -54,11 +54,22 @@ export class ViewerComponent extends DataSubscriber {
       fullscreenButton:false,
       // automaticallyTrackDataSourceClocks:false,
       animation:false,
-      shadows:true
+      shadows:true,
+      terrainShadows: Cesium.ShadowMode.ENABLED
     });
-    viewer.scene.globe.depthTestAgainstTerrain = true;
+    //viewer.scene.globe.depthTestAgainstTerrain = true;
+    //viewer.scene.globe.castShadows = true;
+    viewer.scene.globe.enableLighting =  true;
     viewer.scene.imageryLayers.removeAll();
     viewer.scene.globe.baseColor = Cesium.Color.GRAY;
+    /*viewer.scene.primitives.add(new Cesium.Primitive({
+      shadows : Cesium.ShadowMode.ENABLED,
+      appearance : new Cesium.PerInstanceColorAppearance({
+      translucent : false
+      })
+    }));*/
+    //viewer.clock.currentTime = new Cesium.JulianDate(location.date);
+    //viewer.clock.currentTime = new Cesium.JulianDate.now();
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
     this.dataService.setViewer(viewer);
   }
@@ -80,8 +91,8 @@ export class ViewerComponent extends DataSubscriber {
     if(this.data !== undefined) {
       const viewer = this.dataService.getViewer();
       viewer.dataSources.removeAll(); 
-      viewer.scene.primitives.remove(this.dataService.getcesiumpromise());
-      const new_viewer = new Cesium.Viewer("cesiumContainer");
+      //viewer.scene.primitives.remove(this.dataService.getcesiumpromise());
+      //const new_viewer = new Cesium.Viewer("cesiumContainer");
 
       this.data = data;
       const promise = Cesium.GeoJsonDataSource.load(this.data);

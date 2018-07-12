@@ -45,7 +45,9 @@ export class SelectComponent extends DataSubscriber implements OnInit {
           if(_ColorPro !== "None") {
             _Property = [];
             _Property.Name = _ColorPro;
-            _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
+            if(this.dataService.get_SelectedEntity().properties[_Property.Name]!==undefined){
+              _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
+            }else {_Property.Value = ' ';}
             this._Properties.push(_Property);
           }
         }

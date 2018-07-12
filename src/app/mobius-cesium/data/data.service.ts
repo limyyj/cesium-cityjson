@@ -183,15 +183,39 @@ export class DataService {
 
   public getValue(model: JSON) {
     if(model !== undefined) {
-      const propertyName = Object.keys(model["features"][0].properties);
+      let propertyName = Object.keys(model["features"][0].properties);
+      let feature_instance;
+      let property = propertyName;
+      if(model["features"].length>1){
+        for(let i = 1 ;i<model["features"].length;i++){
+          property = property.concat(Object.keys(model["features"][i].properties));
+        }
+      }
+      propertyName = property.reduce(function(a,b){
+        if (a.indexOf(b) < 0 ) a.push(b);
+           return a;
+      },[]);
+      /*for(let i = 0 ;i<model["features"].length;i++){
+        if(model["features"][i].geometry.type === "Polygon"){
+           propertyName= Object.keys(model["features"][i].properties);
+           feature_instance = model["features"][i];
+          break;
+        }
+      }*/
       propertyName.sort();
       propertyName.unshift("None");
       const propertyNames = propertyName.filter(function(value) { 
         return value != 'TYPE'&& value != 'COLOR'&& value != 'HEIGHT'&&value != 'EXTRUHEIGHT'
       });
       const _ColorValue = propertyNames[0];
-
-      const feature_instance = model["features"][0];
+      
+      for(let i = 0 ;i<model["features"].length;i++){
+        if(model["features"][i].geometry.type === "Polygon"||model["features"][i].geometry.type === "MultiPolygon"){
+           //propertyName= Object.keys(model["features"][i].properties);
+          feature_instance = model["features"][i];
+          break;
+        }
+      }
       const _HeightKey = propertyNames.filter(function(prop_name) {
         const value =  feature_instance.properties[prop_name];
         return (typeof(value) === "number");
