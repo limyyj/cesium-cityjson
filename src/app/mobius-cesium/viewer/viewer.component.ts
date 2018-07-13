@@ -90,9 +90,7 @@ export class ViewerComponent extends DataSubscriber {
   public LoadData(data: JSON) {
     if(this.data !== undefined) {
       const viewer = this.dataService.getViewer();
-      viewer.dataSources.removeAll(); 
-      //viewer.scene.primitives.remove(this.dataService.getcesiumpromise());
-      //const new_viewer = new Cesium.Viewer("cesiumContainer");
+      viewer.dataSources.removeAll({destroy:true}); 
 
       this.data = data;
       const promise = Cesium.GeoJsonDataSource.load(this.data);
@@ -312,6 +310,9 @@ export class ViewerComponent extends DataSubscriber {
       const rgb = _ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
+    }else{
+      if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+      if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
     }
   }
 
@@ -328,6 +329,9 @@ export class ViewerComponent extends DataSubscriber {
       if(initial === false) {
         entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
       }
+    }else{
+      if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+      if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
     }
   }
 

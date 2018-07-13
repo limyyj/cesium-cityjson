@@ -184,47 +184,37 @@ export class DataService {
   public getValue(model: JSON) {
     if(model !== undefined) {
       let propertyName = Object.keys(model["features"][0].properties);
-      let feature_instance;
-      let property = propertyName;
-      if(model["features"].length>1){
-        for(let i = 1 ;i<model["features"].length;i++){
-          property = property.concat(Object.keys(model["features"][i].properties));
-        }
-      }
-      propertyName = property.reduce(function(a,b){
-        if (a.indexOf(b) < 0 ) a.push(b);
-           return a;
-      },[]);
-      /*for(let i = 0 ;i<model["features"].length;i++){
-        if(model["features"][i].geometry.type === "Polygon"){
-           propertyName= Object.keys(model["features"][i].properties);
-           feature_instance = model["features"][i];
-          break;
-        }
-      }*/
-      propertyName.sort();
-      propertyName.unshift("None");
-      const propertyNames = propertyName.filter(function(value) { 
-        return value != 'TYPE'&& value != 'COLOR'&& value != 'HEIGHT'&&value != 'EXTRUHEIGHT'
-      });
-      const _ColorValue = propertyNames[0];
-      
-      for(let i = 0 ;i<model["features"].length;i++){
-        if(model["features"][i].geometry.type === "Polygon"||model["features"][i].geometry.type === "MultiPolygon"){
-           //propertyName= Object.keys(model["features"][i].properties);
-          feature_instance = model["features"][i];
-          break;
-        }
-      }
-      const _HeightKey = propertyNames.filter(function(prop_name) {
+      let feature_instance = model["features"][0];
+      let _HeightKeys = propertyName.filter(function(prop_name) {
         const value =  feature_instance.properties[prop_name];
         return (typeof(value) === "number");
       });
-
+      if(model["features"].length > 1){
+        for(let i = 1 ;i<model["features"].length;i++){
+          for(let properties of Object.keys(model["features"][i].properties)){
+            if(propertyName.indexOf(String(properties))<0){
+              propertyName.push(properties);
+              if(typeof(model["features"][i].properties[properties]) === "number"){
+                _HeightKeys.push(properties);
+              }
+            }
+          }
+        }
+      }
+      
+      propertyName.sort();
+      propertyName.unshift("None");
+      const propertyNames = propertyName.filter(function(value) { 
+        return value != 'TYPE'&& value != 'COLOR'&& value != 'HEIGHT'&&value != 'EXTRUDEDHEIGHT'
+      });
+      const _ColorValue = propertyNames[0];
+      const _HeightKey = _HeightKeys.filter(function(value) { 
+        return value != 'TYPE'&& value != 'COLOR'&& value != 'HEIGHT'&&value != 'EXTRUDEDHEIGHT'
+      });
       _HeightKey.sort();
       _HeightKey.unshift("None");
       const _HeightValue = _HeightKey[0];
-
+      
       const promise = this.cesiumpromise;
       const _Heighttexts: any[] = [];
       const _Colortexts: any[] = [];
@@ -253,13 +243,13 @@ export class DataService {
             _indexArr.push(entities.indexOf(entity));
           } else {
             entity.polygon.height =  entity.properties["HEIGHT"];
-            entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
+            entity.polygon.extrudedHeight = entity.properties["EXTRUDEDHEIGHT"];
             const ColorValue = entity.properties["COLOR"]._value;
             entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
           }
           if(entity.polygon !== undefined) {
               entity.polygon.outlineColor = Cesium.Color.Black;
-            }
+          }
           if(entity.billboard !== undefined) {
             entity.billboard = undefined;
             entity.point = new Cesium.PointGraphics({
@@ -284,12 +274,12 @@ export class DataService {
     return this._ViData;
   }
   public set_ViData(_ViData): void {
-    this._ViData=_ViData;
+    this._ViData = _ViData;
   }
 
   public LoadJSONData() {
     if(this._jsonModel !== undefined&&this._jsonModel["cesium"] !== undefined) {
-      const cesiumData=this._jsonModel["cesium"];
+      const cesiumData = this._jsonModel["cesium"];
       let _ColorDescr: string;
       let _ColorValue: string;
       let _MinColor: number;
