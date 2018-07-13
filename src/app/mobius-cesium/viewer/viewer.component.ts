@@ -15,7 +15,7 @@ export class ViewerComponent extends DataSubscriber {
   private dataArr: object;
   private viewer: any;
   private selectEntity: any=null;
-  private material: object;
+  private material: object[];
   private _Colorbar: any[];
   private texts: any[];
   private _Cattexts: any[];
@@ -90,25 +90,7 @@ export class ViewerComponent extends DataSubscriber {
       viewer.dataSources.add(dataSource);
       const _HeightKey: any[] = [];
 
-      /////// ALL THE STUFF BELOW IS FOR GENERATING HEIGHTS AND KEY BARS FROM PROPERTIES ///////
-      const entities = dataSource["entities"]["values"];
-      const self = this;
-      // if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {
-      self._ShowColorBar = false;
-      // }
-      
-      // this.dataService.setcesiumpromise(dataSource);
-      // if(this.mode === "editor") {
-      //   this.dataService.getValue(this.data);
-      //   this.dataService.LoadJSONData();
-      //   this.dataArr = this.dataService.get_ViData();
-      //   this._index = 0;
-      // }
-      // if(this.mode === "viewer") {
-      //   this.dataService.LoadJSONData();
-      //   this.dataArr = this.dataService.get_PuData();
-      //   this._index = 2;
-      // }
+      this._ShowColorBar = false;
 
       /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
@@ -193,15 +175,23 @@ export class ViewerComponent extends DataSubscriber {
     const viewer = this.dataService.getViewer();//this.viewer;
     // console.log("Triggered select");
     if(this.selectEntity !== undefined&&this.selectEntity !== null) {
-      this.selectEntity.polygon.material = this.material;
+      for (let i = 0 ; i < this.selectEntity._children.length ; i++) {
+        this.selectEntity._children[i].polygon.material = this.material[i];
+      }
+      // this.selectEntity.polygon.material = this.material;
       // console.log("Triggered revert colour", this.selectEntity.polygon.material);
     }
     if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
-      this.dataService.set_SelectedEntity(viewer.selectedEntity);
-      this.selectEntity = viewer.selectedEntity;
-      this.material = viewer.selectedEntity.polygon.material;
+      console.log(viewer.selectedEntity);
+      this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
+      this.selectEntity = viewer.selectedEntity._parent;
+      this.material = [];
       // console.log("Stored material", this.material);
-      viewer.selectedEntity.polygon.material = Cesium.Color.BLUE;
+      this.selectEntity._children.forEach((child) => {
+        this.material.push(child.polygon.material);
+        child.polygon.material = Cesium.Color.BLUE;
+      })
+      // viewer.selectedEntity.polygon.material = Cesium.Color.BLUE;
       // console.log("Triggered change colour", viewer.selectedEntity.polygon.material);
 
       //get properties
@@ -212,146 +202,6 @@ export class ViewerComponent extends DataSubscriber {
       // console.log("Triggered set everything to undefined");
     }
 
-  }
-
-  // public select() {
-  //   event.stopPropagation();
-  //   const viewer = this.dataService.getViewer();//this.viewer;
-  //   console.log("Triggered select");
-  //   if(this.dataArr !== undefined) {
-  //     console.log("dataArr ok");
-  //     //if(this.selectEntity !== undefined&&this.selectEntity !== null) {this.ColorSelect(this.selectEntity);}
-  //     if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
-  //       this.dataService.set_SelectedEntity(viewer.selectedEntity);
-  //       let material;
-  //       if(viewer.selectedEntity.polygon !== undefined) {
-  //         material = viewer.selectedEntity.polygon.material;
-  //         viewer.selectedEntity.polygon.material = Cesium.Color.WHITE;
-  //       }
-  //       if(viewer.selectedEntity.polyline !== undefined) {
-  //         material = viewer.selectedEntity.polyline.material;
-  //         viewer.selectedEntity.polyline.material = Cesium.Color.WHITE;
-  //       }
-  //       this.selectEntity = viewer.selectedEntity;
-  //       this.material = material;
-  //       console.log("Selected something", this.selectEntity);
-  //     } else {
-  //       this.dataService.set_SelectedEntity(undefined);
-  //       this.selectEntity = undefined;
-  //       this.material = undefined;
-  //     }
-  //   }
-  // }
-
-  // public ColorSelect(entity) {
-  //   const promise = this.dataService.getcesiumpromise();
-  //   const _ColorKey: string = this.dataArr["ColorKey"];
-  //   const _ColorMax: number = this.dataArr["ColorMax"];
-  //   const _ColorMin: number = this.dataArr["ColorMin"];
-  //   const _ColorText: any[] = this.dataArr["ColorText"];
-  //   const _ColorInvert: boolean = this.dataArr["ColorInvert"];
-  //   const _ExtrudeKey: string = this.dataArr["ExtrudeKey"];
-  //   const _ExtrudeMax: number = this.dataArr["ExtrudeMax"];
-  //   const _ExtrudeMin: number = this.dataArr["ExtrudeMin"];
-  //   const _HeightChart: boolean = this.dataArr["HeightChart"];
-  //   const _Invert: boolean = this.dataArr["Invert"];
-  //   const _Scale: number = this.dataArr["Scale"];
-  //   const _Filter: any[] = this.dataArr["Filter"];
-  //   let _ChromaScale = chroma.scale("SPECTRAL");
-  //   if(_ColorInvert === true) {_ChromaScale = chroma.scale("SPECTRAL").domain([1,0]);}
-  //   let _CheckHide: boolean;
-  //   if(entity.properties["TYPE"] === undefined||entity.properties["TYPE"]._value !== "STATIC"){
-  //     if(_Filter.length !== 0) {
-  //       _CheckHide = this.Hide(_Filter,entity,_HeightChart);
-  //       if(_CheckHide === true) {
-  //         if(entity.polygon !== undefined) {
-  //           entity.polygon.extrudedHeight = 0;
-  //           entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-  //           if(_HeightChart === true) {
-  //             if(entity.polyline !== undefined) {entity.polyline.show = false;}
-  //           }
-  //         }
-  //         if(entity.polyline !== undefined)  {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-  //       }
-  //     }
-  //     if(_Filter.length === 0||_CheckHide === false) {
-  //       if(_ColorKey !== "None") {
-  //         if(typeof(_ColorText[0]) === "number") {
-  //           this.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
-  //         } else {this.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-  //       } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
-  //     }
-  //   }else {
-  //     entity.polygon.height =  entity.properties["HEIGHT"];
-  //     entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
-  //     const ColorValue = entity.properties["COLOR"]._value;
-  //     entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
-  //   }
-  // }
-
-  public Hide(_Filter: any[], entity, _HeightChart: boolean): boolean {
-    let _CheckHide: boolean=false;
-    for(const filter of _Filter) {
-      const value = entity.properties[filter.HeightHide]._value;
-      if(value !== undefined) {
-        if(typeof(value) === "number") {
-          if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
-            _CheckHide = true;
-          }
-        } else if(typeof(value) === "string") {
-          if (this._compareCat(value,filter.CategaryHide, Number(filter.RelaHide))) {
-            _CheckHide = true;
-          }
-        }
-      }
-    }
-    return _CheckHide;
-  }
-
-  public _compare(value: number, slider: number, relation: number): boolean {
-    switch (relation) {
-      case 0:
-        return value < slider;
-      case 1:
-        return value > slider;
-      case 2:
-        return value !== slider;
-    }
-  }
-
-  public _compareCat(value: string, _Categary: string,relation: number): boolean {
-    switch (relation) {
-      case 0:
-        return value ===  undefined;
-      case 1:
-        return value !== _Categary;
-      case 2:
-        return value === _Categary;
-    }
-  }
-  public colorByNum(entity, max: number, min: number, _ColorKey: string, _ChromaScale: any) {
-    if(entity.properties[_ColorKey] !== undefined) {
-      const texts = entity.properties[_ColorKey]._value;
-      const rgb = _ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
-      if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
-      if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
-    }
-  }
-
-  public  colorByCat(entity, _ColorText: any[], _ColorKey: string, _ChromaScale: any) {
-    if(entity.properties[_ColorKey] !== undefined) {
-      let initial: boolean = false;
-      for(let j = 0;j<_ColorText.length; j++) {
-        if(entity.properties[_ColorKey]._value === _ColorText[j]) {
-          const rgb = _ChromaScale(1 - (j / _ColorText.length)); // _ChromaScale((j/_ColorText.length).toFixed(2));
-          entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
-          initial = true;
-        }
-      }
-      if(initial === false) {
-        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-      }
-    }
   }
 
   public showAttribs(event) {

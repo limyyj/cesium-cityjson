@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {Subject} from "rxjs/Subject";
 import * as chroma from "chroma-js";
 import proj4 from "proj4";
+import * as earcut from "earcut";
 
 @Injectable()
 export class DataService {
@@ -407,6 +408,149 @@ export class DataService {
     return newcoords;
   }
 
+  public maxDiff(values): number {
+    let maxval = values[0];
+    let minval = values[0];
+    for (let i = 1 ; i < values.length ; i++) {
+      if (values[i] > maxval) {
+        maxval = values[i];
+      }
+      if (values[i] < minval) {
+        minval = values[i];
+      }
+    }
+    return (maxval - minval);
+  }
+
+  public determineAxis(points,all_vertices): number {
+    // split coords and determine plane
+    const x = [];
+    const y = [];
+    points.forEach((index) => {
+      const coords = all_vertices[index]
+      x.push(coords[0]);
+      y.push(coords[1]);
+    });
+
+    if (this.maxDiff(x) > this.maxDiff(y)) {
+      // x axis seems to be wider, use xz axis
+      return 0;
+    } else {
+      // y axis seems to be wider, use yz axis
+      return 1;
+    }
+  }
+
+  public triangulatePoly(boundaries,all_vertices,dataSource,color): object {
+    // console.log(boundaries);
+    // parent entity to contain triangulated polygons
+    const temp_parent = dataSource.entities.add(new Cesium.Entity());
+
+    // determine axis
+    const axis = this.determineAxis(boundaries[0],all_vertices);
+    let other_axis = 0;
+    if (axis === 0) {
+      other_axis = 1;
+    }
+    
+    // console.log(axis,other_axis);
+
+    // get points and put into earcut format
+    const vertices = [];
+    const holes = [];
+    const other_coords = [];
+    let count = 0;
+    for (let i = 0 ; i < boundaries.length ; i++) {
+      boundaries[i].forEach((index) => {
+        const coords = all_vertices[index];
+        // console.log(coords);
+        vertices.push(coords[axis],coords[2]);
+        other_coords.push(coords[other_axis]);
+        count++;
+      });
+      if (i !== (boundaries.length - 1)) {
+        holes.push(count);
+      }
+    }
+    // console.log(vertices,holes);
+
+    // throw into earcut
+    const tri_index = earcut(vertices,holes);
+    // console.log(tri_index);
+
+    // convert to cesium format
+    for (let p = 0 ; p < tri_index.length ; p = p + 3) {
+      const points = [];
+
+      [tri_index[p], tri_index[p+1], tri_index[p+2]].forEach((j) => {
+        const coord = [undefined,undefined,undefined];
+        coord[other_axis] = other_coords[j];
+        coord[axis] = vertices[j*2];
+        coord[2] = vertices[(j*2) + 1];
+        points.push(...coord);
+      });
+      // console.log(points);
+      const poly = dataSource.entities.add({
+        parent : temp_parent,
+        // name : name,
+        polygon : {
+          hierarchy : new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(points)),
+          perPositionHeight : true,
+          material : color,
+          outline : false,
+          // outlineColor : Cesium.Color.BLACK,
+        },
+      });
+      // console.log(poly);
+    }
+    return temp_parent;
+  }
+
+  public cesiumPoly(boundaries,vertices,dataSource,colour): object {
+    const temp_parent = dataSource.entities.add(new Cesium.Entity());
+
+    const extRing = boundaries[0];
+    const extRing_points = [];
+
+    extRing.forEach((pt_index) => {
+      extRing_points.push(vertices[pt_index][0],vertices[pt_index][1],vertices[pt_index][2]);
+    });
+
+    // console.log(extRing_points);
+    const ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
+    let p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
+
+    // If boundaries contain inner rings for holes, create p_hierarchy with holes
+    const int_cartesian3 = [];
+    if (boundaries.length > 0) {
+      // Create p_hierarchy for each hole and push to int_cartesian3
+      for (let ring_index = 1 ; ring_index < boundaries.length ; ring_index++) {
+        const temp_pts = [];
+        boundaries[ring_index].forEach((pt_index) => {
+          temp_pts.push(vertices[pt_index][0],vertices[pt_index][1],vertices[pt_index][2]);
+        });
+        // console.log(temp_pts);
+        int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
+      }
+      // Create p_hierarchy with holes (as array of p_hierarchies)
+      p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
+
+      // Create polygon
+      const poly = dataSource.entities.add({
+        parent : temp_parent,
+        // name : city_object_keys[obj_index],
+        polygon : {
+          hierarchy : p_hierarchy,
+          perPositionHeight : true,
+          material : colour,
+          outline : false,
+          //outlineColor : Cesium.Color.BLACK,
+        },
+      });
+    }
+    return temp_parent;
+  }
+
   public genCityJSONGeom(file: JSON): object {
     // Initialise arrays to contain primitives to display in viewer
     const inst_Filled = [];
@@ -440,7 +584,10 @@ export class DataService {
       const city_object_keys = Object.keys(file["CityObjects"]);
       for (let obj_index = 0 ; obj_index < city_object_keys.length ; obj_index ++) {
         const obj =  file["CityObjects"][city_object_keys[obj_index]];
+        // if (obj.type === "Building") {
         if (1) {
+          // Create parent dummy entity
+          // const temp_parent = dataSource.entities.add(new Cesium.Entity());
 
           // Loop through geometry
           for (let geom_index = 0 ; geom_index < obj["geometry"].length ; geom_index ++) {
@@ -470,34 +617,11 @@ export class DataService {
               continue;
             }
             for (let srf_index = 0 ; srf_index < boundaries.length ; srf_index ++) {
-              const rings = boundaries[srf_index];
-              const extRing = rings[0];
-              const extRing_points = [];
+            // for (let srf_index = 52 ; srf_index < 53 ; srf_index ++) {
 
               // Obtain coordinates for each vertice and create p_hierarchy for outer ring
-              if (extRing === undefined) {
+              if (boundaries[srf_index][0] === undefined) {
                 continue;
-              }
-              extRing.forEach((pt_index) => {
-                extRing_points.push(vertices[pt_index][0],vertices[pt_index][1],vertices[pt_index][2]);
-              });
-
-              const ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
-              let p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
-
-              // If boundaries contain inner rings for holes, create p_hierarchy with holes
-              if (rings.length > 0) {
-                const int_cartesian3 = [];
-                // Create p_hierarchy for each hole and push to int_cartesian3
-                for (let ring_index = 1 ; ring_index < rings.length ; ring_index++) {
-                  const temp_pts = [];
-                  rings[ring_index].forEach((pt_index) => {
-                    temp_pts.push(vertices[pt_index][0],vertices[pt_index][1],vertices[pt_index][2]);
-                  });
-                  int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
-                }
-                // Create p_hierarchy with holes (as array of p_hierarchies)
-                p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
               }
 
               // Extract surface type
@@ -513,8 +637,6 @@ export class DataService {
               } else if (surface_type === "RoofSurface") {
                 colour = Cesium.Color.CRIMSON;
               }
-              
-              // console.log(srf_index,p_hierarchy,surface_type,colour);
 
               // // Set colour based on surface_type
               // let colour = Cesium.Color.WHITE;
@@ -529,22 +651,26 @@ export class DataService {
               const property_bag = new Cesium.PropertyBag();
               property_bag.addProperty("Name", city_object_keys[obj_index]);
               property_bag.addProperty("Surface Type", surface_type);
-              // console.log(property_bag)
+              property_bag.addProperty("srf_index", srf_index);
 
-              // Create polygon
-              const poly = dataSource.entities.add({
-                name : city_object_keys[obj_index],
-                polygon : {
-                  hierarchy : p_hierarchy,
-                  perPositionHeight : true,
-                  material : colour,
-                  outline : false,
-                  //outlineColor : Cesium.Color.BLACK,
-                  // properties : property_bag,
-                },
+              const z = [];
+              boundaries[srf_index][0].forEach((coords) => {
+                z.push(vertices[coords][2]);
               });
-              poly.properties = property_bag;
-              // console.log(poly);
+
+              if (this.maxDiff(z) === 0) {
+                console.log("Horizontal!");
+                // horizontal, use Cesium's stuff
+                const poly = this.cesiumPoly(boundaries[srf_index],vertices,dataSource,colour);
+                poly["properties"] = property_bag;
+                // console.log(srf_index,poly);
+              } else {
+                const poly = this.triangulatePoly(boundaries[srf_index],vertices,dataSource,colour);
+                poly["properties"] = property_bag;
+                // console.log(srf_index,poly);
+              }
+
+              
             }
           }
         }
