@@ -234,6 +234,24 @@ var DataService = /** @class */ (function () {
     DataService.prototype.set_index = function (_index) {
         this._index = _index;
     };
+    DataService.prototype.set_Sun = function (_Sun) {
+        this._Sun = _Sun;
+    };
+    DataService.prototype.get_Sun = function () {
+        return this._Sun;
+    };
+    DataService.prototype.set_Shadow = function (_Shadow) {
+        this._Shadow = _Shadow;
+    };
+    DataService.prototype.get_Shadow = function () {
+        return this._Shadow;
+    };
+    DataService.prototype.set_Date = function (_Date) {
+        this._Date = _Date;
+    };
+    DataService.prototype.get_Date = function () {
+        return this._Date;
+    };
     /*public set_imageryViewModels() :void{
       this._imageryViewModels.push(new Cesium.ProviderViewModel({
        name : "Stamen Toner",
@@ -961,7 +979,7 @@ module.exports = "/*/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-
 /***/ "./src/app/mobius-cesium/setting/display.copmponent.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"DisplayView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table>\r\n      <tr>\r\n      <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Imagery</div></th>\r\n      <th><div>\r\n        <select class=\"cesium-button\" (change)=\"onChangeImagery($event.target.value)\" [ngModel]=\"_Imagery\">\r\n          <option class=\"cesium-option\"  *ngFor=\"let Imagery of _ImageryList\" value={{Imagery}}>{{Imagery}}</option>\r\n        </select>\r\n      </div></th>\r\n      </tr>\r\n    </table>\r\n    <hr>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Shadows</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Shadow\" (click)=\"changeShadow()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Date</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_ExtrudeMin}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeDate($event.target.value)\"></th></tr>  \r\n     </table>\r\n</div>\r\n  "
+module.exports = "<div id=\"DisplayView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table>\r\n      <tr>\r\n      <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Imagery</div></th>\r\n      <th><div>\r\n        <select class=\"cesium-button\" (change)=\"onChangeImagery($event.target.value)\" [ngModel]=\"_Imagery\">\r\n          <option class=\"cesium-option\"  *ngFor=\"let Imagery of _ImageryList\" value={{Imagery}}>{{Imagery}}</option>\r\n        </select>\r\n      </div></th>\r\n      </tr>\r\n    </table>\r\n    <hr>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Sun</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Sun\" (click)=\"changeSun()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Shadows</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Shadow\" (click)=\"changeShadow()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Date</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_Date}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeDate($event.target.value)\"></th></tr>  \r\n    </table>\r\n    \r\n</div>\r\n  "
 
 /***/ }),
 
@@ -1000,7 +1018,7 @@ var DisplayComponent = /** @class */ (function (_super) {
     }
     DisplayComponent.prototype.ngOnInit = function () {
         this.data = this.dataService.getGsModel();
-        this._ImageryList = ["Display", "Stamen Toner", "Stamen Toner(Lite)", "Terrain(Standard)", "Terrain(Background)",
+        this._ImageryList = ["None", "Stamen Toner", "Stamen Toner(Lite)", "Terrain(Standard)", "Terrain(Background)",
             "OpenStreetMap", "Earth at Night", "Natural Earth\u00a0II", "Blue Marble"];
         if (this._Imagery === undefined) {
             this._Imagery = this._ImageryList[0];
@@ -1008,6 +1026,32 @@ var DisplayComponent = /** @class */ (function (_super) {
         else {
             this._Imagery = this.dataService.get_Imagery();
         }
+        if (this._Sun === undefined) {
+            this._Sun = false;
+            this.dataService.set_Sun(this._Sun);
+        }
+        else {
+            this._Sun = this.dataService.get_Sun();
+        }
+        if (this._Shadow === undefined) {
+            this._Shadow = false;
+            this.dataService.set_Shadow(this._Shadow);
+        }
+        else {
+            this._Shadow = this.dataService.get_Shadow();
+        }
+        if (this._Date === undefined) {
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = String(today.getMonth() + 1).padStart(2, "0");
+            var day = String(today.getDate()).padStart(2, "0");
+            this._Date = year + "-" + month + "-" + day;
+        }
+        else {
+            this._Date = this.dataService.get_Date();
+            this.changeDate(this._Date);
+        }
+        this.dataService.set_Date(this._Date);
     };
     DisplayComponent.prototype.notify = function (message) {
     };
@@ -1052,7 +1096,6 @@ var DisplayComponent = /** @class */ (function (_super) {
         else if (_Imagery === this._ImageryList[6]) {
             layers.removeAll();
             var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3812 }));
-            //blackMarble.alpha = 0.5; 
         }
         else if (_Imagery === this._ImageryList[7]) {
             layers.removeAll();
@@ -1064,6 +1107,58 @@ var DisplayComponent = /** @class */ (function (_super) {
             layers.removeAll();
             var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3845 }));
         }
+    };
+    DisplayComponent.prototype.changeSun = function () {
+        var viewer = this.dataService.getViewer();
+        this._Sun = !this._Sun;
+        if (this._Sun === true) {
+            viewer.terrainShadows = Cesium.ShadowMode.ENABLED;
+            viewer.scene.globe.enableLighting = true;
+            viewer.scene.sun.show = true;
+        }
+        else {
+            viewer.terrainShadows = undefined;
+            viewer.scene.globe.enableLighting = false;
+            viewer.scene.sun.show = false;
+        }
+    };
+    DisplayComponent.prototype.changeShadow = function () {
+        this._Shadow = !this._Shadow;
+        var promise = this.dataService.getcesiumpromise();
+        if (this._Shadow === true) {
+            promise.then(function (dataSource) {
+                var entities = dataSource.entities.values;
+                for (var _i = 0, entities_1 = entities; _i < entities_1.length; _i++) {
+                    var entity = entities_1[_i];
+                    entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
+                }
+            });
+        }
+        else {
+            promise.then(function (dataSource) {
+                var entities = dataSource.entities.values;
+                for (var _i = 0, entities_2 = entities; _i < entities_2.length; _i++) {
+                    var entity = entities_2[_i];
+                    entity.polygon.shadows = undefined;
+                }
+            });
+        }
+        this.dataService.set_Imagery(this._Shadow);
+    };
+    DisplayComponent.prototype.changeDate = function (Date) {
+        this._Date = Date;
+        var viewer = this.dataService.getViewer();
+        var now = new Cesium.JulianDate.fromIso8601(Date);
+        var tomorrow = now.clone();
+        tomorrow.dayNumber = tomorrow.dayNumber + 1;
+        viewer.clock.currentTime = now;
+        viewer.clock.startTime = now.clone();
+        viewer.clock.stopTime = tomorrow.clone();
+        viewer.clock.multiplier = 1.0;
+        viewer.timeline.updateFromClock();
+        viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime);
+        viewer.clock.multiplier = 1;
+        this.dataService.set_Date(this._Date);
     };
     DisplayComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -2104,22 +2199,18 @@ var ViewerComponent = /** @class */ (function (_super) {
             // automaticallyTrackDataSourceClocks:false,
             animation: false,
             shadows: true,
-            terrainShadows: Cesium.ShadowMode.ENABLED
         });
         //viewer.scene.globe.depthTestAgainstTerrain = true;
         //viewer.scene.globe.castShadows = true;
-        viewer.scene.globe.enableLighting = true;
+        //viewer.scene.globe.enableLighting =  true;
         viewer.scene.imageryLayers.removeAll();
         viewer.scene.globe.baseColor = Cesium.Color.GRAY;
-        /*viewer.scene.primitives.add(new Cesium.Primitive({
-          shadows : Cesium.ShadowMode.ENABLED,
-          appearance : new Cesium.PerInstanceColorAppearance({
-          translucent : false
-          })
-        }));*/
-        //viewer.clock.currentTime = new Cesium.JulianDate(location.date);
-        //viewer.clock.currentTime = new Cesium.JulianDate.now();
         document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
+        var self = this;
+        viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
+            e.cancel = true;
+            viewer.zoomTo(self.dataService.getcesiumpromise());
+        });
         this.dataService.setViewer(viewer);
     };
     ViewerComponent.prototype.notify = function (message) {
@@ -2135,13 +2226,13 @@ var ViewerComponent = /** @class */ (function (_super) {
     };
     ViewerComponent.prototype.LoadData = function (data) {
         if (this.data !== undefined) {
-            var viewer_1 = this.dataService.getViewer();
-            viewer_1.dataSources.removeAll({ destroy: true });
+            var viewer = this.dataService.getViewer();
+            viewer.dataSources.removeAll({ destroy: true });
             this.data = data;
-            var promise_1 = Cesium.GeoJsonDataSource.load(this.data);
-            viewer_1.dataSources.add(promise_1);
+            var promise = Cesium.GeoJsonDataSource.load(this.data);
+            viewer.dataSources.add(promise);
             var _HeightKey = [];
-            promise_1.then(function (dataSource) {
+            promise.then(function (dataSource) {
                 var entities = dataSource.entities.values;
                 var self = this;
                 if (entities[0].polygon !== undefined) {
@@ -2151,7 +2242,7 @@ var ViewerComponent = /** @class */ (function (_super) {
                     self._ShowColorBar = false;
                 }
             });
-            this.dataService.setcesiumpromise(promise_1);
+            this.dataService.setcesiumpromise(promise);
             if (this.mode === "editor") {
                 this.dataService.getValue(this.data);
                 this.dataService.LoadJSONData();
@@ -2163,11 +2254,7 @@ var ViewerComponent = /** @class */ (function (_super) {
                 this.dataArr = this.dataService.get_PuData();
                 this._index = 3;
             }
-            viewer_1.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
-                e.cancel = true;
-                viewer_1.zoomTo(promise_1);
-            });
-            viewer_1.zoomTo(promise_1);
+            viewer.zoomTo(promise);
             this.Colortext();
         }
     };
