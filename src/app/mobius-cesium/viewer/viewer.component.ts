@@ -243,7 +243,7 @@ export class ViewerComponent extends DataSubscriber {
           if(typeof(_ColorText[0]) === "number") {
             this.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
           } else {this.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-        } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
+        } else {entity.polygon.material = Cesium.Color.DARKGREY;}
       }
     }else {
       entity.polygon.height =  entity.properties["HEIGHT"];

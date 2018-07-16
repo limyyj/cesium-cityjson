@@ -28,7 +28,8 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
                          "OpenStreetMap","Earth at Night","Natural Earth\u00a0II","Blue Marble"];
     
     if(this._Imagery === undefined){
-      this._Imagery = this._ImageryList[0];
+      this._Imagery = this._ImageryList[3];
+      this.onChangeImagery(this._Imagery);
     }else {this._Imagery =this.dataService.get_Imagery();}
 
     if(this._Sun === undefined){

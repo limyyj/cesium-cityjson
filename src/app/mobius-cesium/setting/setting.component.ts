@@ -114,7 +114,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
               if(typeof(_ColorText[0]) === "number") {
                 self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
               } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-            } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
+            } else {entity.polygon.material = Cesium.Color.DARKGREY;}
             if(_ExtrudeKey !== "None") {
               if(_HeightChart === false) {
                 
@@ -152,7 +152,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
             if(typeof(_ColorText[0]) === "number") {
               self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
             } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-            } else {entity.polyline.material = Cesium.Color.GOLD.withAlpha(0.8);
+            } else {entity.polyline.material = Cesium.Color.DARKGREY;
           }
         }
       }
