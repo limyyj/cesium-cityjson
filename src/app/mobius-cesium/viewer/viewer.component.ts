@@ -62,15 +62,22 @@ export class ViewerComponent extends DataSubscriber {
     viewer.scene.globe.enableLighting =  true;
     viewer.scene.imageryLayers.removeAll();
     viewer.scene.globe.baseColor = Cesium.Color.GRAY;
-    /*viewer.scene.primitives.add(new Cesium.Primitive({
-      shadows : Cesium.ShadowMode.ENABLED,
-      appearance : new Cesium.PerInstanceColorAppearance({
-      translucent : false
-      })
-    }));*/
-    //viewer.clock.currentTime = new Cesium.JulianDate(location.date);
+    //viewer.clock.currentTime = new Cesium.JulianDate.fromIso8601("2013-12-25");
     //viewer.clock.currentTime = new Cesium.JulianDate.now();
+    //viewer.clock.currentTime =  Cesium.JulianDate.fromIso8601("2013-12-25");
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
+    const self = this;
+    viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
+        e.cancel = true;
+        viewer.zoomTo(self.dataService.getcesiumpromise());
+    });
+    /*var clock = new Cesium.Clock({
+      startTime : Cesium.JulianDate.fromIso8601("2013-12-25"),
+      currentTime : Cesium.JulianDate.fromIso8601("2013-12-25"),
+      stopTime : Cesium.JulianDate.fromIso8601("2013-12-26"),
+      clockRange : Cesium.ClockRange.LOOP_STOP,
+      clockStep : Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER
+    });*/
     this.dataService.setViewer(viewer);
   }
 
@@ -115,10 +122,6 @@ export class ViewerComponent extends DataSubscriber {
         this.dataArr = this.dataService.get_PuData();
         this._index = 3;
       }
-      viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
-        e.cancel = true;
-        viewer.zoomTo(promise);
-      });
       viewer.zoomTo(promise);
       this.Colortext();
     }

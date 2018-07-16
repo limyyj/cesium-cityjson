@@ -15,18 +15,31 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
   private mode: string;
   private _ImageryList: any[];
   private _Imagery: string;
+  private _Shadow: boolean;
+  private _Date: string;
 
   constructor(injector: Injector, myElement: ElementRef) {
   super(injector);
   }
   public ngOnInit() {
     this.data = this.dataService.getGsModel();
-    this._ImageryList = ["Display","Stamen Toner","Stamen Toner(Lite)","Terrain(Standard)","Terrain(Background)",
+    this._ImageryList = ["None","Stamen Toner","Stamen Toner(Lite)","Terrain(Standard)","Terrain(Background)",
                          "OpenStreetMap","Earth at Night","Natural Earth\u00a0II","Blue Marble"];
     if(this._Imagery === undefined){
       this._Imagery = this._ImageryList[0];
     }else {this._Imagery =this.dataService.get_Imagery();}
+    if(this._Date ===undefined){
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth()+1).padStart(2, "0");
+      const day = String(today.getDate()).padStart(2, "0");
+      this._Date = year+"-"+month+"-"+day;
+    }else {
+      this._Date = this.dataService.get_Date();
+      this.changeDate(this._Date);
+    }
     
+    this.dataService.set_Date(this._Date);
   }
   public  notify(message: string): void {
   }
@@ -65,7 +78,6 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
     }else if(_Imagery === this._ImageryList[6]){
       layers.removeAll();
       var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3812 }));
-      //blackMarble.alpha = 0.5; 
     }else if(_Imagery === this._ImageryList[7]){
       layers.removeAll();
       var blackMarble = layers.addImageryProvider(Cesium.createTileMapServiceImageryProvider({
@@ -75,6 +87,41 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
       layers.removeAll();
       var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3845 }));
     }
+  }
+  public changeShadow(){
+    this._Shadow = ! this._Shadow;
+    const promise = this.dataService.getcesiumpromise();
+    if(this._Shadow === true){
+      promise.then(function(dataSource) {
+        const entities = dataSource.entities.values;
+        for(const entity of entities) {
+          entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
+        }
+      });
+    } else {
+      promise.then(function(dataSource) {
+        const entities = dataSource.entities.values;
+        for(const entity of entities) {
+          entity.polygon.shadows = undefined;
+        }
+      });
+    }
+    this.dataService.set_Imagery(this._Shadow);
+  }
+  public changeDate(Date){
+    this._Date = Date;
+    const viewer = this.dataService.getViewer();
+    const now = new Cesium.JulianDate.fromIso8601(Date);
+    const tomorrow = now.clone();
+    tomorrow.dayNumber = tomorrow.dayNumber + 1;
+    viewer.clock.currentTime = now;
+    viewer.clock.startTime = now.clone();
+    viewer.clock.stopTime = tomorrow.clone();
+    viewer.clock.multiplier = 1.0;
+    viewer.timeline.updateFromClock();
+    viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime);
+    viewer.clock.multiplier = 1;
+    this.dataService.set_Date(this._Date);
   }
 
 }

@@ -18,6 +18,8 @@ export class DataService {
   private _index: number;
   private _Filter: any[];
   private _Imagery: string;
+  private _Shadow: boolean;
+  private _Date: string;
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -87,6 +89,18 @@ export class DataService {
   }
   public set_index(_index): void {
     this._index = _index;
+  }
+  public set_Shadow(_Shadow): void{
+    this._Shadow = _Shadow;
+  }
+  public get_Shadow(): boolean{
+    return this._Shadow;
+  }
+  public set_Date(_Date): void{
+    this._Date = _Date;
+  }
+  public get_Date(): string{
+    return this._Date;
   }
   /*public set_imageryViewModels() :void{
     this._imageryViewModels.push(new Cesium.ProviderViewModel({
@@ -214,7 +228,7 @@ export class DataService {
       _HeightKey.sort();
       _HeightKey.unshift("None");
       const _HeightValue = _HeightKey[0];
-      
+
       const promise = this.cesiumpromise;
       const _Heighttexts: any[] = [];
       const _Colortexts: any[] = [];
