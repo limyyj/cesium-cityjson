@@ -1018,7 +1018,7 @@ var DisplayComponent = /** @class */ (function (_super) {
     }
     DisplayComponent.prototype.ngOnInit = function () {
         this.data = this.dataService.getGsModel();
-        this._ImageryList = ["None", "Stamen Toner", "Stamen Toner(Lite)", "Terrain(Standard)", "Terrain(Background)",
+        this._ImageryList = ["Disable", "Stamen Toner", "Stamen Toner(Lite)", "Terrain(Standard)", "Terrain(Background)",
             "OpenStreetMap", "Earth at Night", "Natural Earth\u00a0II", "Blue Marble"];
         if (this._Imagery === undefined) {
             this._Imagery = this._ImageryList[0];
@@ -1121,6 +1121,7 @@ var DisplayComponent = /** @class */ (function (_super) {
             viewer.scene.globe.enableLighting = false;
             viewer.scene.sun.show = false;
         }
+        this.dataService.set_Sun(this._Sun);
     };
     DisplayComponent.prototype.changeShadow = function () {
         this._Shadow = !this._Shadow;
@@ -1143,7 +1144,7 @@ var DisplayComponent = /** @class */ (function (_super) {
                 }
             });
         }
-        this.dataService.set_Imagery(this._Shadow);
+        this.dataService.set_Shadow(this._Shadow);
     };
     DisplayComponent.prototype.changeDate = function (Date) {
         this._Date = Date;
@@ -2194,15 +2195,11 @@ var ViewerComponent = /** @class */ (function (_super) {
             showRenderLoopErrors: false,
             orderIndependentTranslucency: false,
             baseLayerPicker: false,
-            //timeline: false,
             fullscreenButton: false,
-            // automaticallyTrackDataSourceClocks:false,
+            automaticallyTrackDataSourceClocks: false,
             animation: false,
             shadows: true,
         });
-        //viewer.scene.globe.depthTestAgainstTerrain = true;
-        //viewer.scene.globe.castShadows = true;
-        //viewer.scene.globe.enableLighting =  true;
         viewer.scene.imageryLayers.removeAll();
         viewer.scene.globe.baseColor = Cesium.Color.GRAY;
         document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
