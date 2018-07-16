@@ -881,7 +881,7 @@ module.exports = "/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-wi
 /***/ "./src/app/mobius-cesium/setting/attributes.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"AttribsView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr >\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 85px;\"><div style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 85px\"><div matTooltip={{ID}} style=\"width: 85px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr *ngFor=\"let Property of _Properties\">\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#D3D3D3 ;width: 85px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Name}}</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#D3D3D3 ;width: 85px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 85px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Value}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n</div>\r\n  "
+module.exports = "<div id=\"AttribsView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr >\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 135px;\"><div style=\"width: 135px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">ID</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;width: 135px\"><div matTooltip={{ID}} style=\"width: 135px;height:16px;background: #395D73;color:white;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{ID}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"0\" bordercolor=\"#d0d0d0\">\r\n\t  <tr *ngFor=\"let Property of _Properties\">\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#D3D3D3 ;width: 135px;height: 14px\"><div matTooltip={{Property.Name}} style=\"width: 135px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Name}}</div></th>\r\n\t    <th style=\"font-size: 10px;font-weight: normal;color:#D3D3D3 ;width: 135px;height: 14px\"><div matTooltip={{Property.Value}} style=\"width: 135px;height:14px;text-align: left;white-space: nowrap;display:block;overflow: hidden !important;text-overflow: ellipsis !important;cursor:pointer;\">{{Property.Value}}</div></th>\r\n\t  </tr>\r\n\t</table>\r\n</div>\r\n  "
 
 /***/ }),
 
@@ -1021,7 +1021,8 @@ var DisplayComponent = /** @class */ (function (_super) {
         this._ImageryList = ["Disable", "Stamen Toner", "Stamen Toner(Lite)", "Terrain(Standard)", "Terrain(Background)",
             "OpenStreetMap", "Earth at Night", "Natural Earth\u00a0II", "Blue Marble"];
         if (this._Imagery === undefined) {
-            this._Imagery = this._ImageryList[0];
+            this._Imagery = this._ImageryList[3];
+            this.onChangeImagery(this._Imagery);
         }
         else {
             this._Imagery = this.dataService.get_Imagery();
@@ -1567,7 +1568,7 @@ var SettingComponent = /** @class */ (function (_super) {
                             }
                         }
                         else {
-                            entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);
+                            entity.polygon.material = Cesium.Color.DARKGREY;
                         }
                         if (_ExtrudeKey !== "None") {
                             if (_HeightChart === false) {
@@ -1612,7 +1613,7 @@ var SettingComponent = /** @class */ (function (_super) {
                         }
                     }
                     else {
-                        entity.polyline.material = Cesium.Color.GOLD.withAlpha(0.8);
+                        entity.polyline.material = Cesium.Color.DARKGREY;
                     }
                 }
             }
@@ -2416,7 +2417,7 @@ var ViewerComponent = /** @class */ (function (_super) {
                     }
                 }
                 else {
-                    entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);
+                    entity.polygon.material = Cesium.Color.DARKGREY;
                 }
             }
         }
