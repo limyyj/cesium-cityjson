@@ -50,16 +50,12 @@ export class ViewerComponent extends DataSubscriber {
       showRenderLoopErrors: false,
       orderIndependentTranslucency: false,
       baseLayerPicker: false,
-      //timeline: false,
       fullscreenButton:false,
-      // automaticallyTrackDataSourceClocks:false,
+      automaticallyTrackDataSourceClocks:false,
       animation:false,
       shadows:true,
       //terrainShadows: Cesium.ShadowMode.ENABLED
     });
-    //viewer.scene.globe.depthTestAgainstTerrain = true;
-    //viewer.scene.globe.castShadows = true;
-    //viewer.scene.globe.enableLighting =  true;
     viewer.scene.imageryLayers.removeAll();
     viewer.scene.globe.baseColor = Cesium.Color.GRAY;
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();

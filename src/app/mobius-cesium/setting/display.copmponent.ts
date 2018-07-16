@@ -24,7 +24,7 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
   }
   public ngOnInit() {
     this.data = this.dataService.getGsModel();
-    this._ImageryList = ["None","Stamen Toner","Stamen Toner(Lite)","Terrain(Standard)","Terrain(Background)",
+    this._ImageryList = ["Disable","Stamen Toner","Stamen Toner(Lite)","Terrain(Standard)","Terrain(Background)",
                          "OpenStreetMap","Earth at Night","Natural Earth\u00a0II","Blue Marble"];
     
     if(this._Imagery === undefined){
@@ -112,6 +112,7 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
       viewer.scene.globe.enableLighting =  false;
       viewer.scene.sun.show = false;
     }
+    this.dataService.set_Sun(this._Sun);
   }
   public changeShadow(){
     this._Shadow = ! this._Shadow;
@@ -131,7 +132,7 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
         }
       });
     }
-    this.dataService.set_Imagery(this._Shadow);
+    this.dataService.set_Shadow(this._Shadow);
   }
   public changeDate(Date){
     this._Date = Date;
