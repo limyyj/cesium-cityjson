@@ -15,6 +15,7 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
   private mode: string;
   private _ImageryList: any[];
   private _Imagery: string;
+  private _Sun: boolean;
   private _Shadow: boolean;
   private _Date: string;
 
@@ -25,9 +26,21 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
     this.data = this.dataService.getGsModel();
     this._ImageryList = ["None","Stamen Toner","Stamen Toner(Lite)","Terrain(Standard)","Terrain(Background)",
                          "OpenStreetMap","Earth at Night","Natural Earth\u00a0II","Blue Marble"];
+    
     if(this._Imagery === undefined){
       this._Imagery = this._ImageryList[0];
     }else {this._Imagery =this.dataService.get_Imagery();}
+
+    if(this._Sun === undefined){
+      this._Sun = false;
+      this.dataService.set_Sun(this._Sun);
+    }else {this._Sun =this.dataService.get_Sun();}
+
+    if(this._Shadow === undefined){
+      this._Shadow = false;
+      this.dataService.set_Shadow(this._Shadow);
+    }else {this._Shadow =this.dataService.get_Shadow();}
+
     if(this._Date ===undefined){
       const today = new Date();
       const year = today.getFullYear();
@@ -38,7 +51,6 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
       this._Date = this.dataService.get_Date();
       this.changeDate(this._Date);
     }
-    
     this.dataService.set_Date(this._Date);
   }
   public  notify(message: string): void {
@@ -86,6 +98,19 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
     }else if(_Imagery === this._ImageryList[8]){
       layers.removeAll();
       var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3845 }));
+    }
+  }
+  public changeSun(){
+    const viewer = this.dataService.getViewer();
+    this._Sun = ! this._Sun;
+    if(this._Sun === true){
+      viewer.terrainShadows = Cesium.ShadowMode.ENABLED;
+      viewer.scene.globe.enableLighting =  true;
+      viewer.scene.sun.show = true;
+    } else {
+      viewer.terrainShadows = undefined;
+      viewer.scene.globe.enableLighting =  false;
+      viewer.scene.sun.show = false;
     }
   }
   public changeShadow(){

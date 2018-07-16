@@ -11,12 +11,17 @@
     </table>
     <hr>
     <table>
+      <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Sun</div></th>
+      <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_Sun" (click)="changeSun()"></div></th></tr>
+    </table>
+    <table>
       <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Shadows</div></th>
       <th style="width:80px;height: 25px;"><div style="width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;"><input type="checkbox" [checked]="_Shadow" (click)="changeShadow()"></div></th></tr>
     </table>
     <table>
       <tr ><th style="width:80px;height: 25px;"><div style="width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;">Date</div></th>
       <th style="width:80px;height: 18px;"><input type="text"  value={{_Date}} style="width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left" (change)="changeDate($event.target.value)"></th></tr>  
-     </table>
+    </table>
+    
 </div>
   

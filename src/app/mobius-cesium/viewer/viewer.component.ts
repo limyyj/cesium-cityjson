@@ -55,29 +55,19 @@ export class ViewerComponent extends DataSubscriber {
       // automaticallyTrackDataSourceClocks:false,
       animation:false,
       shadows:true,
-      terrainShadows: Cesium.ShadowMode.ENABLED
+      //terrainShadows: Cesium.ShadowMode.ENABLED
     });
     //viewer.scene.globe.depthTestAgainstTerrain = true;
     //viewer.scene.globe.castShadows = true;
-    viewer.scene.globe.enableLighting =  true;
+    //viewer.scene.globe.enableLighting =  true;
     viewer.scene.imageryLayers.removeAll();
     viewer.scene.globe.baseColor = Cesium.Color.GRAY;
-    //viewer.clock.currentTime = new Cesium.JulianDate.fromIso8601("2013-12-25");
-    //viewer.clock.currentTime = new Cesium.JulianDate.now();
-    //viewer.clock.currentTime =  Cesium.JulianDate.fromIso8601("2013-12-25");
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
     const self = this;
     viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
         e.cancel = true;
         viewer.zoomTo(self.dataService.getcesiumpromise());
     });
-    /*var clock = new Cesium.Clock({
-      startTime : Cesium.JulianDate.fromIso8601("2013-12-25"),
-      currentTime : Cesium.JulianDate.fromIso8601("2013-12-25"),
-      stopTime : Cesium.JulianDate.fromIso8601("2013-12-26"),
-      clockRange : Cesium.ClockRange.LOOP_STOP,
-      clockStep : Cesium.ClockStep.SYSTEM_CLOCK_MULTIPLIER
-    });*/
     this.dataService.setViewer(viewer);
   }
 

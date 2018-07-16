@@ -18,6 +18,7 @@ export class DataService {
   private _index: number;
   private _Filter: any[];
   private _Imagery: string;
+  private _Sun: boolean;
   private _Shadow: boolean;
   private _Date: string;
 
@@ -89,6 +90,12 @@ export class DataService {
   }
   public set_index(_index): void {
     this._index = _index;
+  }
+  public set_Sun(_Sun): void{
+    this._Sun = _Sun;
+  }
+  public get_Sun(): boolean{
+    return this._Sun;
   }
   public set_Shadow(_Shadow): void{
     this._Shadow = _Shadow;
