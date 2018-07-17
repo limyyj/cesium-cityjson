@@ -21,6 +21,7 @@ export class DataService {
   private _Sun: boolean;
   private _Shadow: boolean;
   private _Date: string;
+  private _UTC: number;
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -108,6 +109,12 @@ export class DataService {
   }
   public get_Date(): string{
     return this._Date;
+  }
+  public set_UTC(_UTC): void{
+    this._UTC = _UTC;
+  }
+  public get_UTC(): number{
+    return this._UTC;
   }
   /*public set_imageryViewModels() :void{
     this._imageryViewModels.push(new Cesium.ProviderViewModel({
