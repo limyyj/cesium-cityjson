@@ -617,7 +617,14 @@ var DataService = /** @class */ (function () {
             return 1;
         }
     };
-    DataService.prototype.triangulatePoly = function (boundaries, all_vertices, dataSource, color) {
+    DataService.prototype.transformTemplate = function (coord, transform) {
+        var pt = Cesium.Cartesian3.fromArray(coord);
+        var t = Cesium.Matrix4.multiplyByPoint(transform.temp_matrix, pt, new Cesium.Cartesian3());
+        var coord2 = [(t["x"] + transform.refpt[0]), (t["y"] + transform.refpt[1]), (t["z"] + transform.refpt[2])];
+        return coord2;
+    };
+    DataService.prototype.triangulatePoly = function (boundaries, all_vertices, epsg, transform, dataSource, color) {
+        var _this = this;
         // console.log(boundaries);
         // parent entity to contain triangulated polygons
         var temp_parent = dataSource.entities.add(new Cesium.Entity());
@@ -650,14 +657,22 @@ var DataService = /** @class */ (function () {
         var tri_index = __WEBPACK_IMPORTED_MODULE_3_earcut__(vertices, holes);
         var _loop_1 = function (p) {
             var points = [];
+            //get coordinates for each point
             [tri_index[p], tri_index[p + 1], tri_index[p + 2]].forEach(function (j) {
                 var coord = [undefined, undefined, undefined];
                 coord[other_axis] = other_coords[j];
                 coord[axis] = vertices[j * 2];
                 coord[2] = vertices[(j * 2) + 1];
-                points.push.apply(points, coord);
+                // if object is a geometry instance, multiply by transformation matrix and add reference point
+                if (transform.refpt !== undefined) {
+                    coord = _this.transformTemplate(coord, transform);
+                }
+                // project to wgs84
+                var pt3 = _this.projectPtsToWGS84(coord, epsg);
+                points.push.apply(points, pt3);
             });
             // console.log(points);
+            // create and add polygon
             var poly = dataSource.entities.add({
                 parent: temp_parent,
                 // name : name,
@@ -677,12 +692,21 @@ var DataService = /** @class */ (function () {
         }
         return temp_parent;
     };
-    DataService.prototype.cesiumPoly = function (boundaries, vertices, dataSource, colour) {
+    DataService.prototype.cesiumPoly = function (boundaries, vertices, epsg, transform, dataSource, colour) {
+        var _this = this;
         var temp_parent = dataSource.entities.add(new Cesium.Entity());
         var extRing = boundaries[0];
         var extRing_points = [];
         extRing.forEach(function (pt_index) {
-            extRing_points.push(vertices[pt_index][0], vertices[pt_index][1], vertices[pt_index][2]);
+            var coord = vertices[pt_index];
+            // if object is a geometry instance, multiply by transformation matrix and add reference point
+            if (transform.refpt !== undefined) {
+                coord = _this.transformTemplate(coord, transform);
+            }
+            // project to wgs84
+            var pt3 = _this.projectPtsToWGS84(coord, epsg);
+            // console.log (coord,pt3)
+            extRing_points.push.apply(extRing_points, pt3);
         });
         // console.log(extRing_points);
         var ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
@@ -693,7 +717,14 @@ var DataService = /** @class */ (function () {
             var _loop_2 = function (ring_index) {
                 var temp_pts = [];
                 boundaries[ring_index].forEach(function (pt_index) {
-                    temp_pts.push(vertices[pt_index][0], vertices[pt_index][1], vertices[pt_index][2]);
+                    var coord = vertices[pt_index];
+                    // if object is a geometry instance, multiply by transformation matrix and add reference point
+                    if (transform.refpt !== undefined) {
+                        coord = _this.transformTemplate(coord, transform);
+                    }
+                    // project to wgs84
+                    var pt3 = _this.projectPtsToWGS84(coord, epsg);
+                    temp_pts.push.apply(temp_pts, pt3);
                 });
                 // console.log(temp_pts);
                 int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
@@ -704,37 +735,59 @@ var DataService = /** @class */ (function () {
             }
             // Create p_hierarchy with holes (as array of p_hierarchies)
             p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
-            // Create polygon
-            var poly = dataSource.entities.add({
-                parent: temp_parent,
-                // name : city_object_keys[obj_index],
-                polygon: {
-                    hierarchy: p_hierarchy,
-                    perPositionHeight: true,
-                    material: colour,
-                    outline: false,
-                },
-            });
         }
+        // console.log(p_hierarchy);
+        // Create polygon
+        var poly = dataSource.entities.add({
+            parent: temp_parent,
+            // name : city_object_keys[obj_index],
+            polygon: {
+                hierarchy: p_hierarchy,
+                perPositionHeight: true,
+                material: colour,
+                outline: false,
+            },
+        });
+        // console.log(poly);
         return temp_parent;
     };
+    // public templatePoly(geom,templates,vertices,dataSource,proj_epsg) {
+    //   const boundaries = templates[geom.template];
+    //   // const refpt = vertices[geom.boundaries[0]];
+    //   const matrix = Cesium.Matrix4.fromArray(geom.transformationMatrix);
+    //   console.log(boundaries);
+    //   for (let srf_index = 0 ; srf_index < 1; srf_index ++) {
+    //   // for (let srf_index = 0 ; srf_index < boundaries.length ; srf_index ++) {
+    //   //   const points = [];
+    //   //   boundaries[srf_index].forEach((pt_index) => {
+    //   //     const p = new Cesium.Cartesian3(temp_vertices[pt_index]);
+    //   //     const coords = Cesium.Matrix4.multiplyByPoint(matrix,p,new Cesium.Cartesian3());
+    //   //     console.log(p,coords);
+    //   //   });
+    //   }
+    // }
     DataService.prototype.genCityJSONGeom = function (file) {
-        var _this = this;
         // Initialise arrays to contain primitives to display in viewer
         var inst_Filled = [];
         var inst_Outline = [];
         var dataSource = new Cesium.CustomDataSource();
         if (file !== undefined) {
             // TODO: Initialise epsg projector (proj4js) link to Spatial References
-            var proj1 = "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs";
-            var WGS84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees";
-            var proj_epsg_1 = Object(__WEBPACK_IMPORTED_MODULE_2_proj4__["a" /* default */])(proj1, WGS84).forward;
+            var epsg = {
+                31467: "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs",
+                28992: "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs",
+                3414: "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs",
+            };
+            // Check file metadata for epsg code
+            // console.log(file["metadata"]["crs"]["epsg"]);
+            // console.log(epsg[file["metadata"]["crs"]["epsg"]]);
+            var proj_epsg = Object(__WEBPACK_IMPORTED_MODULE_2_proj4__["a" /* default */])(epsg[file["metadata"]["crs"]["epsg"]], "WGS84").forward;
             // Pull out array of vertices and project to WGS84
-            var vertices_1 = [];
-            file["vertices"].forEach(function (point) {
-                var coords = _this.projectPtsToWGS84(point, proj_epsg_1);
-                vertices_1.push(coords);
-            });
+            var vertices_1 = file["vertices"];
+            // file["vertices"].forEach((point) => {
+            //   const coords = this.projectPtsToWGS84(point,proj_epsg);
+            //   vertices.push(coords);
+            // });
             // Pull out array of material definitions and create cesium materials
             var materials_1 = [];
             if (file["appearance"]["materials"] !== undefined) {
@@ -745,19 +798,54 @@ var DataService = /** @class */ (function () {
                     var _a;
                 });
             }
+            // Pull out array of template boundaries and vertices
+            var templates_1 = [];
+            var temp_vertices = [];
+            if (file["geometry-templates"] !== undefined) {
+                if (file["geometry-templates"]["templates"] !== undefined) {
+                    file["geometry-templates"]["templates"].forEach(function (temp) {
+                        templates_1.push(temp.boundaries);
+                    });
+                }
+                if (file["geometry-templates"]["vertices-templates"] !== undefined) {
+                    // file["geometry-templates"]["vertices-templates"].forEach((point) => {
+                    //   const coords = this.projectPtsToWGS84(point,proj_epsg);
+                    //   temp_vertices.push(coords);
+                    // });
+                    temp_vertices = file["geometry-templates"]["vertices-templates"];
+                }
+            }
             // Loop through CityObjects and search for type "Building"
             var city_object_keys = Object.keys(file["CityObjects"]);
+            // for (let obj_index = 1 ; obj_index < 2 ; obj_index ++) {
             for (var obj_index = 0; obj_index < city_object_keys.length; obj_index++) {
                 var obj = file["CityObjects"][city_object_keys[obj_index]];
+                // Get opbject type
+                var cityobj_type = obj.type;
                 // if (obj.type === "Building") {
                 if (1) {
-                    // Create parent dummy entity
-                    // const temp_parent = dataSource.entities.add(new Cesium.Entity());
                     // Loop through geometry
+                    // for (let geom_index = 1 ; geom_index < 2 ; geom_index++) {
                     for (var geom_index = 0; geom_index < obj["geometry"].length; geom_index++) {
                         var geom = obj["geometry"][geom_index];
                         if (geom == undefined) {
                             continue;
+                        }
+                        // Set values for poly generation
+                        var poly_vertices = vertices_1;
+                        var boundaries = geom["boundaries"];
+                        var transform = { temp_matrix: undefined, refpt: undefined, epsg: undefined };
+                        // Check geometry type
+                        var geom_type = geom.type;
+                        if (geom_type === "GeometryInstance") {
+                            // console.log(obj_index,geom_index,"Instance!");
+                            poly_vertices = temp_vertices;
+                            boundaries = templates_1[geom.template];
+                            transform.temp_matrix = Cesium.Matrix4.fromArray(geom.transformationMatrix);
+                            transform.refpt = vertices_1[geom.boundaries[0]];
+                            transform.epsg = proj_epsg;
+                            // console.log(transform);
+                            // this.templatePoly(geom,templates,temp_vertices,dataSource,proj_epsg);
                         }
                         // Pull out array of semantics values & surfaces
                         var values = undefined;
@@ -770,11 +858,6 @@ var DataService = /** @class */ (function () {
                         var mats = undefined;
                         if (geom["material"] !== undefined) {
                             mats = geom["material"][""]["values"];
-                        }
-                        // Extract vertices
-                        var boundaries = geom["boundaries"];
-                        if (boundaries === undefined) {
-                            continue;
                         }
                         var _loop_3 = function (srf_index) {
                             // for (let srf_index = 52 ; srf_index < 53 ; srf_index ++) {
@@ -813,19 +896,24 @@ var DataService = /** @class */ (function () {
                                 z.push(vertices_1[coords][2]);
                             });
                             if (this_1.maxDiff(z) === 0) {
-                                console.log("Horizontal!");
+                                // console.log("Horizontal!");
                                 // horizontal, use Cesium's stuff
-                                var poly = this_1.cesiumPoly(boundaries[srf_index], vertices_1, dataSource, colour);
+                                var poly = this_1.cesiumPoly(boundaries[srf_index], poly_vertices, proj_epsg, transform, dataSource, colour);
                                 poly["properties"] = property_bag;
                                 // console.log(srf_index,poly);
                             }
                             else {
-                                var poly = this_1.triangulatePoly(boundaries[srf_index], vertices_1, dataSource, colour);
+                                var poly = this_1.triangulatePoly(boundaries[srf_index], poly_vertices, proj_epsg, transform, dataSource, colour);
                                 poly["properties"] = property_bag;
                                 // console.log(srf_index,poly);
                             }
                         };
                         var this_1 = this;
+                        // // Extract vertices
+                        // const boundaries = geom["boundaries"];
+                        // if (boundaries === undefined) {
+                        //   continue;
+                        // }
                         for (var srf_index = 0; srf_index < boundaries.length; srf_index++) {
                             _loop_3(srf_index);
                         }
@@ -2306,7 +2394,7 @@ var ViewerComponent = /** @class */ (function (_super) {
             // console.log("Triggered revert colour", this.selectEntity.polygon.material);
         }
         if (viewer.selectedEntity !== undefined && viewer.selectedEntity.polygon !== null) {
-            console.log(viewer.selectedEntity);
+            // console.log(viewer.selectedEntity);
             this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
             this.selectEntity = viewer.selectedEntity._parent;
             this.material = [];

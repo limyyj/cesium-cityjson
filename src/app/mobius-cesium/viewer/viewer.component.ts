@@ -182,7 +182,7 @@ export class ViewerComponent extends DataSubscriber {
       // console.log("Triggered revert colour", this.selectEntity.polygon.material);
     }
     if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
-      console.log(viewer.selectedEntity);
+      // console.log(viewer.selectedEntity);
       this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
       this.selectEntity = viewer.selectedEntity._parent;
       this.material = [];
