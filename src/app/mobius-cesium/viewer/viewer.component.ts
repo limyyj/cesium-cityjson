@@ -54,6 +54,7 @@ export class ViewerComponent extends DataSubscriber {
       automaticallyTrackDataSourceClocks:false,
       animation:false,
       shadows:true,
+      scene3DOnly:true,
       //terrainShadows: Cesium.ShadowMode.ENABLED
     });
     viewer.scene.imageryLayers.removeAll();
