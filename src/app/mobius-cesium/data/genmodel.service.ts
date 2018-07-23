@@ -10,7 +10,7 @@ export class GenModelService {
   private subject = new Subject<any>();
   private file: JSON;
   private epsg: string;
-  private dataSource: any;
+  private scene: any;
   private vertices: any;
   private materials: any;
   private templates: any;
@@ -18,7 +18,7 @@ export class GenModelService {
   private srftype_ids: any;
   private scale: number[];
   private translate: number[];
-  // private cart_matrix: any;
+  private bound: any;
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -71,8 +71,8 @@ export class GenModelService {
     return this.srftype_ids;
   }
 
-  public setEPSG(file): void {
-    if (file["metadata"]["crs"] === undefined || file["metadata"]["crs"]["epsg"] === undefined) {
+  public setEPSG(metadata): void {
+    if (metadata["crs"] === undefined || metadata["crs"]["epsg"] === undefined) {
       // this.epsg = "+proj=tmerc +lat_0=1.344564 +lon_0=103.858189 +k=1 +x_0=-1500 +y_0=-1500 +ellps=WGS84 +units=m +no_defs";
       this.epsg = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs"
       // this.epsg = "+proj=tmerc +lat_0=0 +lon_0=0 +k=1 +ellps=WGS84 +units=m +no_defs";
@@ -89,33 +89,33 @@ export class GenModelService {
       28992 : "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs",
       3414 : "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs",
     };
-    this.epsg = epsg[file["metadata"]["crs"]["epsg"]];
+    this.epsg = epsg[metadata["crs"]["epsg"]];
     }
     if (this.epsg === undefined) {
       this.epsg = "WGS84";
     }
   }
 
-  public setDataSource(dataSource: any): void {
-    this.dataSource = dataSource;
+  public setScene(scene: any): void {
+    this.scene = scene;
   }
 
-  public getDataSource(): any {
-    return this.dataSource;
+  public getScene(): any {
+    return this.scene;
   }
 
-  public setVertices(file: any): void {
-    if (file["vertices"] !== undefined) {
-      this.vertices = file["vertices"];
+  public setVertices(vertices: any): void {
+    if (vertices !== undefined) {
+      this.vertices = vertices;
     }
   }
 
-  public setMaterials(file: any): void {
+  public setMaterials(appearance: any): void {
     const materials = [];
-    if (file["appearance"] === undefined || file["appearance"]["materials"] == undefined) {
+    if (appearance === undefined || appearance["materials"] == undefined) {
        this.materials = undefined;
     } else {
-        file["appearance"]["materials"].forEach((mat) => {
+        appearance["materials"].forEach((mat) => {
         const color = mat["diffuseColor"];
         color.push(mat["transparency"]);
         materials.push(new Cesium.Color(...color));
@@ -124,14 +124,14 @@ export class GenModelService {
     }
   }
 
-  public setTemplates(file: any): void {
+  public setTemplates(geometry_templates: any): void {
     // Pull out array of template boundaries and vertices
-    if (file["geometry-templates"] === undefined) {
+    if (geometry_templates === undefined) {
       this.templates = undefined
     } else {
       const templates = [];
-      if (file["geometry-templates"]["templates"] !== undefined) {
-        file["geometry-templates"]["templates"].forEach((temp) => {
+      if (geometry_templates["templates"] !== undefined) {
+        geometry_templates["templates"].forEach((temp) => {
           if (temp.lod < 3) {
             templates.push(undefined);
           } else {
@@ -139,23 +139,43 @@ export class GenModelService {
           }
         });
       }
-      if (file["geometry-templates"]["vertices-templates"] !== undefined) {
-        this.template_vertices = file["geometry-templates"]["vertices-templates"];
+      if (geometry_templates["vertices-templates"] !== undefined) {
+        this.template_vertices = geometry_templates["vertices-templates"];
       }
       this.templates = templates;
     }
     
   }
 
-  public setTransform(file: any): void {
-    if (file["transform"] !== undefined) {
-      this.scale = file["transform"].scale;
-      this.translate = file["transform"].translate;
+  public setTransform(transform: any): void {
+    if (transform !== undefined) {
+      this.scale = transform.scale;
+      this.translate = transform.translate;
     } else {
       this.scale = undefined;
       this.translate = undefined;
     }
     // console.log(this.scale);
+  }
+
+  public setBound(metadata: any): void {
+    if (metadata !== undefined && metadata["bbox"] !== undefined) {
+      const coord = metadata["bbox"];
+      let pt1 = [coord[0],coord[1],coord[2]];
+      let pt2 = [coord[3],coord[4],coord[5]];
+      if (this.translate !== undefined) {
+        pt1 = this.transformCityJSON([coord[0],coord[1],coord[2]]);
+        pt2 = this.transformCityJSON([coord[3],coord[4],coord[5]]);
+      }
+     
+      pt1 = new Cesium.Cartesian3(pt1);
+      pt2 = new Cesium.Cartesian3(pt2);
+      this.bound = Cesium.BoundingSphere.fromPoints([pt1,pt2]);
+    }
+  }
+
+  public getBound() {
+    return this.bound;
   }
 
   public projectPtsToWGS84(coords): number[] {
@@ -164,21 +184,6 @@ export class GenModelService {
     const newcoords = [projcoords[0],projcoords[1],coords[2]];
     return newcoords;
   }
-
-  // public setCartMatrix(angle,origin): void {
-  //   var hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(angle), 0, 0);
-  //   var mat = Cesium.Transforms.headingPitchRollToFixedFrame(origin, hpr);
-  //   this.cart_matrix = mat;
-  // }
-
-  // public projectPtsToCartographic(coord): number[]{
-  //   const pt = Cesium.Cartesian3.fromArray(coord);
-  //   const t = Cesium.Matrix3.multiplyByPoint(this.cart_matrix,pt,new Cesium.Cartesian3());
-  //   coord = [t["x"],t["y"],t["z"]];
-  //   // console.log(coord,transform,coord2);
-  //   const coord2 = [(coord[0]/10000),(coord[1]/10000),(coord[2]/10000)];
-  //   return coord2;
-  // }
 
   public maxDiff(values): number {
     let maxval = values[0];
@@ -234,8 +239,8 @@ export class GenModelService {
     if (vertex_arr === 1) {
       vertices = this.template_vertices;
     }
-    // parent entity to contain triangulated polygons
-    const temp_parent = this.dataSource.entities.add(new Cesium.Entity());
+    // arr to contain triangulated polygons
+    const polys = [];
 
     // determine axis
     const axis = this.determineAxis(boundaries[0]);
@@ -296,113 +301,122 @@ export class GenModelService {
         points.push(...coord);
       });
       // console.log(points);
-      // create and add polygon
-      const poly = this.dataSource.entities.add({
-        parent : temp_parent,
-        // name : name,
-        polygon : {
-          hierarchy : new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(points)),
-          perPositionHeight : true,
-          material : color,
-          outline : false,
-          // shadows: Cesium.ShadowMode.ENABLED
-          // outlineColor : Cesium.Color.BLACK,
-        },
+      // create poly and push to arr
+      const poly = new Cesium.PolygonGeometry({
+        polygonHierarchy: Cesium.Cartesian3.fromDegreesArrayHeights(points),
+        perPositionHeight: true,
       });
       // console.log(poly);
+      polys.push(poly);
     }
-    return temp_parent;
+
+    // check if template and set allowPicking
+    let pick = true;
+    if (transform.refpt !== undefined) {
+      pick = false;
+    }
+
+    // create primitive and add to scene
+    const primitive = new Cesium.Primitive({
+      geometryInstances: polys,
+      allowPicking: pick,
+      appearance: new Cesium.Appearance({material: color})
+    });
+    // console.log(primitive);
+    // this.scene.primitives.add(primitive);
+    // console.log(this.scene);
+    return primitive;
   }
 
-  public cesiumPoly(boundaries,vertex_arr,transform,colour): any {
-    let vertices = this.vertices;
-    if (vertex_arr === 1) {
-      vertices = this.template_vertices;
-    }
+  // public cesiumPoly(boundaries,vertex_arr,transform,colour): any {
+  //   let vertices = this.vertices;
+  //   if (vertex_arr === 1) {
+  //     vertices = this.template_vertices;
+  //   }
 
-    const temp_parent = this.dataSource.entities.add(new Cesium.Entity());
+  //   const temp_parent = this.dataSource.entities.add(new Cesium.Entity());
 
-    const extRing = boundaries[0];
-    const extRing_points = [];
+  //   const extRing = boundaries[0];
+  //   const extRing_points = [];
 
-    extRing.forEach((pt_index) => {
-      let coord = vertices[pt_index];
+  //   extRing.forEach((pt_index) => {
+  //     let coord = vertices[pt_index];
 
-      // if object is a geometry instance, multiply by transformation matrix and add reference point
-      if (transform.refpt !== undefined) {
-        coord = this.transformTemplate(coord,transform);
-      }
-      // transform coordinates if transform specification exists in file
-      if (this.scale !== undefined) {
-        coord = this.transformCityJSON(coord);
-      }
-      // project to wgs84
-      const pt3 = this.projectPtsToWGS84(coord);
-      // console.log (coord,pt3)
-      extRing_points.push(...pt3);
-    });
+  //     // if object is a geometry instance, multiply by transformation matrix and add reference point
+  //     if (transform.refpt !== undefined) {
+  //       coord = this.transformTemplate(coord,transform);
+  //     }
+  //     // transform coordinates if transform specification exists in file
+  //     if (this.scale !== undefined) {
+  //       coord = this.transformCityJSON(coord);
+  //     }
+  //     // project to wgs84
+  //     const pt3 = this.projectPtsToWGS84(coord);
+  //     // console.log (coord,pt3)
+  //     extRing_points.push(...pt3);
+  //   });
 
-    // console.log(extRing_points);
-    const ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
-    let p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
+  //   // console.log(extRing_points);
+  //   const ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
+  //   let p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
 
-    // If boundaries contain inner rings for holes, create p_hierarchy with holes
-    const int_cartesian3 = [];
-    if (boundaries.length > 0) {
-      // Create p_hierarchy for each hole and push to int_cartesian3
-      for (let ring_index = 1 ; ring_index < boundaries.length ; ring_index++) {
-        const temp_pts = [];
-        boundaries[ring_index].forEach((pt_index) => {
-          let coord = vertices[pt_index];
+  //   // If boundaries contain inner rings for holes, create p_hierarchy with holes
+  //   const int_cartesian3 = [];
+  //   if (boundaries.length > 0) {
+  //     // Create p_hierarchy for each hole and push to int_cartesian3
+  //     for (let ring_index = 1 ; ring_index < boundaries.length ; ring_index++) {
+  //       const temp_pts = [];
+  //       boundaries[ring_index].forEach((pt_index) => {
+  //         let coord = vertices[pt_index];
           
-          // if object is a geometry instance, multiply by transformation matrix and add reference point
-          if (transform.refpt !== undefined) {
-            coord = this.transformTemplate(coord,transform);
-          }
-          // transform coordinates if transform specification exists in file
-          if (this.scale !== undefined) {
-            coord = this.transformCityJSON(coord);
-          }
-          // project to wgs84
-          const pt3 = this.projectPtsToWGS84(coord);
-          temp_pts.push(...pt3);
-        });
-        // console.log(temp_pts);
-        int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
-      }
-      // Create p_hierarchy with holes (as array of p_hierarchies)
-      p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
-    }
-    // console.log(p_hierarchy);
-    // Create polygon
-    const poly = this.dataSource.entities.add({
-      parent : temp_parent,
-      // name : city_object_keys[obj_index],
-      polygon : {
-        hierarchy : p_hierarchy,
-        perPositionHeight : true,
-        material : colour,
-        outline : false,
-        // shadows: Cesium.ShadowMode.ENABLED
-        //outlineColor : Cesium.Color.BLACK,
-      },
-    });
-    // console.log(poly);
-    return temp_parent;
-  }
+  //         // if object is a geometry instance, multiply by transformation matrix and add reference point
+  //         if (transform.refpt !== undefined) {
+  //           coord = this.transformTemplate(coord,transform);
+  //         }
+  //         // transform coordinates if transform specification exists in file
+  //         if (this.scale !== undefined) {
+  //           coord = this.transformCityJSON(coord);
+  //         }
+  //         // project to wgs84
+  //         const pt3 = this.projectPtsToWGS84(coord);
+  //         temp_pts.push(...pt3);
+  //       });
+  //       // console.log(temp_pts);
+  //       int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
+  //     }
+  //     // Create p_hierarchy with holes (as array of p_hierarchies)
+  //     p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
+  //   }
+  //   // console.log(p_hierarchy);
+  //   // Create polygon
+  //   const poly = this.dataSource.entities.add({
+  //     parent : temp_parent,
+  //     // name : city_object_keys[obj_index],
+  //     polygon : {
+  //       hierarchy : p_hierarchy,
+  //       perPositionHeight : true,
+  //       material : colour,
+  //       outline : false,
+  //       // shadows: Cesium.ShadowMode.ENABLED
+  //       //outlineColor : Cesium.Color.BLACK,
+  //     },
+  //   });
+  //   // console.log(poly);
+  //   return temp_parent;
+  // }
 
-  public genCityJSONGeom(file: JSON): object {
+  public genCityJSONGeom(file: JSON): any {
     // Initialise dataSource and surface type ID arrays
-    this.setDataSource(new Cesium.CustomDataSource());
+    // this.setScene(scene);
     this.initialiseSrftypeIds();
-    const dataSource = this.dataSource;
+    const arr = [];
 
     if (file !== undefined) {
-      this.setEPSG(file);
-      this.setVertices(file);
-      this.setMaterials(file);
-      this.setTemplates(file);
-      this.setTransform(file);
+      this.setEPSG(file["metadata"]);
+      this.setVertices(file["vertices"]);
+      this.setMaterials(file["appearance"]);
+      this.setTemplates(file["geometry-templates"]);
+      this.setTransform(file["transform"]);
 
       // Loop through CityObjects
       const city_object_keys = Object.keys(file["CityObjects"]);
@@ -415,6 +429,7 @@ export class GenModelService {
 
         // Loop through geometry (typically used for different LOD but not necessarily, may contain multiple)
         for (let geom_index = 0 ; geom_index < obj.geometry.length ; geom_index ++) {
+        // for (let geom_index = 52 ; geom_index < 53 ; geom_index ++) {
           const geom = obj.geometry[geom_index];
 
           if (geom == undefined) {
@@ -515,15 +530,16 @@ export class GenModelService {
             if (this.maxDiff(z) === 0) {
               // // horizontal, use Cesium's stuff
               // console.log("Horizontal")
-              const poly = this.cesiumPoly(boundaries[srf_index],vertex_arr,transform,colour);
-              poly.properties = property_bag;
-              // poly.show = false;
-              this.setSrftypeIds(surface_type,poly.id);
+              // const poly = this.cesiumPoly(boundaries[srf_index],vertex_arr,transform,colour);
+              // poly.properties = property_bag;
+              // // poly.show = false;
+              // this.setSrftypeIds(surface_type,poly.id);
             } else {
               const poly = this.triangulatePoly(boundaries[srf_index],vertex_arr,transform,colour);
-              poly.properties = property_bag;
+              arr.push(poly);
+              // poly.properties = property_bag;
               // poly.show = false;
-              this.setSrftypeIds(surface_type,poly.id);
+              // this.setSrftypeIds(surface_type,poly.id);
             }
           }
         }
@@ -532,7 +548,8 @@ export class GenModelService {
     }
     // console.log (this.srftype_ids);
     this.clearData();
-    return dataSource;
+    this.setBound(file["metadata"]);
+    return arr;
   }
 
 }

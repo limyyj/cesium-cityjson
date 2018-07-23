@@ -47,18 +47,18 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
   }
 
   public Show(event) {
-    const eventCheckbox = document.getElementById(event+"_check");
-    const ids = this.srftype_ids[event];
-    const entities = this.genModelService.getDataSource().entities;
-    if (eventCheckbox["checked"] === false) {
-      ids.forEach((id) => {
-        entities.getById(id).show = false;
-      });
-    } else {
-      ids.forEach((id) => {
-        entities.getById(id).show = true;
-      });
-    }
+    // const eventCheckbox = document.getElementById(event+"_check");
+    // const ids = this.srftype_ids[event];
+    // const entities = this.genModelService.getDataSource().entities;
+    // if (eventCheckbox["checked"] === false) {
+    //   ids.forEach((id) => {
+    //     entities.getById(id).show = false;
+    //   });
+    // } else {
+    //   ids.forEach((id) => {
+    //     entities.getById(id).show = true;
+    //   });
+    // }
   }
 
   // public Show(event) {

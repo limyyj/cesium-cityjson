@@ -89,9 +89,11 @@ export class ViewerComponent extends DataSubscriber {
 
       /////// OBTAINING DATA ////////
       this.data = data;
-      const dataSource = this.genModelService.genCityJSONGeom(this.data);
+      const primitives = this.genModelService.genCityJSONGeom(this.data);
+      viewer.scene.primitives.add(primitives);
+      const bound = this.genModelService.getBound();
       // const promise = Cesium.GeoJsonDataSource.load(this.data);
-      viewer.dataSources.add(dataSource);
+      // viewer.dataSources.add(dataSource);
       const _HeightKey: any[] = [];
 
       this._ShowColorBar = false;
@@ -99,9 +101,9 @@ export class ViewerComponent extends DataSubscriber {
       /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
         e.cancel = true;
-        viewer.zoomTo(dataSource);
+        viewer.camera.viewBoundingSphere(bound);
       });
-      viewer.zoomTo(dataSource);
+      viewer.camera.viewBoundingSphere(bound);
 // =======
 //       promise.then(function(dataSource) {
 //         const entities = dataSource.entities.values;
