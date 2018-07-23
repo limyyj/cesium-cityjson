@@ -34,17 +34,28 @@ export class ViewerComponent extends DataSubscriber {
 
   public ngOnInit() {
     this.mode = this.dataService.getmode();
-    /*if(this.mode === "editor") {
-      this.dataService.getValue(this.data);
-      this.dataService.LoadJSONData();
-      this.dataArr = this.dataService.get_ViData();
-      this._index = 1;
+    if(this.dataService.getViewer() === undefined){
+      this.CreateViewer();
     }
-    if(this.mode === "viewer") {
-      this.dataService.LoadJSONData();
-      this.dataArr = this.dataService.get_PuData();
-      this._index = 3;
-    }*/
+    this.data = this.dataService.getGsModel();
+    this.LoadData(this.data);
+  }
+
+  public notify(message: string): void {
+    if(message === "model_update" ) {
+      this.data = this.dataService.getGsModel();
+      try {
+        if(this.dataService.getViewer() === undefined){
+          this.CreateViewer();
+        }
+        this.LoadData(this.data);
+      }
+      catch(ex) {
+        console.log(ex);
+      }
+    }
+  }
+   public CreateViewer(){
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox: false,
       showRenderLoopErrors: false,
@@ -66,18 +77,6 @@ export class ViewerComponent extends DataSubscriber {
         viewer.zoomTo(self.dataService.getcesiumpromise());
     });
     this.dataService.setViewer(viewer);
-  }
-
-  public notify(message: string): void {
-    if(message === "model_update" ) {
-      this.data = this.dataService.getGsModel();
-      try {
-        this.LoadData(this.data);
-      }
-      catch(ex) {
-        console.log(ex);
-      }
-    }
   }
 
   public LoadData(data: JSON) {
