@@ -34,7 +34,7 @@ export class ViewerComponent extends DataSubscriber {
 
   public ngOnInit() {
     this.mode = this.dataService.getmode();
-    if(this.mode === "editor") {
+    /*if(this.mode === "editor") {
       this.dataService.getValue(this.data);
       this.dataService.LoadJSONData();
       this.dataArr = this.dataService.get_ViData();
@@ -44,7 +44,7 @@ export class ViewerComponent extends DataSubscriber {
       this.dataService.LoadJSONData();
       this.dataArr = this.dataService.get_PuData();
       this._index = 3;
-    }
+    }*/
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox: false,
       showRenderLoopErrors: false,
@@ -70,7 +70,6 @@ export class ViewerComponent extends DataSubscriber {
 
   public notify(message: string): void {
     if(message === "model_update" ) {
-
       this.data = this.dataService.getGsModel();
       try {
         this.LoadData(this.data);
