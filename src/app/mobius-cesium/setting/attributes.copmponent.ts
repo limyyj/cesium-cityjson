@@ -5,11 +5,11 @@ import {ViewerComponent} from "../viewer/viewer.component";
 import * as chroma from "chroma-js";
 
 @Component({
-  selector: "app-attributes",
+  selector: "app-select",
   templateUrl: "./attributes.component.html",
   styleUrls: ["./attributes.component.css"],
 })
-export class AttributesComponent extends DataSubscriber implements OnInit {
+export class SelectComponent extends DataSubscriber implements OnInit {
   private myElement;
   private data: JSON;
   private mode: string;
@@ -46,8 +46,15 @@ export class AttributesComponent extends DataSubscriber implements OnInit {
         for(const name of prop_names) {
           if(name !== "None") {
             _Property = [];
+            
             _Property.Name = name;
             _Property.Value = selected.properties[name]._value;
+
+            // _Property.Name = _ColorPro;
+            // if(this.dataService.get_SelectedEntity().properties[_Property.Name]!==undefined){
+            //   _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
+            // }else {_Property.Value = ' ';}
+
             this._Properties.push(_Property);
           }
         }

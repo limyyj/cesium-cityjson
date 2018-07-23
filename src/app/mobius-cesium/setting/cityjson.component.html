@@ -1,0 +1,14 @@
+<div id="CityJSONView" >
+  <div class="srftype-container" style="margin-top:5px;">
+    Show geometry with surface property:
+    <div *ngFor="let item of srftype_keys;" id={{item}}>
+  <table>
+    <tr ><th style="width:85px;height: 22px;"><div style="width:85px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item}}</div></th>
+    <th style="width:40px;height: 22px;"><div style="width:40px;height: 22px;">
+      </div></th>
+    <th style="width:20px;height: 25px;" id={{item}}><input type="checkbox" id={{item}}_check checked="checked" (click)="Show(item)" tyle="width:20px;height: 25px;cursor:pointer;"></th></tr>
+  </table>
+    </div>
+  </div>
+  </div>
+  

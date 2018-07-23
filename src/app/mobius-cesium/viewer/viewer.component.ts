@@ -30,7 +30,6 @@ export class ViewerComponent extends DataSubscriber {
   constructor(injector: Injector, myElement: ElementRef) {
     super(injector);
     this.myElement = myElement;
-    this.dataService.set_imageryViewModels();
   }
 
   public ngOnInit() {
@@ -39,26 +38,32 @@ export class ViewerComponent extends DataSubscriber {
       this.dataService.getValue(this.data);
       this.dataService.LoadJSONData();
       this.dataArr = this.dataService.get_ViData();
-      this._index = 0;
+      this._index = 1;
     }
     if(this.mode === "viewer") {
       this.dataService.LoadJSONData();
       this.dataArr = this.dataService.get_PuData();
-      this._index = 2;
+      this._index = 3;
     }
-    const imageryViewModels = this.dataService.get_imageryViewModels();
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox: false,
       showRenderLoopErrors: false,
       orderIndependentTranslucency: false,
-      imageryProviderViewModels : imageryViewModels,
-      selectedImageryProviderViewModel : imageryViewModels[0],
-      timeline: false,
+      baseLayerPicker: false,
       fullscreenButton:false,
       automaticallyTrackDataSourceClocks:false,
-      animation:false
+      animation:false,
+      shadows:true,
+      //terrainShadows: Cesium.ShadowMode.ENABLED
     });
+    viewer.scene.imageryLayers.removeAll();
+    viewer.scene.globe.baseColor = Cesium.Color.GRAY;
     document.getElementsByClassName("cesium-viewer-bottom")[0].remove();
+    const self = this;
+    viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
+        e.cancel = true;
+        viewer.zoomTo(self.dataService.getcesiumpromise());
+    });
     this.dataService.setViewer(viewer);
   }
 
@@ -79,13 +84,12 @@ export class ViewerComponent extends DataSubscriber {
     if(this.data !== undefined) {
       /////// INITIALISING VIEWER ////////
       const viewer = this.dataService.getViewer();
-      viewer.dataSources.removeAll();
-      viewer.scene.primitives.remove(this.dataService.getcesiumpromise());
-      const new_viewer = new Cesium.Viewer("cesiumContainer");
-      
-      /////// LOADING DATA ///////
+      viewer.dataSources.removeAll({destroy:true});
+      // console.log("cleared data", viewer);
+
+      /////// OBTAINING DATA ////////
       this.data = data;
-      const dataSource = this.dataService.genCityJSONGeom(this.data);
+      const dataSource = this.genModelService.genCityJSONGeom(this.data);
       // const promise = Cesium.GeoJsonDataSource.load(this.data);
       viewer.dataSources.add(dataSource);
       const _HeightKey: any[] = [];
@@ -98,6 +102,27 @@ export class ViewerComponent extends DataSubscriber {
         viewer.zoomTo(dataSource);
       });
       viewer.zoomTo(dataSource);
+// =======
+//       promise.then(function(dataSource) {
+//         const entities = dataSource.entities.values;
+//         const self = this;
+//         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
+//       });
+      
+//       this.dataService.setcesiumpromise(promise);
+//       if(this.mode === "editor") {
+//         this.dataService.getValue(this.data);
+//         this.dataService.LoadJSONData();
+//         this.dataArr = this.dataService.get_ViData();
+//         this._index = 1;
+//       }
+//       if(this.mode === "viewer") {
+//         this.dataService.LoadJSONData();
+//         this.dataArr = this.dataService.get_PuData();
+//         this._index = 3;
+//       }
+//       viewer.zoomTo(promise);
+// >>>>>>> upstream/master
       this.Colortext();
     }
   }
@@ -106,8 +131,8 @@ export class ViewerComponent extends DataSubscriber {
     if(this.dataArr !== undefined) {
       if(this._index !== this.dataService.get_index()) {
         this._index = this.dataService.get_index();
-        if(this._index === 0) {this.dataArr = this.dataService.get_ViData();
-        } else if(this._index === 2) {this.dataArr = this.dataService.get_PuData();}
+        if(this._index === 1) {this.dataArr = this.dataService.get_ViData();
+        } else if(this._index === 3) {this.dataArr = this.dataService.get_PuData();}
       }
       const propertyname = this.dataArr["ColorKey"];
       const texts = this.dataArr["ColorText"].sort();
@@ -201,8 +226,123 @@ export class ViewerComponent extends DataSubscriber {
       this.material = undefined;
       // console.log("Triggered set everything to undefined");
     }
-
   }
+
+//   public ColorSelect(entity) {
+//     const promise = this.dataService.getcesiumpromise();
+//     const _ColorKey: string = this.dataArr["ColorKey"];
+//     const _ColorMax: number = this.dataArr["ColorMax"];
+//     const _ColorMin: number = this.dataArr["ColorMin"];
+//     const _ColorText: any[] = this.dataArr["ColorText"];
+//     const _ColorInvert: boolean = this.dataArr["ColorInvert"];
+//     const _ExtrudeKey: string = this.dataArr["ExtrudeKey"];
+//     const _ExtrudeMax: number = this.dataArr["ExtrudeMax"];
+//     const _ExtrudeMin: number = this.dataArr["ExtrudeMin"];
+//     const _HeightChart: boolean = this.dataArr["HeightChart"];
+//     const _Invert: boolean = this.dataArr["Invert"];
+//     const _Scale: number = this.dataArr["Scale"];
+//     const _Filter: any[] = this.dataArr["Filter"];
+//     let _ChromaScale = chroma.scale("SPECTRAL");
+//     if(_ColorInvert === true) {_ChromaScale = chroma.scale("SPECTRAL").domain([1,0]);}
+//     let _CheckHide: boolean;
+//     if(entity.properties["TYPE"] === undefined||entity.properties["TYPE"]._value !== "STATIC"){
+//       if(_Filter.length !== 0) {
+//         _CheckHide = this.Hide(_Filter,entity,_HeightChart);
+//         if(_CheckHide === true) {
+//           if(entity.polygon !== undefined) {
+//             entity.polygon.extrudedHeight = 0;
+//             entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+//             if(_HeightChart === true) {
+//               if(entity.polyline !== undefined) {entity.polyline.show = false;}
+//             }
+//           }
+//           if(entity.polyline !== undefined)  {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//         }
+//       }
+//       if(_Filter.length === 0||_CheckHide === false) {
+//         if(_ColorKey !== "None") {
+//           if(typeof(_ColorText[0]) === "number") {
+//             this.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
+//           } else {this.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+//         } else {entity.polygon.material = Cesium.Color.DARKGREY;}
+//       }
+//     }else {
+//       entity.polygon.height =  entity.properties["HEIGHT"];
+//       entity.polygon.extrudedHeight = entity.properties["EXTRUHEIGHT"];
+//       const ColorValue = entity.properties["COLOR"]._value;
+//       entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
+//     }
+//   }
+
+//   public Hide(_Filter: any[], entity, _HeightChart: boolean): boolean {
+//     let _CheckHide: boolean=false;
+//     for(const filter of _Filter) {
+//       const value = entity.properties[filter.HeightHide]._value;
+//       if(value !== undefined) {
+//         if(typeof(value) === "number") {
+//           if (this._compare(value, Number(filter.textHide), Number(filter.RelaHide))) {
+//             _CheckHide = true;
+//           }
+//         } else if(typeof(value) === "string") {
+//           if (this._compareCat(value,filter.CategaryHide, Number(filter.RelaHide))) {
+//             _CheckHide = true;
+//           }
+//         }
+//       }
+//     }
+//     return _CheckHide;
+//   }
+
+//   public _compare(value: number, slider: number, relation: number): boolean {
+//     switch (relation) {
+//       case 0:
+//         return value < slider;
+//       case 1:
+//         return value > slider;
+//       case 2:
+//         return value !== slider;
+//     }
+//   }
+
+//   public _compareCat(value: string, _Categary: string,relation: number): boolean {
+//     switch (relation) {
+//       case 0:
+//         return value ===  undefined;
+//       case 1:
+//         return value !== _Categary;
+//       case 2:
+//         return value === _Categary;
+//     }
+//   }
+//   public colorByNum(entity, max: number, min: number, _ColorKey: string, _ChromaScale: any) {
+//     if(entity.properties[_ColorKey] !== undefined) {
+//       const texts = entity.properties[_ColorKey]._value;
+//       const rgb = _ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
+//       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
+//       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
+//     }else{
+//       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//     }
+
+  // public  colorByCat(entity, _ColorText: any[], _ColorKey: string, _ChromaScale: any) {
+  //   if(entity.properties[_ColorKey] !== undefined) {
+  //     let initial: boolean = false;
+  //     for(let j = 0;j<_ColorText.length; j++) {
+  //       if(entity.properties[_ColorKey]._value === _ColorText[j]) {
+  //         const rgb = _ChromaScale(1 - (j / _ColorText.length)); // _ChromaScale((j/_ColorText.length).toFixed(2));
+  //         entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+  //         initial = true;
+  //       }
+  //     }
+  //     if(initial === false) {
+  //       entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+  //     }
+  //   }else{
+  //     if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+  //     if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+  //   }
+  // }
 
   public showAttribs(event) {
     const viewer = this.dataService.getViewer();

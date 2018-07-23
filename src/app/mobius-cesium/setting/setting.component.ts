@@ -27,9 +27,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     this.data = this.dataService.getGsModel();
     this.mode = this.dataService.getmode();
     if(this.mode === "viewer") {
-      this.changedata(2);
+      this.changedata(3);
     } else if(this.mode==="editor") {
-      this.changedata(0);
+      this.changedata(1);
     }
   }
 
@@ -40,9 +40,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       try {
         if(this.data !== undefined&&this.data["features"] !== undefined) {
           if(this.mode === "viewer") {
-            this.changedata(2);
+            this.changedata(3);
           } else if(this.mode === "editor") {
-            this.changedata(0);
+            this.changedata(1);
           }
         }
       }
@@ -53,9 +53,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   }
   public changedata(id: number) {
     this.dataService.set_index(id);
-    if(id === 0) {
+    if(id === 1) {
       this.dataArr = this.dataService.get_ViData();
-    } else if(id === 2) {
+    } else if(id === 3) {
       this.dataArr = this.dataService.get_PuData();
     }
     if(this.dataArr !== undefined) {
@@ -94,52 +94,65 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       for (const i of _indexArr) {
         const entity = entities[i];
         let _CheckHide: boolean;
-        if(_Filter.length !== 0) {
-          _CheckHide = self.Hide(_Filter,entity,_HeightChart);
-          if(_CheckHide === true) {
-            if(entity.polygon !== undefined) {
-              entity.polygon.extrudedHeight = 0;
-              entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-              if(_HeightChart === true) {
-                if(entity.polyline !== undefined) {entity.polyline.show = false;}
+        if(entity.polygon !==undefined){
+          if(_Filter.length !== 0) {
+            _CheckHide = self.Hide(_Filter,entity,_HeightChart);
+            if(_CheckHide === true) {
+              if(entity.polygon !== undefined) {
+                entity.polygon.extrudedHeight = 0;
+                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                if(_HeightChart === true) {
+                  if(entity.polyline !== undefined) {entity.polyline.show = false;}
+                }
               }
+              if(entity.polyline !== undefined)  {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
             }
-            if(entity.polyline !== undefined)  {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
           }
-        }
 
-        if(_Filter.length === 0||_CheckHide === false) {
+          if(_Filter.length === 0||_CheckHide === false) {
+            if(_ColorKey !== "None") {
+              if(typeof(_ColorText[0]) === "number") {
+                self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
+              } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+            } else {entity.polygon.material = Cesium.Color.DARKGREY;}
+            if(_ExtrudeKey !== "None") {
+              if(_HeightChart === false) {
+                
+                 entity.polyline = undefined;
+                if(entity.properties[_ExtrudeKey] !==undefined) {
+                  entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
+                                                                  _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
+                } else {entity.polygon.extrudedHeight = 0;}
+                
+              } else {
+                entity.polygon.extrudedHeight =0;
+                const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
+                const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
+                                      (entity.polygon.hierarchy.getValue().positions).radius/100),10);
+                const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
+                                        cartesianToCartographic(center).longitude).toFixed(10);
+                const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
+                                        latitude).toFixed(10);
+                entity.polyline = new Cesium.PolylineGraphics({
+                  positions:new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString,latitudeString,0,longitudeString,
+                          latitudeString,self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
+                          _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
+                  width:radius,
+                  material:entity.polygon.material,
+                  show:true,
+                });
+              }
+            } else {
+              entity.polyline = undefined;
+              entity.polygon.extrudedHeight = 0;
+            }
+          }
+        }else if(entity.polyline!==undefined){
           if(_ColorKey !== "None") {
             if(typeof(_ColorText[0]) === "number") {
               self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
             } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
-          } else {entity.polygon.material = Cesium.Color.GOLD.withAlpha(0.8);}
-          if(_ExtrudeKey !== "None") {
-            if(_HeightChart === false) {
-              entity.polyline = undefined;
-              entity.polygon.extrudedHeight = self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
-                                                                _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale;
-            } else {
-              entity.polygon.extrudedHeight =0;
-              const center =  Cesium.BoundingSphere.fromPoints(entity.polygon.hierarchy.getValue().positions).center;
-              const radius = Math.min(Math.round(Cesium.BoundingSphere.fromPoints
-                                    (entity.polygon.hierarchy.getValue().positions).radius/100),10);
-              const longitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.
-                                      cartesianToCartographic(center).longitude).toFixed(10);
-              const latitudeString = Cesium.Math.toDegrees(Cesium.Ellipsoid.WGS84.cartesianToCartographic(center).
-                                      latitude).toFixed(10);
-              entity.polyline = new Cesium.PolylineGraphics({
-                positions:new Cesium.Cartesian3.fromDegreesArrayHeights([longitudeString,latitudeString,0,longitudeString,
-                        latitudeString,self.ExtrudeHeight(entity.properties[_ExtrudeKey]._value,
-                        _ExtrudeMax,_ExtrudeMin,_Invert)*_Scale]),
-                width:radius,
-                material:entity.polygon.material,
-                show:true,
-              });
-            }
-          } else {
-            entity.polyline = undefined;
-            entity.polygon.extrudedHeight = 0;
+            } else {entity.polyline.material = Cesium.Color.DARKGREY;
           }
         }
       }
@@ -205,7 +218,13 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       const texts = entity.properties[_ColorKey]._value;
       const rgb = _ChromaScale(Number(((max - texts) / (max - min)).toFixed(2)))._rgb;
       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
-      if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
+      if(entity.polyline !== undefined) {
+        const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+        entity.polyline.material.color.setValue(newColor);
+      }
+    }else{
+      if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+      if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
     }
   }
 
@@ -215,13 +234,21 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       for(let j = 0;j < _ColorText.length; j++) {
         if(entity.properties[_ColorKey]._value === _ColorText[j]) {
           const rgb = _ChromaScale(1 - (j / _ColorText.length));
-          entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
+          if(entity.polygon !== undefined){entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);}
+          if(entity.polyline !== undefined) {
+            const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            entity.polyline.material.color.setValue(newColor);
+          }
           initial = true;
         }
       }
       if(initial === false) {
-        entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+        if(entity.polygon !== undefined){entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+        if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
       }
+    }else{
+      if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+      if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
     }
   }
 }
