@@ -841,19 +841,6 @@ var GenModelService = /** @class */ (function () {
         var newcoords = [projcoords[0], projcoords[1], coords[2]];
         return newcoords;
     };
-    // public setCartMatrix(angle,origin): void {
-    //   var hpr = new Cesium.HeadingPitchRoll(Cesium.Math.toRadians(angle), 0, 0);
-    //   var mat = Cesium.Transforms.headingPitchRollToFixedFrame(origin, hpr);
-    //   this.cart_matrix = mat;
-    // }
-    // public projectPtsToCartographic(coord): number[]{
-    //   const pt = Cesium.Cartesian3.fromArray(coord);
-    //   const t = Cesium.Matrix3.multiplyByPoint(this.cart_matrix,pt,new Cesium.Cartesian3());
-    //   coord = [t["x"],t["y"],t["z"]];
-    //   // console.log(coord,transform,coord2);
-    //   const coord2 = [(coord[0]/10000),(coord[1]/10000),(coord[2]/10000)];
-    //   return coord2;
-    // }
     GenModelService.prototype.maxDiff = function (values) {
         var maxval = values[0];
         var minval = values[0];
@@ -1064,15 +1051,43 @@ var GenModelService = /** @class */ (function () {
             this.setTransform(file);
             // Loop through CityObjects
             var city_object_keys = Object.keys(file["CityObjects"]);
-            // for (let obj_index = 1 ; obj_index < 2 ; obj_index ++) {
-            for (var obj_index = 0; obj_index < city_object_keys.length; obj_index++) {
+            var _loop_3 = function (obj_index) {
                 var obj = file["CityObjects"][city_object_keys[obj_index]];
                 // console.log(city_object_keys[obj_index]);
                 // Get object type (21 types)
                 var cityobj_type = obj.type;
+                if (cityobj_type === "BuildingPart") {
+                    return "continue";
+                }
+                // Get object attributes
+                var cityobj_attrib = obj.attributes;
+                // if (cityobj_attrib === undefined) {
+                //   continue;
+                // }
+                // console.log(cityobj_attrib);
+                // console.log(Object.keys(cityobj_attrib))
+                // Get object parts (TODO: Installations)
+                var cityobj_parts_ID = obj.Parts;
+                // console.log(cityobj_parts_ID);
+                var cityobj_parts_geom = [];
+                var cityobj_parts_attrib = [];
+                var cityobj_parts_type = [];
+                if (cityobj_parts_ID !== undefined) {
+                    cityobj_parts_ID.forEach(function (ID) {
+                        cityobj_parts_geom.push.apply(cityobj_parts_geom, file["CityObjects"][ID].geometry);
+                        cityobj_parts_attrib.push(file["CityObjects"][ID].attributes);
+                        cityobj_parts_type.push(file["CityObjects"][ID].type);
+                    });
+                }
+                // console.log(obj.geometry);
+                var all_geom = obj.geometry.concat(cityobj_parts_geom);
+                // console.log(all_geom);
+                var parts_start = obj.geometry.length;
+                var parts_index = 0;
                 // Loop through geometry (typically used for different LOD but not necessarily, may contain multiple)
-                for (var geom_index = 0; geom_index < obj.geometry.length; geom_index++) {
-                    var geom = obj.geometry[geom_index];
+                for (var geom_index = 0; geom_index < all_geom.length; geom_index++) {
+                    var geom = all_geom[geom_index];
+                    // console.log(geom);
                     if (geom == undefined) {
                         continue;
                     }
@@ -1093,9 +1108,9 @@ var GenModelService = /** @class */ (function () {
                     if (geom_type === "GeometryInstance") {
                         // console.log("GeometryInstance")
                         vertex_arr = 1;
-                        boundaries = this.templates[geom.template];
+                        boundaries = this_2.templates[geom.template];
                         transform.temp_matrix = Cesium.Matrix4.fromArray(geom.transformationMatrix);
-                        transform.refpt = this.vertices[geom.boundaries[0]];
+                        transform.refpt = this_2.vertices[geom.boundaries[0]];
                     }
                     if (boundaries === undefined) {
                         continue;
@@ -1112,12 +1127,12 @@ var GenModelService = /** @class */ (function () {
                     if (geom["material"] !== undefined) {
                         mats = geom["material"][""]["values"];
                     }
-                    var _loop_3 = function (srf_index) {
+                    var _loop_4 = function (srf_index) {
                         if (boundaries[srf_index][0] === undefined) {
                             return "continue";
                         }
                         // Extract surface type
-                        var surface_type = void 0;
+                        var surface_type = "None";
                         if (values !== undefined && surfaces[values[srf_index]] !== undefined) {
                             surface_type = surfaces[values[srf_index]]["type"];
                         }
@@ -1141,15 +1156,39 @@ var GenModelService = /** @class */ (function () {
                         else if (obj.type === "SolitaryVegetationObject" || obj.type === "PlantCover") {
                             colour = Cesium.Color.YELLOWGREEN;
                         }
-                        // Create property bag
-                        var property_bag = new Cesium.PropertyBag();
-                        property_bag.addProperty("Object ID", city_object_keys[obj_index]);
-                        property_bag.addProperty("Object Type", cityobj_type);
-                        property_bag.addProperty("Geom Type", geom_type);
-                        property_bag.addProperty("Surface Type", surface_type);
-                        property_bag.addProperty("LOD", lod);
-                        property_bag.addProperty("Material", colour);
-                        // property_bag.addProperty("srf_index", srf_index);
+                        // Create property bag (with parent information if obj is building part)
+                        // (TO-DO: building installation)
+                        var props = { Object_ID: city_object_keys[obj_index],
+                            Object_Type: cityobj_type,
+                            Geom_Type: geom_type,
+                            Surface_Type: surface_type,
+                            LOD: lod,
+                            Color: colour,
+                            Parent_ID: "None",
+                            Parent_Type: "None"
+                        };
+                        if (geom_index >= parts_start) {
+                            props.Object_ID = cityobj_parts_ID[parts_index];
+                            props.Object_Type = cityobj_parts_type[parts_index];
+                            props.Parent_ID = city_object_keys[obj_index];
+                            props.Parent_Type = cityobj_type;
+                        }
+                        // Add attributes from parent to properties
+                        if (cityobj_attrib !== undefined) {
+                            Object.keys(cityobj_attrib).forEach(function (name) {
+                                props[name] = cityobj_attrib[name];
+                            });
+                        }
+                        // console.log(props);
+                        // Add attributes from parent to properties
+                        if (cityobj_parts_attrib[parts_index] !== undefined) {
+                            Object.keys(cityobj_parts_attrib[parts_index]).forEach(function (name) {
+                                props[name] = cityobj_parts_attrib[parts_index][name];
+                            });
+                            // console.log(props);
+                        }
+                        var property_bag = new Cesium.PropertyBag(props);
+                        // Check horizontal or not
                         var z = [];
                         if (vertex_arr === 0) {
                             boundaries[srf_index][0].forEach(function (coords) {
@@ -1176,12 +1215,19 @@ var GenModelService = /** @class */ (function () {
                             this_2.setSrftypeIds(surface_type, poly.id);
                         }
                     };
-                    var this_2 = this;
                     // // Loop through surfaces
                     for (var srf_index = 0; srf_index < boundaries.length; srf_index++) {
-                        _loop_3(srf_index);
+                        _loop_4(srf_index);
                     }
                 }
+                if (parts_index >= parts_start) {
+                    parts_index++;
+                }
+            };
+            var this_2 = this;
+            // for (let obj_index = 1 ; obj_index < 2 ; obj_index ++) {
+            for (var obj_index = 0; obj_index < city_object_keys.length; obj_index++) {
+                _loop_3(obj_index);
             }
         }
         // console.log (this.srftype_ids);
