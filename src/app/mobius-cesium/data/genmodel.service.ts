@@ -167,10 +167,15 @@ export class GenModelService {
         pt1 = this.transformCityJSON([coord[0],coord[1],coord[2]]);
         pt2 = this.transformCityJSON([coord[3],coord[4],coord[5]]);
       }
-     
-      pt1 = new Cesium.Cartesian3(pt1);
-      pt2 = new Cesium.Cartesian3(pt2);
-      this.bound = Cesium.BoundingSphere.fromPoints([pt1,pt2]);
+      // console.log(p01,pt2);
+      pt1 = this.projectPtsToWGS84(pt1);
+      pt2 = this.projectPtsToWGS84(pt2);
+      // console.log(pt1,pt2);
+      pt1 = new Cesium.Cartesian3.fromDegrees(pt1[0],pt1[1],pt1[2]);
+      pt2 = new Cesium.Cartesian3.fromDegrees(pt2[0],pt2[1],pt2[2]);
+      // console.log(pt1,pt2);
+      this.bound = new Cesium.BoundingSphere.fromCornerPoints(pt1,pt2);
+      console.log(this.bound);
     }
   }
 
@@ -275,6 +280,10 @@ export class GenModelService {
     // convert to cesium format
     for (let p = 0 ; p < tri_index.length ; p = p + 3) {
       const points = [];
+      // const p1 = new Cesium.Cartesian3(-1518390.0899016291, 6193084.268171512, 144063.46198718922);
+      // const p2 = new Cesium.Cartesian3(-1518390.3606380953, 6193085.37242908, 144013.4749156908);
+      // const p3 = new Cesium.Cartesian3(-1518444.8739198465, 6193097.740894707, 144014.04339678388);
+      // console.log([p1,p2,p3]);
 
       //get coordinates for each point
       [tri_index[p], tri_index[p+1], tri_index[p+2]].forEach((j) => {
@@ -301,10 +310,20 @@ export class GenModelService {
         points.push(...coord);
       });
       // console.log(points);
-      // create poly and push to arr
-      const poly = new Cesium.PolygonGeometry({
-        polygonHierarchy: Cesium.Cartesian3.fromDegreesArrayHeights(points),
+      const cart = new Cesium.Cartesian3.fromDegreesArrayHeights(points);
+      // console.log(cart);
+      const geom = new Cesium.PolygonGeometry({
+        vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+        polygonHierarchy: new Cesium.PolygonHierarchy(cart),
         perPositionHeight: true,
+      });
+      // console.log(geom);
+      // create poly and push to arr
+      const poly = new Cesium.GeometryInstance({
+        geometry: geom,
+        attributes : {
+          color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.WHITE)
+        }
       });
       // console.log(poly);
       polys.push(poly);
@@ -320,7 +339,15 @@ export class GenModelService {
     const primitive = new Cesium.Primitive({
       geometryInstances: polys,
       allowPicking: pick,
-      appearance: new Cesium.Appearance({material: color})
+      // shadows : Cesium.ShadowMode.ENABLED,
+      appearance : new Cesium.PerInstanceColorAppearance({
+          translucent : false
+      })
+      // appearance: new Cesium.Appearance({
+      //   material: Cesium.Material.fromType('Color', {
+      //     color :new Cesium.Color(1.0, 0.0, 0.0, 1.0)
+      //   })
+      // })
     });
     // console.log(primitive);
     // this.scene.primitives.add(primitive);
@@ -405,11 +432,12 @@ export class GenModelService {
   //   return temp_parent;
   // }
 
-  public genCityJSONGeom(file: JSON): any {
+  public genCityJSONGeom(file: JSON, primitives): void {
     // Initialise dataSource and surface type ID arrays
     // this.setScene(scene);
     this.initialiseSrftypeIds();
-    const arr = [];
+    // const coll = new Cesium.PrimitiveCollection();
+    // const arr = [];
 
     if (file !== undefined) {
       this.setEPSG(file["metadata"]);
@@ -594,7 +622,9 @@ export class GenModelService {
               // this.setSrftypeIds(surface_type,poly.id);
             } else {
               const poly = this.triangulatePoly(boundaries[srf_index],vertex_arr,transform,colour);
-              arr.push(poly);
+              // coll.add(poly);
+              primitives.add(poly);
+              // return;
               // poly.properties = property_bag;
               // poly.show = false;
               // this.setSrftypeIds(surface_type,poly.id);
@@ -608,9 +638,11 @@ export class GenModelService {
 
     }
     // console.log (this.srftype_ids);
-    this.clearData();
+    
     this.setBound(file["metadata"]);
-    return arr;
+    this.clearData();
+    // console.log(coll);
+    // return coll;
   }
 
 }

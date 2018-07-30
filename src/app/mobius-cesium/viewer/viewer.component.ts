@@ -83,14 +83,19 @@ export class ViewerComponent extends DataSubscriber {
     if(this.data !== undefined) {
       /////// INITIALISING VIEWER ////////
       const viewer = this.dataService.getViewer();
-      viewer.dataSources.removeAll({destroy:true});
+      viewer.scene.primitives.removeAll();
+      // viewer.dataSources.removeAll({destroy:true});
       // console.log("cleared data", viewer);
 
       /////// OBTAINING DATA ////////
       this.data = data;
-      const primitives = this.genModelService.genCityJSONGeom(this.data);
-      viewer.scene.primitives.add(primitives);
+      console.log(viewer.scene.primitives);
+      this.genModelService.genCityJSONGeom(this.data, viewer.scene.primitives);
+      console.log(viewer.scene.primitives);
+      // console.log(primitives);
+      // viewer.scene.primitives.add(primitives);
       const bound = this.genModelService.getBound();
+      console.log(viewer);
       // const promise = Cesium.GeoJsonDataSource.load(this.data);
       // viewer.dataSources.add(dataSource);
       const _HeightKey: any[] = [];
@@ -100,9 +105,9 @@ export class ViewerComponent extends DataSubscriber {
       /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
         e.cancel = true;
-        viewer.camera.viewBoundingSphere(bound);
+        // viewer.camera.viewBoundingSphere(bound);
       });
-      viewer.camera.viewBoundingSphere(bound);
+      // viewer.camera.viewBoundingSphere(bound);
 // =======
 //       promise.then(function(dataSource) {
 //         const entities = dataSource.entities.values;
