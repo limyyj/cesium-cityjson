@@ -10,7 +10,7 @@ export class GenModelService {
   private subject = new Subject<any>();
   private file: JSON;
   private epsg: string;
-  private scene: any;
+  // private scene: any;
   private vertices: any;
   private materials: any;
   private templates: any;
@@ -96,13 +96,13 @@ export class GenModelService {
     }
   }
 
-  public setScene(scene: any): void {
-    this.scene = scene;
-  }
+  // public setScene(scene: any): void {
+  //   this.scene = scene;
+  // }
 
-  public getScene(): any {
-    return this.scene;
-  }
+  // public getScene(): any {
+  //   return this.scene;
+  // }
 
   public setVertices(vertices: any): void {
     if (vertices !== undefined) {
@@ -322,7 +322,7 @@ export class GenModelService {
       const poly = new Cesium.GeometryInstance({
         geometry: geom,
         attributes : {
-          color : Cesium.ColorGeometryInstanceAttribute.fromColor(Cesium.Color.WHITE)
+          color : Cesium.ColorGeometryInstanceAttribute.fromColor(color)
         }
       });
       // console.log(poly);
@@ -343,94 +343,98 @@ export class GenModelService {
       appearance : new Cesium.PerInstanceColorAppearance({
           translucent : false
       })
-      // appearance: new Cesium.Appearance({
-      //   material: Cesium.Material.fromType('Color', {
-      //     color :new Cesium.Color(1.0, 0.0, 0.0, 1.0)
-      //   })
-      // })
     });
-    // console.log(primitive);
-    // this.scene.primitives.add(primitive);
-    // console.log(this.scene);
     return primitive;
   }
 
-  // public cesiumPoly(boundaries,vertex_arr,transform,colour): any {
-  //   let vertices = this.vertices;
-  //   if (vertex_arr === 1) {
-  //     vertices = this.template_vertices;
-  //   }
+  public cesiumPoly(boundaries,vertex_arr,transform,colour): any {
+    let vertices = this.vertices;
+    if (vertex_arr === 1) {
+      vertices = this.template_vertices;
+    }
 
-  //   const temp_parent = this.dataSource.entities.add(new Cesium.Entity());
+    const extRing = boundaries[0];
+    const extRing_points = [];
 
-  //   const extRing = boundaries[0];
-  //   const extRing_points = [];
+    extRing.forEach((pt_index) => {
+      let coord = vertices[pt_index];
 
-  //   extRing.forEach((pt_index) => {
-  //     let coord = vertices[pt_index];
+      // if object is a geometry instance, multiply by transformation matrix and add reference point
+      if (transform.refpt !== undefined) {
+        coord = this.transformTemplate(coord,transform);
+      }
+      // transform coordinates if transform specification exists in file
+      if (this.scale !== undefined) {
+        coord = this.transformCityJSON(coord);
+      }
+      // project to wgs84
+      const pt3 = this.projectPtsToWGS84(coord);
+      // console.log (coord,pt3)
+      extRing_points.push(...pt3);
+    });
 
-  //     // if object is a geometry instance, multiply by transformation matrix and add reference point
-  //     if (transform.refpt !== undefined) {
-  //       coord = this.transformTemplate(coord,transform);
-  //     }
-  //     // transform coordinates if transform specification exists in file
-  //     if (this.scale !== undefined) {
-  //       coord = this.transformCityJSON(coord);
-  //     }
-  //     // project to wgs84
-  //     const pt3 = this.projectPtsToWGS84(coord);
-  //     // console.log (coord,pt3)
-  //     extRing_points.push(...pt3);
-  //   });
+    // console.log(extRing_points);
+    const ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
+    let p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
 
-  //   // console.log(extRing_points);
-  //   const ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
-  //   let p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
-
-  //   // If boundaries contain inner rings for holes, create p_hierarchy with holes
-  //   const int_cartesian3 = [];
-  //   if (boundaries.length > 0) {
-  //     // Create p_hierarchy for each hole and push to int_cartesian3
-  //     for (let ring_index = 1 ; ring_index < boundaries.length ; ring_index++) {
-  //       const temp_pts = [];
-  //       boundaries[ring_index].forEach((pt_index) => {
-  //         let coord = vertices[pt_index];
+    // If boundaries contain inner rings for holes, create p_hierarchy with holes
+    const int_cartesian3 = [];
+    if (boundaries.length > 0) {
+      // Create p_hierarchy for each hole and push to int_cartesian3
+      for (let ring_index = 1 ; ring_index < boundaries.length ; ring_index++) {
+        const temp_pts = [];
+        boundaries[ring_index].forEach((pt_index) => {
+          let coord = vertices[pt_index];
           
-  //         // if object is a geometry instance, multiply by transformation matrix and add reference point
-  //         if (transform.refpt !== undefined) {
-  //           coord = this.transformTemplate(coord,transform);
-  //         }
-  //         // transform coordinates if transform specification exists in file
-  //         if (this.scale !== undefined) {
-  //           coord = this.transformCityJSON(coord);
-  //         }
-  //         // project to wgs84
-  //         const pt3 = this.projectPtsToWGS84(coord);
-  //         temp_pts.push(...pt3);
-  //       });
-  //       // console.log(temp_pts);
-  //       int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
-  //     }
-  //     // Create p_hierarchy with holes (as array of p_hierarchies)
-  //     p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
-  //   }
-  //   // console.log(p_hierarchy);
-  //   // Create polygon
-  //   const poly = this.dataSource.entities.add({
-  //     parent : temp_parent,
-  //     // name : city_object_keys[obj_index],
-  //     polygon : {
-  //       hierarchy : p_hierarchy,
-  //       perPositionHeight : true,
-  //       material : colour,
-  //       outline : false,
-  //       // shadows: Cesium.ShadowMode.ENABLED
-  //       //outlineColor : Cesium.Color.BLACK,
-  //     },
-  //   });
-  //   // console.log(poly);
-  //   return temp_parent;
-  // }
+          // if object is a geometry instance, multiply by transformation matrix and add reference point
+          if (transform.refpt !== undefined) {
+            coord = this.transformTemplate(coord,transform);
+          }
+          // transform coordinates if transform specification exists in file
+          if (this.scale !== undefined) {
+            coord = this.transformCityJSON(coord);
+          }
+          // project to wgs84
+          const pt3 = this.projectPtsToWGS84(coord);
+          temp_pts.push(...pt3);
+        });
+        // console.log(temp_pts);
+        int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
+      }
+      // Create p_hierarchy with holes (as array of p_hierarchies)
+      p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
+    }
+    // console.log(p_hierarchy);
+    // Create polygon
+    const geom = new Cesium.PolygonGeometry({
+      vertexFormat : Cesium.PerInstanceColorAppearance.VERTEX_FORMAT,
+      polygonHierarchy: p_hierarchy,
+      perPositionHeight: true,
+    });
+    const poly = new Cesium.GeometryInstance({
+      geometry: geom,
+      attributes : {
+        color : Cesium.ColorGeometryInstanceAttribute.fromColor(colour)
+      }
+    });
+
+    // check if template and set allowPicking
+    let pick = true;
+    if (transform.refpt !== undefined) {
+      pick = false;
+    }
+
+    // create primitive and add to scene
+    const primitive = new Cesium.Primitive({
+      geometryInstances: poly,
+      allowPicking: pick,
+      // shadows : Cesium.ShadowMode.ENABLED,
+      appearance : new Cesium.PerInstanceColorAppearance({
+          translucent : false
+      })
+    });
+    return primitive;
+  }
 
   public genCityJSONGeom(file: JSON, primitives): void {
     // Initialise dataSource and surface type ID arrays
@@ -616,7 +620,8 @@ export class GenModelService {
             if (this.maxDiff(z) === 0) {
               // // horizontal, use Cesium's stuff
               // console.log("Horizontal")
-              // const poly = this.cesiumPoly(boundaries[srf_index],vertex_arr,transform,colour);
+              const poly = this.cesiumPoly(boundaries[srf_index],vertex_arr,transform,colour);
+              primitives.add(poly);
               // poly.properties = property_bag;
               // // poly.show = false;
               // this.setSrftypeIds(surface_type,poly.id);
