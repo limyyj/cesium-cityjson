@@ -47,7 +47,7 @@ export class DataComponent extends DataSubscriber implements OnInit {
       }
     }
   }
-
+  //load data
   public LoadData() {
     this._ColorProperty = this.dataArr["ColorProperty"];
     this._ColorKey = this.dataArr["ColorKey"];
@@ -64,7 +64,7 @@ export class DataComponent extends DataSubscriber implements OnInit {
     this._Filter = this.dataArr["Filter"];
     this._HideNum = this.dataArr["HideNum"];
   }
-
+  //change color property in editor version
   public onChangeColor(value) {
     this.dataArr["ColorKey"] = value;
     const promise = this.dataService.getcesiumpromise();
@@ -89,20 +89,26 @@ export class DataComponent extends DataSubscriber implements OnInit {
     this.dataService.set_ViData(this.dataArr);
     this.LoadData();
   }
-
+  //change color min in editor version
   public changeColorMin(_Min: number) {
     this.dataArr["ColorMin"] = Number(_Min);
     this._ColorMin = this.dataArr["ColorMin"];
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //change color max in editor version
   public changeColorMax(_Max: number) {
     this.dataArr["ColorMax"] = Number(_Max);
     this._ColorMax = this.dataArr["ColorMax"];
     this.dataService.set_ViData(this.dataArr);
 
   }
-
+  //change color invert in editor version
+  public changeColorInvert() {
+    this._ColorInvert =! this._ColorInvert;
+    this.dataArr["ColorInvert"] = this._ColorInvert;
+    this.dataService.set_ViData(this.dataArr);
+  }
+  //change extrudeheight property in editor version
   public onChangeHeight(value) {
     this.dataArr["ExtrudeKey"] = value;
     const promise = this.dataService.getcesiumpromise();
@@ -127,42 +133,37 @@ export class DataComponent extends DataSubscriber implements OnInit {
     this.dataService.set_ViData(this.dataArr);
     this.LoadData();
   }
-
+  //change extrudeheight min in editor version
   public changeHeightMin(_Min: number) {
     this.dataArr["ExtrudeMin"] = Number(_Min);
     this._ExtrudeMin = this.dataArr["ExtrudeMin"];
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //change extrudeHeight max in editor version
   public changeHeightMax(_Max: number) {
     this.dataArr["ExtrudeMax"] = Number(_Max);
     this._ExtrudeMax = this.dataArr["ExtrudeMax"];
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //change scale in editor version
   public changescale(_ScaleValue: number) {
     this.dataArr["Scale"] = Number(_ScaleValue);
     this._Scale = this.dataArr["Scale"];
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //change extrudeheight invert in editor version
   public changeopp() {
     this._Invert =! this._Invert;
     this.dataArr["Invert"] = this._Invert;
     this.dataService.set_ViData(this.dataArr);
   }
-  public changeColorInvert() {
-    this._ColorInvert =! this._ColorInvert;
-    this.dataArr["ColorInvert"] = this._ColorInvert;
-    this.dataService.set_ViData(this.dataArr);
-  }
-
+  //change heightChart in editor version
   public changeExtrude() {
     this._HeightChart =! this._HeightChart;
     this.dataArr["HeightChart"] = this._HeightChart;
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //add filter in editor version
   public addHide() {
     let lastnumber: string;
     if(this.dataArr["HideNum"] !== undefined) {
@@ -193,7 +194,7 @@ export class DataComponent extends DataSubscriber implements OnInit {
     this.dataArr["HideNum"] = this._HideNum;
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //delete filter in editor version
   public deleteHide(event) {
     const index = this._HideNum.indexOf(event);
     const divid = String("addHide".concat(String(event)));
@@ -217,7 +218,7 @@ export class DataComponent extends DataSubscriber implements OnInit {
     this.dataArr["HideNum"] = this._HideNum;
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //change disable button in filter
   public Disable(event) {
     const index = this._HideNum.indexOf(event);
     const divid = String("addHide".concat(String(event)));
@@ -251,11 +252,11 @@ export class DataComponent extends DataSubscriber implements OnInit {
     this.dataArr["HideNum"] = this._HideNum;
     this.dataService.set_ViData(this.dataArr);
   }
-
+  //change height slider in filter
   public ChangeHeight(_HeightHide: string) {
     this._HideValue = _HeightHide;
   }
-
+  //change relation in filter
   public Changerelation(_RelaHide: any, id: number) {
     const index = this._HideNum.indexOf(id);
     const HeightHide = this._Filter[index].HeightHide;
@@ -281,7 +282,7 @@ export class DataComponent extends DataSubscriber implements OnInit {
     if(_RelaHide==="0"||_RelaHide === 0) {this._Filter[index].textHide = this._Filter[index].HideMin;}
     if(_RelaHide==="1"||_RelaHide === 1) {this._Filter[index].textHide = this._Filter[index].HideMax;}
   }
-
+  //change category in filter
   public ChangeCategory(categary: string, id: number, type: number) {
     const index = this._HideNum.indexOf(id);
     if(type === 1) {
@@ -291,12 +292,12 @@ export class DataComponent extends DataSubscriber implements OnInit {
       this._Filter[index].RelaHide = Number(categary);
     }
   }
-
+  //change text in filter
   public Changetext(value: string, id: number) {
     const index = this._HideNum.indexOf(id);
     this._Filter[index].textHide = value;
   }
-
+  //get text according to property
   public  Initial(_HideValue: string): any[] {
     const texts = [];
     const promise = this.dataService.getcesiumpromise();

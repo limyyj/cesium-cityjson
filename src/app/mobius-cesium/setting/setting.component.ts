@@ -23,6 +23,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   constructor(injector: Injector, myElement: ElementRef) {
   super(injector);
   }
+  //get data and mode
   public ngOnInit() {
     this.data = this.dataService.getGsModel();
     this.mode = this.dataService.getmode();
@@ -32,7 +33,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       this.changedata(1);
     }
   }
-
+  //change data and load new data
   public notify(message: string): void {
     if(message === "model_update" ) {
       this.data = this.dataService.getGsModel();
@@ -51,6 +52,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       }
     }
   }
+  //change index from editor version to publish version
   public changedata(id: number) {
     this.dataService.set_index(id);
     if(id === 1) {
@@ -62,11 +64,11 @@ export class SettingComponent extends DataSubscriber implements OnInit {
       this.LoadViewer();
     }
   }
-
+  //reset button to reset everthing in publish version
   public Reset() {
     this.dataArr = this.dataService.get_PuData();
   }
-
+  //change color and extrudeHeight of entity
   public LoadViewer() {
     const promise = this.dataService.getcesiumpromise();
     const _ColorKey: string = this.dataArr["ColorKey"];
@@ -80,8 +82,8 @@ export class SettingComponent extends DataSubscriber implements OnInit {
     const _HeightChart: boolean = this.dataArr["HeightChart"];
     const _Invert: boolean = this.dataArr["Invert"];
     const _Scale: number = this.dataArr["Scale"];
-    
     const _indexArr: number[] = this.dataArr["indexArr"];
+
     let _Filter: any[];
     if(this.dataArr["Filter"] !== undefined&&this.dataArr["Filter"].length !== 0) {
       _Filter = this.dataArr["Filter"];
@@ -154,11 +156,18 @@ export class SettingComponent extends DataSubscriber implements OnInit {
             } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
             } else {entity.polyline.material = Cesium.Color.DARKGREY;
           }
+        } else if(entity.point!==undefined){
+          if(_ColorKey !== "None") {
+            if(typeof(_ColorText[0]) === "number") {
+              self.colorByNum(entity,_ColorMax,_ColorMin,_ColorKey,_ChromaScale);
+            } else {self.colorByCat(entity,_ColorText,_ColorKey,_ChromaScale);}
+            } else {entity.point.color = Cesium.Color.DARKGREY;
+          }
         }
       }
     });
   }
-
+  //check whether entity should be hided or not
   public Hide(_Filter: any[], entity, _HeightChart: boolean): boolean {
     let _CheckHide: boolean = false;
     for(const filter of _Filter) {
@@ -199,7 +208,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
         return value === _Categary;
     }
   }
-
+  //caculate the extrudeHeight of entity
   public ExtrudeHeight(value: number, _ExtrudeMax: number, _ExtrudeMin: number, _Invert: boolean): number {
     let diff: number;
     if(_ExtrudeMin < 0) {diff = Math.abs(_ExtrudeMin);} else {diff = 0;}
@@ -212,7 +221,6 @@ export class SettingComponent extends DataSubscriber implements OnInit {
         return value;
     }
   }
-
   public colorByNum(entity, max: number, min: number, _ColorKey: string, _ChromaScale: any) {
     if(entity.properties[_ColorKey] !== undefined) {
       const texts = entity.properties[_ColorKey]._value;
@@ -222,9 +230,14 @@ export class SettingComponent extends DataSubscriber implements OnInit {
         const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
         entity.polyline.material.color.setValue(newColor);
       }
+      if(entity.point !==undefined){
+        const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+        entity.point.color = newColor;
+      }
     }else{
       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+      if(entity.point !== undefined) {entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
     }
   }
 
@@ -239,16 +252,22 @@ export class SettingComponent extends DataSubscriber implements OnInit {
             const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
             entity.polyline.material.color.setValue(newColor);
           }
+          if(entity.point !== undefined) {
+            const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+            entity.point.color = newColor;
+          }
           initial = true;
         }
       }
       if(initial === false) {
         if(entity.polygon !== undefined){entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
         if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+        if(entity.point !== undefined) {entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
       }
     }else{
       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+      if(entity.point !== undefined) {entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
     }
   }
 }

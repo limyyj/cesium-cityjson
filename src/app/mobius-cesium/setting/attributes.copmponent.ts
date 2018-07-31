@@ -35,6 +35,7 @@ export class SelectComponent extends DataSubscriber implements OnInit {
     }
   }
 
+  //check whether ID is changed or not and show in  Select tab
   public ngDoCheck() {
     if(this.viewer !== undefined&&this.dataService.get_SelectedEntity() !== undefined&&this.mode === "editor") {
       if(this.ID !== this.dataService.get_SelectedEntity()._id) {

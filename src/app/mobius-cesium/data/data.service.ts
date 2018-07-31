@@ -33,14 +33,15 @@ export class DataService {
   public getMessage(): Observable<any> {
     return this.subject.asObservable();
   }
-
+  //get geojson
   public getGsModel(): any {
     return this._jsonModel;
   }
+  //set mode 
   public setMode(mode: string) {
     this.mode = mode;
   }
-
+  //set new json file
   public setGsModel(model: JSON) {
     delete this._jsonModel;
     const json = this._jsonModel;
@@ -49,6 +50,7 @@ export class DataService {
     this.sendMessage("model_update");
     
   }
+  //before loading geojson, clear all for last geojson
   public clearAll(){
     delete this.hideElementArr;
     delete this._HideNum;
@@ -58,157 +60,92 @@ export class DataService {
     delete this._Filter;
 
   }
+  //get viewer
   public getViewer(): any {
     return this.viewer;
   }
+  //set viewer
   public setViewer(_viewer): void {
     this.viewer = _viewer;
   }
+  //get selected entity
   public get_SelectedEntity(): any {
     return this._SelectedEntity;
   }
+  //set selected entity
   public set_SelectedEntity(_SelectedEntity): void {
     this._SelectedEntity = _SelectedEntity;
   }
+  //get promise
   public getcesiumpromise(): any {
     return this.cesiumpromise;
   }
+  //set promise
   public setcesiumpromise(cesiumpromise): void {
     delete this.cesiumpromise;
     this.cesiumpromise = cesiumpromise;
   }
+  // get filter array
   public gethideElementArr(): any {
     return this.hideElementArr;
   }
+  //get filter number
   public get_HideNum(): any[] {
     return this._HideNum;
   }
+  //get mode
   public getmode(): string {
     return this.mode;
   }
+  //get index after changing select, data, display, publish
   public get_index(): number {
     return this._index;
   }
+  //set index after changing select, data, display, publish
   public set_index(_index): void {
     this._index = _index;
   }
+  //set sun true/false in Display
   public set_Sun(_Sun): void{
     this._Sun = _Sun;
   }
+  //get sun true/false in Display
   public get_Sun(): boolean{
     return this._Sun;
   }
+  //set shadow true/false in Display
   public set_Shadow(_Shadow): void{
     this._Shadow = _Shadow;
   }
+  //get shadow true/false in Display
   public get_Shadow(): boolean{
     return this._Shadow;
   }
+  //set date in Display
   public set_Date(_Date): void{
     this._Date = _Date;
   }
+  //get date in Display
   public get_Date(): string{
     return this._Date;
   }
+  //set UTC in Display
   public set_UTC(_UTC): void{
     this._UTC = _UTC;
   }
+  //get UTC in Display
   public get_UTC(): number{
     return this._UTC;
   }
-  /*public set_imageryViewModels() :void{
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Stamen Toner",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-     tooltip : "A high contrast black and white map.\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/toner/",
-         });
-     },
-    }));
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Stamen Toner(Lite)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-     tooltip : "A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/toner-lite/",
-         });
-     },
-    }));
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Terrain(Standard)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-     tooltip : "A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/terrain/",
-         });
-     },
-    }));
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Terrain(Background)",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-     tooltip : "A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://stamen-tiles.a.ssl.fastly.net/terrain-background/",
-         });
-     },
-    }));
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Open\u00adStreet\u00adMap",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/openStreetMap.png"),
-     tooltip : "OpenStreetMap (OSM) is a collaborative project to create a free editable \
-             map of the world.\nhttp://www.openstreetmap.org",
-     creationFunction : function() {
-         return Cesium.createOpenStreetMapImageryProvider({
-             url : "https://a.tile.openstreetmap.org/",
-         });
-     },
-    }));
-
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Earth at Night",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/earthAtNight.png"),
-     tooltip : "The lights of cities and villages trace the outlines of civilization \
-                 in this global view of the Earth at night as seen by NASA/NOAA\'s Suomi NPP satellite.",
-     creationFunction : function() {
-         return new Cesium.IonImageryProvider({ assetId: 3812 });
-     },
-    }));
-
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Natural Earth\u00a0II",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/naturalEarthII.png"),
-     tooltip : "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
-     creationFunction : function() {
-         return Cesium.createTileMapServiceImageryProvider({
-             url : Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII"),
-         });
-     },
-    }));
-
-    this._imageryViewModels.push(new Cesium.ProviderViewModel({
-     name : "Blue Marble",
-     iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/blueMarble.png"),
-     tooltip : "Blue Marble Next Generation July, 2004 imagery from NASA.",
-     creationFunction : function() {
-         return new Cesium.IonImageryProvider({ assetId: 3845 });
-     },
-    }));
-  }
-  public get_imageryViewModels(): any[] {
-    return this._imageryViewModels;
-  }*/
+  //set imagery in Display
   public set_Imagery(_Imagery): void {
     this._Imagery = _Imagery;
   }
+  //get imagery in Display
   public get_Imagery(): string {
     return this._Imagery;
   }
-
+  //convert json to ViData(editor version) to store every thing in setting
   public getValue(model: JSON) {
     if(model !== undefined) {
       let propertyName = Object.keys(model["features"][0].properties);
@@ -298,13 +235,15 @@ export class DataService {
                      false,false,_Filter,_HideNum,_indexArr);
     }
   }
+  //get ViData(editor version)
   public get_ViData(): object {
     return this._ViData;
   }
+  //set ViData(editor version)
   public set_ViData(_ViData): void {
     this._ViData = _ViData;
   }
-
+  //convert geojson to PuData(publish version)
   public LoadJSONData() {
     if(this._jsonModel !== undefined&&this._jsonModel["cesium"] !== undefined) {
       const cesiumData = this._jsonModel["cesium"];
@@ -446,6 +385,7 @@ export class DataService {
     }
 
   }
+  //get text for the certain property
   public  Initial(_HideValue: string): any[] {
     const texts=[];
     const promise = this.getcesiumpromise();
@@ -465,13 +405,15 @@ export class DataService {
     });
     return texts;
   }
-
+  //get PuData
   public get_PuData(): object {
     return this._PuData;
   }
+  //set PuData
   public set_PuData(_PuData): void {
     this._PuData = _PuData;
   }
+  //create object of ViData
   public getViData(_ColorProperty: any[],_ColorText: any[],_ColorKey: string,
                    _ColorMin: number,_ColorMax: number,_ColorInvert: boolean,
                    _ExtrudeProperty: any[],_ExtrudeText: any[],_ExturdeValue: string,
@@ -483,7 +425,7 @@ export class DataService {
                     ExtrudeMin:_ExtrudeMin,ExtrudeMax:_ExtrudeMax,Scale:_Scale,Invert:_Invert,
                     HeightChart:_HeightChart,Filter:_Filter,HideNum:_HideNum,indexArr:_indexArr};
   }
-
+  //create object of PuData
   public getPuData(_ColorDescr: string,_ColorProperty: any[],_ColorText: any[],_ColorKey: string,
                    _ColorMin: number,_ColorMax: number,_ColorInvert: boolean,
                    _ExtrudeDescr: string,_ExtrudeProperty: any[],_ExtrudeText: any[],
