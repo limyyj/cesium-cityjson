@@ -177,12 +177,15 @@ var DataService = /** @class */ (function () {
     DataService.prototype.getMessage = function () {
         return this.subject.asObservable();
     };
+    //get geojson
     DataService.prototype.getGsModel = function () {
         return this._jsonModel;
     };
+    //set mode 
     DataService.prototype.setMode = function (mode) {
         this.mode = mode;
     };
+    //set new json file
     DataService.prototype.setGsModel = function (model) {
         delete this._jsonModel;
         var json = this._jsonModel;
@@ -192,6 +195,7 @@ var DataService = /** @class */ (function () {
         }
         this.sendMessage("model_update");
     };
+    //before loading geojson, clear all for last geojson
     DataService.prototype.clearAll = function () {
         delete this.hideElementArr;
         delete this._HideNum;
@@ -200,150 +204,92 @@ var DataService = /** @class */ (function () {
         delete this._index;
         delete this._Filter;
     };
+    //get viewer
     DataService.prototype.getViewer = function () {
         return this.viewer;
     };
+    //set viewer
     DataService.prototype.setViewer = function (_viewer) {
         this.viewer = _viewer;
     };
+    //get selected entity
     DataService.prototype.get_SelectedEntity = function () {
         return this._SelectedEntity;
     };
+    //set selected entity
     DataService.prototype.set_SelectedEntity = function (_SelectedEntity) {
         this._SelectedEntity = _SelectedEntity;
     };
+    //get promise
     DataService.prototype.getcesiumpromise = function () {
         return this.cesiumpromise;
     };
+    //set promise
     DataService.prototype.setcesiumpromise = function (cesiumpromise) {
         delete this.cesiumpromise;
         this.cesiumpromise = cesiumpromise;
     };
+    // get filter array
     DataService.prototype.gethideElementArr = function () {
         return this.hideElementArr;
     };
+    //get filter number
     DataService.prototype.get_HideNum = function () {
         return this._HideNum;
     };
+    //get mode
     DataService.prototype.getmode = function () {
         return this.mode;
     };
+    //get index after changing select, data, display, publish
     DataService.prototype.get_index = function () {
         return this._index;
     };
+    //set index after changing select, data, display, publish
     DataService.prototype.set_index = function (_index) {
         this._index = _index;
     };
+    //set sun true/false in Display
     DataService.prototype.set_Sun = function (_Sun) {
         this._Sun = _Sun;
     };
+    //get sun true/false in Display
     DataService.prototype.get_Sun = function () {
         return this._Sun;
     };
+    //set shadow true/false in Display
     DataService.prototype.set_Shadow = function (_Shadow) {
         this._Shadow = _Shadow;
     };
+    //get shadow true/false in Display
     DataService.prototype.get_Shadow = function () {
         return this._Shadow;
     };
+    //set date in Display
     DataService.prototype.set_Date = function (_Date) {
         this._Date = _Date;
     };
+    //get date in Display
     DataService.prototype.get_Date = function () {
         return this._Date;
     };
-    /*public set_imageryViewModels() :void{
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Stamen Toner",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-       tooltip : "A high contrast black and white map.\nhttp://www.maps.stamen.com/",
-       creationFunction : function() {
-           return Cesium.createOpenStreetMapImageryProvider({
-               url : "https://stamen-tiles.a.ssl.fastly.net/toner/",
-           });
-       },
-      }));
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Stamen Toner(Lite)",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/stamenToner.png"),
-       tooltip : "A high contrast black and white map(Lite).\nhttp://www.maps.stamen.com/",
-       creationFunction : function() {
-           return Cesium.createOpenStreetMapImageryProvider({
-               url : "https://stamen-tiles.a.ssl.fastly.net/toner-lite/",
-           });
-       },
-      }));
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Terrain(Standard)",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-       tooltip : "A high contrast black and white map(Standard).\nhttp://www.maps.stamen.com/",
-       creationFunction : function() {
-           return Cesium.createOpenStreetMapImageryProvider({
-               url : "https://stamen-tiles.a.ssl.fastly.net/terrain/",
-           });
-       },
-      }));
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Terrain(Background)",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/TerrainProviders/CesiumWorldTerrain.png"),
-       tooltip : "A high contrast black and white map(Background).\nhttp://www.maps.stamen.com/",
-       creationFunction : function() {
-           return Cesium.createOpenStreetMapImageryProvider({
-               url : "https://stamen-tiles.a.ssl.fastly.net/terrain-background/",
-           });
-       },
-      }));
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Open\u00adStreet\u00adMap",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/openStreetMap.png"),
-       tooltip : "OpenStreetMap (OSM) is a collaborative project to create a free editable \
-               map of the world.\nhttp://www.openstreetmap.org",
-       creationFunction : function() {
-           return Cesium.createOpenStreetMapImageryProvider({
-               url : "https://a.tile.openstreetmap.org/",
-           });
-       },
-      }));
-  
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Earth at Night",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/earthAtNight.png"),
-       tooltip : "The lights of cities and villages trace the outlines of civilization \
-                   in this global view of the Earth at night as seen by NASA/NOAA\'s Suomi NPP satellite.",
-       creationFunction : function() {
-           return new Cesium.IonImageryProvider({ assetId: 3812 });
-       },
-      }));
-  
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Natural Earth\u00a0II",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/naturalEarthII.png"),
-       tooltip : "Natural Earth II, darkened for contrast.\nhttp://www.naturalearthdata.com/",
-       creationFunction : function() {
-           return Cesium.createTileMapServiceImageryProvider({
-               url : Cesium.buildModuleUrl("Assets/Textures/NaturalEarthII"),
-           });
-       },
-      }));
-  
-      this._imageryViewModels.push(new Cesium.ProviderViewModel({
-       name : "Blue Marble",
-       iconUrl : Cesium.buildModuleUrl("Widgets/Images/ImageryProviders/blueMarble.png"),
-       tooltip : "Blue Marble Next Generation July, 2004 imagery from NASA.",
-       creationFunction : function() {
-           return new Cesium.IonImageryProvider({ assetId: 3845 });
-       },
-      }));
-    }
-    public get_imageryViewModels(): any[] {
-      return this._imageryViewModels;
-    }*/
+    //set UTC in Display
+    DataService.prototype.set_UTC = function (_UTC) {
+        this._UTC = _UTC;
+    };
+    //get UTC in Display
+    DataService.prototype.get_UTC = function () {
+        return this._UTC;
+    };
+    //set imagery in Display
     DataService.prototype.set_Imagery = function (_Imagery) {
         this._Imagery = _Imagery;
     };
+    //get imagery in Display
     DataService.prototype.get_Imagery = function () {
         return this._Imagery;
     };
+    //convert json to ViData(editor version) to store every thing in setting
     DataService.prototype.getValue = function (model) {
         if (model !== undefined) {
             var propertyName = Object.keys(model["features"][0].properties);
@@ -440,12 +386,15 @@ var DataService = /** @class */ (function () {
             this.getViData(propertyNames, _Colortexts_1.sort(), _ColorValue_1, _MinColor, _MaxColor, false, _HeightKey, _Heighttexts_1.sort(), _HeightValue_1, _MinHeight, _MaxHeight, 1, false, false, _Filter, _HideNum, _indexArr_1);
         }
     };
+    //get ViData(editor version)
     DataService.prototype.get_ViData = function () {
         return this._ViData;
     };
+    //set ViData(editor version)
     DataService.prototype.set_ViData = function (_ViData) {
         this._ViData = _ViData;
     };
+    //convert geojson to PuData(publish version)
     DataService.prototype.LoadJSONData = function () {
         if (this._jsonModel !== undefined && this._jsonModel["cesium"] !== undefined) {
             var cesiumData = this._jsonModel["cesium"];
@@ -617,6 +566,7 @@ var DataService = /** @class */ (function () {
             this.getPuData(_ColorDescr, _propertyNames, _Colortexts_2.sort(), _ColorValue_2, _MinColor, _MaxColor, _ColorInvert, _HeightDescr, _HeightKey, _Heighttexts_2.sort(), _HeightValue_2, _MinHeight, _MaxHeight, _HeightScale, _HeightInvert, _HeightLine, this._Filter, this._HideNum, _indexArr_2);
         }
     };
+    //get text for the certain property
     DataService.prototype.Initial = function (_HideValue) {
         var texts = [];
         var promise = this.getcesiumpromise();
@@ -641,12 +591,15 @@ var DataService = /** @class */ (function () {
         });
         return texts;
     };
+    //get PuData
     DataService.prototype.get_PuData = function () {
         return this._PuData;
     };
+    //set PuData
     DataService.prototype.set_PuData = function (_PuData) {
         this._PuData = _PuData;
     };
+    //create object of ViData
     DataService.prototype.getViData = function (_ColorProperty, _ColorText, _ColorKey, _ColorMin, _ColorMax, _ColorInvert, _ExtrudeProperty, _ExtrudeText, _ExturdeValue, _ExtrudeMin, _ExtrudeMax, _Scale, _Invert, _HeightChart, _Filter, _HideNum, _indexArr) {
         this._ViData = { ColorProperty: _ColorProperty, ColorText: _ColorText, ColorKey: _ColorKey,
             ColorMin: _ColorMin, ColorMax: _ColorMax, ColorInvert: _ColorInvert,
@@ -654,6 +607,7 @@ var DataService = /** @class */ (function () {
             ExtrudeMin: _ExtrudeMin, ExtrudeMax: _ExtrudeMax, Scale: _Scale, Invert: _Invert,
             HeightChart: _HeightChart, Filter: _Filter, HideNum: _HideNum, indexArr: _indexArr };
     };
+    //create object of PuData
     DataService.prototype.getPuData = function (_ColorDescr, _ColorProperty, _ColorText, _ColorKey, _ColorMin, _ColorMax, _ColorInvert, _ExtrudeDescr, _ExtrudeProperty, _ExtrudeText, _ExturdeValue, _ExtrudeMin, _ExtrudeMax, _Scale, _Invert, _HeightChart, _Filter, _HideNum, _indexArr) {
         this._PuData = { ColorDescr: _ColorDescr, ColorProperty: _ColorProperty, ColorText: _ColorText,
             ColorKey: _ColorKey, ColorMin: _ColorMin, ColorMax: _ColorMax, ColorInvert: _ColorInvert,
@@ -708,22 +662,22 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var MobiuscesiumComponent = /** @class */ (function () {
     function MobiuscesiumComponent(dataService) {
         this.dataService = dataService;
+        //create slider to switch setting
         this.slider_state = "slide_out";
     }
     ;
+    //pass data to dataService
     MobiuscesiumComponent.prototype.setModel = function (data) {
         try {
             this.dataService.setGsModel(data);
-            // console.log("mode: ", this.mode);
         }
         catch (ex) {
             this.data = undefined;
-            //console.error("Error generating model");
         }
     };
+    //pass data to dataService
     MobiuscesiumComponent.prototype.ngOnInit = function () {
         this.setModel(this.data);
-        // console.log("Setting", this.mode)
         this.dataService.setMode(this.mode);
         // console.log(this.data);
     };
@@ -931,6 +885,7 @@ var SelectComponent = /** @class */ (function (_super) {
             this.dataArr = this.dataService.get_ViData();
         }
     };
+    //check whether ID is changed or not and show in  Select tab
     SelectComponent.prototype.ngDoCheck = function () {
         if (this.viewer !== undefined && this.dataService.get_SelectedEntity() !== undefined && this.mode === "editor") {
             if (this.ID !== this.dataService.get_SelectedEntity()._id) {
@@ -979,7 +934,7 @@ module.exports = "/*/deep/.mat-tab-label, /deep/.mat-tab-label-active{\r\n  min-
 /***/ "./src/app/mobius-cesium/setting/display.copmponent.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"DisplayView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table>\r\n      <tr>\r\n      <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Imagery</div></th>\r\n      <th><div>\r\n        <select class=\"cesium-button\" (change)=\"onChangeImagery($event.target.value)\" [ngModel]=\"_Imagery\">\r\n          <option class=\"cesium-option\"  *ngFor=\"let Imagery of _ImageryList\" value={{Imagery}}>{{Imagery}}</option>\r\n        </select>\r\n      </div></th>\r\n      </tr>\r\n    </table>\r\n    <hr>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Sun</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Sun\" (click)=\"changeSun()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Shadows</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Shadow\" (click)=\"changeShadow()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Date</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_Date}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeDate($event.target.value)\"></th></tr>  \r\n    </table>\r\n    \r\n</div>\r\n  "
+module.exports = "<div id=\"DisplayView\"  style=\"background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;\"  >\r\n\t<table>\r\n      <tr>\r\n      <th class=\"colorkey\" style=\"width: 80px\"><div class=\"Hide\" style=\"width: 80px;color:#D3D3D3 !important;border:0;text-align: left;font-weight: normal;\">Imagery</div></th>\r\n      <th><div>\r\n        <select class=\"cesium-button\" (change)=\"onChangeImagery($event.target.value)\" [ngModel]=\"_Imagery\">\r\n          <option class=\"cesium-option\"  *ngFor=\"let Imagery of _ImageryList\" value={{Imagery}}>{{Imagery}}</option>\r\n        </select>\r\n      </div></th>\r\n      </tr>\r\n    </table>\r\n    <hr>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Sun</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Sun\" (click)=\"changeSun()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Shadows</div></th>\r\n      <th style=\"width:80px;height: 25px;\"><div style=\"width:80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\"><input type=\"checkbox\" [checked]=\"_Shadow\" (click)=\"changeShadow()\"></div></th></tr>\r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">Date</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_Date}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeDate($event.target.value,_UTC)\"></th></tr>  \r\n    </table>\r\n    <table>\r\n      <tr ><th style=\"width:80px;height: 25px;\"><div style=\"width: 80px;color:#D3D3D3 !important;font-weight: normal;text-align: left;border:0;\">UTC</div></th>\r\n      <th style=\"width:80px;height: 18px;\"><input type=\"text\"  value={{_UTC}} style=\"width:80px;height: 18px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;font-weight: normal;text-align: left\" (change)=\"changeDate(_Date,$event.target.value)\"></th></tr>  \r\n    </table>\r\n    \r\n</div>\r\n  "
 
 /***/ }),
 
@@ -1041,6 +996,8 @@ var DisplayComponent = /** @class */ (function (_super) {
         else {
             this._Shadow = this.dataService.get_Shadow();
         }
+        this._UTC = +8;
+        this.dataService.set_UTC(this._UTC);
         if (this._Date === undefined) {
             var today = new Date();
             var year = today.getFullYear();
@@ -1050,12 +1007,13 @@ var DisplayComponent = /** @class */ (function (_super) {
         }
         else {
             this._Date = this.dataService.get_Date();
-            this.changeDate(this._Date);
+            this.changeDate(this._Date, this._UTC);
         }
         this.dataService.set_Date(this._Date);
     };
     DisplayComponent.prototype.notify = function (message) {
     };
+    //chanage imagery in Display tab
     DisplayComponent.prototype.onChangeImagery = function (_Imagery) {
         this._Imagery = _Imagery;
         this.dataService.set_Imagery(_Imagery);
@@ -1109,6 +1067,7 @@ var DisplayComponent = /** @class */ (function (_super) {
             var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3845 }));
         }
     };
+    //change sun
     DisplayComponent.prototype.changeSun = function () {
         var viewer = this.dataService.getViewer();
         this._Sun = !this._Sun;
@@ -1124,6 +1083,7 @@ var DisplayComponent = /** @class */ (function (_super) {
         }
         this.dataService.set_Sun(this._Sun);
     };
+    //change shadow
     DisplayComponent.prototype.changeShadow = function () {
         this._Shadow = !this._Shadow;
         var promise = this.dataService.getcesiumpromise();
@@ -1147,20 +1107,21 @@ var DisplayComponent = /** @class */ (function (_super) {
         }
         this.dataService.set_Shadow(this._Shadow);
     };
-    DisplayComponent.prototype.changeDate = function (Date) {
-        this._Date = Date;
+    //change date
+    DisplayComponent.prototype.changeDate = function (_Date, _UTC) {
+        this._Date = _Date;
+        this._UTC = _UTC;
         var viewer = this.dataService.getViewer();
-        var now = new Cesium.JulianDate.fromIso8601(Date);
+        var now = new Cesium.JulianDate.fromIso8601(this._Date);
         var tomorrow = now.clone();
         tomorrow.dayNumber = tomorrow.dayNumber + 1;
-        viewer.clock.currentTime = now;
+        viewer.clock.currentTime = Cesium.JulianDate.addHours(now, this._UTC, now);
         viewer.clock.startTime = now.clone();
         viewer.clock.stopTime = tomorrow.clone();
-        viewer.clock.multiplier = 1.0;
-        viewer.timeline.updateFromClock();
         viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime);
-        viewer.clock.multiplier = 1;
         this.dataService.set_Date(this._Date);
+        this.dataService.set_UTC(this._UTC);
+        viewer.timeline.updateFromClock();
     };
     DisplayComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -1246,6 +1207,7 @@ var PublishComponent = /** @class */ (function (_super) {
             }
         }
     };
+    //load data in publish version
     PublishComponent.prototype.LoadData = function () {
         this._ColorDescr = this.dataArr["ColorDescr"];
         this._ColorProperty = this.dataArr["ColorProperty"];
@@ -1264,6 +1226,7 @@ var PublishComponent = /** @class */ (function (_super) {
         this._HideNum = this.dataArr["HideNum"];
         this._Filter = this.dataArr["Filter"];
     };
+    //disable button in publish version
     PublishComponent.prototype.Disable = function (event) {
         var index = this._HideNum.indexOf(event);
         var divid = String("addHide".concat(String(event)));
@@ -1305,6 +1268,7 @@ var PublishComponent = /** @class */ (function (_super) {
         this.dataArr["HideNum"] = this._HideNum;
         this.dataService.set_PuData(this.dataArr);
     };
+    //change category in filter
     PublishComponent.prototype.ChangeCategory = function (categary, id, type) {
         var _index = this._HideNum.indexOf(id);
         if (type === 1) {
@@ -1314,10 +1278,12 @@ var PublishComponent = /** @class */ (function (_super) {
             this._Filter[_index].RelaHide = Number(categary);
         }
     };
+    //change text in filter
     PublishComponent.prototype.Changetext = function (value, id) {
         var _index = this._HideNum.indexOf(id);
         this._Filter[_index].textHide = value;
     };
+    //change color property in publish version
     PublishComponent.prototype.onChangeColor = function (value) {
         var data = this.dataService.getGsModel()["cesium"]["colour"]["attribs"];
         this.dataArr["ColorKey"] = value;
@@ -1354,6 +1320,7 @@ var PublishComponent = /** @class */ (function (_super) {
         this.dataService.set_PuData(this.dataArr);
         this.LoadData();
     };
+    //change extrudeheight property in publish version
     PublishComponent.prototype.onChangeHeight = function (value) {
         var data = this.dataService.getGsModel()["cesium"]["extrude"]["attribs"];
         this.dataArr["ExtrudeKey"] = value;
@@ -1392,6 +1359,7 @@ var PublishComponent = /** @class */ (function (_super) {
         this.dataService.set_PuData(this.dataArr);
         this.LoadData();
     };
+    //reset button to load again
     PublishComponent.prototype.reset = function () {
         this.dataService.LoadJSONData();
         this.dataArr = this.dataService.get_PuData();
@@ -1464,6 +1432,7 @@ var SettingComponent = /** @class */ (function (_super) {
     function SettingComponent(injector, myElement) {
         return _super.call(this, injector) || this;
     }
+    //get data and mode
     SettingComponent.prototype.ngOnInit = function () {
         this.data = this.dataService.getGsModel();
         this.mode = this.dataService.getmode();
@@ -1474,6 +1443,7 @@ var SettingComponent = /** @class */ (function (_super) {
             this.changedata(1);
         }
     };
+    //change data and load new data
     SettingComponent.prototype.notify = function (message) {
         if (message === "model_update") {
             this.data = this.dataService.getGsModel();
@@ -1493,6 +1463,7 @@ var SettingComponent = /** @class */ (function (_super) {
             }
         }
     };
+    //change index from editor version to publish version
     SettingComponent.prototype.changedata = function (id) {
         this.dataService.set_index(id);
         if (id === 1) {
@@ -1505,9 +1476,11 @@ var SettingComponent = /** @class */ (function (_super) {
             this.LoadViewer();
         }
     };
+    //reset button to reset everthing in publish version
     SettingComponent.prototype.Reset = function () {
         this.dataArr = this.dataService.get_PuData();
     };
+    //change color and extrudeHeight of entity
     SettingComponent.prototype.LoadViewer = function () {
         var promise = this.dataService.getcesiumpromise();
         var _ColorKey = this.dataArr["ColorKey"];
@@ -1616,9 +1589,23 @@ var SettingComponent = /** @class */ (function (_super) {
                         entity.polyline.material = Cesium.Color.DARKGREY;
                     }
                 }
+                else if (entity.point !== undefined) {
+                    if (_ColorKey !== "None") {
+                        if (typeof (_ColorText[0]) === "number") {
+                            self.colorByNum(entity, _ColorMax, _ColorMin, _ColorKey, _ChromaScale);
+                        }
+                        else {
+                            self.colorByCat(entity, _ColorText, _ColorKey, _ChromaScale);
+                        }
+                    }
+                    else {
+                        entity.point.color = Cesium.Color.DARKGREY;
+                    }
+                }
             }
         });
     };
+    //check whether entity should be hided or not
     SettingComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
         var _CheckHide = false;
         for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
@@ -1659,6 +1646,7 @@ var SettingComponent = /** @class */ (function (_super) {
                 return value === _Categary;
         }
     };
+    //caculate the extrudeHeight of entity
     SettingComponent.prototype.ExtrudeHeight = function (value, _ExtrudeMax, _ExtrudeMin, _Invert) {
         var diff;
         if (_ExtrudeMin < 0) {
@@ -1691,6 +1679,10 @@ var SettingComponent = /** @class */ (function (_super) {
                 var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                 entity.polyline.material.color.setValue(newColor);
             }
+            if (entity.point !== undefined) {
+                var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                entity.point.color = newColor;
+            }
         }
         else {
             if (entity.polygon !== undefined) {
@@ -1698,6 +1690,9 @@ var SettingComponent = /** @class */ (function (_super) {
             }
             if (entity.polyline !== undefined) {
                 entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+            if (entity.point !== undefined) {
+                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
             }
         }
     };
@@ -1714,6 +1709,10 @@ var SettingComponent = /** @class */ (function (_super) {
                         var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
                         entity.polyline.material.color.setValue(newColor);
                     }
+                    if (entity.point !== undefined) {
+                        var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                        entity.point.color = newColor;
+                    }
                     initial = true;
                 }
             }
@@ -1724,6 +1723,9 @@ var SettingComponent = /** @class */ (function (_super) {
                 if (entity.polyline !== undefined) {
                     entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
                 }
+                if (entity.point !== undefined) {
+                    entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
             }
         }
         else {
@@ -1732,6 +1734,9 @@ var SettingComponent = /** @class */ (function (_super) {
             }
             if (entity.polyline !== undefined) {
                 entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+            if (entity.point !== undefined) {
+                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
             }
         }
     };
@@ -1818,6 +1823,7 @@ var DataComponent = /** @class */ (function (_super) {
             }
         }
     };
+    //load data
     DataComponent.prototype.LoadData = function () {
         this._ColorProperty = this.dataArr["ColorProperty"];
         this._ColorKey = this.dataArr["ColorKey"];
@@ -1834,6 +1840,7 @@ var DataComponent = /** @class */ (function (_super) {
         this._Filter = this.dataArr["Filter"];
         this._HideNum = this.dataArr["HideNum"];
     };
+    //change color property in editor version
     DataComponent.prototype.onChangeColor = function (value) {
         this.dataArr["ColorKey"] = value;
         var promise = this.dataService.getcesiumpromise();
@@ -1863,16 +1870,25 @@ var DataComponent = /** @class */ (function (_super) {
         this.dataService.set_ViData(this.dataArr);
         this.LoadData();
     };
+    //change color min in editor version
     DataComponent.prototype.changeColorMin = function (_Min) {
         this.dataArr["ColorMin"] = Number(_Min);
         this._ColorMin = this.dataArr["ColorMin"];
         this.dataService.set_ViData(this.dataArr);
     };
+    //change color max in editor version
     DataComponent.prototype.changeColorMax = function (_Max) {
         this.dataArr["ColorMax"] = Number(_Max);
         this._ColorMax = this.dataArr["ColorMax"];
         this.dataService.set_ViData(this.dataArr);
     };
+    //change color invert in editor version
+    DataComponent.prototype.changeColorInvert = function () {
+        this._ColorInvert = !this._ColorInvert;
+        this.dataArr["ColorInvert"] = this._ColorInvert;
+        this.dataService.set_ViData(this.dataArr);
+    };
+    //change extrudeheight property in editor version
     DataComponent.prototype.onChangeHeight = function (value) {
         this.dataArr["ExtrudeKey"] = value;
         var promise = this.dataService.getcesiumpromise();
@@ -1902,36 +1918,37 @@ var DataComponent = /** @class */ (function (_super) {
         this.dataService.set_ViData(this.dataArr);
         this.LoadData();
     };
+    //change extrudeheight min in editor version
     DataComponent.prototype.changeHeightMin = function (_Min) {
         this.dataArr["ExtrudeMin"] = Number(_Min);
         this._ExtrudeMin = this.dataArr["ExtrudeMin"];
         this.dataService.set_ViData(this.dataArr);
     };
+    //change extrudeHeight max in editor version
     DataComponent.prototype.changeHeightMax = function (_Max) {
         this.dataArr["ExtrudeMax"] = Number(_Max);
         this._ExtrudeMax = this.dataArr["ExtrudeMax"];
         this.dataService.set_ViData(this.dataArr);
     };
+    //change scale in editor version
     DataComponent.prototype.changescale = function (_ScaleValue) {
         this.dataArr["Scale"] = Number(_ScaleValue);
         this._Scale = this.dataArr["Scale"];
         this.dataService.set_ViData(this.dataArr);
     };
+    //change extrudeheight invert in editor version
     DataComponent.prototype.changeopp = function () {
         this._Invert = !this._Invert;
         this.dataArr["Invert"] = this._Invert;
         this.dataService.set_ViData(this.dataArr);
     };
-    DataComponent.prototype.changeColorInvert = function () {
-        this._ColorInvert = !this._ColorInvert;
-        this.dataArr["ColorInvert"] = this._ColorInvert;
-        this.dataService.set_ViData(this.dataArr);
-    };
+    //change heightChart in editor version
     DataComponent.prototype.changeExtrude = function () {
         this._HeightChart = !this._HeightChart;
         this.dataArr["HeightChart"] = this._HeightChart;
         this.dataService.set_ViData(this.dataArr);
     };
+    //add filter in editor version
     DataComponent.prototype.addHide = function () {
         var lastnumber;
         if (this.dataArr["HideNum"] !== undefined) {
@@ -1971,6 +1988,7 @@ var DataComponent = /** @class */ (function (_super) {
         this.dataArr["HideNum"] = this._HideNum;
         this.dataService.set_ViData(this.dataArr);
     };
+    //delete filter in editor version
     DataComponent.prototype.deleteHide = function (event) {
         var index = this._HideNum.indexOf(event);
         var divid = String("addHide".concat(String(event)));
@@ -1994,6 +2012,7 @@ var DataComponent = /** @class */ (function (_super) {
         this.dataArr["HideNum"] = this._HideNum;
         this.dataService.set_ViData(this.dataArr);
     };
+    //change disable button in filter
     DataComponent.prototype.Disable = function (event) {
         var index = this._HideNum.indexOf(event);
         var divid = String("addHide".concat(String(event)));
@@ -2035,9 +2054,11 @@ var DataComponent = /** @class */ (function (_super) {
         this.dataArr["HideNum"] = this._HideNum;
         this.dataService.set_ViData(this.dataArr);
     };
+    //change height slider in filter
     DataComponent.prototype.ChangeHeight = function (_HeightHide) {
         this._HideValue = _HeightHide;
     };
+    //change relation in filter
     DataComponent.prototype.Changerelation = function (_RelaHide, id) {
         var index = this._HideNum.indexOf(id);
         var HeightHide = this._Filter[index].HeightHide;
@@ -2072,6 +2093,7 @@ var DataComponent = /** @class */ (function (_super) {
             this._Filter[index].textHide = this._Filter[index].HideMax;
         }
     };
+    //change category in filter
     DataComponent.prototype.ChangeCategory = function (categary, id, type) {
         var index = this._HideNum.indexOf(id);
         if (type === 1) {
@@ -2081,10 +2103,12 @@ var DataComponent = /** @class */ (function (_super) {
             this._Filter[index].RelaHide = Number(categary);
         }
     };
+    //change text in filter
     DataComponent.prototype.Changetext = function (value, id) {
         var index = this._HideNum.indexOf(id);
         this._Filter[index].textHide = value;
     };
+    //get text according to property
     DataComponent.prototype.Initial = function (_HideValue) {
         var texts = [];
         var promise = this.dataService.getcesiumpromise();
@@ -2127,7 +2151,7 @@ var DataComponent = /** @class */ (function (_super) {
 /***/ "./src/app/mobius-cesium/viewer/viewer.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "body{\r\n  background: red;\r\n}\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n#ColorBar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 7%;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n#ColorKey{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 2%;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n#Download{\r\n  z-index: 99;\r\n  top: 5px;\r\n  position: absolute;\r\n  right: 160px;\r\n  width: 32px;\r\n  height: 32px;\r\n  font-size: 16px;\r\n  -webkit-box-sizing: border-box;\r\n          box-sizing: border-box;\r\n  border-radius: 14%;\r\n  padding: 0;\r\n  vertical-align: middle;\r\n}\r\n\r\n"
+module.exports = "body{\r\n  background: red;\r\n}\r\n#cesiumContainer{\r\n height: 100%;\r\n width: 100%; \r\n font-family: sans-serif !important;\r\n margin: 0px !important;\r\n padding: 0px !important;\r\n font-size: 14px;\r\n}\r\n#ColorBar{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 7%;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n#ColorKey{\r\n  z-index:99;\r\n  margin: 5px;\r\n  width: 100%;\r\n  padding: 2px 5px;\r\n  position: absolute;\r\n  display:inline-block;\r\n  bottom: 2%;\r\n  overflow: hidden !important;\r\n  text-overflow: ellipsis !important;\r\n  table-layout:fixed !important;\r\n  white-space: nowrap !important;\r\n}\r\n#Download{\r\n  z-index: 99;\r\n  top: 5px;\r\n  position: absolute;\r\n  right: 120px;\r\n  width: 32px;\r\n  height: 32px;\r\n  font-size: 16px;\r\n  -webkit-box-sizing: border-box;\r\n          box-sizing: border-box;\r\n  border-radius: 14%;\r\n  padding: 0;\r\n  vertical-align: middle;\r\n}\r\n\r\n"
 
 /***/ }),
 
@@ -2179,18 +2203,32 @@ var ViewerComponent = /** @class */ (function (_super) {
         return _this;
     }
     ViewerComponent.prototype.ngOnInit = function () {
+        //pass mode to dataService
         this.mode = this.dataService.getmode();
-        if (this.mode === "editor") {
-            this.dataService.getValue(this.data);
-            this.dataService.LoadJSONData();
-            this.dataArr = this.dataService.get_ViData();
-            this._index = 1;
+        if (this.dataService.getViewer() === undefined) {
+            this.CreateViewer();
         }
-        if (this.mode === "viewer") {
-            this.dataService.LoadJSONData();
-            this.dataArr = this.dataService.get_PuData();
-            this._index = 3;
+        //pass data to dataService
+        this.data = this.dataService.getGsModel();
+        //load data
+        this.LoadData(this.data);
+    };
+    ViewerComponent.prototype.notify = function (message) {
+        if (message === "model_update") {
+            this.data = this.dataService.getGsModel();
+            try {
+                if (this.dataService.getViewer() === undefined) {
+                    this.CreateViewer();
+                }
+                this.LoadData(this.data);
+            }
+            catch (ex) {
+                console.log(ex);
+            }
         }
+    };
+    //create cesium viewer and change home button funciton
+    ViewerComponent.prototype.CreateViewer = function () {
         var viewer = new Cesium.Viewer("cesiumContainer", {
             infoBox: false,
             showRenderLoopErrors: false,
@@ -2200,6 +2238,7 @@ var ViewerComponent = /** @class */ (function (_super) {
             automaticallyTrackDataSourceClocks: false,
             animation: false,
             shadows: true,
+            scene3DOnly: true,
         });
         viewer.scene.imageryLayers.removeAll();
         viewer.scene.globe.baseColor = Cesium.Color.GRAY;
@@ -2211,17 +2250,7 @@ var ViewerComponent = /** @class */ (function (_super) {
         });
         this.dataService.setViewer(viewer);
     };
-    ViewerComponent.prototype.notify = function (message) {
-        if (message === "model_update") {
-            this.data = this.dataService.getGsModel();
-            try {
-                this.LoadData(this.data);
-            }
-            catch (ex) {
-                console.log(ex);
-            }
-        }
-    };
+    //Cesium geoJson to load data and check mode
     ViewerComponent.prototype.LoadData = function (data) {
         if (this.data !== undefined) {
             var viewer = this.dataService.getViewer();
@@ -2229,7 +2258,6 @@ var ViewerComponent = /** @class */ (function (_super) {
             this.data = data;
             var promise = Cesium.GeoJsonDataSource.load(this.data);
             viewer.dataSources.add(promise);
-            var _HeightKey = [];
             promise.then(function (dataSource) {
                 var entities = dataSource.entities.values;
                 var self = this;
@@ -2256,6 +2284,7 @@ var ViewerComponent = /** @class */ (function (_super) {
             this.Colortext();
         }
     };
+    //create color bar and text at bottom of viewer
     ViewerComponent.prototype.Colortext = function () {
         if (this.dataArr !== undefined) {
             if (this._index !== this.dataService.get_index()) {
@@ -2342,6 +2371,7 @@ var ViewerComponent = /** @class */ (function (_super) {
             this._Colorbar = undefined;
         }
     };
+    //click building to select and  pass whole entity to dataService
     ViewerComponent.prototype.select = function () {
         event.stopPropagation();
         var viewer = this.dataService.getViewer(); //this.viewer;
@@ -2370,6 +2400,7 @@ var ViewerComponent = /** @class */ (function (_super) {
             }
         }
     };
+    //if unselect the building, it will show the color before
     ViewerComponent.prototype.ColorSelect = function (entity) {
         var promise = this.dataService.getcesiumpromise();
         var _ColorKey = this.dataArr["ColorKey"];
@@ -2428,6 +2459,7 @@ var ViewerComponent = /** @class */ (function (_super) {
             entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
         }
     };
+    //check the selected building  color before
     ViewerComponent.prototype.Hide = function (_Filter, entity, _HeightChart) {
         var _CheckHide = false;
         for (var _i = 0, _Filter_1 = _Filter; _i < _Filter_1.length; _i++) {
@@ -2476,7 +2508,12 @@ var ViewerComponent = /** @class */ (function (_super) {
                 entity.polygon.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
             }
             if (entity.polyline !== undefined) {
-                entity.polyline.material = Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                entity.polyline.material.color.setValue(newColor);
+            }
+            if (entity.point !== undefined) {
+                var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                entity.point.color = newColor;
             }
         }
         else {
@@ -2485,6 +2522,9 @@ var ViewerComponent = /** @class */ (function (_super) {
             }
             if (entity.polyline !== undefined) {
                 entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
+            if (entity.point !== undefined) {
+                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
             }
         }
     };
@@ -2494,12 +2534,30 @@ var ViewerComponent = /** @class */ (function (_super) {
             for (var j = 0; j < _ColorText.length; j++) {
                 if (entity.properties[_ColorKey]._value === _ColorText[j]) {
                     var rgb = _ChromaScale(1 - (j / _ColorText.length)); // _ChromaScale((j/_ColorText.length).toFixed(2));
-                    entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                    if (entity.polygon !== undefined) {
+                        entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0], rgb._rgb[1], rgb._rgb[2]);
+                    }
+                    if (entity.polyline !== undefined) {
+                        var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                        entity.polyline.material.color.setValue(newColor);
+                    }
+                    if (entity.point !== undefined) {
+                        var newColor = new Cesium.Color.fromBytes(rgb[0], rgb[1], rgb[2]);
+                        entity.point.color = newColor;
+                    }
                     initial = true;
                 }
             }
             if (initial === false) {
-                entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                if (entity.polygon !== undefined) {
+                    entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+                if (entity.polyline !== undefined) {
+                    entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
+                if (entity.point !== undefined) {
+                    entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+                }
             }
         }
         else {
@@ -2509,8 +2567,12 @@ var ViewerComponent = /** @class */ (function (_super) {
             if (entity.polyline !== undefined) {
                 entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
             }
+            if (entity.point !== undefined) {
+                entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
+            }
         }
     };
+    //in viewer mode,set some attibutes to show
     ViewerComponent.prototype.showAttribs = function (event) {
         var viewer = this.dataService.getViewer();
         if (this.data !== undefined && this.mode === "viewer") {
@@ -2554,6 +2616,7 @@ var ViewerComponent = /** @class */ (function (_super) {
     return ViewerComponent;
 }(__WEBPACK_IMPORTED_MODULE_1__data_DataSubscriber__["a" /* DataSubscriber */]));
 
+//download geojson
 var FileUtils = /** @class */ (function () {
     function FileUtils() {
     }
