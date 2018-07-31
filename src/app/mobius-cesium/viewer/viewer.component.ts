@@ -33,7 +33,7 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public ngOnInit() {
-    //padd mode to dataService
+    //pass mode to dataService
     this.mode = this.dataService.getmode();
     if(this.dataService.getViewer() === undefined){
       this.CreateViewer();
@@ -91,7 +91,6 @@ export class ViewerComponent extends DataSubscriber {
       this.data = data;
       const promise = Cesium.GeoJsonDataSource.load(this.data);
       viewer.dataSources.add(promise);
-      const _HeightKey: any[] = [];
 
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
