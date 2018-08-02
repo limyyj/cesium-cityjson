@@ -92,23 +92,29 @@ export class ViewerComponent extends DataSubscriber {
 
       /////// OBTAINING DATA ////////
       this.data = data;
-      const dataSource = this.genModelService.genCityJSONGeom(this.data);
-      // const promise = Cesium.GeoJsonDataSource.load(this.data);
-      viewer.dataSources.add(dataSource);
+      const context = this;
+      const promise = new Promise (function(resolve) {
+        const datasource = context.genModelService.genCityJSONGeom(context.data);
+        resolve(datasource);
+      });
+
+      this.dataService.setcesiumpromise(promise);
+
+      viewer.dataSources.add(promise);
       const _HeightKey: any[] = [];
-// =======
-//       const promise = Cesium.GeoJsonDataSource.load(this.data);
-//       viewer.dataSources.add(promise);
-// >>>>>>> upstream/master
+
+      // const promise = Cesium.GeoJsonDataSource.load(this.data);
+      // viewer.dataSources.add(promise);
+
 
       this._ShowColorBar = false;
 
       /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
         e.cancel = true;
-        viewer.zoomTo(dataSource);
+        viewer.zoomTo(promise);
       });
-      viewer.zoomTo(dataSource);
+      viewer.zoomTo(promise);
 // =======
 //       promise.then(function(dataSource) {
 //         const entities = dataSource.entities.values;

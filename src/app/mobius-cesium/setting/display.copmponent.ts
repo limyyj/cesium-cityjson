@@ -130,14 +130,18 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
         for(const entity of entities) {
-          entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
+          if (entity.polygon !== undefined){
+            entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
+          }
         }
       });
     } else {
       promise.then(function(dataSource) {
         const entities = dataSource.entities.values;
         for(const entity of entities) {
-          entity.polygon.shadows = undefined;
+          if (entity.polygon !== undefined){
+            entity.polygon.shadows = undefined;
+          }
         }
       });
     }

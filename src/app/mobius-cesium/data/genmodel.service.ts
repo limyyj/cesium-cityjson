@@ -384,7 +384,7 @@ export class GenModelService {
     return temp_parent;
   }
 
-  public genCityJSONGeom(file: JSON): void {
+  public genCityJSONGeom(file: JSON): any {
     // Initialise dataSource and surface type ID arrays
     this.setDataSource(new Cesium.CustomDataSource());
     this.initialiseSrftypeIds();
