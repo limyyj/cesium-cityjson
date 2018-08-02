@@ -80,7 +80,7 @@ export class GenModelService {
       this.epsg = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
     } else {
       // search EPSG.io (TO-DO)
-      const url = "http://epsg.io/"+file["metadata"]["crs"]["epsg"]+".proj4";
+      const url = "https://epsg.io/"+file["metadata"]["crs"]["epsg"]+".proj4";
       let val = "";
 
       let xhttp = new XMLHttpRequest();
