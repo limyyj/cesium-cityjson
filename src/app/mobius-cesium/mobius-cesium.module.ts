@@ -9,7 +9,7 @@ import { BrowserAnimationsModule ,NoopAnimationsModule} from "@angular/platform-
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from "@angular/platform-browser";
 import { MatTabsModule} from "@angular/material/tabs";
 import { MatTooltipModule} from "@angular/material/tooltip";
-import {MatSliderModule } from "@angular/material/slider";
+import { MatSliderModule } from "@angular/material/slider";
 import { FormsModule } from "@angular/forms";
 import { SettingComponent } from "./setting/setting.component";
 import { DataComponent } from "./setting/visualise.component";
@@ -40,7 +40,8 @@ import { CityJSONComponent } from "./setting/cityjson.component";
                     CityJSONComponent,
                     ],
     providers: [DataService,
-                GenModelService],
+                GenModelService,
+                ],
 })
 export class MobiusCesium {
    static forRoot(): ModuleWithProviders {

@@ -3,12 +3,11 @@
   "project": {
     "name": "cesiumhdb"
   },
-  "apps": [
-    {
+  "apps": [{
       "root": "src",
       "outDir": "docs",
       "assets": [
-        { "glob": "**/*", "input": "../node_modules/cesium/Build/Cesium", "output": "./assets/cesium" } 
+        { "glob": "**/*", "input": "../node_modules/cesium/Build/Cesium", "output": "./assets/cesium" },
       ],
       "index": "index.html",
       "main": "main.ts",

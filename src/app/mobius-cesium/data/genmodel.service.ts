@@ -5,6 +5,10 @@ import * as chroma from "chroma-js";
 import proj4 from "proj4";
 import * as earcut from "earcut";
 
+export interface EpsgString {
+  textfile: string;
+}
+
 @Injectable()
 export class GenModelService {
   private subject = new Subject<any>();
@@ -18,7 +22,6 @@ export class GenModelService {
   private srftype_ids: any;
   private scale: number[];
   private translate: number[];
-  // private cart_matrix: any;
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -73,27 +76,28 @@ export class GenModelService {
 
   public setEPSG(file): void {
     if (file["metadata"]["crs"] === undefined || file["metadata"]["crs"]["epsg"] === undefined) {
-      // this.epsg = "+proj=tmerc +lat_0=1.344564 +lon_0=103.858189 +k=1 +x_0=-1500 +y_0=-1500 +ellps=WGS84 +units=m +no_defs";
-      this.epsg = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs"
-      // this.epsg = "+proj=tmerc +lat_0=0 +lon_0=0 +k=1 +ellps=WGS84 +units=m +no_defs";
-      // this.epsg = undefined;
-      // this.setCartMatrix(90,Cesium.Cartesian3.fromDegrees(103.775765,1.302975));
-      // console.log("set cart_matrix", this.cart_matrix);
+    // if undefined, default is EPSG 3414 sweats (WGS84 causes our models to go crazy, with EPSG 3414 they at least show up)
+      this.epsg = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
     } else {
-    // TODO: Initialise epsg projector (proj4js) link to Spatial References
-    const epsg = {
-      31467 : "+proj=tmerc +lat_0=0 +lon_0=9 +k=1 +x_0=3500000 +y_0=0 +ellps=bessel +datum=potsdam +units=m +no_defs",
-      // 31467 : "+proj=tmerc +lat_0=0 +lon_0=12 +k=1 +x_0=4500000 +y_0=0 +ellps=bessel +towgs84=598.1,73.7,418.2,0.202,0.045,-2.455,6.7 +units=m +no_defs",
-      // 28992 : "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +units=m +no_defs",
-      // Rotterdam: actually EPSG:7415!
-      28992 : "+proj=sterea +lat_0=52.15616055555555 +lon_0=5.38763888888889 +k=0.9999079 +x_0=155000 +y_0=463000 +ellps=bessel +towgs84=565.4171,50.3319,465.5524,-0.398957,0.343988,-1.87740,4.0725 +units=m +no_defs",
-      3414 : "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs",
-    };
-    this.epsg = epsg[file["metadata"]["crs"]["epsg"]];
+      // search EPSG.io (TO-DO)
+      const url = "http://epsg.io/"+file["metadata"]["crs"]["epsg"]+".proj4";
+      let val = "";
+
+      let xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          val = this.responseText;
+        }
+      };
+      xhttp.open("GET", url, false);
+      xhttp.send();
+      this.epsg = val;
+
+      if (this.epsg === undefined) {
+        this.epsg = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+      }
     }
-    if (this.epsg === undefined) {
-      this.epsg = "WGS84";
-    }
+    // console.log(this.epsg);
   }
 
   public setDataSource(dataSource: any): void {
@@ -221,6 +225,10 @@ export class GenModelService {
     }
     // parent entity to contain triangulated polygons
     const temp_parent = this.dataSource.entities.add(new Cesium.Entity());
+
+    if (typeof(boundaries[0][0]) !== "number") {
+      boundaries = boundaries[0];
+    }
 
     // determine axis
     const axis = this.determineAxis(boundaries[0]);
@@ -376,7 +384,7 @@ export class GenModelService {
     return temp_parent;
   }
 
-  public genCityJSONGeom(file: JSON): object {
+  public genCityJSONGeom(file: JSON): void {
     // Initialise dataSource and surface type ID arrays
     this.setDataSource(new Cesium.CustomDataSource());
     this.initialiseSrftypeIds();
@@ -546,17 +554,22 @@ export class GenModelService {
 
             // Check horizontal or not
             const z = [];
+            let arr = boundaries[srf_index][0];
+            if (typeof(arr[0]) !== "number") {
+              arr = boundaries[0][srf_index][0];
+            }
             if (vertex_arr === 0) {
-              boundaries[srf_index][0].forEach((coords) => {
+              arr.forEach((coords) => {
+                // console.log(this.vertices[coords])
                 z.push(this.vertices[coords][2]);
               });
             } else {
-              boundaries[srf_index][0].forEach((coords) => {
+              arr.forEach((coords) => {
                 z.push(this.template_vertices[coords][2]);
               });
             }
             
-            if (this.maxDiff(z) === 0) {
+            if (this.maxDiff(z) < 0.01) {
               // // horizontal, use Cesium's stuff
               // console.log("Horizontal")
               const poly = this.cesiumPoly(boundaries[srf_index],vertex_arr,transform,colour);

@@ -18,10 +18,12 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
   private _Sun: boolean;
   private _Shadow: boolean;
   private _Date: string;
+  private _UTC: number;
 
   constructor(injector: Injector, myElement: ElementRef) {
   super(injector);
   }
+
   public ngOnInit() {
     this.data = this.dataService.getGsModel();
     this._ImageryList = ["Disable","Stamen Toner","Stamen Toner(Lite)","Terrain(Standard)","Terrain(Background)",
@@ -42,6 +44,8 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
       this.dataService.set_Shadow(this._Shadow);
     }else {this._Shadow =this.dataService.get_Shadow();}
 
+    this._UTC = +8;
+    this.dataService.set_UTC(this._UTC);
     if(this._Date ===undefined){
       const today = new Date();
       const year = today.getFullYear();
@@ -50,12 +54,14 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
       this._Date = year+"-"+month+"-"+day;
     }else {
       this._Date = this.dataService.get_Date();
-      this.changeDate(this._Date);
+      this.changeDate(this._Date,this._UTC);
     }
-    this.dataService.set_Date(this._Date);
+        this.dataService.set_Date(this._Date);
   }
   public  notify(message: string): void {
   }
+  
+  //chanage imagery in Display tab
   public onChangeImagery(_Imagery): void{
     this._Imagery = _Imagery;
     this.dataService.set_Imagery(_Imagery);
@@ -101,6 +107,7 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
       var blackMarble = layers.addImageryProvider(new Cesium.IonImageryProvider({ assetId: 3845 }));
     }
   }
+  //change sun
   public changeSun(){
     const viewer = this.dataService.getViewer();
     this._Sun = ! this._Sun;
@@ -115,6 +122,7 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
     }
     this.dataService.set_Sun(this._Sun);
   }
+  //change shadow
   public changeShadow(){
     this._Shadow = ! this._Shadow;
     const promise = this.dataService.getcesiumpromise();
@@ -135,20 +143,22 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
     }
     this.dataService.set_Shadow(this._Shadow);
   }
-  public changeDate(Date){
-    this._Date = Date;
+  //change date
+  public changeDate(_Date,_UTC){
+    this._Date = _Date;
+    this._UTC = _UTC;
     const viewer = this.dataService.getViewer();
-    const now = new Cesium.JulianDate.fromIso8601(Date);
+    const now = new Cesium.JulianDate.fromIso8601(this._Date);
     const tomorrow = now.clone();
     tomorrow.dayNumber = tomorrow.dayNumber + 1;
-    viewer.clock.currentTime = now;
+    viewer.clock.currentTime = Cesium.JulianDate.addHours(now,this._UTC,now);
     viewer.clock.startTime = now.clone();
     viewer.clock.stopTime = tomorrow.clone();
-    viewer.clock.multiplier = 1.0;
-    viewer.timeline.updateFromClock();
     viewer.timeline.zoomTo(viewer.clock.startTime, viewer.clock.stopTime);
-    viewer.clock.multiplier = 1;
     this.dataService.set_Date(this._Date);
+    this.dataService.set_UTC(this._UTC);
+    viewer.timeline.updateFromClock();
+
   }
 
 }

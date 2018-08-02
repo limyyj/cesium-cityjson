@@ -52,7 +52,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
       }
     }
   }
-
+  //load data in publish version
   public LoadData() {
     this._ColorDescr = this.dataArr["ColorDescr"];
     this._ColorProperty = this.dataArr[ "ColorProperty"];
@@ -71,7 +71,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     this._HideNum = this.dataArr[ "HideNum"];
     this._Filter = this.dataArr[ "Filter"];
   }
-
+  //disable button in publish version
   public Disable(event) {
     const index = this._HideNum.indexOf(event);
     const divid = String("addHide".concat(String(event)));
@@ -107,7 +107,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     this.dataArr["HideNum"] = this._HideNum;
     this.dataService.set_PuData(this.dataArr);
   }
-
+  //change category in filter
   public ChangeCategory(categary,id,type) {
     const _index = this._HideNum.indexOf(id);
     if(type === 1) {
@@ -117,12 +117,12 @@ export class PublishComponent extends DataSubscriber implements OnInit {
       this._Filter[_index].RelaHide = Number(categary);
     }
   }
-
+  //change text in filter
   public Changetext(value,id) {
     const _index = this._HideNum.indexOf(id);
     this._Filter[_index].textHide = value;
   }
-
+  //change color property in publish version
   public onChangeColor(value) {
     const data = this.dataService.getGsModel()["cesium"]["colour"]["attribs"];
     this.dataArr["ColorKey"] = value;
@@ -153,7 +153,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
-
+  //change extrudeheight property in publish version
   public onChangeHeight(value) {
     const data = this.dataService.getGsModel()["cesium"]["extrude"]["attribs"];
     this.dataArr["ExtrudeKey"] = value;
@@ -186,7 +186,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
-
+  //reset button to load again
   public reset() {
     this.dataService.LoadJSONData();
     this.dataArr = this.dataService.get_PuData();

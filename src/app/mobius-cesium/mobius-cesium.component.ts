@@ -29,20 +29,19 @@ export class MobiuscesiumComponent {
   constructor(private dataService: DataService) {
 
   	};
+  //pass data to dataService
   public setModel(data: JSON): void {
   	try {
   		this.dataService.setGsModel(data);
-      // console.log("mode: ", this.mode);
   	}
   	catch(ex) {
   		this.data = undefined;
-  		//console.error("Error generating model");
 
   	}
   }
+  //pass data to dataService
   public ngOnInit() {
   	this.setModel(this.data);
-    // console.log("Setting", this.mode)
     this.dataService.setMode(this.mode);
     // console.log(this.data);
 
@@ -54,6 +53,8 @@ export class MobiuscesiumComponent {
       // console.log("mode:", this.mode);
   	}
   }
+
+  //create slider to switch setting
   private slider_state:string = "slide_out";
   public toggleSlider(): void {
     // do something to change the animation_state variable

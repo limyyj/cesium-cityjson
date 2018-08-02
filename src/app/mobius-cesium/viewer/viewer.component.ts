@@ -33,18 +33,33 @@ export class ViewerComponent extends DataSubscriber {
   }
 
   public ngOnInit() {
+    //pass mode to dataService
     this.mode = this.dataService.getmode();
-    if(this.mode === "editor") {
-      this.dataService.getValue(this.data);
-      this.dataService.LoadJSONData();
-      this.dataArr = this.dataService.get_ViData();
-      this._index = 1;
+    if(this.dataService.getViewer() === undefined){
+      this.CreateViewer();
     }
-    if(this.mode === "viewer") {
-      this.dataService.LoadJSONData();
-      this.dataArr = this.dataService.get_PuData();
-      this._index = 3;
+    //pass data to dataService
+    this.data = this.dataService.getGsModel();
+    //load data
+    this.LoadData(this.data);
+  }
+
+  public notify(message: string): void {
+    if(message === "model_update" ) {
+      this.data = this.dataService.getGsModel();
+      try {
+        if(this.dataService.getViewer() === undefined){
+          this.CreateViewer();
+        }
+        this.LoadData(this.data);
+      }
+      catch(ex) {
+        console.log(ex);
+      }
     }
+  }
+  //create cesium viewer and change home button funciton
+  public CreateViewer(){
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox: false,
       showRenderLoopErrors: false,
@@ -54,6 +69,7 @@ export class ViewerComponent extends DataSubscriber {
       automaticallyTrackDataSourceClocks:false,
       animation:false,
       shadows:true,
+      scene3DOnly:true,
       //terrainShadows: Cesium.ShadowMode.ENABLED
     });
     viewer.scene.imageryLayers.removeAll();
@@ -66,20 +82,7 @@ export class ViewerComponent extends DataSubscriber {
     });
     this.dataService.setViewer(viewer);
   }
-
-  public notify(message: string): void {
-    if(message === "model_update" ) {
-
-      this.data = this.dataService.getGsModel();
-      try {
-        this.LoadData(this.data);
-      }
-      catch(ex) {
-        console.log(ex);
-      }
-    }
-  }
-
+  //Cesium geoJson to load data and check mode
   public LoadData(data: JSON) {
     if(this.data !== undefined) {
       /////// INITIALISING VIEWER ////////
@@ -93,6 +96,10 @@ export class ViewerComponent extends DataSubscriber {
       // const promise = Cesium.GeoJsonDataSource.load(this.data);
       viewer.dataSources.add(dataSource);
       const _HeightKey: any[] = [];
+// =======
+//       const promise = Cesium.GeoJsonDataSource.load(this.data);
+//       viewer.dataSources.add(promise);
+// >>>>>>> upstream/master
 
       this._ShowColorBar = false;
 
@@ -126,7 +133,7 @@ export class ViewerComponent extends DataSubscriber {
       this.Colortext();
     }
   }
-
+  //create color bar and text at bottom of viewer
   public Colortext() {
     if(this.dataArr !== undefined) {
       if(this._index !== this.dataService.get_index()) {
@@ -194,7 +201,7 @@ export class ViewerComponent extends DataSubscriber {
       this._Colorbar = undefined;
     }
   }
-
+  //click building to select and  pass whole entity to dataService
   public select() {
     event.stopPropagation();
     const viewer = this.dataService.getViewer();//this.viewer;
@@ -206,6 +213,7 @@ export class ViewerComponent extends DataSubscriber {
       // this.selectEntity.polygon.material = this.material;
       // console.log("Triggered revert colour", this.selectEntity.polygon.material);
     }
+
     if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
       // console.log(viewer.selectedEntity);
       this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
@@ -227,7 +235,9 @@ export class ViewerComponent extends DataSubscriber {
       // console.log("Triggered set everything to undefined");
     }
   }
-
+// =======
+//   }
+//   //if unselect the building, it will show the color before
 //   public ColorSelect(entity) {
 //     const promise = this.dataService.getcesiumpromise();
 //     const _ColorKey: string = this.dataArr["ColorKey"];
@@ -273,7 +283,7 @@ export class ViewerComponent extends DataSubscriber {
 //       entity.polygon.material = Cesium.Color.fromBytes(ColorValue[0], ColorValue[1], ColorValue[2], ColorValue[3]);
 //     }
 //   }
-
+//   //check the selected building  color before
 //   public Hide(_Filter: any[], entity, _HeightChart: boolean): boolean {
 //     let _CheckHide: boolean=false;
 //     for(const filter of _Filter) {
@@ -292,7 +302,6 @@ export class ViewerComponent extends DataSubscriber {
 //     }
 //     return _CheckHide;
 //   }
-
 //   public _compare(value: number, slider: number, relation: number): boolean {
 //     switch (relation) {
 //       case 0:
@@ -303,7 +312,6 @@ export class ViewerComponent extends DataSubscriber {
 //         return value !== slider;
 //     }
 //   }
-
 //   public _compareCat(value: string, _Categary: string,relation: number): boolean {
 //     switch (relation) {
 //       case 0:
@@ -319,31 +327,52 @@ export class ViewerComponent extends DataSubscriber {
 //       const texts = entity.properties[_ColorKey]._value;
 //       const rgb = _ChromaScale(Number(((max-texts)/(max-min)).toFixed(2)))._rgb;
 //       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
-//       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);}
+//       if(entity.polyline !== undefined) {
+//         const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+//         entity.polyline.material.color.setValue(newColor);
+//       }
+//       if(entity.point !==undefined){
+//         const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+//         entity.point.color = newColor;
+//       }
 //     }else{
 //       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
 //       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//       if(entity.point !== undefined) {entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
 //     }
+//   }
 
-  // public  colorByCat(entity, _ColorText: any[], _ColorKey: string, _ChromaScale: any) {
-  //   if(entity.properties[_ColorKey] !== undefined) {
-  //     let initial: boolean = false;
-  //     for(let j = 0;j<_ColorText.length; j++) {
-  //       if(entity.properties[_ColorKey]._value === _ColorText[j]) {
-  //         const rgb = _ChromaScale(1 - (j / _ColorText.length)); // _ChromaScale((j/_ColorText.length).toFixed(2));
-  //         entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);
-  //         initial = true;
-  //       }
-  //     }
-  //     if(initial === false) {
-  //       entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);
-  //     }
-  //   }else{
-  //     if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-  //     if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
-  //   }
-  // }
-
+//   public  colorByCat(entity, _ColorText: any[], _ColorKey: string, _ChromaScale: any) {
+//     if(entity.properties[_ColorKey] !== undefined) {
+//       let initial: boolean = false;
+//       for(let j = 0;j<_ColorText.length; j++) {
+//         if(entity.properties[_ColorKey]._value === _ColorText[j]) {
+//           const rgb = _ChromaScale(1 - (j / _ColorText.length)); // _ChromaScale((j/_ColorText.length).toFixed(2));
+//           if(entity.polygon !== undefined){entity.polygon.material = Cesium.Color.fromBytes(rgb._rgb[0],rgb._rgb[1],rgb._rgb[2]);}
+//           if(entity.polyline !== undefined) {
+//             const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+//             entity.polyline.material.color.setValue(newColor);
+//           }
+//           if(entity.point !== undefined) {
+//             const newColor = new Cesium.Color.fromBytes(rgb[0],rgb[1],rgb[2]);
+//             entity.point.color = newColor;
+//           }
+//           initial = true;
+//         }
+//       }
+//       if(initial === false) {
+//         if(entity.polygon !== undefined){entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//         if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//         if(entity.point !== undefined) {entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//       }
+//     }else{
+//       if(entity.polygon !== undefined) {entity.polygon.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//       if(entity.polyline !== undefined) {entity.polyline.material = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//       if(entity.point !== undefined) {entity.point.color = Cesium.Color.LIGHTSLATEGRAY.withAlpha(1);}
+//     }
+//   }
+//   //in viewer mode,set some attibutes to show
+// >>>>>>> upstream/master
   public showAttribs(event) {
     const viewer = this.dataService.getViewer();
     if(this.data !== undefined && this.mode === "viewer") {
@@ -377,7 +406,7 @@ export class ViewerComponent extends DataSubscriber {
   }
 }
 
-
+//download geojson
 abstract class FileUtils{
   public static downloadContent(blob, filename) {
     if (window.navigator.msSaveOrOpenBlob) {
