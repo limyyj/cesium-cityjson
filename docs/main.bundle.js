@@ -710,7 +710,7 @@ var GenModelService = /** @class */ (function () {
         }
         else {
             // search EPSG.io (TO-DO)
-            var url = "http://epsg.io/" + file["metadata"]["crs"]["epsg"] + ".proj4";
+            var url = "https://epsg.io/" + file["metadata"]["crs"]["epsg"] + ".proj4";
             var val_1 = "";
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () {
