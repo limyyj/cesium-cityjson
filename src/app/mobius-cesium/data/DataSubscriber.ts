@@ -1,12 +1,12 @@
 import { Injector } from '@angular/core';
 import { DataService } from "./data.service";
-import { GenModelService } from "./genmodel.service";
+import { CityJSONService } from "./readCityJSON.service";
 import { Subscription } from 'rxjs/Subscription';
 
 export class DataSubscriber {
 
     protected dataService: DataService;
-    protected genModelService : GenModelService;
+    protected cityJSONService : CityJSONService;
     private _subscription: Subscription;
     private _message: any;
 
@@ -16,8 +16,8 @@ export class DataSubscriber {
           this._message = message;
           this.notify(message.text);
         });
-        this.genModelService = injector.get(GenModelService);
-        this._subscription = this.genModelService.getMessage().subscribe((message) => {
+        this.cityJSONService = injector.get(CityJSONService);
+        this._subscription = this.cityJSONService.getMessage().subscribe((message) => {
           this._message = message;
           this.notify(message.text);
         });

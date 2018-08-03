@@ -3,7 +3,7 @@ import { CommonModule } from "@angular/common";
 import { MobiuscesiumComponent} from "./mobius-cesium.component";
 import { ViewerComponent} from "./viewer/viewer.component";
 import { DataService } from "./data/data.service";
-import { GenModelService } from "./data/genmodel.service";
+import { CityJSONService } from "./data/readCityJSON.service";
 import { AngularSplitModule } from "angular-split";
 import { BrowserAnimationsModule ,NoopAnimationsModule} from "@angular/platform-browser/animations";
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from "@angular/platform-browser";
@@ -40,7 +40,7 @@ import { CityJSONComponent } from "./setting/cityjson.component";
                     CityJSONComponent,
                     ],
     providers: [DataService,
-                GenModelService,
+                CityJSONService,
                 ],
 })
 export class MobiusCesium {

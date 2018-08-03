@@ -94,9 +94,13 @@ export class ViewerComponent extends DataSubscriber {
       this.data = data;
       const context = this;
       const promise = new Promise (function(resolve) {
-        const datasource = context.genModelService.genCityJSONGeom(context.data);
+        const datasource = context.cityJSONService.genCityJSONGeom(context.data);
         resolve(datasource);
       });
+
+      promise.then(function () {
+        context.cityJSONService.clearDataSource;
+      })
 
       this.dataService.setcesiumpromise(promise);
 

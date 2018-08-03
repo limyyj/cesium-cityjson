@@ -19,14 +19,14 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
   super(injector);
   }
   public ngOnInit() {
-    this.srftype_ids = this.genModelService.getSrftypeIds();
+    this.srftype_ids = this.cityJSONService.getSrftypeIds();
     this.setSrftype_keys();
     // if(this.dataArr !== undefined) {this.LoadData();}
   }
   public notify(message: string): void {
     if(message === "model_update" ) {
       try {
-        this.srftype_ids = this.genModelService.getSrftypeIds();
+        this.srftype_ids = this.cityJSONService.getSrftypeIds();
         this.setSrftype_keys();
         // if(this.dataArr !== undefined) {this.LoadData();}
       }
@@ -49,7 +49,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
   public Show(event) {
     const eventCheckbox = document.getElementById(event+"_check");
     const ids = this.srftype_ids[event];
-    const entities = this.genModelService.getDataSource().entities;
+    const entities = this.cityJSONService.getDataSource().entities;
     if (eventCheckbox["checked"] === false) {
       ids.forEach((id) => {
         entities.getById(id).show = false;
