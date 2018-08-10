@@ -19,3 +19,11 @@ html,body {
   flex-direction: row; 
   justify-content: space-between;
 }
+
+#drop_zone {
+  position: absolute;
+  left: calc(50% - 150px);
+  border: 5px solid blue;
+  width:  300px;
+  height: 100px;
+}

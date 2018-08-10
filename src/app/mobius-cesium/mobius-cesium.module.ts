@@ -4,6 +4,8 @@ import { MobiuscesiumComponent} from "./mobius-cesium.component";
 import { ViewerComponent} from "./viewer/viewer.component";
 import { DataService } from "./data/data.service";
 import { CityJSONService } from "./data/readCityJSON.service";
+import { CityGMLService } from "./data/readCityGML.service";
+import { CesiumGeomService } from "./data/cesiumGeom.service";
 import { AngularSplitModule } from "angular-split";
 import { BrowserAnimationsModule ,NoopAnimationsModule} from "@angular/platform-browser/animations";
 import { BrowserModule, HAMMER_GESTURE_CONFIG } from "@angular/platform-browser";
@@ -41,6 +43,8 @@ import { CityJSONComponent } from "./setting/cityjson.component";
                     ],
     providers: [DataService,
                 CityJSONService,
+                CityGMLService,
+                CesiumGeomService,
                 ],
 })
 export class MobiusCesium {
