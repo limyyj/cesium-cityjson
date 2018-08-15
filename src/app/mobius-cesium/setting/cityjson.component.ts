@@ -26,9 +26,11 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
   public notify(message: string): void {
     if(message === "model_update" ) {
       try {
-        this.srftype_ids = this.cesiumGeomService.getSrftypeIds();
-        this.setSrftype_keys();
-        // if(this.dataArr !== undefined) {this.LoadData();}
+        this.dataService.getcesiumpromise().then(() => {
+          this.srftype_ids = this.cesiumGeomService.getSrftypeIds();
+          this.setSrftype_keys();
+          // if(this.dataArr !== undefined) {this.LoadData();}
+        });
       }
       catch(ex) {
         console.log(ex);

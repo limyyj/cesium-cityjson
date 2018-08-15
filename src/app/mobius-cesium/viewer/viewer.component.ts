@@ -92,24 +92,19 @@ export class ViewerComponent extends DataSubscriber {
       this.data = data;
       data = null;
       const context = this;
-      const promise = new Promise (function(resolve) {
-        try {
-          const datasource = context.cityJSONService.genCityJSONGeom(context.data);
-          resolve(datasource);
-        } catch {
-          const datasource = context.cityGMLService.genCityGMLGeom(context.data);
-          resolve(datasource);
-        }
-      });
+      let promise = context.cityJSONService.genGeom(context.data);
+      if (promise === undefined) {
+        promise = context.cityGMLService.genGeom(context.data);
+      }
 
-      promise.then(function() {
+      promise.then((datasource) => {
         context.cesiumGeomService.clearDataSource();
         context.data = null;
+        viewer.dataSources.add(datasource);
       });
 
       this.dataService.setcesiumpromise(promise);
-
-      viewer.dataSources.add(promise);
+      
       const _HeightKey: any[] = [];
 
       /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
