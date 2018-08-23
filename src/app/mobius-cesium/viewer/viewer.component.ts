@@ -89,15 +89,14 @@ export class ViewerComponent extends DataSubscriber {
       const viewer = this.dataService.getViewer();
       viewer.dataSources.removeAll({destroy:true});
       /////// OBTAINING DATA ////////
-      this.data = data;
-      data = null;
       const context = this;
-      let promise = context.cityJSONService.genGeom(context.data);
+      let promise = context.cityJSONService.genGeom(data);
       if (promise === undefined) {
-        promise = context.cityGMLService.genGeom(context.data);
+        promise = context.cityGMLService.genGeom(data);
       }
 
       promise.then((datasource) => {
+        // console.log(context.cityGMLService.getCount());
         context.cesiumGeomService.clearDataSource();
         context.data = null;
         viewer.dataSources.add(datasource);

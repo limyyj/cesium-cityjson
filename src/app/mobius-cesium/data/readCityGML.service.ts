@@ -10,8 +10,17 @@ import { CesiumGeomService } from "./cesiumGeom.service";
 export class CityGMLService {
   private subject = new Subject<any>();
   private epsg: any;
+  private count = 0;
 
   constructor(private cesiumGeomService: CesiumGeomService) {};
+
+  public setCount(): void {
+    this.count = 0;
+  }
+
+  public getCount(): number {
+    return this.count;
+  }
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -83,12 +92,14 @@ export class CityGMLService {
       const coord_arr = [];
       if (dimension === "3") {
         for (let i = 0 ; i < coords.length ; i = i + 3) {
-          const arr = this.projectPtsToWGS84([Number(coords[i]),Number(coords[i+1]),Number(coords[i+2])]);
+          const arr = this.projectPtsToWGS84([(Number(coords[i])/1000),(Number(coords[i+1])/1000),(Number(coords[i+2])/1000)]);
           coord_arr.push(arr);
         }
       }
       solid.push([coord_arr]);
+      this.count ++;
     }
+    // console.log(solid)
     return solid;
   }
 

@@ -8,8 +8,8 @@ import { Subscription } from 'rxjs/Subscription';
 export class DataSubscriber {
 
     protected dataService: DataService;
-    protected cityJSONService : CityJSONService;
-    protected cityGMLService : CityGMLService;
+    protected cityJSONService: CityJSONService;
+    protected cityGMLService: CityGMLService;
     protected cesiumGeomService: CesiumGeomService;
     private _subscription: Subscription;
     private _message: any;
