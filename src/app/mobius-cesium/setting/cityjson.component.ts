@@ -41,9 +41,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
   public setSrftype_keys() {
     const keys = [];
     for (let key in this.srftype_ids) {
-      if ((this.srftype_ids[key]).length > 0) {
-        keys.push(key);
-      }
+      keys.push(key);
     }
     this.srftype_keys = keys;
   }

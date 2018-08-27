@@ -10,17 +10,17 @@ import { CesiumGeomService } from "./cesiumGeom.service";
 export class CityGMLService {
   private subject = new Subject<any>();
   private epsg: any;
-  private count = 0;
+  // private count = 0;
 
   constructor(private cesiumGeomService: CesiumGeomService) {};
 
-  public setCount(): void {
-    this.count = 0;
-  }
+  // public setCount(): void {
+  //   this.count = 0;
+  // }
 
-  public getCount(): number {
-    return this.count;
-  }
+  // public getCount(): number {
+  //   return this.count;
+  // }
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -68,23 +68,33 @@ export class CityGMLService {
     return newcoords;
   }
 
-  public genPoly(polygons,surface_type): void {
+  // Generates surfaces from an element as a group
+  public genPoly(srf,surface_type): void {
     const props = {Surface_Type: surface_type,
                      LOD: 4
                     };
     const solid = [];
-    for (let poly_id = polygons.length - 1 ; poly_id >= 0 ; poly_id--) {
-      solid.push(...this.genTriangles(polygons[poly_id],props));
+    while (srf !== null) {
+      solid.push(...this.genTriangles(srf,props));
+      srf = this.nextElement(srf.nextSibling);
     }
     this.cesiumGeomService.genSolidGrouped(solid,undefined,props);
   }
 
-  public genTriangles(html,props): any {
-    const triangles = html.getElementsByTagName("gml:TriangulatedSurface")[0].getElementsByTagName("gml:trianglePatches")[0].getElementsByTagName("gml:Triangle")
+  // Generates polygons from a triangulated surface
+  public genTriangles(node,props): any {
+    // Get first triangle
+    while ((node.nodeName.split(":")[1] !== "Triangle"))  {
+      node = this.nextElement(node.firstChild);
+    }
     const solid = [];
-    for (let tri_id = triangles.length - 1 ; tri_id >= 0 ; tri_id--) {
+    // Loop through Triangles
+    while (node !== null) {
       // get coordinates
-      let coords = triangles[tri_id].getElementsByTagName("gml:exterior")[0].getElementsByTagName("gml:LinearRing")[0].getElementsByTagName("gml:posList")[0];
+      let coords = this.nextElement(node.firstChild);
+      while ((coords.nodeName.split(":")[1] !== "posList"))  {
+        coords = this.nextElement(coords.firstChild);
+      }
       const dimension = coords.attributes[0].value;
       coords = coords.textContent;
       // split coordinates by " ", convert to number from string and project to wgs84
@@ -97,12 +107,90 @@ export class CityGMLService {
         }
       }
       solid.push([coord_arr]);
-      this.count ++;
+      // this.count ++;
+      node = this.nextElement(node.nextSibling);
     }
     // console.log(solid)
     return solid;
   }
 
+
+  // Returns the next sibling node that is an element.
+  // If no such node is found, returns null.
+  public nextElement(node): any {
+    // if node is null, return null.
+    if (node === null) {
+      return null;
+    }
+    // Loops through siblings untill an element is found
+    // If siblings end up returning null, return null.
+    while (node.nodeType !== 1) {
+      node = node.nextSibling;
+      if (node === null) {
+        return null;
+      }
+    }
+    return node;
+  }
+
+  // Checks the type of element a node is and does the required steps to extract info to generate geom
+  // *TODO: convert to iterative.
+  public checkElement(node) {
+    // break if node is null
+    if (node === null) {
+      return;
+    }
+    const name = node.nodeName.split(":")[1];
+    // If wall, extract polygons and check for openings
+    if (name === "WallSurface") {
+      const srf = this.getFirstSrf(node);
+      this.genPoly(srf,name);
+
+      // check for openings
+      let child = this.nextElement(this.nextElement(node.firstChild).nextSibling);
+      while (child !== null) {
+        this.checkElement(child);
+        child = this.nextElement(child.nextSibling);
+      }
+    }
+    // Else, check for these nodes and extract polygons
+    else if (name === "FloorSurface" ||
+             name === "interiorRoom" ||
+             name === "RoofSurface" ||
+             name === "Window" ||
+             name === "Door") {
+      const srf = this.getFirstSrf(node);
+      this.genPoly(srf,name);
+    }
+    // Else, loop through children
+    else {
+      let child = this.nextElement(node.firstChild);
+      while (child !== null) {
+        this.checkElement(child);
+        child = this.nextElement(child.nextSibling);
+      }
+    }
+  }
+
+  // Returns first surface members of given node
+  // Returns null if node is null or no surface members are found
+  public getFirstSrf(node): any {
+    while (node !== null && node.nodeName.split(":")[1] !== "surfaceMember") {
+      node = this.nextElement(node.firstChild);
+    }
+    return node;
+  }
+
+  public readFile(file): void {
+    // cityObjectMember or featureMember
+    let member = this.nextElement(file.firstChild.firstChild);
+    while (member !== null) {
+      this.checkElement(member);
+      member = this.nextElement(member.nextSibling);
+    }
+  }
+
+  // Main function called to read cityGML and generate geometry
   public genGeom(file): any {
     let data = undefined;
     if (file !== undefined) {
@@ -122,72 +210,5 @@ export class CityGMLService {
       });
     }
     return data;
-  }
-
-  public readFile(file): void{
-    // cityObjectMember
-    const objs = file.getElementsByTagName("cityObjectMember");
-    file = null;
-    
-    // buildings
-    for (let obj_id = objs.length - 1 ; obj_id >= 0 ; obj_id--) {
-      const buildings = objs[obj_id].getElementsByTagName("bldg:Building");
-      for (let bldg_id = buildings.length - 1 ; bldg_id >= 0 ; bldg_id--) {
-        
-        // buildingParts
-        const parts = buildings[bldg_id].getElementsByTagName("bldg:consistsOfBuildingPart");
-        for (let part_id = parts.length - 1 ; part_id >= 0 ; part_id--) {
-       
-          // boundedBy
-          let bounds = parts[part_id].getElementsByTagName("bldg:BuildingPart")[0].getElementsByTagName("bldg:boundedBy");
-          for (let bound_id = bounds.length - 1 ; bound_id >= 0 ; bound_id--) {
-            
-            // wall polygons
-            let walls = bounds[bound_id].getElementsByTagName("bldg:WallSurface");
-            for (let wall_id = walls.length - 1 ; wall_id >= 0 ; wall_id--) {
-              const polygons = walls[wall_id].getElementsByTagName("bldg:lod4MultiSurface")[0].getElementsByTagName("gml:MultiSurface")[0].getElementsByTagName("gml:surfaceMember");
-              this.genPoly(polygons,"WallSurface");
-              //openings
-              const openings = walls[wall_id].getElementsByTagName("bldg:opening");
-              for (let open_id = openings.length - 1 ; open_id >= 0 ; open_id--) {
-                try {
-                  const polygons = openings[open_id].getElementsByTagName("bldg:Door")[0].getElementsByTagName("bldg:lod4MultiSurface")[0].getElementsByTagName("gml:MultiSurface")[0].getElementsByTagName("gml:surfaceMember");
-                  this.genPoly(polygons,"Door");
-                } catch {
-                  const polygons = openings[open_id].getElementsByTagName("bldg:Window")[0].getElementsByTagName("bldg:lod4MultiSurface")[0].getElementsByTagName("gml:MultiSurface")[0].getElementsByTagName("gml:surfaceMember");
-                  this.genPoly(polygons,"Window");
-                }
-              }
-            }
-            walls = null;
-            
-            // floor polygons
-            let floors = bounds[bound_id].getElementsByTagName("bldg:FloorSurface");
-            for (let flr_id = floors.length - 1 ; flr_id >= 0 ; flr_id--) {
-              const polygons = floors[flr_id].getElementsByTagName("bldg:lod4MultiSurface")[0].getElementsByTagName("gml:MultiSurface")[0].getElementsByTagName("gml:surfaceMember");
-              this.genPoly(polygons,"OuterFloorSurface");
-            }
-            floors = null;
-
-            // roof polygons
-            let roof = bounds[bound_id].getElementsByTagName("bldg:RoofSurface");
-            for (let roof_id = roof.length - 1 ; roof_id >= 0 ; roof_id--) {
-              const polygons = roof[roof_id].getElementsByTagName("bldg:lod4MultiSurface")[0].getElementsByTagName("gml:MultiSurface")[0].getElementsByTagName("gml:surfaceMember");
-              this.genPoly(polygons,"RoofSurface");
-            }
-            roof = null;
-          }
-          bounds = null;
-          
-          // room polygons
-          let rooms = parts[part_id].getElementsByTagName("bldg:BuildingPart")[0].getElementsByTagName("bldg:interiorRoom");
-          for (let room_id = rooms.length - 1 ; room_id >= 0 ; room_id--) {
-            const polygons = rooms[room_id].getElementsByTagName("bldg:Room")[0].getElementsByTagName("bldg:lod4MultiSurface")[0].getElementsByTagName("gml:MultiSurface")[0].getElementsByTagName("gml:surfaceMember");
-            this.genPoly(polygons,"ClosureSurface");
-          }
-          rooms = null;
-        }
-      }
-    }
   }
 }
