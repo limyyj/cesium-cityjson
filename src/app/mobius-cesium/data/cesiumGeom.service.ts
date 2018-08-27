@@ -31,20 +31,21 @@ export class CesiumGeomService {
   }
 
   public initialiseSrftypeIds(): void {
-    this.srftype_ids = {RoofSurface: [],
-                        GroundSurface: [],
-                        WallSurface: [],
-                        ClosureSurface: [],
-                        OuterCeilingSurface: [],
-                        OuterFloorSurface: [],
-                        Window: [],
-                        Door: [],
-                        WaterSurface: [],
-                        WaterGroundSurface: [],
-                        WaterClosureSurface: [],
-                        TrafficArea: [],
-                        AuxiliaryTrafficArea: [],
-                        None: []};
+    this.srftype_ids = {//RoofSurface: [],
+                        // GroundSurface: [],
+                        // WallSurface: [],
+                        // ClosureSurface: [],
+                        // OuterCeilingSurface: [],
+                        // OuterFloorSurface: [],
+                        // Window: [],
+                        // Door: [],
+                        // WaterSurface: [],
+                        // WaterGroundSurface: [],
+                        // WaterClosureSurface: [],
+                        // TrafficArea: [],
+                        // AuxiliaryTrafficArea: [],
+                        // None: []
+                      };
   }
 
   public getSrftypeIds(): any {
@@ -268,6 +269,17 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.srftype_ids[properties["Surface_Type"]].push(parent.id);
+    this.addSrfTypeId(properties["Surface_Type"],parent.id);
+  }
+
+  private addSrfTypeId(srf_type,id) {
+    // if srftype doesn't exist in array, add it
+    if (this.srftype_ids[srf_type] === undefined) {
+      this.srftype_ids[srf_type] = [id];
+    }
+    // if it already exists then push id to existing arr
+    else {
+      this.srftype_ids[srf_type].push(id);
+    }
   }
 }
