@@ -1,31 +1,51 @@
 # cesium-viewer
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+This is a viewer for CityJSON and CityGML files based on [Cesium](https://cesiumjs.org/).
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli).
 
-## Development server
+It aims to open and view models with the ability to:
+* View models on a map (if location is provided)
+* Select objects and view attributes
+* Filter visible objects
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Supported CityGML Files
 
-## Code scaffolding
+Currently the viewer can open CityGML files of up to about 50MB in size, containing up to about 70,000 polygons (after triangulation).
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+It supports only objects located within a cityObjectMember or featureMember and of types:
+* WallSurface
+* FloorSurface
+* RoofSurface
+* Room
+* Window
+* Door
 
-## Build
+It supports geometry in the form of:
+* Triangle
+* Polygon
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+Using coordinates in the form of:
+* posList
+* pos
 
-## Running unit tests
+CRS is not supported for CityGML yet.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Supported CityJSON Files
 
-## Running end-to-end tests
+Currently the viewer can open CityJSON files of up to about 10MB in size, containing up to about 50,000 polygons (after triangulation).
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+It supports:
+* BuildingPart and BuildingInstallation
+* GeometryInstance (in uncompressed files)
+* Transform (for compression)
+* EPSG lookup on [EPSG.io](http://epsg.io/)
 
-## Further help
+## Depends on
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+* [Cesium](https://cesiumjs.org/)
+* [Proj4j](https://github.com/Proj4J/proj4j)
+* [Earcut](https://github.com/mapbox/earcut)
 
-## WebSite
+## Test Build
 
 https://limyyj.github.io/cesium-cityjson/

@@ -10,17 +10,8 @@ import { CesiumGeomService } from "./cesiumGeom.service";
 export class CityGMLService {
   private subject = new Subject<any>();
   private epsg: any;
-  // private count = 0;
 
   constructor(private cesiumGeomService: CesiumGeomService) {};
-
-  // public setCount(): void {
-  //   this.count = 0;
-  // }
-
-  // public getCount(): number {
-  //   return this.count;
-  // }
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -75,45 +66,74 @@ export class CityGMLService {
                     };
     const solid = [];
     while (srf !== null) {
-      solid.push(...this.genTriangles(srf,props));
+      // get first Triangle or Polygon (depends on what the CityGML is using)
+      let firstSrf = srf;
+      while ((firstSrf.nodeName.split(":")[1] !== "Triangle") && (firstSrf.nodeName.split(":")[1] !== "Polygon"))  {
+        firstSrf = this.nextElement(firstSrf.firstChild);
+      }
+      // if Triangle, step into first child (exterior linear ring) and get coords
+      if (firstSrf.nodeName.split(":")[1] === "Triangle") {
+        while (firstSrf !== null) {
+          let poly = this.nextElement(firstSrf.firstChild);
+          solid.push(this.getCoords(poly,props));
+          firstSrf = this.nextElement(firstSrf.nextSibling);
+        } 
+      }
+      // if Polygon, step into first child (exterior linear ring) and get coords
+      else if (firstSrf.nodeName.split(":")[1] === "Polygon") {
+        firstSrf = this.nextElement(firstSrf.firstChild);
+        solid.push(this.getCoords(firstSrf,props));
+      }
+      // extract and convert all coordinates for surface and push to solid
       srf = this.nextElement(srf.nextSibling);
     }
+    // console.log(solid);
     this.cesiumGeomService.genSolidGrouped(solid,undefined,props);
   }
 
-  // Generates polygons from a triangulated surface
-  public genTriangles(node,props): any {
-    // Get first triangle
-    while ((node.nodeName.split(":")[1] !== "Triangle"))  {
-      node = this.nextElement(node.firstChild);
-    }
-    const solid = [];
-    // Loop through Triangles
+  // Gets coords from the linear rings that make up ONE Triangle or Polygon
+  public getCoords(node,props): any {
+    const polygon = [];
+    // Loop through Linear rings
     while (node !== null) {
       // get coordinates
       let coords = this.nextElement(node.firstChild);
-      while ((coords.nodeName.split(":")[1] !== "posList"))  {
+      while ((coords.nodeName.split(":")[1] !== "LinearRing"))  {
         coords = this.nextElement(coords.firstChild);
       }
-      const dimension = coords.attributes[0].value;
-      coords = coords.textContent;
-      // split coordinates by " ", convert to number from string and project to wgs84
-      coords = coords.split(" ");
-      const coord_arr = [];
-      if (dimension === "3") {
-        for (let i = 0 ; i < coords.length ; i = i + 3) {
-          const arr = this.projectPtsToWGS84([(Number(coords[i])/1000),(Number(coords[i+1])/1000),(Number(coords[i+2])/1000)]);
-          coord_arr.push(arr);
+      coords = this.nextElement(coords.firstChild);
+      // if positions are in posList, split and project to wgs84 in threes, then push to polygon
+      if (coords.nodeName.split(":")[1] === "posList") {
+        const dimension = coords.attributes[0].value;
+        let coordinates = coords.textContent;
+        // split coordinates by " ", convert to number from string and project to wgs84
+        coordinates = coordinates.split(" ");
+        const coord_arr = [];
+        if (dimension === "3") {
+          for (let i = 0 ; i < coordinates.length ; i = i + 3) {
+            const arr = this.projectPtsToWGS84([(Number(coordinates[i])),(Number(coordinates[i+1])),(Number(coordinates[i+2]))]);
+            coord_arr.push(arr);
+          }
         }
+        polygon.push(coord_arr);
+        // if positions are in pos, loop through and split and project to wgs84, then push to polygon
+      } else if (coords.nodeName.split(":")[1] === "pos") {
+        const coord_arr = [];
+        while (coords !== null) {
+          let coordinates = coords.textContent;
+          // split coordinates by " ", convert to number from string and project to wgs84
+          coordinates = coordinates.split(" ");
+          const arr = this.projectPtsToWGS84([(Number(coordinates[0])),(Number(coordinates[1])),(Number(coordinates[2]))]);
+          coord_arr.push(arr);
+          coords = this.nextElement(coords.nextSibling);
+        }
+        polygon.push(coord_arr);
       }
-      solid.push([coord_arr]);
-      // this.count ++;
       node = this.nextElement(node.nextSibling);
     }
-    // console.log(solid)
-    return solid;
+    // console.log(polygon);
+    return polygon;
   }
-
 
   // Returns the next sibling node that is an element.
   // If no such node is found, returns null.
@@ -155,7 +175,7 @@ export class CityGMLService {
     }
     // Else, check for these nodes and extract polygons
     else if (name === "FloorSurface" ||
-             name === "interiorRoom" ||
+             name === "Room" ||
              name === "RoofSurface" ||
              name === "Window" ||
              name === "Door") {
@@ -183,7 +203,7 @@ export class CityGMLService {
 
   public readFile(file): void {
     // cityObjectMember or featureMember
-    let member = this.nextElement(file.firstChild.firstChild);
+    let member = this.nextElement(file.firstChild);
     while (member !== null) {
       this.checkElement(member);
       member = this.nextElement(member.nextSibling);
@@ -195,9 +215,8 @@ export class CityGMLService {
     let data = undefined;
     if (file !== undefined) {
       // Initialise dataSource and surface type ID arrays
-      this.cesiumGeomService.setDataSource(new Cesium.CustomDataSource());
-      this.cesiumGeomService.suspendDataSource();
-      this.cesiumGeomService.initialiseSrftypeIds();
+      this.cesiumGeomService.initialiseCesium();
+      // this.initialiseCount();
 
       // TODO proper crs, for now default
       this.setEPSG(undefined);

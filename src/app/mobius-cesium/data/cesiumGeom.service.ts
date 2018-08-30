@@ -9,6 +9,13 @@ import * as earcut from "earcut";
 export class CesiumGeomService {
 	private dataSource: any;
 	private srftype_ids: any;
+  private srftype_count: any;
+
+  public initialiseCesium(): void {
+    this.setDataSource(new Cesium.CustomDataSource());
+    this.suspendDataSource();
+    this.initialiseSrftypeIds();
+  }
 
 	public setDataSource(dataSource: any): void {
     this.dataSource = dataSource;
@@ -31,33 +38,42 @@ export class CesiumGeomService {
   }
 
   public initialiseSrftypeIds(): void {
-    this.srftype_ids = {//RoofSurface: [],
-                        // GroundSurface: [],
-                        // WallSurface: [],
-                        // ClosureSurface: [],
-                        // OuterCeilingSurface: [],
-                        // OuterFloorSurface: [],
-                        // Window: [],
-                        // Door: [],
-                        // WaterSurface: [],
-                        // WaterGroundSurface: [],
-                        // WaterClosureSurface: [],
-                        // TrafficArea: [],
-                        // AuxiliaryTrafficArea: [],
-                        // None: []
-                      };
+    this.srftype_ids = {};
+    this.srftype_count = {};
   }
 
   public getSrftypeIds(): any {
     return this.srftype_ids;
   }
 
-  public setSrftypeIds(type: string, id: string): void {
-    if (type === undefined) {
-      this.srftype_ids["None"].push(id);
-    } else {
-      this.srftype_ids[type].push(id);
+  public getSrfCount(): any {
+    return this.srftype_count;
+  }
+
+  private addSrfTypeId(srf_type,id,count) {
+    // if srftype doesn't exist in array, add it
+    if (this.srftype_ids[srf_type] === undefined) {
+      this.srftype_ids[srf_type] = [id];
+      this.srftype_count[srf_type] = count;
     }
+    // if it already exists then push id to existing arr
+    else {
+      this.srftype_ids[srf_type].push(id);
+      this.srftype_count[srf_type] += count;
+    }
+  }
+
+  public timeIntervalColor(color): any {
+    var property = new Cesium.TimeIntervalCollectionProperty(Cesium.Color);
+    var timeInterval = new Cesium.TimeInterval({
+        start : Cesium.JulianDate.fromDate(new Date(1000, 1, 1, 1)),
+        stop : Cesium.JulianDate.fromDate(new Date(3000, 1, 1, 1)),
+        isStartIncluded : true,
+        isStopIncluded : false,
+        data : color
+    });
+    property.intervals.addInterval(timeInterval);
+    return new Cesium.ColorMaterialProperty(property);
   }
 
   public maxDiff(values): number {
@@ -117,15 +133,15 @@ export class CesiumGeomService {
   public determineColor(surface_type): any {
     let colour = undefined;
     if (surface_type === "WallSurface") {
-      colour = Cesium.Color.SILVER;
+      colour = this.timeIntervalColor(Cesium.Color.SILVER);
     } else if (surface_type === "RoofSurface") {
-      colour = Cesium.Color.RED;
+      colour = this.timeIntervalColor(Cesium.Color.RED);
     } else if (surface_type === "Window") {
-      colour = Cesium.Color.LIGHTBLUE.withAlpha(0.5);
+      colour = this.timeIntervalColor(Cesium.Color.LIGHTBLUE.withAlpha(0.5));
     } else if (surface_type === "Door") {
-      colour = Cesium.Color.TAN;
+      colour = this.timeIntervalColor(Cesium.Color.TAN);
     } else {
-      colour = Cesium.Color.WHITE;
+      colour = this.timeIntervalColor(Cesium.Color.WHITE);
     }
     return colour;
   }
@@ -203,7 +219,7 @@ export class CesiumGeomService {
     const parent = this.dataSource.entities.add(new Cesium.Entity());
     let CScolour = undefined;
     if (colour !== undefined) {
-      CScolour = colour;
+      CScolour = this.timeIntervalColor(colour);
     } else {
       CScolour = this.determineColor(properties["Surface_Type"]);
     }
@@ -217,7 +233,7 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.srftype_ids[properties["Surface_Type"]].push(parent.id);
+    this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
   }
 
   public genSolid(solid, colour, surface_type, properties): void {
@@ -227,7 +243,7 @@ export class CesiumGeomService {
       const polygon = solid[i];
       let CScolour = undefined;
       if (colour[i] !== undefined) {
-        CScolour = colour[i];
+        CScolour = this.timeIntervalColor(colour[i]);
       } else {
         CScolour = this.determineColor(surface_type[i]);
       }
@@ -243,7 +259,7 @@ export class CesiumGeomService {
       }
       // Add properties and add entity ID to respective group for filter
       parent.properties = new Cesium.PropertyBag(properties);
-      this.srftype_ids[surface_type[i]].push(parent.id);
+      this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
     }
   }
 
@@ -252,7 +268,7 @@ export class CesiumGeomService {
     const parent = this.dataSource.entities.add(new Cesium.Entity());
     let CScolour = undefined;
     if (colour !== undefined) {
-      CScolour = colour;
+      CScolour = this.timeIntervalColor(colour);
     } else {
       CScolour = this.determineColor(properties["Surface_Type"]);
     }
@@ -269,17 +285,6 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.addSrfTypeId(properties["Surface_Type"],parent.id);
-  }
-
-  private addSrfTypeId(srf_type,id) {
-    // if srftype doesn't exist in array, add it
-    if (this.srftype_ids[srf_type] === undefined) {
-      this.srftype_ids[srf_type] = [id];
-    }
-    // if it already exists then push id to existing arr
-    else {
-      this.srftype_ids[srf_type].push(id);
-    }
+    this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
   }
 }

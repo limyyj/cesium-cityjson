@@ -15,7 +15,7 @@ export class ViewerComponent extends DataSubscriber {
   private dataArr: object;
   private viewer: any;
   private selectEntity: any=null;
-  private material: object[];
+  private material: any;
   private _Colorbar: any[];
   private texts: any[];
   private _Cattexts: any[];
@@ -85,6 +85,7 @@ export class ViewerComponent extends DataSubscriber {
   //Cesium geoJson to load data and check mode
   public LoadData(data: JSON) {
     if(this.data !== undefined) {
+      // console.log("Gen geom");
       /////// INITIALISING VIEWER ////////
       const viewer = this.dataService.getViewer();
       viewer.dataSources.removeAll({destroy:true});
@@ -100,6 +101,7 @@ export class ViewerComponent extends DataSubscriber {
         context.cesiumGeomService.clearDataSource();
         context.data = null;
         viewer.dataSources.add(datasource);
+        // console.log("Done");
       });
 
       this.dataService.setcesiumpromise(promise);
@@ -212,20 +214,14 @@ export class ViewerComponent extends DataSubscriber {
     event.stopPropagation();
     const viewer = this.dataService.getViewer();//this.viewer;
     if(this.selectEntity !== undefined&&this.selectEntity !== null) {
-      for (let i = 0 ; i < this.selectEntity._children.length ; i++) {
-        this.selectEntity._children[i].polygon.material = this.material[i];
-      }
+      this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = this.material;
     }
 
     if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
       this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
       this.selectEntity = viewer.selectedEntity._parent;
-      this.material = [];
-      this.selectEntity._children.forEach((child) => {
-        this.material.push(child.polygon.material);
-        child.polygon.material = Cesium.Color.BLUE;
-      })
-
+      this.material = this.selectEntity._children[0].polygon.material.color.intervals.get(0).data;
+      this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = Cesium.Color.BLUE.withAlpha(this.material.alpha);
       //get properties
     } else {
       this.dataService.set_SelectedEntity(undefined);
