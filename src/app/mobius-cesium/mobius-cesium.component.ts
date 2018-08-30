@@ -43,14 +43,11 @@ export class MobiuscesiumComponent {
   public ngOnInit() {
   	this.setModel(this.data);
     this.dataService.setMode(this.mode);
-    // console.log(this.data);
 
   }
   public ngDoCheck() {
   	if(this.dataService.getGsModel() !== this.data) {
   		this.setModel(this.data);
-      // console.log("data changed");
-      // console.log("mode:", this.mode);
   	}
   }
 

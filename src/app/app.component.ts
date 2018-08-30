@@ -16,11 +16,20 @@ export class AppComponent {
 
   public handleFileSelect(evt) {
     const files = evt.target.files; // FileList object
+    evt = null;
+    const filetype = files[0].type;
     const fr = new FileReader();
     const self = this;
     fr.onload = function(text) {
-      const js_data = JSON.parse(text.target["result"]);
-      self.gs_dummy_data = js_data;
+      if (filetype === "application/json") {
+        const js_data = JSON.parse(text.target["result"]);
+        self.gs_dummy_data = js_data;
+      } else {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(text.target["result"],"application/xml");
+        // console.log(xmlDoc);
+        self.gs_dummy_data = xmlDoc;
+      }
       // self.dataService.setGsModel(self.gs_dummy_data);
     };
     fr.readAsText(files[0]);

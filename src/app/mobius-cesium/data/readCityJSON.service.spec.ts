@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { GenModelService } from './genmodel.service';
+import { CityJSONService } from './readCityJSON.service';
 
 describe('GenModelService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GenModelService]
+      providers: [CityJSONService]
     });
   });
 
-  it('should be created', inject([GenModelService], (service: GenModelService) => {
+  it('should be created', inject([CityJSONService], (service: CityJSONService) => {
     expect(service).toBeTruthy();
   }));
 });

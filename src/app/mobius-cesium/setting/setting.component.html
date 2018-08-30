@@ -14,7 +14,6 @@
     </mat-tab> -->
     <mat-tab label="&nbsp;CityJSON&nbsp;" >
       <app-cityjson></app-cityjson>
-      <!-- <app-select></app-select> -->
     </mat-tab>
   </mat-tab-group>
     <app-publish *ngIf="mode==='viewer'" (change)="LoadViewer()" (click)="Reset();LoadViewer();"></app-publish>

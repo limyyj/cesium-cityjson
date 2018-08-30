@@ -60,7 +60,6 @@ export class DataService {
     delete this._PuData;
     delete this._index;
     delete this._Filter;
-
   }
   //get viewer
   public getViewer(): any {

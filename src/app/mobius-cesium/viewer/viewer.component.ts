@@ -15,7 +15,7 @@ export class ViewerComponent extends DataSubscriber {
   private dataArr: object;
   private viewer: any;
   private selectEntity: any=null;
-  private material: object[];
+  private material: any;
   private _Colorbar: any[];
   private texts: any[];
   private _Cattexts: any[];
@@ -85,29 +85,28 @@ export class ViewerComponent extends DataSubscriber {
   //Cesium geoJson to load data and check mode
   public LoadData(data: JSON) {
     if(this.data !== undefined) {
+      // console.log("Gen geom");
       /////// INITIALISING VIEWER ////////
       const viewer = this.dataService.getViewer();
       viewer.dataSources.removeAll({destroy:true});
-      // console.log("cleared data", viewer);
-
       /////// OBTAINING DATA ////////
-      this.data = data;
       const context = this;
-      const promise = new Promise (function(resolve) {
-        const datasource = context.genModelService.genCityJSONGeom(context.data);
-        resolve(datasource);
+      let promise = context.cityJSONService.genGeom(data);
+      if (promise === undefined) {
+        promise = context.cityGMLService.genGeom(data);
+      }
+
+      promise.then((datasource) => {
+        // console.log(context.cityGMLService.getCount());
+        context.cesiumGeomService.clearDataSource();
+        context.data = null;
+        viewer.dataSources.add(datasource);
+        // console.log("Done");
       });
 
       this.dataService.setcesiumpromise(promise);
-
-      viewer.dataSources.add(promise);
+      
       const _HeightKey: any[] = [];
-
-      // const promise = Cesium.GeoJsonDataSource.load(this.data);
-      // viewer.dataSources.add(promise);
-
-
-      this._ShowColorBar = false;
 
       /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
@@ -115,27 +114,30 @@ export class ViewerComponent extends DataSubscriber {
         viewer.zoomTo(promise);
       });
       viewer.zoomTo(promise);
-// =======
-//       promise.then(function(dataSource) {
-//         const entities = dataSource.entities.values;
-//         const self = this;
-//         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
-//       });
-      
-//       this.dataService.setcesiumpromise(promise);
-//       if(this.mode === "editor") {
-//         this.dataService.getValue(this.data);
-//         this.dataService.LoadJSONData();
-//         this.dataArr = this.dataService.get_ViData();
-//         this._index = 1;
-//       }
-//       if(this.mode === "viewer") {
-//         this.dataService.LoadJSONData();
-//         this.dataArr = this.dataService.get_PuData();
-//         this._index = 3;
-//       }
-//       viewer.zoomTo(promise);
-// >>>>>>> upstream/master
+
+      // promise.then(function(dataSource) {
+      //   const entities = dataSource.entities.values;
+      //   const self = this;
+      //   if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
+      // });
+
+      if(this.mode === "editor") {
+        // this.dataService.getValue(this.data);
+        // this.dataService.LoadJSONData();
+        // this.dataArr = this.dataService.get_ViData();
+        this._ShowColorBar = false;
+        this._index = 1;
+      }
+      if(this.mode === "viewer") {
+        this.dataService.LoadJSONData();
+        this.dataArr = this.dataService.get_PuData();
+        this._index = 3;
+      }
+      if(this.mode === "cityjson") {
+        this._ShowColorBar = false;
+        this._index = 1;
+      }
+
       this.Colortext();
     }
   }
@@ -211,34 +213,20 @@ export class ViewerComponent extends DataSubscriber {
   public select() {
     event.stopPropagation();
     const viewer = this.dataService.getViewer();//this.viewer;
-    // console.log("Triggered select");
     if(this.selectEntity !== undefined&&this.selectEntity !== null) {
-      for (let i = 0 ; i < this.selectEntity._children.length ; i++) {
-        this.selectEntity._children[i].polygon.material = this.material[i];
-      }
-      // this.selectEntity.polygon.material = this.material;
-      // console.log("Triggered revert colour", this.selectEntity.polygon.material);
+      this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = this.material;
     }
 
     if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
-      // console.log(viewer.selectedEntity);
       this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
       this.selectEntity = viewer.selectedEntity._parent;
-      this.material = [];
-      // console.log("Stored material", this.material);
-      this.selectEntity._children.forEach((child) => {
-        this.material.push(child.polygon.material);
-        child.polygon.material = Cesium.Color.BLUE;
-      })
-      // viewer.selectedEntity.polygon.material = Cesium.Color.BLUE;
-      // console.log("Triggered change colour", viewer.selectedEntity.polygon.material);
-
+      this.material = this.selectEntity._children[0].polygon.material.color.intervals.get(0).data;
+      this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = Cesium.Color.BLUE.withAlpha(this.material.alpha);
       //get properties
     } else {
       this.dataService.set_SelectedEntity(undefined);
       this.selectEntity = undefined;
       this.material = undefined;
-      // console.log("Triggered set everything to undefined");
     }
   }
 // =======

@@ -20,14 +20,14 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /***/ "./src/app/app.component.css":
 /***/ (function(module, exports) {
 
-module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  margin: 0px !important;\r\n  padding: 0px !important;\r\n  border: 0px !important;\r\n  outline:0px !important;\r\n  overflow: hidden;\r\n  font-size: 14px;\r\n}\r\n\r\n#loadfile{\r\n  position: absolute;\r\n  width: 300px; \r\n  left: calc(50% - 150px);\r\n  top: 15px;\r\n  z-index: 100;\r\n  font-family:sans-serif;\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex; \r\n  -webkit-box-orient: horizontal; \r\n  -webkit-box-direction: normal; \r\n      -ms-flex-direction: row; \r\n          flex-direction: row; \r\n  -webkit-box-pack: justify; \r\n      -ms-flex-pack: justify; \r\n          justify-content: space-between;\r\n}\r\n"
+module.exports = "html,body {\r\n  font-family: 'Open Sans', sans-serif;\r\n  margin: 0px !important;\r\n  padding: 0px !important;\r\n  border: 0px !important;\r\n  outline:0px !important;\r\n  overflow: hidden;\r\n  font-size: 14px;\r\n}\r\n\r\n#loadfile{\r\n  position: absolute;\r\n  width: 300px; \r\n  left: calc(50% - 150px);\r\n  top: 15px;\r\n  z-index: 100;\r\n  font-family:sans-serif;\r\n  display: -webkit-box;\r\n  display: -ms-flexbox;\r\n  display: flex; \r\n  -webkit-box-orient: horizontal; \r\n  -webkit-box-direction: normal; \r\n      -ms-flex-direction: row; \r\n          flex-direction: row; \r\n  -webkit-box-pack: justify; \r\n      -ms-flex-pack: justify; \r\n          justify-content: space-between;\r\n}\r\n\r\n#drop_zone {\r\n  position: absolute;\r\n  left: calc(50% - 150px);\r\n  border: 5px solid blue;\r\n  width:  300px;\r\n  height: 100px;\r\n}\r\n"
 
 /***/ }),
 
 /***/ "./src/app/app.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div style=\"height: 100%\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.0.0&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  </div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\" [mode]=\"'editor'\"></mobius-cesium>\r\n</div>\r\n"
+module.exports = "<div style=\"height: 100%\">\r\n\t<div id=\"loadfile\">\r\n      <div class=\"version\" style=\"font-family:sans-serif;color:white;\">v0.1.0&nbsp;&nbsp;</div>\r\n      <input type=\"file\" id=\"files\" name=\"files[]\" style=\"font-family:sans-serif;color:white;\" (change)=\"handleFileSelect($event)\" />\r\n  \t</div>\r\n\t<mobius-cesium [data]=\"gs_dummy_data\" [mode]=\"'editor'\"></mobius-cesium>\r\n</div>\r\n"
 
 /***/ }),
 
@@ -57,11 +57,21 @@ var AppComponent = /** @class */ (function () {
     }
     AppComponent.prototype.handleFileSelect = function (evt) {
         var files = evt.target.files; // FileList object
+        evt = null;
+        var filetype = files[0].type;
         var fr = new FileReader();
         var self = this;
         fr.onload = function (text) {
-            var js_data = JSON.parse(text.target["result"]);
-            self.gs_dummy_data = js_data;
+            if (filetype === "application/json") {
+                var js_data = JSON.parse(text.target["result"]);
+                self.gs_dummy_data = js_data;
+            }
+            else {
+                var parser = new DOMParser();
+                var xmlDoc = parser.parseFromString(text.target["result"], "application/xml");
+                // console.log(xmlDoc);
+                self.gs_dummy_data = xmlDoc;
+            }
             // self.dataService.setGsModel(self.gs_dummy_data);
         };
         fr.readAsText(files[0]);
@@ -129,7 +139,11 @@ var AppModule = /** @class */ (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DataSubscriber; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__genmodel_service__ = __webpack_require__("./src/app/mobius-cesium/data/genmodel.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__readCityJSON_service__ = __webpack_require__("./src/app/mobius-cesium/data/readCityJSON.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__readCityGML_service__ = __webpack_require__("./src/app/mobius-cesium/data/readCityGML.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__cesiumGeom_service__ = __webpack_require__("./src/app/mobius-cesium/data/cesiumGeom.service.ts");
+
+
 
 
 var DataSubscriber = /** @class */ (function () {
@@ -140,16 +154,301 @@ var DataSubscriber = /** @class */ (function () {
             _this._message = message;
             _this.notify(message.text);
         });
-        this.genModelService = injector.get(__WEBPACK_IMPORTED_MODULE_1__genmodel_service__["a" /* GenModelService */]);
-        this._subscription = this.genModelService.getMessage().subscribe(function (message) {
-            _this._message = message;
-            _this.notify(message.text);
-        });
+        this.cityJSONService = injector.get(__WEBPACK_IMPORTED_MODULE_1__readCityJSON_service__["a" /* CityJSONService */]);
+        this.cityGMLService = injector.get(__WEBPACK_IMPORTED_MODULE_2__readCityGML_service__["a" /* CityGMLService */]);
+        this.cesiumGeomService = injector.get(__WEBPACK_IMPORTED_MODULE_3__cesiumGeom_service__["a" /* CesiumGeomService */]);
     }
     DataSubscriber.prototype.notify = function (message) {
         console.warn("Notify function not Implemented");
     };
     return DataSubscriber;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/mobius-cesium/data/cesiumGeom.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CesiumGeomService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_earcut__ = __webpack_require__("./node_modules/earcut/src/earcut.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_earcut___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_earcut__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var CesiumGeomService = /** @class */ (function () {
+    function CesiumGeomService() {
+    }
+    CesiumGeomService.prototype.initialiseCesium = function () {
+        this.setDataSource(new Cesium.CustomDataSource());
+        this.suspendDataSource();
+        this.initialiseSrftypeIds();
+    };
+    CesiumGeomService.prototype.setDataSource = function (dataSource) {
+        this.dataSource = dataSource;
+    };
+    CesiumGeomService.prototype.getDataSource = function () {
+        return this.dataSource;
+    };
+    CesiumGeomService.prototype.clearDataSource = function () {
+        this.dataSource = null;
+    };
+    CesiumGeomService.prototype.suspendDataSource = function () {
+        this.dataSource.entities.suspendEvents();
+    };
+    CesiumGeomService.prototype.resumeDataSource = function () {
+        this.dataSource.entities.resumeEvents();
+    };
+    CesiumGeomService.prototype.initialiseSrftypeIds = function () {
+        this.srftype_ids = {};
+        this.srftype_count = {};
+    };
+    CesiumGeomService.prototype.getSrftypeIds = function () {
+        return this.srftype_ids;
+    };
+    CesiumGeomService.prototype.getSrfCount = function () {
+        return this.srftype_count;
+    };
+    CesiumGeomService.prototype.addSrfTypeId = function (srf_type, id, count) {
+        // if srftype doesn't exist in array, add it
+        if (this.srftype_ids[srf_type] === undefined) {
+            this.srftype_ids[srf_type] = [id];
+            this.srftype_count[srf_type] = count;
+        }
+        else {
+            this.srftype_ids[srf_type].push(id);
+            this.srftype_count[srf_type] += count;
+        }
+    };
+    CesiumGeomService.prototype.timeIntervalColor = function (color) {
+        var property = new Cesium.TimeIntervalCollectionProperty(Cesium.Color);
+        var timeInterval = new Cesium.TimeInterval({
+            start: Cesium.JulianDate.fromDate(new Date(1000, 1, 1, 1)),
+            stop: Cesium.JulianDate.fromDate(new Date(3000, 1, 1, 1)),
+            isStartIncluded: true,
+            isStopIncluded: false,
+            data: color
+        });
+        property.intervals.addInterval(timeInterval);
+        return new Cesium.ColorMaterialProperty(property);
+    };
+    CesiumGeomService.prototype.maxDiff = function (values) {
+        var maxval = values[0];
+        var minval = values[0];
+        for (var i = 1; i < values.length; i++) {
+            if (values[i] > maxval) {
+                maxval = values[i];
+            }
+            if (values[i] < minval) {
+                minval = values[i];
+            }
+        }
+        return (maxval - minval);
+    };
+    CesiumGeomService.prototype.determineAxis = function (points) {
+        // split coords and determine plane
+        var x = [];
+        var y = [];
+        points.forEach(function (coords) {
+            x.push(coords[0]);
+            y.push(coords[1]);
+        });
+        if (this.maxDiff(x) > this.maxDiff(y)) {
+            // x axis seems to be wider, use xz axis
+            return 0;
+        }
+        else {
+            // y axis seems to be wider, use yz axis
+            return 1;
+        }
+    };
+    CesiumGeomService.prototype.checkHorizontal = function (ring) {
+        //Check horizontal or not
+        var z = [];
+        ring.forEach(function (coords) {
+            z.push(coords[2]);
+        });
+        if (this.maxDiff(z) < 0.001) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    };
+    CesiumGeomService.prototype.flatCoords = function (ring) {
+        var flat = [];
+        ring.forEach(function (point) {
+            flat.push.apply(flat, point);
+        });
+        return flat;
+    };
+    CesiumGeomService.prototype.determineColor = function (surface_type) {
+        var colour = undefined;
+        if (surface_type === "WallSurface") {
+            colour = this.timeIntervalColor(Cesium.Color.SILVER);
+        }
+        else if (surface_type === "RoofSurface") {
+            colour = this.timeIntervalColor(Cesium.Color.RED);
+        }
+        else if (surface_type === "Window") {
+            colour = this.timeIntervalColor(Cesium.Color.LIGHTBLUE.withAlpha(0.5));
+        }
+        else if (surface_type === "Door") {
+            colour = this.timeIntervalColor(Cesium.Color.TAN);
+        }
+        else {
+            colour = this.timeIntervalColor(Cesium.Color.WHITE);
+        }
+        return colour;
+    };
+    CesiumGeomService.prototype.addCesiumPoly = function (polygon, colour, parent) {
+        // Create polygon heirarchy
+        var ext = Cesium.Cartesian3.fromDegreesArrayHeights(this.flatCoords(polygon[0]));
+        var p_hierarchy = new Cesium.PolygonHierarchy(ext);
+        if (polygon.length > 0) {
+            var int = [];
+            for (var i = 1; i < polygon.length; i++) {
+                int.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(this.flatCoords(polygon[i]))));
+            }
+            p_hierarchy = new Cesium.PolygonHierarchy(ext, int);
+        }
+        // Create polygon
+        var poly = this.dataSource.entities.add({
+            parent: parent,
+            polygon: {
+                hierarchy: p_hierarchy,
+                perPositionHeight: true,
+                material: colour,
+                outline: false,
+            },
+        });
+    };
+    CesiumGeomService.prototype.addTriPoly = function (polygon, colour, parent) {
+        // Determine if triangulation should be done on XZ or YZ plane (if X or Y axis have a larger range of values)
+        // 0 for XZ, 1 for YZ
+        var axis = this.determineAxis(polygon[0]);
+        var other_axis = 0;
+        if (axis === 0) {
+            other_axis = 1;
+        }
+        // Get points from respective axes and put into earcut format
+        var poly_vertices = [];
+        var holes = [];
+        var other_coords = [];
+        var count = 0;
+        for (var i = 0; i < polygon.length; i++) {
+            polygon[i].forEach(function (coords) {
+                poly_vertices.push(coords[axis], coords[2]);
+                other_coords.push(coords[other_axis]);
+                count++;
+            });
+            if (i !== (polygon.length - 1)) {
+                holes.push(count);
+            }
+        }
+        // Throw into earcut
+        var tri_index = __WEBPACK_IMPORTED_MODULE_1_earcut__(poly_vertices, holes);
+        var _loop_1 = function (p) {
+            var points = [];
+            // Get coordinates for each point
+            [tri_index[p], tri_index[p + 1], tri_index[p + 2]].forEach(function (j) {
+                var coord = [undefined, undefined, undefined];
+                coord[other_axis] = other_coords[j];
+                coord[axis] = poly_vertices[j * 2];
+                coord[2] = poly_vertices[(j * 2) + 1];
+                points.push(coord);
+            });
+            this_1.addCesiumPoly([points], colour, parent);
+        };
+        var this_1 = this;
+        // Create polys in Cesium
+        for (var p = 0; p < tri_index.length; p = p + 3) {
+            _loop_1(p);
+        }
+    };
+    CesiumGeomService.prototype.genMultiPoly = function (polygon, colour, properties) {
+        // Create parent to hold polygon
+        var parent = this.dataSource.entities.add(new Cesium.Entity());
+        var CScolour = undefined;
+        if (colour !== undefined) {
+            CScolour = this.timeIntervalColor(colour);
+        }
+        else {
+            CScolour = this.determineColor(properties["Surface_Type"]);
+        }
+        // If horizontal use Cesium Polygon Entity API directly
+        if (this.checkHorizontal(polygon[0]) === true) {
+            this.addCesiumPoly(polygon, CScolour, parent);
+        }
+        else {
+            this.addTriPoly(polygon, CScolour, parent);
+        }
+        // Add properties and add entity ID to respective group for filter
+        parent.properties = new Cesium.PropertyBag(properties);
+        this.addSrfTypeId(properties["Surface_Type"], parent.id, parent._children.length);
+    };
+    CesiumGeomService.prototype.genSolid = function (solid, colour, surface_type, properties) {
+        for (var i = 0; i < solid.length; i++) {
+            // Create parent to hold polygons
+            var parent_1 = this.dataSource.entities.add(new Cesium.Entity());
+            var polygon = solid[i];
+            var CScolour = undefined;
+            if (colour[i] !== undefined) {
+                CScolour = this.timeIntervalColor(colour[i]);
+            }
+            else {
+                CScolour = this.determineColor(surface_type[i]);
+            }
+            // Edit properties
+            properties.Surface_Type = surface_type[i];
+            // If horizontal use Cesium Polygon Entity API directly
+            if (this.checkHorizontal(polygon[0]) === true) {
+                this.addCesiumPoly(polygon, CScolour, parent_1);
+            }
+            else {
+                this.addTriPoly(polygon, CScolour, parent_1);
+            }
+            // Add properties and add entity ID to respective group for filter
+            parent_1.properties = new Cesium.PropertyBag(properties);
+            this.addSrfTypeId(properties["Surface_Type"], parent_1.id, parent_1._children.length);
+        }
+    };
+    CesiumGeomService.prototype.genSolidGrouped = function (solid, colour, properties) {
+        // Create parent to hold polygons
+        var parent = this.dataSource.entities.add(new Cesium.Entity());
+        var CScolour = undefined;
+        if (colour !== undefined) {
+            CScolour = this.timeIntervalColor(colour);
+        }
+        else {
+            CScolour = this.determineColor(properties["Surface_Type"]);
+        }
+        for (var i = 0; i < solid.length; i++) {
+            var polygon = solid[i];
+            // If horizontal use Cesium Polygon Entity API directly
+            if (this.checkHorizontal(polygon[0]) === true) {
+                this.addCesiumPoly(polygon, CScolour, parent);
+            }
+            else {
+                this.addTriPoly(polygon, CScolour, parent);
+            }
+        }
+        // Add properties and add entity ID to respective group for filter
+        parent.properties = new Cesium.PropertyBag(properties);
+        this.addSrfTypeId(properties["Surface_Type"], parent.id, parent._children.length);
+    };
+    CesiumGeomService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Injectable */])()
+    ], CesiumGeomService);
+    return CesiumGeomService;
 }());
 
 
@@ -632,40 +931,286 @@ var DataService = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/mobius-cesium/data/genmodel.service.ts":
+/***/ "./src/app/mobius-cesium/data/readCityGML.service.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return GenModelService; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CityGMLService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_proj4__ = __webpack_require__("./node_modules/proj4/lib/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_earcut__ = __webpack_require__("./node_modules/earcut/src/earcut.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_earcut___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_earcut__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__cesiumGeom_service__ = __webpack_require__("./src/app/mobius-cesium/data/cesiumGeom.service.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 
 
 
 
-var GenModelService = /** @class */ (function () {
-    function GenModelService() {
+var CityGMLService = /** @class */ (function () {
+    function CityGMLService(cesiumGeomService) {
+        this.cesiumGeomService = cesiumGeomService;
         this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
     }
-    GenModelService.prototype.sendMessage = function (message) {
+    ;
+    CityGMLService.prototype.sendMessage = function (message) {
         this.subject.next({ text: message });
     };
-    GenModelService.prototype.clearMessage = function () {
+    CityGMLService.prototype.clearMessage = function () {
         this.subject.next();
     };
-    GenModelService.prototype.getMessage = function () {
+    CityGMLService.prototype.getMessage = function () {
         return this.subject.asObservable();
     };
-    GenModelService.prototype.clearData = function () {
+    CityGMLService.prototype.clearData = function () {
+    };
+    CityGMLService.prototype.setEPSG = function (crs) {
+        this.epsg = new Promise(function (resolve) {
+            var val = "";
+            if (crs === undefined) {
+                // if undefined, default is EPSG 3414 sweats (WGS84 causes our models to go crazy, with EPSG 3414 they at least show up)
+                val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+                resolve(val);
+            }
+            else {
+                // search EPSG.io
+                var url = "https://epsg.io/" + crs + ".proj4";
+                var xhttp_1 = new XMLHttpRequest();
+                xhttp_1.onload = function () {
+                    if (xhttp_1.readyState === 4 && xhttp_1.status === 200) {
+                        val = xhttp_1.responseText;
+                        if (val === undefined) {
+                            val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+                        }
+                        resolve(val);
+                    }
+                };
+                xhttp_1.open("GET", url, true);
+                xhttp_1.send();
+            }
+        });
+    };
+    CityGMLService.prototype.projectPtsToWGS84 = function (coords) {
+        var projcoords = Object(__WEBPACK_IMPORTED_MODULE_2_proj4__["a" /* default */])(this.epsg, "WGS84", [coords[0], coords[1]]);
+        var newcoords = [projcoords[0], projcoords[1], coords[2]];
+        return newcoords;
+    };
+    // Generates surfaces from an element as a group
+    CityGMLService.prototype.genPoly = function (srf, surface_type) {
+        var props = { Surface_Type: surface_type,
+            LOD: 4
+        };
+        var solid = [];
+        while (srf !== null) {
+            // get first Triangle or Polygon (depends on what the CityGML is using)
+            var firstSrf = srf;
+            while ((firstSrf.nodeName.split(":")[1] !== "Triangle") && (firstSrf.nodeName.split(":")[1] !== "Polygon")) {
+                firstSrf = this.nextElement(firstSrf.firstChild);
+            }
+            // if Triangle, step into first child (exterior linear ring) and get coords
+            if (firstSrf.nodeName.split(":")[1] === "Triangle") {
+                while (firstSrf !== null) {
+                    var poly = this.nextElement(firstSrf.firstChild);
+                    solid.push(this.getCoords(poly, props));
+                    firstSrf = this.nextElement(firstSrf.nextSibling);
+                }
+            }
+            else if (firstSrf.nodeName.split(":")[1] === "Polygon") {
+                firstSrf = this.nextElement(firstSrf.firstChild);
+                solid.push(this.getCoords(firstSrf, props));
+            }
+            // extract and convert all coordinates for surface and push to solid
+            srf = this.nextElement(srf.nextSibling);
+        }
+        // console.log(solid);
+        this.cesiumGeomService.genSolidGrouped(solid, undefined, props);
+    };
+    // Gets coords from the linear rings that make up ONE Triangle or Polygon
+    CityGMLService.prototype.getCoords = function (node, props) {
+        var polygon = [];
+        // Loop through Linear rings
+        while (node !== null) {
+            // get coordinates
+            var coords = this.nextElement(node.firstChild);
+            while ((coords.nodeName.split(":")[1] !== "LinearRing")) {
+                coords = this.nextElement(coords.firstChild);
+            }
+            coords = this.nextElement(coords.firstChild);
+            // if positions are in posList, split and project to wgs84 in threes, then push to polygon
+            if (coords.nodeName.split(":")[1] === "posList") {
+                var dimension = coords.attributes[0].value;
+                var coordinates = coords.textContent;
+                // split coordinates by " ", convert to number from string and project to wgs84
+                coordinates = coordinates.split(" ");
+                var coord_arr = [];
+                if (dimension === "3") {
+                    for (var i = 0; i < coordinates.length; i = i + 3) {
+                        var arr = this.projectPtsToWGS84([(Number(coordinates[i])), (Number(coordinates[i + 1])), (Number(coordinates[i + 2]))]);
+                        coord_arr.push(arr);
+                    }
+                }
+                polygon.push(coord_arr);
+                // if positions are in pos, loop through and split and project to wgs84, then push to polygon
+            }
+            else if (coords.nodeName.split(":")[1] === "pos") {
+                var coord_arr = [];
+                while (coords !== null) {
+                    var coordinates = coords.textContent;
+                    // split coordinates by " ", convert to number from string and project to wgs84
+                    coordinates = coordinates.split(" ");
+                    var arr = this.projectPtsToWGS84([(Number(coordinates[0])), (Number(coordinates[1])), (Number(coordinates[2]))]);
+                    coord_arr.push(arr);
+                    coords = this.nextElement(coords.nextSibling);
+                }
+                polygon.push(coord_arr);
+            }
+            node = this.nextElement(node.nextSibling);
+        }
+        // console.log(polygon);
+        return polygon;
+    };
+    // Returns the next sibling node that is an element.
+    // If no such node is found, returns null.
+    CityGMLService.prototype.nextElement = function (node) {
+        // if node is null, return null.
+        if (node === null) {
+            return null;
+        }
+        // Loops through siblings untill an element is found
+        // If siblings end up returning null, return null.
+        while (node.nodeType !== 1) {
+            node = node.nextSibling;
+            if (node === null) {
+                return null;
+            }
+        }
+        return node;
+    };
+    // Checks the type of element a node is and does the required steps to extract info to generate geom
+    // *TODO: convert to iterative.
+    CityGMLService.prototype.checkElement = function (node) {
+        // break if node is null
+        if (node === null) {
+            return;
+        }
+        var name = node.nodeName.split(":")[1];
+        // If wall, extract polygons and check for openings
+        if (name === "WallSurface") {
+            var srf = this.getFirstSrf(node);
+            this.genPoly(srf, name);
+            // check for openings
+            var child = this.nextElement(this.nextElement(node.firstChild).nextSibling);
+            while (child !== null) {
+                this.checkElement(child);
+                child = this.nextElement(child.nextSibling);
+            }
+        }
+        else if (name === "FloorSurface" ||
+            name === "Room" ||
+            name === "RoofSurface" ||
+            name === "Window" ||
+            name === "Door") {
+            var srf = this.getFirstSrf(node);
+            this.genPoly(srf, name);
+        }
+        else {
+            var child = this.nextElement(node.firstChild);
+            while (child !== null) {
+                this.checkElement(child);
+                child = this.nextElement(child.nextSibling);
+            }
+        }
+    };
+    // Returns first surface members of given node
+    // Returns null if node is null or no surface members are found
+    CityGMLService.prototype.getFirstSrf = function (node) {
+        while (node !== null && node.nodeName.split(":")[1] !== "surfaceMember") {
+            node = this.nextElement(node.firstChild);
+        }
+        return node;
+    };
+    CityGMLService.prototype.readFile = function (file) {
+        // cityObjectMember or featureMember
+        var member = this.nextElement(file.firstChild);
+        while (member !== null) {
+            this.checkElement(member);
+            member = this.nextElement(member.nextSibling);
+        }
+    };
+    // Main function called to read cityGML and generate geometry
+    CityGMLService.prototype.genGeom = function (file) {
+        var data = undefined;
+        if (file !== undefined) {
+            // Initialise dataSource and surface type ID arrays
+            this.cesiumGeomService.initialiseCesium();
+            // this.initialiseCount();
+            // TODO proper crs, for now default
+            this.setEPSG(undefined);
+            var context_1 = this;
+            data = this.epsg.then(function (epsg) {
+                context_1.epsg = epsg;
+                context_1.readFile(file);
+                context_1.cesiumGeomService.resumeDataSource();
+                return context_1.cesiumGeomService.getDataSource();
+            });
+        }
+        return data;
+    };
+    CityGMLService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__cesiumGeom_service__["a" /* CesiumGeomService */]])
+    ], CityGMLService);
+    return CityGMLService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/mobius-cesium/data/readCityJSON.service.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CityJSONService; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__ = __webpack_require__("./node_modules/rxjs/_esm5/Subject.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_proj4__ = __webpack_require__("./node_modules/proj4/lib/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__cesiumGeom_service__ = __webpack_require__("./src/app/mobius-cesium/data/cesiumGeom.service.ts");
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+var CityJSONService = /** @class */ (function () {
+    function CityJSONService(cesiumGeomService) {
+        this.cesiumGeomService = cesiumGeomService;
+        this.subject = new __WEBPACK_IMPORTED_MODULE_1_rxjs_Subject__["a" /* Subject */]();
+    }
+    ;
+    CityJSONService.prototype.sendMessage = function (message) {
+        this.subject.next({ text: message });
+    };
+    CityJSONService.prototype.clearMessage = function () {
+        this.subject.next();
+    };
+    CityJSONService.prototype.getMessage = function () {
+        return this.subject.asObservable();
+    };
+    CityJSONService.prototype.clearData = function () {
         this.file = undefined;
         this.epsg = undefined;
         this.vertices = undefined;
@@ -675,76 +1220,45 @@ var GenModelService = /** @class */ (function () {
         this.scale = undefined;
         this.translate = undefined;
     };
-    GenModelService.prototype.initialiseSrftypeIds = function () {
-        this.srftype_ids = { RoofSurface: [],
-            GroundSurface: [],
-            WallSurface: [],
-            ClosureSurface: [],
-            OuterCeilingSurface: [],
-            OuterFloorSurface: [],
-            Window: [],
-            Door: [],
-            WaterSurface: [],
-            WaterGroundSurface: [],
-            WaterClosureSurface: [],
-            TrafficArea: [],
-            AuxiliaryTrafficArea: [],
-            None: [] };
-    };
-    GenModelService.prototype.setSrftypeIds = function (type, id) {
-        // console.log(this.srftype_ids,type,id);
-        if (type === undefined) {
-            this.srftype_ids["None"].push(id);
-        }
-        else {
-            this.srftype_ids[type].push(id);
-        }
-    };
-    GenModelService.prototype.getSrftypeIds = function () {
-        return this.srftype_ids;
-    };
-    GenModelService.prototype.setEPSG = function (file) {
-        if (file["metadata"]["crs"] === undefined || file["metadata"]["crs"]["epsg"] === undefined) {
-            // if undefined, default is EPSG 3414 sweats (WGS84 causes our models to go crazy, with EPSG 3414 they at least show up)
-            this.epsg = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
-        }
-        else {
-            // search EPSG.io (TO-DO)
-            var url = "https://epsg.io/" + file["metadata"]["crs"]["epsg"] + ".proj4";
-            var val_1 = "";
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    val_1 = this.responseText;
-                }
-            };
-            xhttp.open("GET", url, false);
-            xhttp.send();
-            this.epsg = val_1;
-            if (this.epsg === undefined) {
-                this.epsg = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+    CityJSONService.prototype.setEPSG = function () {
+        var meta = this.file["metadata"];
+        this.epsg = new Promise(function (resolve) {
+            var val = "";
+            if (meta["crs"] === undefined || meta["crs"]["epsg"] === undefined) {
+                // if undefined, default is EPSG 3414 sweats (WGS84 causes our models to go crazy, with EPSG 3414 they at least show up)
+                val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+                resolve(val);
             }
+            else {
+                // search EPSG.io
+                var url = "https://epsg.io/" + meta["crs"]["epsg"] + ".proj4";
+                var xhttp_1 = new XMLHttpRequest();
+                xhttp_1.onload = function () {
+                    if (xhttp_1.readyState === 4 && xhttp_1.status === 200) {
+                        val = xhttp_1.responseText;
+                        if (val === undefined) {
+                            val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+                        }
+                        resolve(val);
+                    }
+                };
+                xhttp_1.open("GET", url, true);
+                xhttp_1.send();
+            }
+        });
+    };
+    CityJSONService.prototype.setVertices = function () {
+        if (this.file["vertices"] !== undefined) {
+            this.vertices = this.file["vertices"];
         }
-        // console.log(this.epsg);
     };
-    GenModelService.prototype.setDataSource = function (dataSource) {
-        this.dataSource = dataSource;
-    };
-    GenModelService.prototype.getDataSource = function () {
-        return this.dataSource;
-    };
-    GenModelService.prototype.setVertices = function (file) {
-        if (file["vertices"] !== undefined) {
-            this.vertices = file["vertices"];
-        }
-    };
-    GenModelService.prototype.setMaterials = function (file) {
+    CityJSONService.prototype.setMaterials = function () {
         var materials = [];
-        if (file["appearance"] === undefined || file["appearance"]["materials"] == undefined) {
+        if (this.file["appearance"] === undefined || this.file["appearance"]["materials"] == undefined) {
             this.materials = undefined;
         }
         else {
-            file["appearance"]["materials"].forEach(function (mat) {
+            this.file["appearance"]["materials"].forEach(function (mat) {
                 var color = mat["diffuseColor"];
                 color.push(mat["transparency"]);
                 materials.push(new ((_a = Cesium.Color).bind.apply(_a, [void 0].concat(color)))());
@@ -753,451 +1267,301 @@ var GenModelService = /** @class */ (function () {
             this.materials = materials;
         }
     };
-    GenModelService.prototype.setTemplates = function (file) {
+    CityJSONService.prototype.setTemplates = function () {
         // Pull out array of template boundaries and vertices
-        if (file["geometry-templates"] === undefined) {
+        if (this.file["geometry-templates"] === undefined) {
             this.templates = undefined;
         }
         else {
             var templates_1 = [];
-            if (file["geometry-templates"]["templates"] !== undefined) {
-                file["geometry-templates"]["templates"].forEach(function (temp) {
+            if (this.file["geometry-templates"]["templates"] !== undefined) {
+                this.file["geometry-templates"]["templates"].forEach(function (temp) {
                     if (temp.lod < 3) {
                         templates_1.push(undefined);
                     }
                     else {
-                        templates_1.push(temp.boundaries);
+                        templates_1.push(temp);
                     }
                 });
             }
-            if (file["geometry-templates"]["vertices-templates"] !== undefined) {
-                this.template_vertices = file["geometry-templates"]["vertices-templates"];
+            if (this.file["geometry-templates"]["vertices-templates"] !== undefined) {
+                this.template_vertices = this.file["geometry-templates"]["vertices-templates"];
             }
             this.templates = templates_1;
         }
     };
-    GenModelService.prototype.setTransform = function (file) {
-        if (file["transform"] !== undefined) {
-            this.scale = file["transform"].scale;
-            this.translate = file["transform"].translate;
+    CityJSONService.prototype.setTransform = function () {
+        if (this.file["transform"] !== undefined) {
+            this.scale = this.file["transform"].scale;
+            this.translate = this.file["transform"].translate;
         }
         else {
             this.scale = undefined;
             this.translate = undefined;
         }
-        // console.log(this.scale);
     };
-    GenModelService.prototype.projectPtsToWGS84 = function (coords) {
-        // console.log(coords);
+    CityJSONService.prototype.projectPtsToWGS84 = function (coords) {
         var projcoords = Object(__WEBPACK_IMPORTED_MODULE_2_proj4__["a" /* default */])(this.epsg, "WGS84", [coords[0], coords[1]]);
         var newcoords = [projcoords[0], projcoords[1], coords[2]];
         return newcoords;
     };
-    GenModelService.prototype.maxDiff = function (values) {
-        var maxval = values[0];
-        var minval = values[0];
-        for (var i = 1; i < values.length; i++) {
-            if (values[i] > maxval) {
-                maxval = values[i];
-            }
-            if (values[i] < minval) {
-                minval = values[i];
-            }
-        }
-        return (maxval - minval);
-    };
-    GenModelService.prototype.determineAxis = function (points) {
-        var _this = this;
-        // split coords and determine plane
-        var x = [];
-        var y = [];
-        points.forEach(function (index) {
-            var coords = _this.vertices[index];
-            x.push(coords[0]);
-            y.push(coords[1]);
-        });
-        if (this.maxDiff(x) > this.maxDiff(y)) {
-            // x axis seems to be wider, use xz axis
-            return 0;
-        }
-        else {
-            // y axis seems to be wider, use yz axis
-            return 1;
-        }
-    };
-    GenModelService.prototype.transformTemplate = function (coord, transform) {
+    CityJSONService.prototype.transformTemplate = function (coord, transform) {
         var pt = Cesium.Cartesian3.fromArray(coord);
         var t = Cesium.Matrix4.multiplyByPoint(transform.temp_matrix, pt, new Cesium.Cartesian3());
         var coord2 = [(t["x"] + transform.refpt[0]), (t["y"] + transform.refpt[1]), (t["z"] + transform.refpt[2])];
-        // console.log(coord,transform,coord2);
         return coord2;
     };
-    GenModelService.prototype.transformCityJSON = function (coord) {
+    CityJSONService.prototype.transformCityJSON = function (coord) {
         var pt = [undefined, undefined, undefined];
         pt[0] = (coord[0] * this.scale[0]) + this.translate[0];
         pt[1] = (coord[1] * this.scale[1]) + this.translate[1];
         pt[2] = (coord[2] * this.scale[2]) + this.translate[2];
         return pt;
     };
-    GenModelService.prototype.triangulatePoly = function (boundaries, vertex_arr, transform, color) {
-        var _this = this;
-        var vertices = this.vertices;
-        if (vertex_arr === 1) {
-            vertices = this.template_vertices;
-        }
-        // parent entity to contain triangulated polygons
-        var temp_parent = this.dataSource.entities.add(new Cesium.Entity());
-        if (typeof (boundaries[0][0]) !== "number") {
-            boundaries = boundaries[0];
-        }
-        // determine axis
-        var axis = this.determineAxis(boundaries[0]);
-        var other_axis = 0;
-        if (axis === 0) {
-            other_axis = 1;
-        }
-        // get points and put into earcut format
-        var poly_vertices = [];
-        var holes = [];
-        var other_coords = [];
-        var count = 0;
-        for (var i = 0; i < boundaries.length; i++) {
-            boundaries[i].forEach(function (index) {
-                var coords = vertices[index];
-                // console.log(coords);
-                poly_vertices.push(coords[axis], coords[2]);
-                other_coords.push(coords[other_axis]);
-                count++;
-            });
-            if (i !== (boundaries.length - 1)) {
-                holes.push(count);
-            }
-        }
-        // console.log(poly_vertices,holes);
-        // throw into earcut
-        var tri_index = __WEBPACK_IMPORTED_MODULE_3_earcut__(poly_vertices, holes);
-        var _loop_1 = function (p) {
-            var points = [];
-            //get coordinates for each point
-            [tri_index[p], tri_index[p + 1], tri_index[p + 2]].forEach(function (j) {
-                var coord = [undefined, undefined, undefined];
-                coord[other_axis] = other_coords[j];
-                coord[axis] = poly_vertices[j * 2];
-                coord[2] = poly_vertices[(j * 2) + 1];
-                // console.log(coord);
-                // if object is a geometry instance, multiply by transformation matrix and add reference point
-                if (transform.refpt !== undefined) {
-                    coord = _this.transformTemplate(coord, transform);
-                }
-                // transform coordinates if transform specification exists in file
-                if (_this.scale !== undefined) {
-                    coord = _this.transformCityJSON(coord);
-                    // console.log(coord);
-                }
-                // project to wgs84
-                coord = _this.projectPtsToWGS84(coord);
-                // console.log(coord);
-                points.push.apply(points, coord);
-            });
-            // console.log(points);
-            // create and add polygon
-            var poly = this_1.dataSource.entities.add({
-                parent: temp_parent,
-                // name : name,
-                polygon: {
-                    hierarchy: new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(points)),
-                    perPositionHeight: true,
-                    material: color,
-                    outline: false,
-                },
-            });
-            // console.log(poly);
-        };
-        var this_1 = this;
-        // console.log(tri_index);
-        // convert to cesium format
-        for (var p = 0; p < tri_index.length; p = p + 3) {
-            _loop_1(p);
-        }
-        return temp_parent;
-    };
-    GenModelService.prototype.cesiumPoly = function (boundaries, vertex_arr, transform, colour) {
-        var _this = this;
-        var vertices = this.vertices;
-        if (vertex_arr === 1) {
-            vertices = this.template_vertices;
-        }
-        var temp_parent = this.dataSource.entities.add(new Cesium.Entity());
-        var extRing = boundaries[0];
-        var extRing_points = [];
-        extRing.forEach(function (pt_index) {
-            var coord = vertices[pt_index];
-            // if object is a geometry instance, multiply by transformation matrix and add reference point
-            if (transform.refpt !== undefined) {
-                coord = _this.transformTemplate(coord, transform);
-            }
-            // transform coordinates if transform specification exists in file
-            if (_this.scale !== undefined) {
-                coord = _this.transformCityJSON(coord);
-            }
-            // project to wgs84
-            var pt3 = _this.projectPtsToWGS84(coord);
-            // console.log (coord,pt3)
-            extRing_points.push.apply(extRing_points, pt3);
-        });
-        // console.log(extRing_points);
-        var ext_cartesian3 = Cesium.Cartesian3.fromDegreesArrayHeights(extRing_points);
-        var p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3);
-        // If boundaries contain inner rings for holes, create p_hierarchy with holes
-        var int_cartesian3 = [];
-        if (boundaries.length > 0) {
-            var _loop_2 = function (ring_index) {
-                var temp_pts = [];
-                boundaries[ring_index].forEach(function (pt_index) {
-                    var coord = vertices[pt_index];
-                    // if object is a geometry instance, multiply by transformation matrix and add reference point
-                    if (transform.refpt !== undefined) {
-                        coord = _this.transformTemplate(coord, transform);
-                    }
-                    // transform coordinates if transform specification exists in file
-                    if (_this.scale !== undefined) {
-                        coord = _this.transformCityJSON(coord);
-                    }
-                    // project to wgs84
-                    var pt3 = _this.projectPtsToWGS84(coord);
-                    temp_pts.push.apply(temp_pts, pt3);
-                });
-                // console.log(temp_pts);
-                int_cartesian3.push(new Cesium.PolygonHierarchy(Cesium.Cartesian3.fromDegreesArrayHeights(temp_pts)));
-            };
-            // Create p_hierarchy for each hole and push to int_cartesian3
-            for (var ring_index = 1; ring_index < boundaries.length; ring_index++) {
-                _loop_2(ring_index);
-            }
-            // Create p_hierarchy with holes (as array of p_hierarchies)
-            p_hierarchy = new Cesium.PolygonHierarchy(ext_cartesian3, int_cartesian3);
-        }
-        // console.log(p_hierarchy);
-        // Create polygon
-        var poly = this.dataSource.entities.add({
-            parent: temp_parent,
-            // name : city_object_keys[obj_index],
-            polygon: {
-                hierarchy: p_hierarchy,
-                perPositionHeight: true,
-                material: colour,
-                outline: false,
-            },
-        });
-        // console.log(poly);
-        return temp_parent;
-    };
-    GenModelService.prototype.genCityJSONGeom = function (file) {
-        var _this = this;
-        // Initialise dataSource and surface type ID arrays
-        this.setDataSource(new Cesium.CustomDataSource());
-        this.initialiseSrftypeIds();
-        var dataSource = this.dataSource;
+    CityJSONService.prototype.genGeom = function (file) {
+        var data = undefined;
         if (file !== undefined) {
-            this.setEPSG(file);
-            this.setVertices(file);
-            this.setMaterials(file);
-            this.setTemplates(file);
-            this.setTransform(file);
-            // Loop through CityObjects
-            var city_object_keys = Object.keys(file["CityObjects"]);
-            var _loop_3 = function (obj_index) {
-                var obj = file["CityObjects"][city_object_keys[obj_index]];
-                // console.log(city_object_keys[obj_index]);
-                // Get object type (21 types)
-                var cityobj_type = obj.type;
-                if (cityobj_type === "BuildingPart") {
+            this.file = file;
+            file = null;
+            if (this.file["metadata"] !== undefined) {
+                this.setEPSG();
+                this.setVertices();
+                this.setMaterials();
+                this.setTemplates();
+                this.setTransform();
+                // Initialise dataSource and surface type ID arrays
+                this.cesiumGeomService.setDataSource(new Cesium.CustomDataSource());
+                this.cesiumGeomService.suspendDataSource();
+                this.cesiumGeomService.initialiseSrftypeIds();
+                var context_1 = this;
+                data = this.epsg.then(function (epsg) {
+                    context_1.epsg = epsg;
+                    context_1.readFile();
+                    context_1.clearData();
+                    context_1.cesiumGeomService.resumeDataSource();
+                    return context_1.cesiumGeomService.getDataSource();
+                });
+            }
+        }
+        return data;
+    };
+    CityJSONService.prototype.readFile = function () {
+        var _this = this;
+        // Loop through CityObjects
+        var city_object_keys = Object.keys(this.file["CityObjects"]);
+        var city_object = this.file["CityObjects"];
+        this.file = undefined;
+        var _loop_1 = function (obj_index) {
+            var obj = city_object[city_object_keys[obj_index]];
+            // Get object type if type is BuildingPart or BuildingInstallation, skip because we'll reference it from a building.
+            var cityobj_type = obj.type;
+            if (cityobj_type === "BuildingPart" || cityobj_type === "BuildingInstallation") {
+                return "continue";
+            }
+            // Get object attributes
+            var cityobj_attrib = obj.attributes;
+            // Get object parts & installations
+            var cityobj_parts_ID = [];
+            if (obj.Parts !== undefined) {
+                cityobj_parts_ID.push.apply(cityobj_parts_ID, obj.Parts);
+            }
+            if (obj.Installations !== undefined) {
+                cityobj_parts_ID.push.apply(cityobj_parts_ID, obj.Installations);
+            }
+            var cityobj_parts_geom = [];
+            var cityobj_parts_attrib = [];
+            var cityobj_parts_type = [];
+            if (cityobj_parts_ID !== undefined) {
+                cityobj_parts_ID.forEach(function (ID) {
+                    cityobj_parts_geom.push.apply(cityobj_parts_geom, city_object[ID].geometry);
+                    cityobj_parts_attrib.push(city_object[ID].attributes);
+                    cityobj_parts_type.push(city_object[ID].type);
+                });
+            }
+            var all_geom = obj.geometry.concat(cityobj_parts_geom);
+            var parts_start = obj.geometry.length;
+            var parts_index = 0;
+            var _loop_2 = function (geom_index) {
+                var geom = all_geom[geom_index];
+                if (geom == undefined) {
                     return "continue";
                 }
-                // Get object attributes
-                var cityobj_attrib = obj.attributes;
-                // if (cityobj_attrib === undefined) {
+                // Check LOD
+                var lod = geom.lod;
+                // if (lod !== undefined && lod < 3) {
                 //   continue;
                 // }
-                // console.log(cityobj_attrib);
-                // console.log(Object.keys(cityobj_attrib))
-                // Get object parts (TODO: Installations)
-                var cityobj_parts_ID = obj.Parts;
-                // console.log(cityobj_parts_ID);
-                var cityobj_parts_geom = [];
-                var cityobj_parts_attrib = [];
-                var cityobj_parts_type = [];
-                if (cityobj_parts_ID !== undefined) {
-                    cityobj_parts_ID.forEach(function (ID) {
-                        cityobj_parts_geom.push.apply(cityobj_parts_geom, file["CityObjects"][ID].geometry);
-                        cityobj_parts_attrib.push(file["CityObjects"][ID].attributes);
-                        cityobj_parts_type.push(file["CityObjects"][ID].type);
-                    });
-                }
-                // console.log(obj.geometry);
-                var all_geom = obj.geometry.concat(cityobj_parts_geom);
-                // console.log(all_geom);
-                var parts_start = obj.geometry.length;
-                var parts_index = 0;
-                // Loop through geometry (typically used for different LOD but not necessarily, may contain multiple)
-                for (var geom_index = 0; geom_index < all_geom.length; geom_index++) {
-                    var geom = all_geom[geom_index];
-                    // console.log(geom);
-                    if (geom == undefined) {
-                        continue;
-                    }
-                    // Check LOD
-                    var lod = geom.lod;
-                    // if (lod !== undefined && lod < 3) {
-                    //   continue;
-                    // }
-                    // Set values to use for polygon generation
-                    // poly_vertices: array of vertices in the file to refer to (0 for vertices or 1 for template_vertices)
-                    // boundaries: array of vertex position indexes to refer to (boundaries from geometry or template)
-                    // transfrom: object containing transformation matrix (temp_matrix) and reference point (refpt) of the geometry instance
-                    var vertex_arr = 0;
-                    var boundaries = geom.boundaries;
-                    var transform = { temp_matrix: undefined, refpt: undefined };
-                    // Check geometry type
-                    var geom_type = geom.type;
-                    if (geom_type === "GeometryInstance") {
-                        // console.log("GeometryInstance")
-                        vertex_arr = 1;
-                        boundaries = this_2.templates[geom.template];
+                // Set values to use for polygon generation
+                // vertex_arr: array of vertices in the file to refer to (vertices or template_vertices)
+                // boundaries: array of vertex position indexes to refer to (boundaries from geometry or template)
+                // transfrom: object containing transformation matrix (temp_matrix) and reference point (refpt) of the geometry instance
+                var vertex_arr = this_1.vertices;
+                var boundaries = geom.boundaries;
+                var transform = { temp_matrix: undefined, refpt: undefined };
+                // Check geometry type
+                var geom_type = geom.type;
+                if (geom_type === "GeometryInstance") {
+                    if (this_1.templates[geom.template] !== undefined) {
+                        vertex_arr = this_1.template_vertices;
+                        boundaries = this_1.templates[geom.template].boundaries;
+                        geom_type = this_1.templates[geom.template].type;
+                        lod = this_1.templates[geom.template].lod;
                         transform.temp_matrix = Cesium.Matrix4.fromArray(geom.transformationMatrix);
-                        transform.refpt = this_2.vertices[geom.boundaries[0]];
-                    }
-                    if (boundaries === undefined) {
-                        continue;
-                    }
-                    // Pull out array of semantics values & surfaces
-                    var values = void 0;
-                    var surfaces = void 0;
-                    if (geom["semantics"] !== undefined) {
-                        values = geom["semantics"]["values"];
-                        surfaces = geom["semantics"]["surfaces"];
-                    }
-                    // Pull out materials values
-                    var mats = void 0;
-                    if (geom["material"] !== undefined) {
-                        mats = geom["material"][""]["values"];
-                    }
-                    var _loop_4 = function (srf_index) {
-                        if (boundaries[srf_index][0] === undefined) {
-                            return "continue";
-                        }
-                        // Extract surface type
-                        var surface_type = "None";
-                        if (values !== undefined && surfaces[values[srf_index]] !== undefined) {
-                            surface_type = surfaces[values[srf_index]]["type"];
-                        }
-                        // Extract materials
-                        var colour = Cesium.Color.WHITE;
-                        if (mats !== undefined && mats[srf_index] !== null) {
-                            colour = this_2.materials[mats[srf_index]];
-                        }
-                        else if (surface_type === "WallSurface") {
-                            colour = Cesium.Color.SILVER;
-                        }
-                        else if (surface_type === "RoofSurface") {
-                            colour = Cesium.Color.RED;
-                        }
-                        else if (surface_type === "Window") {
-                            colour = Cesium.Color.LIGHTBLUE.withAlpha(0.5);
-                        }
-                        else if (surface_type === "Door") {
-                            colour = Cesium.Color.TAN;
-                        }
-                        else if (obj.type === "SolitaryVegetationObject" || obj.type === "PlantCover") {
-                            colour = Cesium.Color.YELLOWGREEN;
-                        }
-                        // Create property bag (with parent information if obj is building part)
-                        // (TO-DO: building installation)
-                        var props = { Object_ID: city_object_keys[obj_index],
-                            Object_Type: cityobj_type,
-                            Geom_Type: geom_type,
-                            Surface_Type: surface_type,
-                            LOD: lod,
-                            Color: colour,
-                            Parent_ID: "None",
-                            Parent_Type: "None"
-                        };
-                        if (geom_index >= parts_start) {
-                            props.Object_ID = cityobj_parts_ID[parts_index];
-                            props.Object_Type = cityobj_parts_type[parts_index];
-                            props.Parent_ID = city_object_keys[obj_index];
-                            props.Parent_Type = cityobj_type;
-                        }
-                        // Add attributes from parent to properties
-                        if (cityobj_attrib !== undefined) {
-                            Object.keys(cityobj_attrib).forEach(function (name) {
-                                props[name] = cityobj_attrib[name];
-                            });
-                        }
-                        // console.log(props);
-                        // Add attributes from parent to properties
-                        if (cityobj_parts_attrib[parts_index] !== undefined) {
-                            Object.keys(cityobj_parts_attrib[parts_index]).forEach(function (name) {
-                                props[name] = cityobj_parts_attrib[parts_index][name];
-                            });
-                            // console.log(props);
-                        }
-                        var property_bag = new Cesium.PropertyBag(props);
-                        // Check horizontal or not
-                        var z = [];
-                        var arr = boundaries[srf_index][0];
-                        if (typeof (arr[0]) !== "number") {
-                            arr = boundaries[0][srf_index][0];
-                        }
-                        if (vertex_arr === 0) {
-                            arr.forEach(function (coords) {
-                                // console.log(this.vertices[coords])
-                                z.push(_this.vertices[coords][2]);
-                            });
-                        }
-                        else {
-                            arr.forEach(function (coords) {
-                                z.push(_this.template_vertices[coords][2]);
-                            });
-                        }
-                        if (this_2.maxDiff(z) < 0.01) {
-                            // // horizontal, use Cesium's stuff
-                            // console.log("Horizontal")
-                            var poly = this_2.cesiumPoly(boundaries[srf_index], vertex_arr, transform, colour);
-                            poly.properties = property_bag;
-                            // poly.show = false;
-                            this_2.setSrftypeIds(surface_type, poly.id);
-                        }
-                        else {
-                            var poly = this_2.triangulatePoly(boundaries[srf_index], vertex_arr, transform, colour);
-                            poly.properties = property_bag;
-                            // poly.show = false;
-                            this_2.setSrftypeIds(surface_type, poly.id);
-                        }
-                    };
-                    // // Loop through surfaces
-                    for (var srf_index = 0; srf_index < boundaries.length; srf_index++) {
-                        _loop_4(srf_index);
+                        transform.refpt = this_1.vertices[geom.boundaries[0]];
                     }
                 }
-                if (parts_index >= parts_start) {
-                    parts_index++;
+                if (boundaries === undefined) {
+                    return "continue";
+                }
+                // Pull out array of semantics values & surfaces
+                var values = void 0;
+                var surfaces;
+                if (geom["semantics"] !== undefined) {
+                    values = geom["semantics"]["values"];
+                    surfaces = geom["semantics"]["surfaces"];
+                }
+                // Pull out materials values
+                var mats = void 0;
+                if (geom["material"] !== undefined) {
+                    mats = geom["material"][""]["values"];
+                }
+                var _loop_3 = function (srf_index) {
+                    if (boundaries[srf_index][0] === undefined) {
+                        return "continue";
+                    }
+                    // Extract surface type and materials
+                    var surface_type = ["None"];
+                    var colour = [];
+                    if (geom_type === "MultiSurface") {
+                        if (values !== undefined && values[srf_index] !== null && values[srf_index] !== undefined) {
+                            surface_type = [(surfaces[values[srf_index]]["type"])];
+                        }
+                        if (mats !== undefined) {
+                            colour.push(this_1.materials[mats[srf_index]]);
+                        }
+                    }
+                    else if (geom_type === "Solid") {
+                        surface_type = [];
+                        if (values !== undefined && values[srf_index] !== null && values[srf_index] !== undefined) {
+                            values[srf_index].forEach(function (value) {
+                                surface_type.push(surfaces[value]["type"]);
+                            });
+                        }
+                        if (mats !== undefined) {
+                            mats[srf_index].forEach(function (value) {
+                                colour.push(_this.materials[value]);
+                            });
+                        }
+                    }
+                    // Create property bag (with parent information if obj is building part)
+                    var props = { Object_ID: city_object_keys[obj_index],
+                        Object_Type: cityobj_type,
+                        Geom_Type: geom_type,
+                        Surface_Type: surface_type[0],
+                        LOD: lod,
+                        Parent_ID: "None",
+                        Parent_Type: "None"
+                    };
+                    if (geom_index >= parts_start) {
+                        props.Object_ID = cityobj_parts_ID[parts_index];
+                        props.Object_Type = cityobj_parts_type[parts_index];
+                        props.Parent_ID = city_object_keys[obj_index];
+                        props.Parent_Type = cityobj_type;
+                    }
+                    if (props.Surface_Type === undefined) {
+                        props.Surface_Type = "None";
+                    }
+                    // Add attributes from parent to properties
+                    if (cityobj_attrib !== undefined) {
+                        Object.keys(cityobj_attrib).forEach(function (name) {
+                            props[name] = cityobj_attrib[name];
+                        });
+                    }
+                    // Add attributes from parent to properties
+                    if (cityobj_parts_attrib[parts_index] !== undefined) {
+                        Object.keys(cityobj_parts_attrib[parts_index]).forEach(function (name) {
+                            props[name] = cityobj_parts_attrib[parts_index][name];
+                        });
+                    }
+                    // MULTISURFACE
+                    if (geom_type === "MultiSurface") {
+                        // polygon: nested array of coordinates that make up a polygon.
+                        // polygon[0] contains the points for the outer ring.
+                        // polygon[1]... contain the points for the holes.
+                        var polygon_1 = [];
+                        boundaries[srf_index].forEach(function (ring) {
+                            var ringpts = [];
+                            ring.forEach(function (ID) {
+                                var coord = vertex_arr[ID];
+                                // if object is a geometry instance, multiply by transformation matrix and add reference point
+                                if (transform.refpt !== undefined) {
+                                    coord = _this.transformTemplate(coord, transform);
+                                }
+                                // transform coordinates if transform specification exists in file
+                                if (_this.scale !== undefined) {
+                                    coord = _this.transformCityJSON(coord);
+                                }
+                                // project to wgs84
+                                coord = _this.projectPtsToWGS84(coord);
+                                ringpts.push(coord);
+                            });
+                            polygon_1.push(ringpts);
+                        });
+                        // create polygon in Cesium
+                        this_1.cesiumGeomService.genMultiPoly(polygon_1, colour[0], props);
+                        // i++ 
+                    }
+                    else if (geom_type === "Solid") {
+                        var solid_1 = [];
+                        boundaries[srf_index].forEach(function (shell) {
+                            var polygon = [];
+                            shell.forEach(function (ring) {
+                                var ringpts = [];
+                                ring.forEach(function (ID) {
+                                    var coord = vertex_arr[ID];
+                                    // if object is a geometry instance, multiply by transformation matrix and add reference point
+                                    if (transform.refpt !== undefined) {
+                                        coord = _this.transformTemplate(coord, transform);
+                                    }
+                                    // transform coordinates if transform specification exists in file
+                                    if (_this.scale !== undefined) {
+                                        coord = _this.transformCityJSON(coord);
+                                    }
+                                    // project to wgs84
+                                    coord = _this.projectPtsToWGS84(coord);
+                                    ringpts.push(coord);
+                                });
+                                polygon.push(ringpts);
+                            });
+                            solid_1.push(polygon);
+                        });
+                        // create solid in cesium
+                        this_1.cesiumGeomService.genSolid(solid_1, colour, surface_type, props);
+                    }
+                };
+                // // Loop through surfaces
+                for (var srf_index = 0; srf_index < boundaries.length; srf_index++) {
+                    _loop_3(srf_index);
                 }
             };
-            var this_2 = this;
-            // for (let obj_index = 1 ; obj_index < 2 ; obj_index ++) {
-            for (var obj_index = 0; obj_index < city_object_keys.length; obj_index++) {
-                _loop_3(obj_index);
+            // Loop through geometry (typically used for different LOD but not necessarily, may contain multiple)
+            for (var geom_index = all_geom.length - 1; geom_index >= 0; geom_index--) {
+                _loop_2(geom_index);
             }
+            if (parts_index >= parts_start) {
+                parts_index++;
+            }
+        };
+        var this_1 = this;
+        for (var obj_index = city_object_keys.length - 1; obj_index >= 0; obj_index--) {
+            _loop_1(obj_index);
         }
-        // console.log (this.srftype_ids);
-        this.clearData();
-        return dataSource;
     };
-    GenModelService = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Injectable */])()
-    ], GenModelService);
-    return GenModelService;
+    CityJSONService = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["z" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__cesiumGeom_service__["a" /* CesiumGeomService */]])
+    ], CityJSONService);
+    return CityJSONService;
 }());
 
 
@@ -1258,13 +1622,10 @@ var MobiuscesiumComponent = /** @class */ (function () {
     MobiuscesiumComponent.prototype.ngOnInit = function () {
         this.setModel(this.data);
         this.dataService.setMode(this.mode);
-        // console.log(this.data);
     };
     MobiuscesiumComponent.prototype.ngDoCheck = function () {
         if (this.dataService.getGsModel() !== this.data) {
             this.setModel(this.data);
-            // console.log("data changed");
-            // console.log("mode:", this.mode);
         }
     };
     MobiuscesiumComponent.prototype.toggleSlider = function () {
@@ -1326,26 +1687,30 @@ var MobiuscesiumComponent = /** @class */ (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__ = __webpack_require__("./src/app/mobius-cesium/mobius-cesium.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__ = __webpack_require__("./src/app/mobius-cesium/viewer/viewer.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__data_data_service__ = __webpack_require__("./src/app/mobius-cesium/data/data.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__data_genmodel_service__ = __webpack_require__("./src/app/mobius-cesium/data/genmodel.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular_split__ = __webpack_require__("./node_modules/angular-split/esm5/angular-split.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__ = __webpack_require__("./node_modules/@angular/material/esm5/tabs.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__ = __webpack_require__("./node_modules/@angular/material/esm5/tooltip.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__ = __webpack_require__("./node_modules/@angular/material/esm5/slider.es5.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__setting_setting_component__ = __webpack_require__("./src/app/mobius-cesium/setting/setting.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__setting_visualise_component__ = __webpack_require__("./src/app/mobius-cesium/setting/visualise.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__setting_attributes_copmponent__ = __webpack_require__("./src/app/mobius-cesium/setting/attributes.copmponent.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__setting_publish_component__ = __webpack_require__("./src/app/mobius-cesium/setting/publish.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__setting_display_copmponent__ = __webpack_require__("./src/app/mobius-cesium/setting/display.copmponent.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__setting_cityjson_component__ = __webpack_require__("./src/app/mobius-cesium/setting/cityjson.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__data_readCityJSON_service__ = __webpack_require__("./src/app/mobius-cesium/data/readCityJSON.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__data_readCityGML_service__ = __webpack_require__("./src/app/mobius-cesium/data/readCityGML.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__data_cesiumGeom_service__ = __webpack_require__("./src/app/mobius-cesium/data/cesiumGeom.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_angular_split__ = __webpack_require__("./node_modules/angular-split/esm5/angular-split.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_platform_browser_animations__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/animations.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__angular_platform_browser__ = __webpack_require__("./node_modules/@angular/platform-browser/esm5/platform-browser.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__angular_material_tabs__ = __webpack_require__("./node_modules/@angular/material/esm5/tabs.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__angular_material_tooltip__ = __webpack_require__("./node_modules/@angular/material/esm5/tooltip.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__angular_material_slider__ = __webpack_require__("./node_modules/@angular/material/esm5/slider.es5.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__setting_setting_component__ = __webpack_require__("./src/app/mobius-cesium/setting/setting.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__setting_visualise_component__ = __webpack_require__("./src/app/mobius-cesium/setting/visualise.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__setting_attributes_copmponent__ = __webpack_require__("./src/app/mobius-cesium/setting/attributes.copmponent.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__setting_publish_component__ = __webpack_require__("./src/app/mobius-cesium/setting/publish.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__setting_display_copmponent__ = __webpack_require__("./src/app/mobius-cesium/setting/display.copmponent.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__setting_cityjson_component__ = __webpack_require__("./src/app/mobius-cesium/setting/cityjson.component.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -1380,27 +1745,29 @@ var MobiusCesium = /** @class */ (function () {
     MobiusCesium = MobiusCesium_1 = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["H" /* NgModule */])({
             imports: [__WEBPACK_IMPORTED_MODULE_1__angular_common__["a" /* CommonModule */],
-                __WEBPACK_IMPORTED_MODULE_6_angular_split__["a" /* AngularSplitModule */],
-                __WEBPACK_IMPORTED_MODULE_9__angular_material_tabs__["a" /* MatTabsModule */],
-                __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_7__angular_platform_browser_animations__["b" /* NoopAnimationsModule */],
-                __WEBPACK_IMPORTED_MODULE_8__angular_platform_browser__["a" /* BrowserModule */],
-                __WEBPACK_IMPORTED_MODULE_10__angular_material_tooltip__["a" /* MatTooltipModule */],
-                __WEBPACK_IMPORTED_MODULE_11__angular_material_slider__["a" /* MatSliderModule */],
-                __WEBPACK_IMPORTED_MODULE_12__angular_forms__["a" /* FormsModule */],
+                __WEBPACK_IMPORTED_MODULE_8_angular_split__["a" /* AngularSplitModule */],
+                __WEBPACK_IMPORTED_MODULE_11__angular_material_tabs__["a" /* MatTabsModule */],
+                __WEBPACK_IMPORTED_MODULE_9__angular_platform_browser_animations__["a" /* BrowserAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_9__angular_platform_browser_animations__["b" /* NoopAnimationsModule */],
+                __WEBPACK_IMPORTED_MODULE_10__angular_platform_browser__["a" /* BrowserModule */],
+                __WEBPACK_IMPORTED_MODULE_12__angular_material_tooltip__["a" /* MatTooltipModule */],
+                __WEBPACK_IMPORTED_MODULE_13__angular_material_slider__["a" /* MatSliderModule */],
+                __WEBPACK_IMPORTED_MODULE_14__angular_forms__["a" /* FormsModule */],
             ],
             exports: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */]],
             declarations: [__WEBPACK_IMPORTED_MODULE_2__mobius_cesium_component__["a" /* MobiuscesiumComponent */],
                 __WEBPACK_IMPORTED_MODULE_3__viewer_viewer_component__["a" /* ViewerComponent */],
-                __WEBPACK_IMPORTED_MODULE_13__setting_setting_component__["a" /* SettingComponent */],
-                __WEBPACK_IMPORTED_MODULE_14__setting_visualise_component__["a" /* DataComponent */],
-                __WEBPACK_IMPORTED_MODULE_15__setting_attributes_copmponent__["a" /* SelectComponent */],
-                __WEBPACK_IMPORTED_MODULE_16__setting_publish_component__["a" /* PublishComponent */],
-                __WEBPACK_IMPORTED_MODULE_17__setting_display_copmponent__["a" /* DisplayComponent */],
-                __WEBPACK_IMPORTED_MODULE_18__setting_cityjson_component__["a" /* CityJSONComponent */],
+                __WEBPACK_IMPORTED_MODULE_15__setting_setting_component__["a" /* SettingComponent */],
+                __WEBPACK_IMPORTED_MODULE_16__setting_visualise_component__["a" /* DataComponent */],
+                __WEBPACK_IMPORTED_MODULE_17__setting_attributes_copmponent__["a" /* SelectComponent */],
+                __WEBPACK_IMPORTED_MODULE_18__setting_publish_component__["a" /* PublishComponent */],
+                __WEBPACK_IMPORTED_MODULE_19__setting_display_copmponent__["a" /* DisplayComponent */],
+                __WEBPACK_IMPORTED_MODULE_20__setting_cityjson_component__["a" /* CityJSONComponent */],
             ],
             providers: [__WEBPACK_IMPORTED_MODULE_4__data_data_service__["a" /* DataService */],
-                __WEBPACK_IMPORTED_MODULE_5__data_genmodel_service__["a" /* GenModelService */],
+                __WEBPACK_IMPORTED_MODULE_5__data_readCityJSON_service__["a" /* CityJSONService */],
+                __WEBPACK_IMPORTED_MODULE_6__data_readCityGML_service__["a" /* CityGMLService */],
+                __WEBPACK_IMPORTED_MODULE_7__data_cesiumGeom_service__["a" /* CesiumGeomService */],
             ],
         })
     ], MobiusCesium);
@@ -1566,16 +1933,21 @@ var CityJSONComponent = /** @class */ (function (_super) {
         return _this;
     }
     CityJSONComponent.prototype.ngOnInit = function () {
-        this.srftype_ids = this.genModelService.getSrftypeIds();
+        this.srftype_ids = this.cesiumGeomService.getSrftypeIds();
+        this.srfcount = this.cesiumGeomService.getSrfCount();
         this.setSrftype_keys();
         // if(this.dataArr !== undefined) {this.LoadData();}
     };
     CityJSONComponent.prototype.notify = function (message) {
+        var _this = this;
         if (message === "model_update") {
             try {
-                this.srftype_ids = this.genModelService.getSrftypeIds();
-                this.setSrftype_keys();
-                // if(this.dataArr !== undefined) {this.LoadData();}
+                this.dataService.getcesiumpromise().then(function () {
+                    _this.srftype_ids = _this.cesiumGeomService.getSrftypeIds();
+                    _this.srfcount = _this.cesiumGeomService.getSrfCount();
+                    _this.setSrftype_keys();
+                    // if(this.dataArr !== undefined) {this.LoadData();}
+                });
             }
             catch (ex) {
                 console.log(ex);
@@ -1585,16 +1957,15 @@ var CityJSONComponent = /** @class */ (function (_super) {
     CityJSONComponent.prototype.setSrftype_keys = function () {
         var keys = [];
         for (var key in this.srftype_ids) {
-            if (this.srftype_ids[key] !== undefined) {
-                keys.push(key);
-            }
+            // keys.push(key);
+            keys.push(key + " count  = " + this.srfcount[key]);
         }
         this.srftype_keys = keys;
     };
     CityJSONComponent.prototype.Show = function (event) {
         var eventCheckbox = document.getElementById(event + "_check");
-        var ids = this.srftype_ids[event];
-        var entities = this.genModelService.getDataSource().entities;
+        var ids = this.srftype_ids[event.split(" ")[0]];
+        var entities = this.dataService.getViewer().dataSources.get(0).entities;
         if (eventCheckbox["checked"] === false) {
             ids.forEach(function (id) {
                 entities.getById(id).show = false;
@@ -2093,7 +2464,7 @@ module.exports = "#setting{\r\n  position: relative;\r\n  height: 100%;\r\n  wid
 /***/ "./src/app/mobius-cesium/setting/setting.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"setting\" >\r\n  <mat-tab-group class=\"mat-tab-group\" style=\"height: 100%;\" (selectedTabChange)=\"changedata($event.index)\" *ngIf=\"mode==='editor'\" >\r\n    <mat-tab label=\"&nbsp;Select&nbsp;\">\r\n      <app-select></app-select>\r\n    </mat-tab>\r\n<!--     <mat-tab label=\"&nbsp;Data&nbsp;\" >\r\n      <app-data (change)=\"LoadViewer()\" (click)=\"LoadViewer()\"></app-data>\r\n    </mat-tab> -->\r\n    <mat-tab label=\"&nbsp;Display&nbsp;\" >\r\n      <app-display></app-display>\r\n    </mat-tab>\r\n<!--     <mat-tab label=\"&nbsp;Publish&nbsp;\" >\r\n      <app-publish  (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n    </mat-tab> -->\r\n    <mat-tab label=\"&nbsp;CityJSON&nbsp;\" >\r\n      <app-cityjson></app-cityjson>\r\n      <!-- <app-select></app-select> -->\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n    <app-publish *ngIf=\"mode==='viewer'\" (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n</div>"
+module.exports = "<div id=\"setting\" >\r\n  <mat-tab-group class=\"mat-tab-group\" style=\"height: 100%;\" (selectedTabChange)=\"changedata($event.index)\" *ngIf=\"mode==='editor'\" >\r\n    <mat-tab label=\"&nbsp;Select&nbsp;\">\r\n      <app-select></app-select>\r\n    </mat-tab>\r\n<!--     <mat-tab label=\"&nbsp;Data&nbsp;\" >\r\n      <app-data (change)=\"LoadViewer()\" (click)=\"LoadViewer()\"></app-data>\r\n    </mat-tab> -->\r\n    <mat-tab label=\"&nbsp;Display&nbsp;\" >\r\n      <app-display></app-display>\r\n    </mat-tab>\r\n<!--     <mat-tab label=\"&nbsp;Publish&nbsp;\" >\r\n      <app-publish  (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n    </mat-tab> -->\r\n    <mat-tab label=\"&nbsp;CityJSON&nbsp;\" >\r\n      <app-cityjson></app-cityjson>\r\n    </mat-tab>\r\n  </mat-tab-group>\r\n    <app-publish *ngIf=\"mode==='viewer'\" (change)=\"LoadViewer()\" (click)=\"Reset();LoadViewer();\"></app-publish>\r\n</div>"
 
 /***/ }),
 
@@ -2954,49 +3325,52 @@ var ViewerComponent = /** @class */ (function (_super) {
     //Cesium geoJson to load data and check mode
     ViewerComponent.prototype.LoadData = function (data) {
         if (this.data !== undefined) {
+            // console.log("Gen geom");
             /////// INITIALISING VIEWER ////////
             var viewer_1 = this.dataService.getViewer();
             viewer_1.dataSources.removeAll({ destroy: true });
-            // console.log("cleared data", viewer);
             /////// OBTAINING DATA ////////
-            this.data = data;
             var context_1 = this;
-            var promise_1 = new Promise(function (resolve) {
-                var datasource = context_1.genModelService.genCityJSONGeom(context_1.data);
-                resolve(datasource);
+            var promise_1 = context_1.cityJSONService.genGeom(data);
+            if (promise_1 === undefined) {
+                promise_1 = context_1.cityGMLService.genGeom(data);
+            }
+            promise_1.then(function (datasource) {
+                // console.log(context.cityGMLService.getCount());
+                context_1.cesiumGeomService.clearDataSource();
+                context_1.data = null;
+                viewer_1.dataSources.add(datasource);
+                // console.log("Done");
             });
             this.dataService.setcesiumpromise(promise_1);
-            viewer_1.dataSources.add(promise_1);
             var _HeightKey = [];
-            // const promise = Cesium.GeoJsonDataSource.load(this.data);
-            // viewer.dataSources.add(promise);
-            this._ShowColorBar = false;
             /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
             viewer_1.homeButton.viewModel.command.beforeExecute.addEventListener(function (e) {
                 e.cancel = true;
                 viewer_1.zoomTo(promise_1);
             });
             viewer_1.zoomTo(promise_1);
-            // =======
-            //       promise.then(function(dataSource) {
-            //         const entities = dataSource.entities.values;
-            //         const self = this;
-            //         if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
-            //       });
-            //       this.dataService.setcesiumpromise(promise);
-            //       if(this.mode === "editor") {
-            //         this.dataService.getValue(this.data);
-            //         this.dataService.LoadJSONData();
-            //         this.dataArr = this.dataService.get_ViData();
-            //         this._index = 1;
-            //       }
-            //       if(this.mode === "viewer") {
-            //         this.dataService.LoadJSONData();
-            //         this.dataArr = this.dataService.get_PuData();
-            //         this._index = 3;
-            //       }
-            //       viewer.zoomTo(promise);
-            // >>>>>>> upstream/master
+            // promise.then(function(dataSource) {
+            //   const entities = dataSource.entities.values;
+            //   const self = this;
+            //   if(entities[0].polygon !== undefined) {self._ShowColorBar = true;} else {self._ShowColorBar = false;}
+            // });
+            if (this.mode === "editor") {
+                // this.dataService.getValue(this.data);
+                // this.dataService.LoadJSONData();
+                // this.dataArr = this.dataService.get_ViData();
+                this._ShowColorBar = false;
+                this._index = 1;
+            }
+            if (this.mode === "viewer") {
+                this.dataService.LoadJSONData();
+                this.dataArr = this.dataService.get_PuData();
+                this._index = 3;
+            }
+            if (this.mode === "cityjson") {
+                this._ShowColorBar = false;
+                this._index = 1;
+            }
             this.Colortext();
         }
     };
@@ -3089,36 +3463,22 @@ var ViewerComponent = /** @class */ (function (_super) {
     };
     //click building to select and  pass whole entity to dataService
     ViewerComponent.prototype.select = function () {
-        var _this = this;
         event.stopPropagation();
         var viewer = this.dataService.getViewer(); //this.viewer;
-        // console.log("Triggered select");
         if (this.selectEntity !== undefined && this.selectEntity !== null) {
-            for (var i = 0; i < this.selectEntity._children.length; i++) {
-                this.selectEntity._children[i].polygon.material = this.material[i];
-            }
-            // this.selectEntity.polygon.material = this.material;
-            // console.log("Triggered revert colour", this.selectEntity.polygon.material);
+            this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = this.material;
         }
         if (viewer.selectedEntity !== undefined && viewer.selectedEntity.polygon !== null) {
-            // console.log(viewer.selectedEntity);
             this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
             this.selectEntity = viewer.selectedEntity._parent;
-            this.material = [];
-            // console.log("Stored material", this.material);
-            this.selectEntity._children.forEach(function (child) {
-                _this.material.push(child.polygon.material);
-                child.polygon.material = Cesium.Color.BLUE;
-            });
-            // viewer.selectedEntity.polygon.material = Cesium.Color.BLUE;
-            // console.log("Triggered change colour", viewer.selectedEntity.polygon.material);
+            this.material = this.selectEntity._children[0].polygon.material.color.intervals.get(0).data;
+            this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = Cesium.Color.BLUE.withAlpha(this.material.alpha);
             //get properties
         }
         else {
             this.dataService.set_SelectedEntity(undefined);
             this.selectEntity = undefined;
             this.material = undefined;
-            // console.log("Triggered set everything to undefined");
         }
     };
     // =======
