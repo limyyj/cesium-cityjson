@@ -101,7 +101,7 @@ export class ViewerComponent extends DataSubscriber {
         context.cesiumGeomService.clearDataSource();
         context.data = null;
         viewer.dataSources.add(datasource);
-        // console.log("Done");
+        console.log("Done");
       });
 
       this.dataService.setcesiumpromise(promise);

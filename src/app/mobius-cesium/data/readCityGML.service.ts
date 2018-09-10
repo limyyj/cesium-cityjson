@@ -10,6 +10,8 @@ import { CesiumGeomService } from "./cesiumGeom.service";
 export class CityGMLService {
   private subject = new Subject<any>();
   private epsg: any;
+  private currProps: any;
+  private objCount: any;
 
   constructor(private cesiumGeomService: CesiumGeomService) {};
  
@@ -55,15 +57,16 @@ export class CityGMLService {
 
   public projectPtsToWGS84(coords): number[] {
     const projcoords = proj4(this.epsg,"WGS84",[coords[0],coords[1]]);
-    const newcoords = [projcoords[0],projcoords[1],coords[2]];
+    const newcoords = [(projcoords[0]),(projcoords[1]),(coords[2])];
+    // if (this.epsg === "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs") {
+    //   newcoords[2] -= 100;
+    // }
     return newcoords;
   }
 
   // Generates surfaces from an element as a group
   public genPoly(srf,surface_type): void {
-    const props = {Surface_Type: surface_type,
-                     LOD: 4
-                    };
+    const props = Object.assign({Surface_Type: surface_type}, this.currProps);
     const solid = [];
     while (srf !== null) {
       // get first Triangle or Polygon (depends on what the CityGML is using)
@@ -111,7 +114,7 @@ export class CityGMLService {
         const coord_arr = [];
         if (dimension === "3") {
           for (let i = 0 ; i < coordinates.length ; i = i + 3) {
-            const arr = this.projectPtsToWGS84([(Number(coordinates[i])),(Number(coordinates[i+1])),(Number(coordinates[i+2]))]);
+            const arr = this.projectPtsToWGS84([(Number(coordinates[i])/1000),(Number(coordinates[i+1])/1000),(Number(coordinates[i+2])/1000)]);
             coord_arr.push(arr);
           }
         }
@@ -160,17 +163,32 @@ export class CityGMLService {
     if (node === null) {
       return;
     }
+    // Keep track of obj number for props
     const name = node.nodeName.split(":")[1];
-    // If wall, extract polygons and check for openings
-    if (name === "WallSurface") {
-      const srf = this.getFirstSrf(node);
-      this.genPoly(srf,name);
-
-      // check for openings
-      let child = this.nextElement(this.nextElement(node.firstChild).nextSibling);
+    if (name === "cityObjectMember" ||
+        name === "featureMember" ||
+        name === "Building" ||
+        name === "BuildingPart") {
+      this.addObjCount(name);
+      this.currProps[name] = this.objCount[name];
+      // Loop through children
+      let child = this.nextElement(node.firstChild);
       while (child !== null) {
         this.checkElement(child);
         child = this.nextElement(child.nextSibling);
+      }
+    }
+    // If wall, extract polygons and check for openings
+    else if (name === "WallSurface") {
+      if (node.firstChild !== null) {
+        const srf = this.getFirstSrf(node);
+        this.genPoly(srf,name);
+        // openings
+        let child = this.nextElement(this.nextElement(node.firstChild).nextSibling);
+        while (child !== null) {
+          this.checkElement(child);
+          child = this.nextElement(child.nextSibling);
+        }
       }
     }
     // Else, check for these nodes and extract polygons
@@ -179,16 +197,29 @@ export class CityGMLService {
              name === "RoofSurface" ||
              name === "Window" ||
              name === "Door") {
-      const srf = this.getFirstSrf(node);
-      this.genPoly(srf,name);
+      if (node.firstChild !== null) {
+        const srf = this.getFirstSrf(node);
+        this.genPoly(srf,name);
+      }
     }
-    // Else, loop through children
+    // Else, just loop through children
     else {
       let child = this.nextElement(node.firstChild);
       while (child !== null) {
         this.checkElement(child);
         child = this.nextElement(child.nextSibling);
       }
+    }
+  }
+
+  private addObjCount(prop) {
+    // if prop doesn't exist, add it
+    if (this.objCount[prop] === undefined) {
+      this.objCount[prop] = 0;
+    }
+    // if it already exists then ++
+    else {
+      this.objCount[prop]++;
     }
   }
 
@@ -205,6 +236,8 @@ export class CityGMLService {
     // cityObjectMember or featureMember
     let member = this.nextElement(file.firstChild);
     while (member !== null) {
+      this.currProps = {};
+      this.objCount = {};
       this.checkElement(member);
       member = this.nextElement(member.nextSibling);
     }

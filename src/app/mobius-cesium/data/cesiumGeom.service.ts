@@ -8,8 +8,11 @@ import * as earcut from "earcut";
 @Injectable()
 export class CesiumGeomService {
 	private dataSource: any;
-	private srftype_ids: any;
-  private srftype_count: any;
+	// private srftype_ids: any;
+ //  private srftype_count: any;
+  private parent_ids: string[];
+  private total_count: number;
+  private prop_ids: any;
 
   public initialiseCesium(): void {
     this.setDataSource(new Cesium.CustomDataSource());
@@ -38,28 +41,68 @@ export class CesiumGeomService {
   }
 
   public initialiseSrftypeIds(): void {
-    this.srftype_ids = {};
-    this.srftype_count = {};
+    // this.srftype_ids = {};
+    // this.srftype_count = {};
+    this.parent_ids = [];
+    this.total_count = 0;
+    this.prop_ids = {};
   }
 
-  public getSrftypeIds(): any {
-    return this.srftype_ids;
+  public getIds(): any {
+    // return this.srftype_ids;
+    return this.parent_ids;
   }
 
-  public getSrfCount(): any {
-    return this.srftype_count;
+  public getCount(): any {
+    // return this.srftype_count;
+    return this.total_count;
   }
 
-  private addSrfTypeId(srf_type,id,count) {
+  public getPropIds(): any {
+    return this.prop_ids;
+  }
+
+  // private addSrfTypeId(srf_type,id,count) {
+  //   // if srftype doesn't exist in array, add it
+  //   if (this.srftype_ids[srf_type] === undefined) {
+  //     this.srftype_ids[srf_type] = [id];
+  //     this.srftype_count[srf_type] = count;
+  //   }
+  //   // if it already exists then push id to existing arr
+  //   else {
+  //     this.srftype_ids[srf_type].push(id);
+  //     this.srftype_count[srf_type] += count;
+  //   }
+  // }
+
+  private addId(srf_type,id,count) {
     // if srftype doesn't exist in array, add it
-    if (this.srftype_ids[srf_type] === undefined) {
-      this.srftype_ids[srf_type] = [id];
-      this.srftype_count[srf_type] = count;
-    }
-    // if it already exists then push id to existing arr
-    else {
-      this.srftype_ids[srf_type].push(id);
-      this.srftype_count[srf_type] += count;
+  //   if (this.srftype_ids[srf_type] === undefined) {
+  //     this.srftype_ids[srf_type] = [id];
+  //     this.srftype_count[srf_type] = count;
+  //   }
+  //   // if it already exists then push id to existing arr
+  //   else {
+  //     this.srftype_ids[srf_type].push(id);
+  //     this.srftype_count[srf_type] += count;
+  //   }
+    this.parent_ids.push(id);
+    this.total_count += count;
+  }
+
+  private addPropId(props) {
+    // if PropId doesn't exist in array, add it
+    const ids = Object.keys(props);
+    for (let i of ids) {
+      if (this.prop_ids[i] === undefined) {
+        this.prop_ids[i] = [props[i]];
+      }
+      // if it already exists then push id to existing arr
+      else {
+        if (this.prop_ids[i].includes(props[i]) === false) {
+          this.prop_ids[i].push(props[i]);
+        }
+      }
     }
   }
 
@@ -233,7 +276,8 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addPropId(properties);
   }
 
   public genSolid(solid, colour, surface_type, properties): void {
@@ -259,7 +303,8 @@ export class CesiumGeomService {
       }
       // Add properties and add entity ID to respective group for filter
       parent.properties = new Cesium.PropertyBag(properties);
-      this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
+      this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+      this.addPropId(properties);
     }
   }
 
@@ -285,6 +330,7 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addPropId(properties);
   }
 }
