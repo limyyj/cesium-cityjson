@@ -11,11 +11,8 @@ import * as chroma from "chroma-js";
 })
 export class CityJSONComponent extends DataSubscriber implements OnInit {
   private myElement;
-  // private srftype_ids: any;
-  // private srftype_keys: any;
   private all_ids: any;
   private srfcount: any;
-  // private _CheckDisable: boolean = true;
   private filter_index: number;
   private filter_select: string;
   private filters: any;
@@ -25,10 +22,16 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
   constructor(injector: Injector, myElement: ElementRef) {
   super(injector);
   }
+
+  /* Initialises and gets parent IDs and properties
+     Extracts keys for display in dropdown
+     Uses: - initialise
+           - dataService.getcesiumpromise
+           - cesiumGeomService.getIds
+           - cesiumGeomService.getPropIds
+           - setKeys */
   public ngOnInit() {
     this.intialise();
-    // this.srftype_ids = this.cesiumGeomService.getSrftypeIds();
-    // this.srfcount = this.cesiumGeomService.getSrfCount();
     this.all_ids = this.cesiumGeomService.getIds();
     this.prop_ids = this.cesiumGeomService.getPropIds();
     this.setKeys();
@@ -39,8 +42,6 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
       try {
         this.intialise();
         this.dataService.getcesiumpromise().then(() => {
-          // this.srftype_ids = this.cesiumGeomService.getSrftypeIds();
-          // this.srfcount = this.cesiumGeomService.getSrfCount();
           this.all_ids = this.cesiumGeomService.getIds();
           this.prop_ids = this.cesiumGeomService.getPropIds();
           this.setKeys();
@@ -53,27 +54,17 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  public intialise() {
+  /* Initialise arrays/reset values */
+  private intialise() {
     this.filter_index = 0;
-    // this.srftype_ids = null;
-    // this.srftype_keys = null;
     this.srfcount = null;
     this.filters = [];
     this.prop_keys = null;
     this.all_ids = null;
   }
 
-  public setKeys() {
-    // const keys = [];
-    // let all = [];
-    // for (const key in this.srftype_ids) {
-    //   // keys.push(key);
-    //   keys.push(key);
-    //   all = all.concat(this.srftype_ids[key]);
-    // }
-    // this.srftype_keys = keys;
-    // this.all_ids = all;
-
+  /* Get list of keys for properties (for displaying in the dropdown list) */
+  private setKeys() {
     const keys2 = [];
     for (const key in this.prop_ids) {
       // keys.push(key);
@@ -82,7 +73,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     this.prop_keys = keys2;
   }
 
-  // // shows or hides element from a group when user clicks on checkbox
+  // /* shows or hides element from a group when user clicks on checkbox */
   // public checkbox(event) {
   //   const eventCheckbox = document.getElementById(event+"_check");
   //   const entities = this.dataService.getViewer().dataSources.get(0).entities;
@@ -94,45 +85,54 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
   //   }
   // }
 
-  // hides all entities from list of ids
+  /* Hides all entities from list of ids
+     Params: Array of entities to check for id and hide
+             Array of ids to check for and hide
+     Called in: applyFilter */
   public hide(entities, ids) {
     ids.forEach((id) => {
       entities.getById(id).show = false;
     });
   }
 
-  // shows all entities from list of ids
+  /* Shows all entities from list of ids
+     Params: Array of entities to check for id and show
+             Array of ids to check for and show
+     Called in: applyFilter */
   public show(entities, ids) {
     ids.forEach((id) => {
       entities.getById(id).show = true;
     });
   }
 
-  // adds a filter option based on the current selected property
+  /* Adds a filter option based on the current selected property (this.filter_select) when user clicks button */
   public addFilter() {
     const proptype = typeof(this.prop_ids[this.filter_select][0]);
     let text = 0;
     if (proptype === "string") {
       text = this.prop_ids[this.filter_select][0];
     }
-    const filter = {id: this.filter_index,
-                    name: this.filter_select,
-                    type: proptype,
-                    values: this.prop_ids[this.filter_select],
-                    disable: false,
-                    relation: 0,
-                    text: text
+    const filter = {id: this.filter_index, // ID number of filter
+                    name: this.filter_select, // property name used for filter
+                    type: proptype,  // type of property (number/string)
+                    values: this.prop_ids[this.filter_select], // possible values for property (list if string, range if number)
+                    disable: false, // determines if filter is disabled or not
+                    relation: 0, // number: 0:>, 1:<, 2:=   string: 0:=, 1:!=
+                    text: text // typed/selected value to use in filter
                   };
     this.filters.push(filter);
     this.filter_index ++;
   }
 
-  // changes the currently selected property when the user selects a value from the dropdown box
-  public changeFilterSelect(val) {
-    this.filter_select = val;
+  /* Changes the currently selected property when the user selects a value from the dropdown box
+     Params: Property name selected by user */
+  public changeFilterSelect(name) {
+    this.filter_select = name;
   }
 
-  // changes the currently selected relation for a filter when user selects a value from the dropdown box
+  /* Changes the currently selected relation for a filter when user selects a value from the dropdown box
+     Params: ID number of filter to change
+             Number representing selected relation */
   public changeRelation(id,relation) {
     for (let i = 0 ; i < this.filters.length ; i ++) {
       if (this.filters[i].id === id) {
@@ -142,7 +142,9 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  // changes the currently selected value for a filter when user selects a value from the dropdown box (string)
+  /* Changes the currently selected value for a filter when user selects a value from the dropdown box (string)
+     Params: ID number of filter to change
+             Value selected by user */
   public changeText(id,text) {
     for (let i = 0 ; i < this.filters.length ; i ++) {
       if (this.filters[i].id === id) {
@@ -152,7 +154,9 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  // changes the currently selected value for a filter when user types a value (number)
+  /* Changes the currently selected value for a filter when user types a value (number)
+     Params: ID number of filter to change
+             Value typed by user */
   public changeNum(id,text) {
     for (let i = 0 ; i < this.filters.length ; i ++) {
       if (this.filters[i].id === id) {
@@ -162,7 +166,9 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  // toggles the disable value for a filter when user clicks on checkbox
+  /* Toggles the disable value for a filter when user clicks on checkbox
+     Params: ID number of filter to change
+             Boolean representing checkbox status (true for checked, false for unchecked) */
   public changeDisable(id,check) {
     for (let i = 0 ; i < this.filters.length ; i ++) {
       if (this.filters[i].id === id) {
@@ -176,17 +182,26 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     }
   }
 
-  // removes a filter from the list when user clicks delete
-  public deleteFilter(event) {
+  /* Removes a filter from the list when user clicks delete
+     Params: ID number of filter to delete */
+  public deleteFilter(id) {
     for (let i = 0 ; i < this.filters.length ; i ++) {
-      if (this.filters[i].id === event) {
+      if (this.filters[i].id === id) {
         this.filters.splice(i,1);
         break;
       }
     }
   }
 
-  // applies filter settings to view
+  /* Applies all filter settings to view when user clicks button
+     - Checks if filter is disabled, skips is true
+     - Checks relation and separates parent IDs into 2 arrays, show and hide, based on relation and entered value (text)
+     - Filter applies the rules using "and" 
+         - eg. given 2 properties: property1 < 6, property2 = "A"
+               shown entities will be entities that satisfy ((property1 < 6) && (property2 = "A"))
+     Uses: - show
+           - hide
+    *** TODO: better relation if-else */
   public applyFilter() {
     const entities = this.dataService.getViewer().dataSources.get(0).entities;
     let show = this.all_ids;
@@ -252,58 +267,4 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     this.show(entities,show);
     this.hide(entities,hide);
   }
-
-  // public Show(event) {
-  //   const index = this._HideNum.indexOf(event);
-  //   const divid = String("addHide".concat(String(event)));
-  //   const addHide = document.getElementById(divid);
-  //   // if(this._Filter[index].Disabletext === null) {this._CheckDisable = false;} else {this._CheckDisable = true;}
-  //   if(this._CheckDisable === false) {
-  //     if(this._Filter[index].type === "number") {
-  //       const textHide = this._Filter[index].textHide;
-  //       this._Filter[index].Disabletext = Number(textHide);
-  //       if(this._Filter[index].RelaHide === "0"||this._Filter[index].RelaHide === 0) {
-  //         this._Filter[index].textHide = this._Filter[index].HideMin;
-  //       }
-  //       if(this._Filter[index].RelaHide === "1"||this._Filter[index].RelaHide === 1) {
-  //         this._Filter[index].textHide = this._Filter[index].HideMax;
-  //       }
-  //     } else if(this._Filter[index].type === "category") {
-  //       const textHide = this._Filter[index].RelaHide;
-  //       this._Filter[index].Disabletext = Number(textHide);
-  //       this._Filter[index].RelaHide = 0;
-  //     }
-  //   } else {
-  //     if(this._Filter[index].type === "number") {
-  //       this._Filter[index].textHide = this._Filter[index].Disabletext;
-  //       this._Filter[index].Disabletext = null;
-  //     } else if(this._Filter[index].type === "category") {
-  //       this._Filter[index].RelaHide = this._Filter[index].Disabletext;
-  //       this._Filter[index].Disabletext = null;
-  //     }
-  //   }
-  //   this.dataArr["Filter"] = this._Filter;
-  //   this.dataArr["HideNum"] = this._HideNum;
-  //   this.dataService.set_ViData(this.dataArr);
-  // }
-
-  // public  Initial(_HideValue: string): any[] {
-  //   const texts = [];
-  //   const promise = this.dataService.getcesiumpromise();
-  //   const self = this;
-  //   promise.then(function(dataSource) {
-  //     const entities = dataSource.entities.values;
-  //     for (const entity of entities) {
-  //       if(entity.properties[_HideValue] !== undefined) {
-  //         if(entity.properties[_HideValue]._value !== " ") {
-  //           if(texts.length === 0) {texts[0] = entity.properties[_HideValue]._value;
-  //           } else { if(texts.indexOf(entity.properties[_HideValue]._value) === -1) {
-  //             texts.push(entity.properties[_HideValue]._value);}
-  //           }
-  //         }
-  //       }
-  //     }
-  //   });
-  //   return texts;
-  // }
 }
