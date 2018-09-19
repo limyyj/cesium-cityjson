@@ -284,14 +284,22 @@ export class CesiumGeomService {
     for (let p = 0 ; p < tri_index.length ; p = p + 3) {
       const points = [];
 
-      // Get coordinates for each point
-      [tri_index[p], tri_index[p+1], tri_index[p+2]].forEach((j) => {
+      //Get coordinates for each point
+      // [tri_index[p], tri_index[p+1], tri_index[p+2]].forEach((j) => {
+      //   let coord = [undefined,undefined,undefined];
+      //   coord[other_axis] = other_coords[j];
+      //   coord[axis] = poly_vertices[j*2];
+      //   coord[2] = poly_vertices[(j*2) + 1];
+      //   points.push(coord);
+      // });
+
+      for (let j = p; j < (p + 3) ; j++) {
         let coord = [undefined,undefined,undefined];
         coord[other_axis] = other_coords[j];
         coord[axis] = poly_vertices[j*2];
         coord[2] = poly_vertices[(j*2) + 1];
         points.push(coord);
-      });
+      }
       this.addCesiumPoly([points], colour, parent);
     }
   }

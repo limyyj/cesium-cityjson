@@ -29,7 +29,7 @@ export class CityGMLService {
      - looks up epsg.io if EPSG code is found
      - defaults to EPSG:3414 if undefined
 
-     *** TODO: read crs from file, currently always recieves undefined */
+     ** TODO: read crs from file, currently always recieves undefined */
   public setEPSG(crs): void {
     this.epsg = new Promise(function(resolve) {
       let val = "";
@@ -61,12 +61,12 @@ export class CityGMLService {
      Params: Array of coordinates for 1 point as obtained from file
      Returns: Array of coordinates for point in WGS84 + height
 
-     ** TODO: Units? SG's height datum? */
+     ** TODO: SG's height datum? */
   public projectPtsToWGS84(coords): number[] {
     const projcoords = proj4(this.epsg,"WGS84",[coords[0],coords[1]]);
     const newcoords = [(projcoords[0]),(projcoords[1]),(coords[2])];
     if (this.epsg === "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs") {
-      newcoords[2] -= 100;
+      newcoords[2] -= 104;
     }
     return newcoords;
   }
@@ -120,6 +120,11 @@ export class CityGMLService {
            - projectPtsToWGS84 */
   public getCoords(node): any {
     const polygon = [];
+    let coord_arr: number[][] = [];
+    let arr: number[] = [];
+    let dimension: string;
+    let coordinates: string;
+    let coordsplit: string[];
     // Loop through Linear rings
     while (node !== null) {
       // get coordinates
@@ -130,26 +135,26 @@ export class CityGMLService {
       coords = this.nextElement(coords.firstChild);
       // if positions are in posList, split and project to wgs84 in threes, then push to polygon
       if (coords.nodeName.split(":")[1] === "posList") {
-        const dimension = coords.attributes[0].value;
-        let coordinates = coords.textContent;
+        dimension = coords.attributes[0].value;
+        coordinates = coords.textContent;
         // split coordinates by " ", convert to number from string and project to wgs84
-        coordinates = coordinates.split(" ");
-        const coord_arr = [];
+        coordsplit = coordinates.split(" ");
+        coord_arr.length = 0;
         if (dimension === "3") {
-          for (let i = 0 ; i < coordinates.length ; i = i + 3) {
-            const arr = this.projectPtsToWGS84([(Number(coordinates[i])/1000),(Number(coordinates[i+1])/1000),(Number(coordinates[i+2])/1000)]);
+          for (let i = 0 ; i < coordsplit.length ; i = i + 3) {
+            arr = this.projectPtsToWGS84([(Number(coordsplit[i])),(Number(coordsplit[i+1])),(Number(coordsplit[i+2]))]);
             coord_arr.push(arr);
           }
         }
         polygon.push(coord_arr);
         // if positions are in pos, loop through, split and project each one to wgs84, then push to polygon
       } else if (coords.nodeName.split(":")[1] === "pos") {
-        const coord_arr = [];
+        coord_arr.length = 0;
         while (coords !== null) {
-          let coordinates = coords.textContent;
+          coordinates = coords.textContent;
           // split coordinates by " ", convert to number from string and project to wgs84
-          coordinates = coordinates.split(" ");
-          const arr = this.projectPtsToWGS84([(Number(coordinates[0])),(Number(coordinates[1])),(Number(coordinates[2]))]);
+          coordsplit = coordinates.split(" ");
+          arr = this.projectPtsToWGS84([(Number(coordsplit[0])),(Number(coordsplit[1])),(Number(coordsplit[2]))]);
           coord_arr.push(arr);
           coords = this.nextElement(coords.nextSibling);
         }
