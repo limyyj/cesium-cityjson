@@ -43,22 +43,22 @@ export class SelectComponent extends DataSubscriber implements OnInit {
         let _Property: any;
         this.ID = selected._id;
         this._Properties = [];
-        const prop_names = selected.properties.propertyNames;
-        for(const name of prop_names) {
-          if(name !== "None") {
-            _Property = [];
+        // const prop_names = selected.properties.propertyNames;
+        // for(const name of prop_names) {
+        //   if(name !== "None") {
+        //     _Property = [];
             
-            _Property.Name = name;
-            _Property.Value = selected.properties[name]._value;
+        //     _Property.Name = name;
+        //     _Property.Value = selected.properties[name]._value;
 
-            // _Property.Name = _ColorPro;
-            // if(this.dataService.get_SelectedEntity().properties[_Property.Name]!==undefined){
-            //   _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
-            // }else {_Property.Value = ' ';}
+        //     // _Property.Name = _ColorPro;
+        //     // if(this.dataService.get_SelectedEntity().properties[_Property.Name]!==undefined){
+        //     //   _Property.Value = this.dataService.get_SelectedEntity().properties[_Property.Name]._value;
+        //     // }else {_Property.Value = ' ';}
 
-            this._Properties.push(_Property);
-          }
-        }
+        //     this._Properties.push(_Property);
+        //   }
+        // }
       }
     } else if (this.viewer !== undefined&&this.dataService.get_SelectedEntity() === undefined) {
       this.ID = undefined;

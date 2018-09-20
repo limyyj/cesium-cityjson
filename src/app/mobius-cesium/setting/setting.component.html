@@ -12,9 +12,9 @@
 <!--     <mat-tab label="&nbsp;Publish&nbsp;" >
       <app-publish  (change)="LoadViewer()" (click)="Reset();LoadViewer();"></app-publish>
     </mat-tab> -->
-    <mat-tab label="&nbsp;CityJSON&nbsp;" >
+<!--     <mat-tab label="&nbsp;CityJSON&nbsp;" >
       <app-cityjson></app-cityjson>
-    </mat-tab>
+    </mat-tab> -->
   </mat-tab-group>
     <app-publish *ngIf="mode==='viewer'" (change)="LoadViewer()" (click)="Reset();LoadViewer();"></app-publish>
 </div>

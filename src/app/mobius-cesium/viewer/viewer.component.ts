@@ -91,19 +91,23 @@ export class ViewerComponent extends DataSubscriber {
       viewer.dataSources.removeAll({destroy:true});
       /////// OBTAINING DATA ////////
       const context = this;
-      let promise = context.cityJSONService.genGeom(data);
-      if (promise === undefined) {
-        promise = context.cityGMLService.genGeom(data);
-      }
+      let promise = new Cesium.CzmlDataSource().load(data);
 
-      promise.then((datasource) => {
-        // console.log(context.cityGMLService.getCount());
-        context.cesiumGeomService.clearDataSource();
-        context.data = null;
-        viewer.dataSources.add(datasource);
-        console.log("Done");
-      });
+      // let promise = context.cityJSONService.genGeom(data);
+      // if (promise === undefined) {
+      //   promise = context.cityGMLService.genGeom(data);
+      // }
 
+      // promise.then((datasource) => {
+      //   // console.log(context.cityGMLService.getCount());
+      //   context.cesiumGeomService.clearDataSource();
+      //   context.data = null;
+      //   viewer.dataSources.add(datasource);
+      //   console.log("Done");
+      // });
+
+      viewer.dataSources.add(promise);
+      
       this.dataService.setcesiumpromise(promise);
       
       const _HeightKey: any[] = [];
@@ -214,12 +218,14 @@ export class ViewerComponent extends DataSubscriber {
     event.stopPropagation();
     const viewer = this.dataService.getViewer();//this.viewer;
     if(this.selectEntity !== undefined&&this.selectEntity !== null) {
+      console.log(this.selectEntity);
       this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = this.material;
     }
 
     if(viewer.selectedEntity !== undefined&&viewer.selectedEntity.polygon !== null) {
       this.dataService.set_SelectedEntity(viewer.selectedEntity._parent);
       this.selectEntity = viewer.selectedEntity._parent;
+      console.log(this.selectEntity);
       this.material = this.selectEntity._children[0].polygon.material.color.intervals.get(0).data;
       this.selectEntity._children[0].polygon.material.color.intervals.get(0).data = Cesium.Color.BLUE.withAlpha(this.material.alpha);
       //get properties
