@@ -62,6 +62,7 @@ export class ViewerComponent extends DataSubscriber {
   public CreateViewer(){
     const viewer = new Cesium.Viewer("cesiumContainer" , {
       infoBox: false,
+      selectionIndicator : false,
       showRenderLoopErrors: false,
       orderIndependentTranslucency: false,
       baseLayerPicker: false,
@@ -89,35 +90,32 @@ export class ViewerComponent extends DataSubscriber {
       /////// INITIALISING VIEWER ////////
       const viewer = this.dataService.getViewer();
       viewer.dataSources.removeAll({destroy:true});
+      viewer.scene.primitives.removeAll();
       /////// OBTAINING DATA ////////
       const context = this;
-      let promise = new Cesium.CzmlDataSource().load(data);
+      let origin = Cesium.Cartesian3.fromDegrees(0, 0, 0);
+      const modelMatrix = Cesium.Transforms.eastNorthUpToFixedFrame(origin);
+      const model = new Cesium.Model({gltf: data, modelMatrix: modelMatrix});
+      viewer.scene.primitives.add(model);
 
-      // let promise = context.cityJSONService.genGeom(data);
-      // if (promise === undefined) {
-      //   promise = context.cityGMLService.genGeom(data);
-      // }
-
-      // promise.then((datasource) => {
-      //   // console.log(context.cityGMLService.getCount());
-      //   context.cesiumGeomService.clearDataSource();
-      //   context.data = null;
-      //   viewer.dataSources.add(datasource);
-      //   console.log("Done");
-      // });
-
-      viewer.dataSources.add(promise);
-      
-      this.dataService.setcesiumpromise(promise);
+      console.log(model); 
+      // this.dataService.setcesiumpromise(promise);
       
       const _HeightKey: any[] = [];
 
       /////// THIS IS FOR THE ZOOM TO HOME BUTTON ///////
       viewer.homeButton.viewModel.command.beforeExecute.addEventListener(function(e) {
         e.cancel = true;
-        viewer.zoomTo(promise);
+        Cesium.when(model.readyPromise).then((model) => {
+        const bound = new Cesium.BoundingSphere(origin,model.boundingSphere.radius*1.5);
+        viewer.camera.viewBoundingSphere(bound);
       });
-      viewer.zoomTo(promise);
+        
+      });
+      Cesium.when(model.readyPromise).then((model) => {
+        const bound = new Cesium.BoundingSphere(origin,model.boundingSphere.radius*1.5);
+        viewer.camera.viewBoundingSphere(bound);
+      });
 
       // promise.then(function(dataSource) {
       //   const entities = dataSource.entities.values;

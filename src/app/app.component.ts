@@ -18,13 +18,12 @@ export class AppComponent {
     const files = evt.target.files; // FileList object
     evt = null;
     // const filetype = files[0].type;
-    // console.log(filetype);
     const fr = new FileReader();
     const self = this;
     fr.onload = function(text) {
       // if (filetype === "application/json") {
-      const js_data = JSON.parse(text.target["result"]);
-       self.gs_dummy_data = js_data;
+      // const js_data = JSON.parse(text.target["result"]);
+      //  self.gs_dummy_data = js_data;
       // }
       // else {
       //   const parser = new DOMParser();
@@ -33,9 +32,9 @@ export class AppComponent {
       //   self.gs_dummy_data = xmlDoc;
       // }
       // self.dataService.setGsModel(self.gs_dummy_data);
-      // self.gs_dummy_data = text;
+      self.gs_dummy_data = text.target["result"];
     };
-    fr.readAsText(files[0]);
+    fr.readAsArrayBuffer(files[0]);
   }
   
 }
