@@ -70,6 +70,7 @@ export class ViewerComponent extends DataSubscriber {
       animation:false,
       shadows:true,
       scene3DOnly:true,
+      selectionIndicator : false,
       //terrainShadows: Cesium.ShadowMode.ENABLED
     });
     viewer.scene.imageryLayers.removeAll();

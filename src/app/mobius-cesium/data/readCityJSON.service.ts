@@ -18,7 +18,7 @@ export class CityJSONService {
   private scale: number[];
   private translate: number[];
 
-  constructor(private cesiumGeomService: CesiumGeomService) {};
+  constructor(private cesiumGeomService: CesiumGeomService) {}
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -30,7 +30,8 @@ export class CityJSONService {
     return this.subject.asObservable();
   }
 
-  public clearData(): void {
+  /* Clears stored data after file has been completely generated */
+  private clearData(): void {
     this.file = undefined;
     this.epsg = undefined;
     this.vertices = undefined;
@@ -41,7 +42,10 @@ export class CityJSONService {
     this.translate = undefined;
   }
 
-  public setEPSG(): void {
+  /* Reads and sets EPSG value for Proj4 projection
+     - looks up epsg.io if EPSG code is found
+     - defaults to EPSG:3414 if undefined*/
+  private setEPSG(): void {
     const meta = this.file["metadata"];
     this.epsg = new Promise(function(resolve) {
       let val = "";
@@ -69,13 +73,15 @@ export class CityJSONService {
     });
   }
 
-  public setVertices(): void {
+  /* Reads and sets shared vertices for regular geometry (not geometry templates) */
+  private setVertices(): void {
     if (this.file["vertices"] !== undefined) {
       this.vertices = this.file["vertices"];
     }
   }
 
-  public setMaterials(): void {
+  /* Reads and converts materials into cesium color properties */
+  private setMaterials(): void {
     const materials = [];
     if (this.file["appearance"] === undefined || this.file["appearance"]["materials"] == undefined) {
       this.materials = undefined;
@@ -89,8 +95,8 @@ export class CityJSONService {
     }
   }
 
-  public setTemplates(): void {
-    // Pull out array of template boundaries and vertices
+  /* Reads and sets geometry templates and shared vertices (geometry templates) */
+  private setTemplates(): void {
     if (this.file["geometry-templates"] === undefined) {
       this.templates = undefined;
     } else {
@@ -112,7 +118,8 @@ export class CityJSONService {
     
   }
 
-  public setTransform(): void {
+  /* Reads and sets translation and scale for transformaing model from compressed values */
+  private setTransform(): void {
     if (this.file["transform"] !== undefined) {
       this.scale = this.file["transform"].scale;
       this.translate = this.file["transform"].translate;
@@ -122,21 +129,29 @@ export class CityJSONService {
     }
   }
 
-  public projectPtsToWGS84(coords): number[] {
+  /* Projects input point to WGS84
+     Params: Array of coordinates for 1 point as obtained from file
+     Returns: Array of coordinates for point in WGS84 + height */
+  private projectPtsToWGS84(coords): number[] {
     const projcoords = proj4(this.epsg,"WGS84",[coords[0],coords[1]]);
     const newcoords = [projcoords[0],projcoords[1],coords[2]];
     return newcoords;
   }
 
-
-  public transformTemplate(coord,transform): number[] {
+  /* Transformaing template point from local coords to coords in model
+     Params: Array of coordinates for 1 point as obtained from geometry template
+     Returns: Array of coordinates for point in intended position in model */
+  private transformTemplate(coord,transform): number[] {
     const pt = Cesium.Cartesian3.fromArray(coord);
     const t = Cesium.Matrix4.multiplyByPoint(transform.temp_matrix,pt,new Cesium.Cartesian3());
     const coord2 = [(t["x"]+transform.refpt[0]),(t["y"]+transform.refpt[1]),(t["z"]+transform.refpt[2])];
     return coord2;
   }
 
-  public transformCityJSON(coord): number[] {
+  /* Transformaing point from compressed values to intended values
+     Params: Array of coordinates for 1 point as obtained from file
+     Returns: Array of coordinates for point in intended position in model before compression */
+  private transformCityJSON(coord): number[] {
     const pt = [undefined,undefined,undefined];
     pt[0] = (coord[0] * this.scale[0]) + this.translate[0];
     pt[1] = (coord[1] * this.scale[1]) + this.translate[1];
@@ -144,6 +159,11 @@ export class CityJSONService {
     return pt;
   }
 
+  /* Main function to read file and return datasource containing generated entities
+     - Initialises, retrieves and clears data from cesiumGeomService
+     Called in viewer.component LoadData
+     Params: CityJSON file
+     Returns: Cesium datasource containing entities generated from input file */
   public genGeom(file: JSON): any {
     let data = undefined;
     if (file !== undefined) {
@@ -157,9 +177,7 @@ export class CityJSONService {
         this.setTransform();
 
         // Initialise dataSource and surface type ID arrays
-        this.cesiumGeomService.setDataSource(new Cesium.CustomDataSource());
-        this.cesiumGeomService.suspendDataSource();
-        this.cesiumGeomService.initialiseSrftypeIds();
+        this.cesiumGeomService.initialiseCesium();
 
         const context = this;
         data = this.epsg.then((epsg) => {
@@ -174,7 +192,10 @@ export class CityJSONService {
     return data;
   }
 
-  public readFile(): void {
+  /* Reads file and calls cesiumGeomService
+     - obtains and prepares coordinates and properties
+     - passes data to cesiumGeomService to generate entities */
+  private readFile(): void {
     // Loop through CityObjects
     const city_object_keys = Object.keys(this.file["CityObjects"]);
     const city_object = this.file["CityObjects"];
@@ -229,9 +250,9 @@ export class CityJSONService {
         // }
 
         // Set values to use for polygon generation
-        // vertex_arr: array of vertices in the file to refer to (vertices or template_vertices)
-        // boundaries: array of vertex position indexes to refer to (boundaries from geometry or template)
-        // transfrom: object containing transformation matrix (temp_matrix) and reference point (refpt) of the geometry instance
+        //   vertex_arr: array of vertices in the file to refer to (vertices or template_vertices)
+        //   boundaries: array of vertex position indexes to refer to (boundaries from geometry or template)
+        //   transfrom: object containing transformation matrix (temp_matrix) and reference point (refpt) of the geometry instance
         let vertex_arr = this.vertices;
         let boundaries = geom.boundaries;
         let transform = {temp_matrix:undefined, refpt:undefined};
@@ -329,8 +350,8 @@ export class CityJSONService {
               props[name] = cityobj_parts_attrib[parts_index][name];
             });
           }
-
-          // MULTISURFACE
+///////////////////////////////// Geom Generation, TODO: better geom_type management //////////////////////////////////////
+///////// MULTISURFACE
           if (geom_type === "MultiSurface") {
             // polygon: nested array of coordinates that make up a polygon.
             // polygon[0] contains the points for the outer ring.
@@ -358,7 +379,7 @@ export class CityJSONService {
             this.cesiumGeomService.genMultiPoly(polygon,colour[0],props);
             // i++ 
           } 
-          // SOLIDS
+///////// SOLIDS
           else if (geom_type === "Solid") {
             const solid = [];
             boundaries[srf_index].forEach((shell) => {

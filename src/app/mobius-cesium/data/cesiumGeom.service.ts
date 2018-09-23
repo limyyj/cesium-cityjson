@@ -8,62 +8,113 @@ import * as earcut from "earcut";
 @Injectable()
 export class CesiumGeomService {
 	private dataSource: any;
-	private srftype_ids: any;
-  private srftype_count: any;
+  private parent_ids: string[];
+  private total_count: number;
+  private prop_ids: object;
 
+  /* Initialise datasource and other data
+     Called by CityGMLservice and CityJSONservice when new file is loaded */
   public initialiseCesium(): void {
-    this.setDataSource(new Cesium.CustomDataSource());
+    // initialise and suspend datasource
+    this.dataSource = new Cesium.CustomDataSource();
     this.suspendDataSource();
-    this.initialiseSrftypeIds();
+    // initialise/reset id arrays and counter
+    this.parent_ids = [];
+    this.total_count = 0;
+    this.prop_ids = {};
   }
 
-	public setDataSource(dataSource: any): void {
-    this.dataSource = dataSource;
-  }
-
+  /* Get datasource
+     Returns: datasource
+     Called by CityGMLservice and CityJSONservice when file completely generated */
   public getDataSource(): any {
     return this.dataSource;
   }
 
+  /* Clears datasource after adding to viewer
+     Called in viewer.component */
   public clearDataSource(): void {
     this.dataSource = null;
   }
 
+  /* Suspend and resume tracking of datasource so that it doesn't update while adding entities
+     Called by CityGMLservice and CityJSONservice when new file is loaded and completely generated respectively */
   public suspendDataSource(): void {
     this.dataSource.entities.suspendEvents();
   }
-
   public resumeDataSource(): void {
     this.dataSource.entities.resumeEvents();
   }
 
-  public initialiseSrftypeIds(): void {
-    this.srftype_ids = {};
-    this.srftype_count = {};
+  /* Gets id arrays and counter
+     Called by cityjson.component for filters */
+  public getIds(): string[] {
+    // return this.srftype_ids;
+    return this.parent_ids;
+  }
+  public getCount(): number {
+    // return this.srftype_count;
+    return this.total_count;
+  }
+  public getPropIds(): object {
+    return this.prop_ids;
   }
 
-  public getSrftypeIds(): any {
-    return this.srftype_ids;
+  /* Add ID of parent entity to a list and update polygon count
+     - for looping through in filters because only parent entities have properties and control visibility (no need to look at children)
+     Params: Surface type of element
+             id of entity
+             number of polygons in entity*/
+  private addId(srf_type,id,count): void {
+    this.parent_ids.push(id);
+    this.total_count += count;
   }
 
-  public getSrfCount(): any {
-    return this.srftype_count;
-  }
+  /* Add key:value pairs (property_name : [property_value]) to prop_ids
+     If key already exists, adds property value to array (string), replace min/max value if applicable (number)
+     if property value already exists under same key, nothing is added
+     - for selection dropdown boxes in filters
+     Params: Object containing key:value pairs of properties*/
+  private addPropId(props): void {
+    const ids = Object.keys(props);
+    for (let i of ids) {
+      // Prop type is number:
+      // if PropId doesn't exist in array, add pair
+      if (typeof props[i] === "number") {
+        if (this.prop_ids[i] === undefined) {
+          this.prop_ids[i] = [props[i],props[i]];
+        }
+        // if it already exists then check min and max and replace
+        else {
+          if (props[i] < this.prop_ids[i][0]) {
+            this.prop_ids[i][0] = props[i];
+          } else if (props[i] > this.prop_ids[i][1]) {
+            this.prop_ids[i][1] = props[i];
+          }
+        }
+      }
 
-  private addSrfTypeId(srf_type,id,count) {
-    // if srftype doesn't exist in array, add it
-    if (this.srftype_ids[srf_type] === undefined) {
-      this.srftype_ids[srf_type] = [id];
-      this.srftype_count[srf_type] = count;
+      // Prop type is string:
+      // if PropId doesn't exist in array, add it
+      else {
+        if (this.prop_ids[i] === undefined) {
+          this.prop_ids[i] = [props[i]];
+        }
+        // if it already exists then push id to existing arr
+        else {
+          if (this.prop_ids[i].includes(props[i]) === false) {
+            this.prop_ids[i].push(props[i]);
+          }
+        }
+      } 
     }
-    // if it already exists then push id to existing arr
-    else {
-      this.srftype_ids[srf_type].push(id);
-      this.srftype_count[srf_type] += count;
-    }
   }
 
-  public timeIntervalColor(color): any {
+  /* Creates and returns a color property that is linked to a time interval (from year 1000 to 3000)
+     - allows color changes to update more quickly (than static color property)
+     Params: Color Property (Static)
+     Returns: Color Property (TimeInterval) */
+  private timeIntervalColor(color): object {
     var property = new Cesium.TimeIntervalCollectionProperty(Cesium.Color);
     var timeInterval = new Cesium.TimeInterval({
         start : Cesium.JulianDate.fromDate(new Date(1000, 1, 1, 1)),
@@ -76,7 +127,12 @@ export class CesiumGeomService {
     return new Cesium.ColorMaterialProperty(property);
   }
 
-  public maxDiff(values): number {
+  /* Calculates and returns the max diff between list of values
+     - finds the smallest and largest values
+     - for determining axis and horizontal
+     Params: Array of numbers
+     Returns: Max difference between all input values */
+  private maxDiff(values): number {
     let maxval = values[0];
     let minval = values[0];
     for (let i = 1 ; i < values.length ; i++) {
@@ -90,7 +146,11 @@ export class CesiumGeomService {
     return (maxval - minval);
   }
 
-  public determineAxis(points): number {
+  /* Determines axis/plane to use for earcut triangulation (takes the one with larger difference in coordinates)
+     Params: Array of points (eg. [[0,0,0],[0,1,0],[0,1,1],[0,0,0]])
+     Returns: 0 for xz plane, 1 for yz plane
+     Uses: - maxDiff */
+  private determineAxis(points): number {
     // split coords and determine plane
     const x = [];
     const y = [];
@@ -108,8 +168,11 @@ export class CesiumGeomService {
     }
   }
 
-  public checkHorizontal(ring): boolean {
-    //Check horizontal or not
+  /* Checks if a polygon is horizontal or not by the max difference in z coordinates
+     Params: Array of points (eg. [[0,0,0],[0,1,0],[0,1,1],[0,0,0]])
+     Returns: true if horizontal, false if not horizontal
+     Uses: - maxDiff*/
+  private checkHorizontal(ring): boolean {
     const z = [];
     ring.forEach((coords) => {
       z.push(coords[2]);
@@ -122,7 +185,10 @@ export class CesiumGeomService {
     }
   }
 
-  public flatCoords(ring): number[] {
+  /* Creates and returns a flat list of coordinates from an array of points
+     Params: Array of points (eg. [[0,0,0],[0,1,0],[0,1,1],[0,0,0]])
+     Returns: Flat array of coordinates (eg. [0,0,0,0,1,0,0,1,1,0,0,0]) */
+  private flatCoords(ring): number[] {
     const flat = [];
     ring.forEach((point) => {
       flat.push(...point);
@@ -130,7 +196,11 @@ export class CesiumGeomService {
     return flat;
   }
 
-  public determineColor(surface_type): any {
+  /* Determines and returns the color property for a polygon based on its surface type
+     Params: Surface type
+     Returns: Color Property (Static)
+     Uses: - timeIntervalColor */
+  private determineColor(surface_type): object {
     let colour = undefined;
     if (surface_type === "WallSurface") {
       colour = this.timeIntervalColor(Cesium.Color.SILVER);
@@ -146,7 +216,12 @@ export class CesiumGeomService {
     return colour;
   }
 
-  public addCesiumPoly(polygon, colour, parent): void {
+  /* Adds a polygon entity to the datasource (sets color and parent)
+     Params: Array of array of points (first array is outer ring, subsequent arrays are holes)
+             Colour property (Static/TimeInterval)
+             Parent entity
+     Uses: - flatCoords */
+  private addCesiumPoly(polygon, color, parent): void {
     // Create polygon heirarchy
     const ext = Cesium.Cartesian3.fromDegreesArrayHeights(this.flatCoords(polygon[0]));
     let p_hierarchy = new Cesium.PolygonHierarchy(ext);
@@ -164,13 +239,20 @@ export class CesiumGeomService {
       polygon : {
         hierarchy : p_hierarchy,
         perPositionHeight : true,
-        material : colour,
+        material : color,
         outline : false,
       },
     });
   }
 
-  public addTriPoly(polygon, colour, parent): void {
+  /* Triangulates polygon and adds a group of polygons to datsource
+     Params: Array of array of points (first array is outer ring, subsequent arrays are holes)
+             Colour property (Static/TimeInterval)
+             Parent entity
+     Uses: - determineAxis
+           - earcut
+           - addCesiumPoly */
+  private addTriPoly(polygon, colour, parent): void {
     // Determine if triangulation should be done on XZ or YZ plane (if X or Y axis have a larger range of values)
     // 0 for XZ, 1 for YZ
     const axis = this.determineAxis(polygon[0]);
@@ -202,18 +284,22 @@ export class CesiumGeomService {
     for (let p = 0 ; p < tri_index.length ; p = p + 3) {
       const points = [];
 
-      // Get coordinates for each point
-      [tri_index[p], tri_index[p+1], tri_index[p+2]].forEach((j) => {
+      //Get coordinates for each point
+      for (let j = p; j < (p + 3) ; j++) {
+        const i = tri_index[j];
         let coord = [undefined,undefined,undefined];
-        coord[other_axis] = other_coords[j];
-        coord[axis] = poly_vertices[j*2];
-        coord[2] = poly_vertices[(j*2) + 1];
+        coord[other_axis] = other_coords[i];
+        coord[axis] = poly_vertices[i*2];
+        coord[2] = poly_vertices[(i*2) + 1];
         points.push(coord);
-      });
+      }
       this.addCesiumPoly([points], colour, parent);
     }
   }
 
+////////////////////////// Main functions, TODO: better structure management ///////////////////////////
+
+  // creates a parent entity containing all the entities that make up a multipolygon (called for JSON)
   public genMultiPoly(polygon, colour, properties): void {
     // Create parent to hold polygon
     const parent = this.dataSource.entities.add(new Cesium.Entity());
@@ -233,9 +319,11 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addPropId(properties);
   }
 
+  // creates parent entities containing all the entities that make up each surface in a solid (called for JSON)
   public genSolid(solid, colour, surface_type, properties): void {
     for (var i = 0 ; i < solid.length ; i++) {
       // Create parent to hold polygons
@@ -259,10 +347,12 @@ export class CesiumGeomService {
       }
       // Add properties and add entity ID to respective group for filter
       parent.properties = new Cesium.PropertyBag(properties);
-      this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
+      this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+      this.addPropId(properties);
     }
   }
 
+  // creates a parent entity containing all the entities that make up an element (eg. 1 wall) (called for GML)
   public genSolidGrouped(solid, colour, properties): void {
     // Create parent to hold polygons
     const parent = this.dataSource.entities.add(new Cesium.Entity());
@@ -285,6 +375,7 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.addSrfTypeId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addPropId(properties);
   }
 }

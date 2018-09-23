@@ -1,14 +1,84 @@
 <div id="CityJSONView" >
-  <div class="srftype-container" style="margin-top:5px;">
-    Show geometry with surface property:
+  <!-- <div class="srftype-container" style="margin-top:5px;">
+    Show geometry with surface property:<br><br>
     <div *ngFor="let item of srftype_keys;" id={{item}}>
-  <table>
-    <tr ><th style="width:85px;height: 22px;"><div style="width:85px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item}}</div></th>
-    <th style="width:40px;height: 22px;"><div style="width:40px;height: 22px;">
-      </div></th>
-    <th style="width:20px;height: 25px;" id={{item}}><input type="checkbox" id={{item}}_check checked="checked" (click)="Show(item)" tyle="width:20px;height: 25px;cursor:pointer;"></th></tr>
-  </table>
+      <table>
+        <tr ><th style="width:85px;height: 20px;">
+          <div style="width:85px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item}}</div>
+        </th>
+        <th style="width:40px;height: 20px;"><div style="width:40px;height: 22px;">
+          </div></th>
+        <th style="width:20px;height: 20px;" id={{item}}><input type="checkbox" id={{item}}_check checked="checked" (click)="checkbox(item)" style="width:15px;height: 15px;cursor:pointer;"></th></tr>
+      </table>
+    </div>
+  </div> -->
+  <hr>
+  <div class="filter-container">
+    Show geometry with property:<br><br>
+    <div>
+      <table>
+        <tr><th class="addFilter" style="width: 75px;height: 25px;">
+            <input type="button" value="Add Filter" style="color:#D3D3D3;border:1px solid #8AA8C0;width: 75px;height: 25px;background-color: transparent;cursor:pointer;" (click)="addFilter()">
+        </th>
+        <th>
+          <select class="filter-button" (change)="changeFilterSelect($event.target.value)">
+            <option class="filter-option"  *ngFor="let item of prop_keys" value={{item}}>{{item}}</option>
+          </select>
+        </th></tr>
+      </table>
+    </div><br><br>
+    <div *ngFor="let item of filters;" id={{item.id}}>
+      <table>
+        <tr>
+          <th style="width:85px;height: 20px;">
+            <div style="width:85px;color:#D3D3D3 !important;text-align: left;vertical-align: middle;font-weight: normal;">{{item.name}}</div>
+          </th>
+          <th *ngIf="item.type === 'number'" style="width:40px;height: 22px;">
+            <div style="width:40px;height: 22px;">
+              <select class="cesium-button-select" (change)="changeRelation(item.id,$event.target.value)" style="width:40px;height: 22px;"> <!-- [ngModel]="item.RelaHide" --> 
+                 <option class="cesium-option" value=0>></option>
+                 <option class="cesium-option" value=1><</option>
+                 <option class="cesium-option" value=2>=</option>
+              </select>
+            </div>
+          </th>
+          <th *ngIf="item.type === 'string'" style="width:40px;height: 22px;">
+            <div style="width:40px;height: 22px;">
+              <select class="cesium-button-select" (change)="changeRelation(item.id,$event.target.value)" style="width:40px;height: 22px;"> <!-- [ngModel]="item.RelaHide" -->
+                <option class="cesium-option" value=0>=</option>
+                <option class="cesium-option" value=1>!=</option>
+              </select>
+            </div>
+          </th>
+           <th *ngIf="item.type === 'number'" style="width:70px;height: 20px;">
+            <input type="text" id={{item.id}} value={{item.textHide}} (change)="changeNum(item.id,$event.target.value)" style="width:70px;height: 20px;background:transparent;color:#D3D3D3;border:1px solid #8AA8C0;">
+          </th>
+          <th *ngIf="item.type === 'string'" style="width:73px;height: 22px;">
+            <div style="width:73px;height: 22px;">
+              <select class="cesium-button-select" (change)="changeText(item.id,$event.target.value)" style="width:73px;height: 22px;"> <!-- [ngModel]="item.CategaryHide" -->
+                <option class="cesium-option" *ngFor="let val of item.values" value={{val}}>{{val}}</option>
+              </select>
+            </div>
+          </th>
+          <th style="width:20px;height: 22px;" id={{item.id}}>
+            <span id={{item.id}} (click)="deleteFilter(item.id)" style="width:20px;height: 22px;cursor:pointer;">
+              <i class="material-icons" style="color:#D3D3D3;font-size:16px">delete</i>
+            </span>
+          </th>
+          <th style="width:20px;height: 25px;" id={{item.id}}>
+            <input type="checkbox" id={{item.id}} checked="checked" (click)="changeDisable(item.id,$event.target.checked)" tyle="width:20px;height: 25px;cursor:pointer;">
+          </th>
+          <th></th>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <table>
+        <tr><th class="addFilter" style="width: 75px;height: 25px;">
+          <input type="button" value="Apply filters" style="color:#D3D3D3;border:1px solid #8AA8C0;width: 85px;height: 25px;background-color: transparent;cursor:pointer;" (click)="applyFilter()">
+        </th></tr>
+      </table>
     </div>
   </div>
-  </div>
+</div>
   
