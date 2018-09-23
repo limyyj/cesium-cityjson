@@ -285,19 +285,12 @@ export class CesiumGeomService {
       const points = [];
 
       //Get coordinates for each point
-      // [tri_index[p], tri_index[p+1], tri_index[p+2]].forEach((j) => {
-      //   let coord = [undefined,undefined,undefined];
-      //   coord[other_axis] = other_coords[j];
-      //   coord[axis] = poly_vertices[j*2];
-      //   coord[2] = poly_vertices[(j*2) + 1];
-      //   points.push(coord);
-      // });
-
       for (let j = p; j < (p + 3) ; j++) {
+        const i = tri_index[j];
         let coord = [undefined,undefined,undefined];
-        coord[other_axis] = other_coords[j];
-        coord[axis] = poly_vertices[j*2];
-        coord[2] = poly_vertices[(j*2) + 1];
+        coord[other_axis] = other_coords[i];
+        coord[axis] = poly_vertices[i*2];
+        coord[2] = poly_vertices[(i*2) + 1];
         points.push(coord);
       }
       this.addCesiumPoly([points], colour, parent);

@@ -66,7 +66,7 @@ export class CityGMLService {
     const projcoords = proj4(this.epsg,"WGS84",[coords[0],coords[1]]);
     const newcoords = [(projcoords[0]),(projcoords[1]),(coords[2])];
     if (this.epsg === "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs") {
-      newcoords[2] -= 104;
+      // newcoords[2] -= 104;
     }
     return newcoords;
   }
@@ -106,7 +106,6 @@ export class CityGMLService {
       // extract and convert all coordinates for surface and push to solid
       srf = this.nextElement(srf.nextSibling);
     }
-    // console.log(solid);
     this.cesiumGeomService.genSolidGrouped(solid,undefined,props);
   }
 
@@ -120,8 +119,6 @@ export class CityGMLService {
            - projectPtsToWGS84 */
   public getCoords(node): any {
     const polygon = [];
-    let coord_arr: number[][] = [];
-    let arr: number[] = [];
     let dimension: string;
     let coordinates: string;
     let coordsplit: string[];
@@ -139,22 +136,22 @@ export class CityGMLService {
         coordinates = coords.textContent;
         // split coordinates by " ", convert to number from string and project to wgs84
         coordsplit = coordinates.split(" ");
-        coord_arr.length = 0;
+        const coord_arr: number[][] = [];
         if (dimension === "3") {
           for (let i = 0 ; i < coordsplit.length ; i = i + 3) {
-            arr = this.projectPtsToWGS84([(Number(coordsplit[i])),(Number(coordsplit[i+1])),(Number(coordsplit[i+2]))]);
+            const arr = this.projectPtsToWGS84([(Number(coordsplit[i])),(Number(coordsplit[i+1])),(Number(coordsplit[i+2]))]);
             coord_arr.push(arr);
           }
         }
         polygon.push(coord_arr);
         // if positions are in pos, loop through, split and project each one to wgs84, then push to polygon
       } else if (coords.nodeName.split(":")[1] === "pos") {
-        coord_arr.length = 0;
+        const coord_arr: number[][] = [];
         while (coords !== null) {
           coordinates = coords.textContent;
           // split coordinates by " ", convert to number from string and project to wgs84
           coordsplit = coordinates.split(" ");
-          arr = this.projectPtsToWGS84([(Number(coordsplit[0])),(Number(coordsplit[1])),(Number(coordsplit[2]))]);
+          const arr = this.projectPtsToWGS84([(Number(coordsplit[0])),(Number(coordsplit[1])),(Number(coordsplit[2]))]);
           coord_arr.push(arr);
           coords = this.nextElement(coords.nextSibling);
         }
@@ -162,7 +159,6 @@ export class CityGMLService {
       }
       node = this.nextElement(node.nextSibling);
     }
-    // console.log(polygon);
     return polygon;
   }
 
@@ -203,7 +199,8 @@ export class CityGMLService {
     if (name === "cityObjectMember" ||
         name === "featureMember" ||
         name === "Building" ||
-        name === "BuildingPart") {
+        name === "BuildingPart" ||
+        name === "Storey") {
       this.addObjCount(name);
       this.currProps[name] = this.objCount[name];
       // Loop through children
@@ -215,8 +212,9 @@ export class CityGMLService {
     }
     // If wall, extract polygons and check for openings
     else if (name === "WallSurface") {
+      // console.log(name);
       if (node.firstChild !== null) {
-        const srf = this.getFirstSrf(node);
+        const srf = this.getFirstSrf(this.nextElement(node.firstChild));
         this.genPoly(srf,name);
         // openings
         let child = this.nextElement(this.nextElement(node.firstChild).nextSibling);
@@ -233,7 +231,7 @@ export class CityGMLService {
              name === "Window" ||
              name === "Door") {
       if (node.firstChild !== null) {
-        const srf = this.getFirstSrf(node);
+        const srf = this.getFirstSrf(this.nextElement(node.firstChild));
         this.genPoly(srf,name);
       }
     }
@@ -266,6 +264,9 @@ export class CityGMLService {
      Returns: XML node of first surface member, null if not found
      Uses: - nextElement */
   public getFirstSrf(node): any {
+    if (node.nodeName.split(":")[1] === "boundedBy") {
+      node = this.nextElement(node.nextSibling);
+    }
     while (node !== null && node.nodeName.split(":")[1] !== "surfaceMember") {
       node = this.nextElement(node.firstChild);
     }
