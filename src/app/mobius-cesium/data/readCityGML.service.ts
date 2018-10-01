@@ -57,6 +57,10 @@ export class CityGMLService {
     });
   }
 
+  public clearEPSG(): void {
+    this.epsg = undefined;
+  }
+
   /* Projects input point to WGS84
      Params: Array of coordinates for 1 point as obtained from file
      Returns: Array of coordinates for point in WGS84 + height
@@ -134,6 +138,8 @@ export class CityGMLService {
       if (coords.nodeName.split(":")[1] === "posList") {
         dimension = coords.attributes[0].value;
         coordinates = coords.textContent;
+        // replace linebreaks with spaces if any
+        coordinates = coordinates.replace(/\n/g, " ");
         // split coordinates by " ", convert to number from string and project to wgs84
         coordsplit = coordinates.split(" ");
         const coord_arr: number[][] = [];
@@ -194,8 +200,25 @@ export class CityGMLService {
     if (node === null) {
       return;
     }
+    let namespace = node.nodeName.split(":")[0];
+    let name = node.nodeName.split(":")[1];
+    // Stop propagation
+    if (namespace === "app" ||
+        name === "outerBuildingInstallation" ||
+        name === "SolitaryVegetationObject" ||
+        name === "CityFurniture" ||
+        name === "Road" ||
+        name === "ReliefFeature" ||
+        name === "LandUse" ||
+        name === "MultiSurface" ||
+        name === "Envelope") {
+      return;
+    }
+    // Extract name without namespace (if any)
+    if (name === undefined) {
+      name = node.nodeName;
+    }
     // Keep track of obj number for props
-    const name = node.nodeName.split(":")[1];
     if (name === "cityObjectMember" ||
         name === "featureMember" ||
         name === "Building" ||
@@ -212,7 +235,6 @@ export class CityGMLService {
     }
     // If wall, extract polygons and check for openings
     else if (name === "WallSurface") {
-      // console.log(name);
       if (node.firstChild !== null) {
         const srf = this.getFirstSrf(this.nextElement(node.firstChild));
         this.genPoly(srf,name);
@@ -229,14 +251,36 @@ export class CityGMLService {
              name === "Room" ||
              name === "RoofSurface" ||
              name === "Window" ||
-             name === "Door") {
+             name === "Door" ||
+             name === "Solid" ||
+             name === "GroundSurface") {
       if (node.firstChild !== null) {
         const srf = this.getFirstSrf(this.nextElement(node.firstChild));
         this.genPoly(srf,name);
       }
     }
-    // Else, just loop through children
+    // Else, just loop through children for native CityGML names that should be ignored
+    else if (name === "boundedBy" ||
+             name === "lod1Solid" ||
+             name === "consistsOfBuildingPart" ||
+             name === "lod4MultiSurface" ||
+             name === "interiorRoom" ||
+             name === "lod3Geometry" ||
+             name === "opening" ||
+             name === "buildingSubdivision" ||
+             name === "boundary" ||
+             name === "lod3MultiSurface") {
+      let child = this.nextElement(node.firstChild);
+      while (child !== null) {
+        this.checkElement(child);
+        child = this.nextElement(child.nextSibling);
+      }
+    }
+    // Else, loop through children and also extract values for properties
     else {
+      if (node.innerHTML === node.textContent) {
+        this.currProps[name] = node.textContent;
+      }
       let child = this.nextElement(node.firstChild);
       while (child !== null) {
         this.checkElement(child);
@@ -278,9 +322,8 @@ export class CityGMLService {
      Params: XML node to check
      Returns: XML node of first surface member, null if not found
      Uses: - nextElement */
-  public readFile(file): void {
+  public readFile(member): void {
     // cityObjectMember or featureMember
-    let member = this.nextElement(file.firstChild);
     while (member !== null) {
       this.currProps = {};
       this.objCount = {};
@@ -299,13 +342,41 @@ export class CityGMLService {
     if (file !== undefined) {
       // Initialise dataSource and surface type ID arrays
       this.cesiumGeomService.initialiseCesium();
+      // Get properties before first CityobjectMember
+      let member = this.nextElement(this.nextElement(file.firstChild).firstChild);
+      while (member !== null) {
+        if (member.nodeName.split(":")[1] === "name") {
+          // extract name
+          const name = member.textContent;
+        } else if (member.nodeName.split(":")[1] === "boundedBy") {
+          // extract CRS
+          const node = this.nextElement(member.firstChild);
+          if (node === null) {
+            break;
+          }
+          let srs : String[];
+          srs = (node.getAttribute("srsName")).split(",");
+          srs = srs[1].split(":");
+          const epsg = srs[srs.length-1];
+          this.setEPSG(epsg);
+        } else if (member.nodeName === "cityObjectMember" ||
+                   member.nodeName.split(":")[1] === "cityObjectMember" ||
+                   member.nodeName === "featureMember" ||
+                   member.nodeName.split(":")[1] === "featureMember") {
+          break;
+        }
+        member = this.nextElement(member.nextSibling);
+      }
       // TODO proper crs, for now default
-      this.setEPSG(undefined);
+      if (this.epsg === undefined) {
+        this.setEPSG(undefined);
+      }
       const context = this;
       data = this.epsg.then((epsg) => {
         context.epsg = epsg;
-        context.readFile(file);
+        context.readFile(member);
         context.cesiumGeomService.resumeDataSource();
+        context.clearEPSG();
         return context.cesiumGeomService.getDataSource();
       });
     }
