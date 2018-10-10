@@ -83,8 +83,8 @@ export class CityGMLService {
      Uses: - nextElement
            - getCoords
            - cesiumGeomService.genSolidGrouped */
-  public genPoly(srf,surface_type): void {
-    const props = Object.assign({Surface_Type: surface_type}, this.currProps);
+  public genPoly(srf,props,srf_type): void {
+    // const props = Object.assign({Surface_Type: surface_type}, this.currProps);
     const solid = [];
     // loop through all surfaces in element
     while (srf !== null) {
@@ -110,7 +110,7 @@ export class CityGMLService {
       // extract and convert all coordinates for surface and push to solid
       srf = this.nextElement(srf.nextSibling);
     }
-    this.cesiumGeomService.genSolidGrouped(solid,undefined,props);
+    this.cesiumGeomService.genSolidGrouped(solid,undefined,props,srf_type);
   }
 
   /* Obtains and prepares coordinates from the linear rings that make up ONE Triangle or Polygon
@@ -187,105 +187,301 @@ export class CityGMLService {
     return node;
   }
 
-  /* Checks the type of element a node is and does the required steps to extract info to generate geom
-     - keeps track of current cityObjectMember/featureMember/Building/BuildingPart number for properties
-     Params: XML node to check
-     Uses: - nextElement
-           - getFirstSrf
-           - genPoly
+  public getName(node): string {
+    const split = node.nodeName.split(":");
+    const nodename = split[split.length - 1];
+    return nodename;
+  }
 
-     ** TODO: convert to iterative */
-  public checkElement(node): void {
-    // break if node is null
-    if (node === null) {
-      return;
+  public checkCityModel(node): any {
+    const nodes = [];
+    const citymodel_props = {};
+    const citymodel_ade = {};
+    while (node !== null) {
+      const nodename = this.getName(node);
+      // extract name
+      if (nodename === "name") {
+        const name = node.textContent;
+        citymodel_props[nodename] = name;
+      }
+      // extract envelope
+      else if (nodename === "boundedBy") {
+        // extract crs
+        const envelope = this.nextElement(node.firstChild);
+        if (envelope != null) {
+          citymodel_props["srsName"] = envelope.getAttribute("srsName");
+          let srs : String[];
+          srs = (envelope.getAttribute("srsName")).split(",");
+          srs = srs[1].split(":");
+          const epsg = srs[srs.length-1];
+          this.setEPSG(epsg);
+        }
+        // extract pos - TODO
+      }
+      // extract list of cityobjectmember and featuremember
+      else if (nodename === "cityObjectMember" ||
+                 nodename === "featureMember") {
+        nodes.push(node);
+      }
+      // skip appearanceMember
+      else if (nodename === "appearanceMember"){}
+      // extract everything else
+      else {
+        this.checkADE(node,citymodel_ade);
+      }
+      node = this.nextElement(node.nextSibling);
     }
-    let namespace = node.nodeName.split(":")[0];
-    let name = node.nodeName.split(":")[1];
-    // Stop propagation
-    if (namespace === "app" ||
-        name === "outerBuildingInstallation" ||
-        name === "SolitaryVegetationObject" ||
-        name === "CityFurniture" ||
-        name === "Road" ||
-        name === "ReliefFeature" ||
-        name === "LandUse" ||
-        name === "MultiSurface" ||
-        name === "Envelope") {
-      return;
-    }
-    // Extract name without namespace (if any)
-    if (name === undefined) {
-      name = node.nodeName;
-    }
-    // Keep track of obj number for props
-    if (name === "cityObjectMember" ||
-        name === "featureMember" ||
-        name === "Building" ||
-        name === "BuildingPart" ||
-        name === "Storey") {
-      this.addObjCount(name);
-      this.currProps[name] = this.objCount[name];
-      // Loop through children
-      let child = this.nextElement(node.firstChild);
-      while (child !== null) {
-        this.checkElement(child);
-        child = this.nextElement(child.nextSibling);
+    // console.log(nodes,citymodel_props,citymodel_ade);
+    return [nodes, {"citymodel_props":citymodel_props, "citymodel_ade":citymodel_ade}] ;
+  }
+
+  public checkFeatures(nodes, props): void {
+    // cityObjectMember or featureMember
+    for (let node of nodes) {
+      const featurenodes = [];
+      const feature_props = {};
+      const feature_ade = {};
+      const membername = this.getName(node);
+      this.addObjCount(membername);
+      feature_props[membername] = this.objCount[membername];
+
+      node = this.nextElement(node.firstChild);
+      while (node !== null) {
+        const featurename = this.getName(node);
+        // extract list of buildings
+        if (featurename === "Building") {
+          featurenodes.push(node);
+        }
+        // skip other stuff 
+        else if (featurename === "Bridge" ||
+                 featurename === "Building" ||
+                 featurename === "SolitaryVegetationObject" ||
+                 featurename === "CityFurniture" ||
+                 featurename === "Road" ||
+                 featurename === "ReliefFeature" ||
+                 featurename === "LandUse") {}
+        // else ADE
+        else {
+          this.checkADE(node,feature_ade);
+        }
+        node = this.nextElement(node.nextSibling);
+      }
+      // console.log(featurenodes,feature_props,feature_ade);
+      if (featurenodes.length > 0) {
+        let props2 = Object.assign({}, props);
+        props2 = Object.assign(props2,{"feature_props":feature_props, "feature_ade":feature_ade});
+        this.checkBuildings(featurenodes, props2);
       }
     }
-    // If wall, extract polygons and check for openings
-    else if (name === "WallSurface") {
-      if (node.firstChild !== null) {
-        const srf = this.getFirstSrf(this.nextElement(node.firstChild));
-        this.genPoly(srf,name);
-        // openings
-        let child = this.nextElement(this.nextElement(node.firstChild).nextSibling);
-        while (child !== null) {
-          this.checkElement(child);
-          child = this.nextElement(child.nextSibling);
+  }
+
+  public checkBuildings(nodes, props): void {
+    // Building
+    for (let node of nodes) {
+      const bldgnodes = [];
+      const partnodes = [];
+      const elemnodes = [];
+      const bldg_props = {};
+      const bldg_ade = {};
+      const bldgname = this.getName(node);
+      this.addObjCount(bldgname);
+      bldg_props[bldgname] = this.objCount[bldgname];
+
+      node = this.nextElement(node.firstChild);
+      while (node !== null) {
+        const featurename = this.getName(node);
+        // extract list of buildings
+        if (featurename === "consistsOfBuildingPart" ||
+            featurename === "buildingSubdivision" ) {
+          bldgnodes.push(this.nextElement(node.firstChild));
+        }
+        // jump to checking elem
+        else if (featurename === "outerBuildingInstallation" ||
+                 featurename === "boundedBy") {
+          const part = this.nextElement(node.firstChild);
+          if (part !== null) {
+            partnodes.push(part);
+          }  
+        }
+        // jump to gen poly??
+        else if (featurename.includes("lod")) {
+          const part = this.nextElement(node.firstChild);
+          if (part !== null) {
+            elemnodes.push(part);
+          }  
+        }
+        // else properties
+        else if (featurename === "name" ||
+                 featurename === "creationDate" ||
+                 featurename === "externalReference" ||
+                 featurename === "function" ||
+                 featurename === "measuredHeight" ||
+                 featurename === "address") {
+          this.checkADE(node,bldg_props);
+        }
+      // else ADE
+        else {
+          this.checkADE(node,bldg_ade);
+        }
+        node = this.nextElement(node.nextSibling);
+      }
+      // console.log(bldgnodes,bldg_props,bldg_ade);
+      let props2 = Object.assign({}, props);
+      props2 = Object.assign(props2,{"bldg_props":bldg_props, "bldg_ade":bldg_ade});
+      if (bldgnodes.length > 0) {
+        this.checkParts(bldgnodes, props2);
+      }
+      if (partnodes.length > 0) {
+        this.checkElements(partnodes, props2);
+      }
+      if (elemnodes.length > 0) {
+        for (let srf of elemnodes) {
+          srf = this.getFirstSrf(this.nextElement(srf.firstChild));
+          this.genPoly(srf,props2,bldgname);
         }
       }
     }
-    // Else, check for these nodes and extract polygons
-    else if (name === "FloorSurface" ||
-             name === "Room" ||
-             name === "RoofSurface" ||
-             name === "Window" ||
-             name === "Door" ||
-             name === "Solid" ||
-             name === "GroundSurface") {
-      if (node.firstChild !== null) {
-        const srf = this.getFirstSrf(this.nextElement(node.firstChild));
-        this.genPoly(srf,name);
+  }
+
+  public checkParts(nodes, props): void {
+    // Building
+    for (let node of nodes) {
+      const partnodes = [];
+      const part_props = {};
+      const part_ade = {};
+      const partname = this.getName(node);
+      this.addObjCount(partname);
+      part_props[partname] = this.objCount[partname];
+
+      node = this.nextElement(node.firstChild);
+      while (node !== null) {
+        const featurename = this.getName(node);
+        // extract list of buildings
+        if (featurename === "boundedBy" ||
+            featurename === "boundary" ||
+            featurename === "interiorRoom") {
+          const part = this.nextElement(node.firstChild);
+          if (part !== null) {
+            partnodes.push(part);
+          }   
+        }
+      // else ADE
+        else {
+          this.checkADE(node,part_ade);
+        }
+        node = this.nextElement(node.nextSibling);
+      }
+      // console.log(partnodes,part_props,part_ade);
+      if (partnodes.length > 0) {
+        let props2 = Object.assign({}, props);
+        props2 = Object.assign(props2,{"part_props":part_props, "part_ade":part_ade});
+        this.checkElements(partnodes, props2);
       }
     }
-    // Else, just loop through children for native CityGML names that should be ignored
-    else if (name === "boundedBy" ||
-             name === "lod1Solid" ||
-             name === "consistsOfBuildingPart" ||
-             name === "lod4MultiSurface" ||
-             name === "interiorRoom" ||
-             name === "lod3Geometry" ||
-             name === "opening" ||
-             name === "buildingSubdivision" ||
-             name === "boundary" ||
-             name === "lod3MultiSurface") {
-      let child = this.nextElement(node.firstChild);
-      while (child !== null) {
-        this.checkElement(child);
-        child = this.nextElement(child.nextSibling);
+  }
+
+  public checkElements(nodes, props): void {
+    for (let node of nodes) {
+      const elemnodes = [];
+      const openings = [];
+      const elem_props = {};
+      const elem_ade = {};
+      const elemname = this.getName(node);
+
+      // skip envelope?
+      if (elemname === "Envelope") {
+        break;
+      }
+      // this.addObjCount(elemname);
+      elem_props["Surface_Type"] = elemname;
+
+      node = this.nextElement(node.firstChild);
+      while (node !== null) {
+        const featurename = this.getName(node);
+        // extract srf
+        if (featurename.includes("lod")) {
+          const part = this.nextElement(node.firstChild);
+          if (part !== null) {
+            elemnodes.push(part);
+          }   
+        }
+        // extract openings
+        else if (featurename === "opening") {
+          const part = this.nextElement(node.firstChild);
+          if (part !== null) {
+            openings.push(part);
+          }   
+        }
+      // else ADE
+        else {
+          this.checkADE(node,elem_ade);
+        }
+        node = this.nextElement(node.nextSibling);
+      }
+      // console.log(elemnodes,elem_props,elem_ade);
+      let props2 = Object.assign({}, props);
+      props2 = Object.assign(props2,{"elem_props":elem_props, "elem_ade":elem_ade});
+      if (elemnodes.length > 0) {
+        for (let srf of elemnodes) {
+          srf = this.getFirstSrf(this.nextElement(srf.firstChild));
+          this.genPoly(srf,props2,elemname);
+        }
+      }
+      if (openings.length > 0) {
+        this.checkOpenings(openings,props2);
       }
     }
-    // Else, loop through children and also extract values for properties
-    else {
-      if (node.innerHTML === node.textContent) {
-        this.currProps[name] = node.textContent;
+  }
+
+  public checkOpenings(nodes, props) {
+    for (let node of nodes) {
+      const openings = [];
+      const opening_props = {};
+      const opening_ade = {};
+      const openingname = this.getName(node);
+      // this.addObjCount(elemname);
+      opening_props["Surface_Type"] = openingname;
+
+      node = this.nextElement(node.firstChild);
+      while (node !== null) {
+        const featurename = this.getName(node);
+        // extract srf
+        if (featurename.includes("MultiSurface")) {
+          const part = this.nextElement(node.firstChild);
+          if (part !== null) {
+            openings.push(part);
+          }
+        }
+      // else ADE
+        else {
+          this.checkADE(node,opening_ade);
+        }
+        node = this.nextElement(node.nextSibling);
       }
-      let child = this.nextElement(node.firstChild);
-      while (child !== null) {
-        this.checkElement(child);
-        child = this.nextElement(child.nextSibling);
+      // console.log(elemnodes,elem_props,elem_ade);
+      if (openings.length > 0) {
+        let props2 = Object.assign({}, props);
+        props2 = Object.assign(props2,{"opening_props":opening_props, "opening_ade":opening_ade});
+        for (let srf of openings) {
+          srf = this.getFirstSrf(this.nextElement(srf.firstChild));
+          this.genPoly(srf,props2,openingname);
+        }
       }
+    }
+  }
+
+  public checkADE(node,ade): void {
+    if (node === null) {
+      return;
+    }
+    const name = this.getName(node);
+    if (node.innerHTML === node.textContent) {
+      ade[name] = node.textContent;
+    }
+    let child = this.nextElement(node.firstChild);
+    while (child !== null) {
+      this.checkADE(child,ade);
+      child = this.nextElement(child.nextSibling);
     }
   }
 
@@ -308,28 +504,10 @@ export class CityGMLService {
      Returns: XML node of first surface member, null if not found
      Uses: - nextElement */
   public getFirstSrf(node): any {
-    if (node.nodeName.split(":")[1] === "boundedBy") {
-      node = this.nextElement(node.nextSibling);
-    }
     while (node !== null && node.nodeName.split(":")[1] !== "surfaceMember") {
       node = this.nextElement(node.firstChild);
     }
     return node;
-  }
-
-  /* Reads file and loops through each cityObjectMember or featureMember
-     - Calls checkElement to process elements and generate geometry
-     Params: XML node to check
-     Returns: XML node of first surface member, null if not found
-     Uses: - nextElement */
-  public readFile(member): void {
-    // cityObjectMember or featureMember
-    while (member !== null) {
-      this.currProps = {};
-      this.objCount = {};
-      this.checkElement(member);
-      member = this.nextElement(member.nextSibling);
-    }
   }
 
   /* Main function to read file and return datasource containing generated entities
@@ -342,39 +520,20 @@ export class CityGMLService {
     if (file !== undefined) {
       // Initialise dataSource and surface type ID arrays
       this.cesiumGeomService.initialiseCesium();
-      // Get properties before first CityobjectMember
-      let member = this.nextElement(this.nextElement(file.firstChild).firstChild);
-      while (member !== null) {
-        if (member.nodeName.split(":")[1] === "name") {
-          // extract name
-          const name = member.textContent;
-        } else if (member.nodeName.split(":")[1] === "boundedBy") {
-          // extract CRS
-          const node = this.nextElement(member.firstChild);
-          if (node === null) {
-            break;
-          }
-          let srs : String[];
-          srs = (node.getAttribute("srsName")).split(",");
-          srs = srs[1].split(":");
-          const epsg = srs[srs.length-1];
-          this.setEPSG(epsg);
-        } else if (member.nodeName === "cityObjectMember" ||
-                   member.nodeName.split(":")[1] === "cityObjectMember" ||
-                   member.nodeName === "featureMember" ||
-                   member.nodeName.split(":")[1] === "featureMember") {
-          break;
-        }
-        member = this.nextElement(member.nextSibling);
-      }
-      // TODO proper crs, for now default
+      this.objCount = {};
+      this.currProps = {};
+
+      // Get properties of CityModel
+      const member = this.nextElement(this.nextElement(file.firstChild).firstChild);
+      const nodes = this.checkCityModel(member);
+
       if (this.epsg === undefined) {
         this.setEPSG(undefined);
       }
       const context = this;
       data = this.epsg.then((epsg) => {
         context.epsg = epsg;
-        context.readFile(member);
+        context.checkFeatures(nodes[0],nodes[1]);
         context.cesiumGeomService.resumeDataSource();
         context.clearEPSG();
         return context.cesiumGeomService.getDataSource();

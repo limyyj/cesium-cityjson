@@ -27,12 +27,11 @@ export class AppComponent {
       } else {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(text.target["result"],"application/xml");
-        // console.log(xmlDoc);
         self.gs_dummy_data = xmlDoc;
       }
-      // self.dataService.setGsModel(self.gs_dummy_data);
     };
     fr.readAsText(files[0]);
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("loader").style.display = "block";
   }
-  
 }

@@ -65,7 +65,7 @@ export class CesiumGeomService {
      Params: Surface type of element
              id of entity
              number of polygons in entity*/
-  private addId(srf_type,id,count): void {
+  private addId(id,count): void {
     this.parent_ids.push(id);
     this.total_count += count;
   }
@@ -76,37 +76,40 @@ export class CesiumGeomService {
      - for selection dropdown boxes in filters
      Params: Object containing key:value pairs of properties*/
   private addPropId(props): void {
-    const ids = Object.keys(props);
-    for (let i of ids) {
-      // Prop type is number:
-      // if PropId doesn't exist in array, add pair
-      if (typeof props[i] === "number") {
-        if (this.prop_ids[i] === undefined) {
-          this.prop_ids[i] = [props[i],props[i]];
-        }
-        // if it already exists then check min and max and replace
-        else {
-          if (props[i] < this.prop_ids[i][0]) {
-            this.prop_ids[i][0] = props[i];
-          } else if (props[i] > this.prop_ids[i][1]) {
-            this.prop_ids[i][1] = props[i];
+    const cats = Object.keys(props);
+    for (let x of cats) {
+      const ids = Object.keys(props[x]);
+      for (let i of ids) {
+        // Prop type is number:
+        // if PropId doesn't exist in array, add pair
+        if (typeof props[i] === "number") {
+          if (this.prop_ids[i] === undefined) {
+            this.prop_ids[i] = [props[x][i],props[x][i]];
+          }
+          // if it already exists then check min and max and replace
+          else {
+            if (props[x][i] < this.prop_ids[x][i][0]) {
+              this.prop_ids[i][0] = props[x][i];
+            } else if (props[x][i] > this.prop_ids[i][1]) {
+              this.prop_ids[i][1] = props[x][i];
+            }
           }
         }
-      }
 
-      // Prop type is string:
-      // if PropId doesn't exist in array, add it
-      else {
-        if (this.prop_ids[i] === undefined) {
-          this.prop_ids[i] = [props[i]];
-        }
-        // if it already exists then push id to existing arr
+        // Prop type is string:
+        // if PropId doesn't exist in array, add it
         else {
-          if (this.prop_ids[i].includes(props[i]) === false) {
-            this.prop_ids[i].push(props[i]);
+          if (this.prop_ids[i] === undefined) {
+            this.prop_ids[i] = [props[x][i]];
           }
-        }
-      } 
+          // if it already exists then push id to existing arr
+          else {
+            if (this.prop_ids[i].includes(props[x][i]) === false) {
+              this.prop_ids[i].push(props[x][i]);
+            }
+          }
+        } 
+      }
     }
   }
 
@@ -319,7 +322,7 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addId(parent.id,parent._children.length);
     this.addPropId(properties);
   }
 
@@ -347,20 +350,20 @@ export class CesiumGeomService {
       }
       // Add properties and add entity ID to respective group for filter
       parent.properties = new Cesium.PropertyBag(properties);
-      this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+      this.addId(parent.id,parent._children.length);
       this.addPropId(properties);
     }
   }
 
   // creates a parent entity containing all the entities that make up an element (eg. 1 wall) (called for GML)
-  public genSolidGrouped(solid, colour, properties): void {
+  public genSolidGrouped(solid, colour, properties, srftype): void {
     // Create parent to hold polygons
     const parent = this.dataSource.entities.add(new Cesium.Entity());
     let CScolour = undefined;
     if (colour !== undefined) {
       CScolour = this.timeIntervalColor(colour);
     } else {
-      CScolour = this.determineColor(properties["Surface_Type"]);
+      CScolour = this.determineColor(srftype);
     }
     for (var i = 0 ; i < solid.length ; i++) {
       const polygon = solid[i];
@@ -375,7 +378,7 @@ export class CesiumGeomService {
     }
     // Add properties and add entity ID to respective group for filter
     parent.properties = new Cesium.PropertyBag(properties);
-    this.addId(properties["Surface_Type"],parent.id,parent._children.length);
+    this.addId(parent.id,parent._children.length);
     this.addPropId(properties);
   }
 }

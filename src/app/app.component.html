@@ -1,7 +1,11 @@
 <div style="height: 100%">
 	<div id="loadfile">
-      <div class="version" style="font-family:sans-serif;color:white;">v0.1.1&nbsp;&nbsp;</div>
-      <input type="file" id="files" name="files[]" style="font-family:sans-serif;color:white;" (change)="handleFileSelect($event)" />
+      <!-- <div class="version" style="font-family:sans-serif;color:white;">v0.1.1&nbsp;&nbsp;</div> -->
+      <button  class="cesium-button" onclick="document.getElementById('files').click();" style="width: 32px; height: 32px; padding: 0px"><i class="fa fa-file fa-lg"></i></button>
+      <input type="file" id="files" name="files[]" style="font-family:sans-serif;color:white;" (change)="handleFileSelect($event)" style="display: none;"/>
   	</div>
 	<mobius-cesium [data]="gs_dummy_data" [mode]="'editor'"></mobius-cesium>
 </div>
+
+<div id="overlay"></div>
+<div id="loader"></div>

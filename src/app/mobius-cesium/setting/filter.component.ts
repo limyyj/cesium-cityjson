@@ -5,11 +5,11 @@ import {ViewerComponent} from "../viewer/viewer.component";
 import * as chroma from "chroma-js";
 
 @Component({
-  selector: "app-cityjson",
-  templateUrl: "./cityjson.component.html",
-  styleUrls: ["./cityjson.component.css"],
+  selector: "app-filter",
+  templateUrl: "./filter.component.html",
+  styleUrls: ["./filter.component.css"],
 })
-export class CityJSONComponent extends DataSubscriber implements OnInit {
+export class FilterComponent extends DataSubscriber implements OnInit {
   private myElement;
   private all_ids: any;
   private srfcount: any;
@@ -72,18 +72,6 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     }
     this.prop_keys = keys2;
   }
-
-  // /* shows or hides element from a group when user clicks on checkbox */
-  // public checkbox(event) {
-  //   const eventCheckbox = document.getElementById(event+"_check");
-  //   const entities = this.dataService.getViewer().dataSources.get(0).entities;
-  //   const ids = this.srftype_ids[event];
-  //   if (eventCheckbox["checked"] === false) {
-  //     this.hide(entities,ids);
-  //   } else {
-  //     this.show(entities,ids);
-  //   }
-  // }
 
   /* Hides all entities from list of ids
      Params: Array of entities to check for id and hide
@@ -193,6 +181,19 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
     }
   }
 
+  public getPropValue(props,name): any {
+    const cats = props.propertyNames;
+    for (let x of cats) {
+      const ids = Object.keys(props[x]._value);
+      for (let i of ids) {
+        if (i === name) {
+          return props[x]._value[i];
+        }
+      }
+    }
+    return null;
+  }
+
   /* Applies all filter settings to view when user clicks button
      - Checks if filter is disabled, skips is true
      - Checks relation and separates parent IDs into 2 arrays, show and hide, based on relation and entered value (text)
@@ -216,7 +217,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
         if (filter.relation === 0) {
           // >
           show.forEach((id) => {
-            if (entities.getById(id).properties[filter.name]._value > filter.text) {
+            if (this.getPropValue(entities.getById(id).properties,filter.name) > filter.text) {
               newshow.push(id);
             } else {
               hide.push(id);
@@ -225,7 +226,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
         } else if (filter.relation === 1) {
           // <
           show.forEach((id) => {
-            if (entities.getById(id).properties[filter.name]._value < filter.text) {
+            if (this.getPropValue(entities.getById(id).properties,filter.name) < filter.text) {
               newshow.push(id);
             } else {
               hide.push(id);
@@ -234,7 +235,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
         } else {
           // =
           show.forEach((id) => {
-            if (entities.getById(id).properties[filter.name]._value === filter.text) {
+            if (this.getPropValue(entities.getById(id).properties,filter.name) === filter.text) {
               newshow.push(id);
             } else {
               hide.push(id);
@@ -245,7 +246,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
         if (filter.relation === 0) {
           // =
           show.forEach((id) => {
-            if (entities.getById(id).properties[filter.name]._value === filter.text) {
+            if (this.getPropValue(entities.getById(id).properties,filter.name) === filter.text) {
               newshow.push(id);
             } else {
               hide.push(id);
@@ -254,7 +255,7 @@ export class CityJSONComponent extends DataSubscriber implements OnInit {
         } else {
           // !=
           show.forEach((id) => {
-            if (entities.getById(id).properties[filter.name]._value !== filter.text) {
+            if (this.getPropValue(entities.getById(id).properties,filter.name) !== filter.text) {
               newshow.push(id);
             } else {
               hide.push(id);
