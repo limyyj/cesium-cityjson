@@ -24,6 +24,7 @@ export class DataService {
   private _Shadow: boolean;
   private _Date: string;
   private _UTC: number;
+  private rules: any;
 
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -35,6 +36,30 @@ export class DataService {
   public getMessage(): Observable<any> {
     return this.subject.asObservable();
   }
+
+  public readRules(): void {
+    this.rules = new Promise(function(resolve) {
+      let val = "";
+      const xhttp = new XMLHttpRequest();
+      xhttp.onload = function() {
+        if (xhttp.readyState === 4 && xhttp.status === 200) {
+          val = JSON.parse(xhttp.responseText);
+          resolve(val);
+        }
+      };
+      xhttp.open("GET", "./assets/rules/testnames1.json", true);
+      xhttp.send();
+    });
+    const self = this;
+    this.rules.then((file) => {
+      self.rules = file;
+    });
+  }
+
+  public getRules(): any {
+    return this.rules;
+  }
+
   //get geojson
   public getGsModel(): any {
     return this._jsonModel;

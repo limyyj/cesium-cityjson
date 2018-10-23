@@ -9,6 +9,7 @@ import {DataService} from "./mobius-cesium/data/data.service";
 export class AppComponent {
   public gs_dummy_data: any=undefined;
   public mode: string;
+  public rules : any;
 
   constructor(private dataService: DataService) {
     // this.dataService.setGsModel(this.gs_dummy_data);

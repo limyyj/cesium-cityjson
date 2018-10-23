@@ -310,7 +310,7 @@ export class CesiumGeomService {
     if (colour !== undefined) {
       CScolour = this.timeIntervalColor(colour);
     } else {
-      CScolour = this.determineColor(properties["Surface_Type"]);
+      CScolour = this.determineColor(properties["Surface Properties"]["Surface_Type"]);
     }
     // If horizontal use Cesium Polygon Entity API directly
     if (this.checkHorizontal(polygon[0]) === true) {
@@ -339,7 +339,7 @@ export class CesiumGeomService {
         CScolour = this.determineColor(surface_type[i]);
       }
       // Edit properties
-      properties.Surface_Type = surface_type[i];
+      properties["Surface Properties"].Surface_Type = surface_type[i];
       // If horizontal use Cesium Polygon Entity API directly
       if (this.checkHorizontal(polygon[0]) === true) {
         this.addCesiumPoly(polygon, CScolour, parent);

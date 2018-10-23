@@ -38,6 +38,8 @@ export class ViewerComponent extends DataSubscriber {
     if(this.dataService.getViewer() === undefined){
       this.CreateViewer();
     }
+    // get rules
+    this.dataService.readRules();
     // //pass data to dataService
     this.data = this.dataService.getGsModel();
     // //load data

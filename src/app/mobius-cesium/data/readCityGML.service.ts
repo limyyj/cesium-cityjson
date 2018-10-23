@@ -5,6 +5,7 @@ import * as chroma from "chroma-js";
 import proj4 from "proj4";
 import * as earcut from "earcut";
 import { CesiumGeomService } from "./cesiumGeom.service";
+import { DataService } from "./data.service";
 
 @Injectable()
 export class CityGMLService {
@@ -12,8 +13,10 @@ export class CityGMLService {
   private epsg: any;
   private currProps: object;
   private objCount: object;
+  private rules: any;
+  private keys: string[];
 
-  constructor(private cesiumGeomService: CesiumGeomService) {}
+  constructor(private cesiumGeomService: CesiumGeomService, private dataService: DataService) {}
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -29,7 +32,7 @@ export class CityGMLService {
      - looks up epsg.io if EPSG code is found
      - defaults to EPSG:3414 if undefined
 
-     ** TODO: read crs from file, currently always recieves undefined */
+     ** TODO: reads crs from citymodel envelope, need to confirm if this is intended behaviour */
   public setEPSG(crs): void {
     this.epsg = new Promise(function(resolve) {
       let val = "";
@@ -84,14 +87,20 @@ export class CityGMLService {
            - getCoords
            - cesiumGeomService.genSolidGrouped */
   public genPoly(srf,props,srf_type): void {
-    // const props = Object.assign({Surface_Type: surface_type}, this.currProps);
+    while (srf !== null && srf.nodeName.split(":")[1] !== "surfaceMember") {
+      srf = this.nextElement(srf.firstChild);
+    }
     const solid = [];
     // loop through all surfaces in element
     while (srf !== null) {
       // get first Triangle or Polygon (depends on what the CityGML is using)
       let firstSrf = srf;
-      while ((firstSrf.nodeName.split(":")[1] !== "Triangle") && (firstSrf.nodeName.split(":")[1] !== "Polygon"))  {
+      while (firstSrf !== null && (firstSrf.nodeName.split(":")[1] !== "Triangle") && (firstSrf.nodeName.split(":")[1] !== "Polygon"))  {
         firstSrf = this.nextElement(firstSrf.firstChild);
+      }
+      if (firstSrf === null) {
+        srf = this.nextElement(srf.nextSibling);
+        break;
       }
       // if Triangle, step into first child (exterior linear ring) and get coords
       // loop through all other triangles in surface
@@ -110,6 +119,7 @@ export class CityGMLService {
       // extract and convert all coordinates for surface and push to solid
       srf = this.nextElement(srf.nextSibling);
     }
+    // console.log(solid);
     this.cesiumGeomService.genSolidGrouped(solid,undefined,props,srf_type);
   }
 
@@ -136,7 +146,12 @@ export class CityGMLService {
       coords = this.nextElement(coords.firstChild);
       // if positions are in posList, split and project to wgs84 in threes, then push to polygon
       if (coords.nodeName.split(":")[1] === "posList") {
-        dimension = coords.attributes[0].value;
+        // get dimension if present, else default to "3"
+        if (coords.getAttribute("srsDimension") !== null) {
+          dimension = coords.getAttribute("srsDimension");
+        } else {
+          dimension = "3";
+        }
         coordinates = coords.textContent;
         // replace linebreaks with spaces if any
         coordinates = coordinates.replace(/\n/g, " ");
@@ -149,6 +164,12 @@ export class CityGMLService {
             coord_arr.push(arr);
           }
         }
+        // else if (dimension === "2") {
+        //   for (let i = 0 ; i < coordsplit.length ; i = i + 2) {
+        //     const arr = this.projectPtsToWGS84([(Number(coordsplit[i])),(Number(coordsplit[i+1])),0]);
+        //     coord_arr.push(arr);
+        //   }
+        // }
         polygon.push(coord_arr);
         // if positions are in pos, loop through, split and project each one to wgs84, then push to polygon
       } else if (coords.nodeName.split(":")[1] === "pos") {
@@ -187,12 +208,16 @@ export class CityGMLService {
     return node;
   }
 
+  /* Gets the name of the given node, excluding namespace prefix if any
+     Params: XML node to get name of
+     Returns: Name of node without prefix */
   public getName(node): string {
     const split = node.nodeName.split(":");
     const nodename = split[split.length - 1];
     return nodename;
   }
 
+  // Checks the cityModel and extracts EPSG if any and excludes appearanceMember
   public checkCityModel(node): any {
     const nodes = [];
     const citymodel_props = {};
@@ -221,266 +246,126 @@ export class CityGMLService {
       // extract list of cityobjectmember and featuremember
       else if (nodename === "cityObjectMember" ||
                  nodename === "featureMember") {
-        nodes.push(node);
+        nodes.push(this.nextElement(node.firstChild));
       }
       // skip appearanceMember
       else if (nodename === "appearanceMember"){}
       // extract everything else
       else {
-        this.checkADE(node,citymodel_ade);
+        this.addProperties(node,citymodel_ade);
       }
       node = this.nextElement(node.nextSibling);
     }
     // console.log(nodes,citymodel_props,citymodel_ade);
-    return [nodes, {"citymodel_props":citymodel_props, "citymodel_ade":citymodel_ade}] ;
+    return [nodes, {"cityModel properties":citymodel_props, "cityModel ADE properties":citymodel_ade}] ;
   }
 
-  public checkFeatures(nodes, props): void {
-    // cityObjectMember or featureMember
+  /* Checks each node in input array against arrays of node names (this.rules).
+     Updates properties and performs additional checks or generates geometry according to rules
+     Params: Array of nodes to check
+             Object containing properties objects accumulated so far
+
+      *** RECURSIVE *** */
+  public check(nodes, props): void {
+    let match = false;
     for (let node of nodes) {
-      const featurenodes = [];
-      const feature_props = {};
-      const feature_ade = {};
-      const membername = this.getName(node);
-      this.addObjCount(membername);
-      feature_props[membername] = this.objCount[membername];
+      // create new variables
+      const check_nodes = [];
+      const gen_nodes = [];
+      const new_props = [];
+      const new_ade = [];
+      const node_name = this.getName(node);
+      let sibling_name = node_name;
+
+      if (node_name === "Building") {
+        this.objCount = {};
+      }
+
+      if (node_name === "Building" ||
+          node_name === "BuildingPart" ||
+          node_name === "Storey") {
+        this.addObjCount(node_name);
+        new_props[node_name] = this.objCount[node_name];
+      }
 
       node = this.nextElement(node.firstChild);
       while (node !== null) {
-        const featurename = this.getName(node);
-        // extract list of buildings
-        if (featurename === "Building") {
-          featurenodes.push(node);
-        }
-        // skip other stuff 
-        else if (featurename === "Bridge" ||
-                 featurename === "Building" ||
-                 featurename === "SolitaryVegetationObject" ||
-                 featurename === "CityFurniture" ||
-                 featurename === "Road" ||
-                 featurename === "ReliefFeature" ||
-                 featurename === "LandUse") {}
-        // else ADE
-        else {
-          this.checkADE(node,feature_ade);
-        }
-        node = this.nextElement(node.nextSibling);
-      }
-      // console.log(featurenodes,feature_props,feature_ade);
-      if (featurenodes.length > 0) {
-        let props2 = Object.assign({}, props);
-        props2 = Object.assign(props2,{"feature_props":feature_props, "feature_ade":feature_ade});
-        this.checkBuildings(featurenodes, props2);
-      }
-    }
-  }
-
-  public checkBuildings(nodes, props): void {
-    // Building
-    for (let node of nodes) {
-      const bldgnodes = [];
-      const partnodes = [];
-      const elemnodes = [];
-      const bldg_props = {};
-      const bldg_ade = {};
-      const bldgname = this.getName(node);
-      this.addObjCount(bldgname);
-      bldg_props[bldgname] = this.objCount[bldgname];
-
-      node = this.nextElement(node.firstChild);
-      while (node !== null) {
-        const featurename = this.getName(node);
-        // extract list of buildings
-        if (featurename === "consistsOfBuildingPart" ||
-            featurename === "buildingSubdivision" ) {
-          bldgnodes.push(this.nextElement(node.firstChild));
-        }
-        // jump to checking elem
-        else if (featurename === "outerBuildingInstallation" ||
-                 featurename === "boundedBy") {
-          const part = this.nextElement(node.firstChild);
-          if (part !== null) {
-            partnodes.push(part);
-          }  
-        }
-        // jump to gen poly??
-        else if (featurename.includes("lod")) {
-          const part = this.nextElement(node.firstChild);
-          if (part !== null) {
-            elemnodes.push(part);
-          }  
-        }
-        // else properties
-        else if (featurename === "name" ||
-                 featurename === "creationDate" ||
-                 featurename === "externalReference" ||
-                 featurename === "function" ||
-                 featurename === "measuredHeight" ||
-                 featurename === "address") {
-          this.checkADE(node,bldg_props);
-        }
-      // else ADE
-        else {
-          this.checkADE(node,bldg_ade);
-        }
-        node = this.nextElement(node.nextSibling);
-      }
-      // console.log(bldgnodes,bldg_props,bldg_ade);
-      let props2 = Object.assign({}, props);
-      props2 = Object.assign(props2,{"bldg_props":bldg_props, "bldg_ade":bldg_ade});
-      if (bldgnodes.length > 0) {
-        this.checkParts(bldgnodes, props2);
-      }
-      if (partnodes.length > 0) {
-        this.checkElements(partnodes, props2);
-      }
-      if (elemnodes.length > 0) {
-        for (let srf of elemnodes) {
-          srf = this.getFirstSrf(this.nextElement(srf.firstChild));
-          this.genPoly(srf,props2,bldgname);
-        }
-      }
-    }
-  }
-
-  public checkParts(nodes, props): void {
-    // Building
-    for (let node of nodes) {
-      const partnodes = [];
-      const part_props = {};
-      const part_ade = {};
-      const partname = this.getName(node);
-      this.addObjCount(partname);
-      part_props[partname] = this.objCount[partname];
-
-      node = this.nextElement(node.firstChild);
-      while (node !== null) {
-        const featurename = this.getName(node);
-        // extract list of buildings
-        if (featurename === "boundedBy" ||
-            featurename === "boundary" ||
-            featurename === "interiorRoom") {
-          const part = this.nextElement(node.firstChild);
-          if (part !== null) {
-            partnodes.push(part);
-          }   
-        }
-      // else ADE
-        else {
-          this.checkADE(node,part_ade);
-        }
-        node = this.nextElement(node.nextSibling);
-      }
-      // console.log(partnodes,part_props,part_ade);
-      if (partnodes.length > 0) {
-        let props2 = Object.assign({}, props);
-        props2 = Object.assign(props2,{"part_props":part_props, "part_ade":part_ade});
-        this.checkElements(partnodes, props2);
-      }
-    }
-  }
-
-  public checkElements(nodes, props): void {
-    for (let node of nodes) {
-      const elemnodes = [];
-      const openings = [];
-      const elem_props = {};
-      const elem_ade = {};
-      const elemname = this.getName(node);
-
-      // skip envelope?
-      if (elemname === "Envelope") {
-        break;
-      }
-      // this.addObjCount(elemname);
-      elem_props["Surface_Type"] = elemname;
-
-      node = this.nextElement(node.firstChild);
-      while (node !== null) {
-        const featurename = this.getName(node);
-        // extract srf
-        if (featurename.includes("lod")) {
-          const part = this.nextElement(node.firstChild);
-          if (part !== null) {
-            elemnodes.push(part);
-          }   
-        }
-        // extract openings
-        else if (featurename === "opening") {
-          const part = this.nextElement(node.firstChild);
-          if (part !== null) {
-            openings.push(part);
-          }   
-        }
-      // else ADE
-        else {
-          this.checkADE(node,elem_ade);
-        }
-        node = this.nextElement(node.nextSibling);
-      }
-      // console.log(elemnodes,elem_props,elem_ade);
-      let props2 = Object.assign({}, props);
-      props2 = Object.assign(props2,{"elem_props":elem_props, "elem_ade":elem_ade});
-      if (elemnodes.length > 0) {
-        for (let srf of elemnodes) {
-          srf = this.getFirstSrf(this.nextElement(srf.firstChild));
-          this.genPoly(srf,props2,elemname);
-        }
-      }
-      if (openings.length > 0) {
-        this.checkOpenings(openings,props2);
-      }
-    }
-  }
-
-  public checkOpenings(nodes, props) {
-    for (let node of nodes) {
-      const openings = [];
-      const opening_props = {};
-      const opening_ade = {};
-      const openingname = this.getName(node);
-      // this.addObjCount(elemname);
-      opening_props["Surface_Type"] = openingname;
-
-      node = this.nextElement(node.firstChild);
-      while (node !== null) {
-        const featurename = this.getName(node);
-        // extract srf
-        if (featurename.includes("MultiSurface")) {
-          const part = this.nextElement(node.firstChild);
-          if (part !== null) {
-            openings.push(part);
+        match = false;
+        // update sibling_name
+        sibling_name = this.getName(node);
+        // check
+        const action_arr = this.rules[sibling_name];
+        // console.log(sibling_name, action_arr);
+        if (action_arr !== undefined) {
+          for (let action of action_arr) {
+            if (action === "check") {
+              const child = this.nextElement(node.firstChild);
+              if (child !== null) {
+                check_nodes.push(child);
+              }
+              match = true;
+            }
+            if (action === "prop") {
+              this.addProperties(node,new_props);
+              match = true;
+            }
+            if (action === "geom") {
+              const child = this.nextElement(node.firstChild);
+              if (child !== null) {
+                new_props["Surface_Type"] = node_name;
+                gen_nodes.push(child);
+              }
+              match = true;
+            }
+            if (match === false) {
+              if (action === "skip") {
+                match = true;
+              }
+            }
           }
         }
-      // else ADE
-        else {
-          this.checkADE(node,opening_ade);
+        // ADE
+        if (match === false) {
+          this.addProperties(node,new_ade);
         }
         node = this.nextElement(node.nextSibling);
       }
-      // console.log(elemnodes,elem_props,elem_ade);
-      if (openings.length > 0) {
-        let props2 = Object.assign({}, props);
-        props2 = Object.assign(props2,{"opening_props":opening_props, "opening_ade":opening_ade});
-        for (let srf of openings) {
-          srf = this.getFirstSrf(this.nextElement(srf.firstChild));
-          this.genPoly(srf,props2,openingname);
+
+      // duplicate props and add properties from current node
+      let updated_props = Object.assign({}, props);
+      const add_props = {}
+      add_props[node_name + " properties"] = new_props;
+      add_props[node_name + " ADE properties"] = new_ade;
+      updated_props = Object.assign(updated_props, add_props);
+
+      // check and gengeom
+      if (check_nodes.length > 0) {
+        this.check(check_nodes, updated_props);
+      }
+      if (gen_nodes.length > 0) {
+        for (let srf of gen_nodes) {;
+          this.genPoly(srf,updated_props,node_name);
         }
       }
     }
   }
 
-  public checkADE(node,ade): void {
+  /* Adds all leaf nodes of specified node as key:value pair in specified properties object
+     Params: Node to check and add to properties
+             Object to add key:value pairs to (alters input)
+
+     *** RECURSIVE *** */
+  public addProperties(node,prop): void {
     if (node === null) {
       return;
     }
     const name = this.getName(node);
     if (node.innerHTML === node.textContent) {
-      ade[name] = node.textContent;
+      prop[name] = node.textContent;
     }
     let child = this.nextElement(node.firstChild);
     while (child !== null) {
-      this.checkADE(child,ade);
+      this.addProperties(child,prop);
       child = this.nextElement(child.nextSibling);
     }
   }
@@ -499,16 +384,6 @@ export class CityGMLService {
     }
   }
 
-  /* Finds next node that is a "surfaceMember"
-     Params: XML node to check
-     Returns: XML node of first surface member, null if not found
-     Uses: - nextElement */
-  public getFirstSrf(node): any {
-    while (node !== null && node.nodeName.split(":")[1] !== "surfaceMember") {
-      node = this.nextElement(node.firstChild);
-    }
-    return node;
-  }
 
   /* Main function to read file and return datasource containing generated entities
      - Initialises, retrieves and clears data from cesiumGeomService
@@ -522,6 +397,13 @@ export class CityGMLService {
       this.cesiumGeomService.initialiseCesium();
       this.objCount = {};
       this.currProps = {};
+      this.rules = this.dataService.getRules();
+      // this.rules = {
+      //               "check": ["consistsOfBuildingPart","buildingSubdivision","outerBuildingInstallation","boundedBy","boundary","interiorRoom","opening"],
+      //               "property": ["name","creationDate","externalReference","function","measuredHeight","address"],
+      //               "geom": ["lod2MultiSurface","lod3MultiSurface","lod4MultiSurface","lod1Geometry","lod2Geometry","lod3Geometry","lod4Geometry","lod1Solid"],
+      //               "skip": []
+      //             };
 
       // Get properties of CityModel
       const member = this.nextElement(this.nextElement(file.firstChild).firstChild);
@@ -533,7 +415,7 @@ export class CityGMLService {
       const context = this;
       data = this.epsg.then((epsg) => {
         context.epsg = epsg;
-        context.checkFeatures(nodes[0],nodes[1]);
+        context.check(nodes[0],nodes[1]);
         context.cesiumGeomService.resumeDataSource();
         context.clearEPSG();
         return context.cesiumGeomService.getDataSource();
