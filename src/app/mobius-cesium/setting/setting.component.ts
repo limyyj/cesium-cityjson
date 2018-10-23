@@ -56,9 +56,9 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   public changedata(id: number) {
     this.dataService.set_index(id);
     if(id === 1) {
-      this.dataArr = this.dataService.get_ViData();
+      // this.dataArr = this.dataService.get_ViData();
     } else if(id === 3) {
-      this.dataArr = this.dataService.get_PuData();
+      // this.dataArr = this.dataService.get_PuData();
     }
     if(this.dataArr !== undefined) {
       this.LoadViewer();
@@ -66,7 +66,7 @@ export class SettingComponent extends DataSubscriber implements OnInit {
   }
   //reset button to reset everthing in publish version
   public Reset() {
-    this.dataArr = this.dataService.get_PuData();
+    // this.dataArr = this.dataService.get_PuData();
   }
   //change color and extrudeHeight of entity
   public LoadViewer() {

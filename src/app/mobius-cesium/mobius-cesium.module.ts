@@ -15,10 +15,11 @@ import { MatSliderModule } from "@angular/material/slider";
 import { FormsModule } from "@angular/forms";
 import { SettingComponent } from "./setting/setting.component";
 import { DataComponent } from "./setting/visualise.component";
-import { SelectComponent } from "./setting/attributes.copmponent";
+import { SelectComponent } from "./setting/attributes.component";
 import { PublishComponent } from "./setting/publish.component";
 import { DisplayComponent } from "./setting/display.copmponent";
-import { CityJSONComponent } from "./setting/cityjson.component";
+import { FilterComponent } from "./setting/filter.component";
+import { AboutComponent } from "./setting/about.component";
 
 @NgModule({
     imports: [CommonModule,
@@ -39,7 +40,8 @@ import { CityJSONComponent } from "./setting/cityjson.component";
                     SelectComponent,
                     PublishComponent,
                     DisplayComponent,
-                    CityJSONComponent,
+                    FilterComponent,
+                    AboutComponent,
                     ],
     providers: [DataService,
                 CityJSONService,

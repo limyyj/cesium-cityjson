@@ -132,6 +132,7 @@ export class DisplayComponent extends DataSubscriber implements OnInit {
         for(const entity of entities) {
           if (entity.polygon !== undefined){
             entity.polygon.shadows = Cesium.ShadowMode.ENABLED;
+            console.log(entity);
           }
         }
       });

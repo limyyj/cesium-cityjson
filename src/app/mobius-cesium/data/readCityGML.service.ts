@@ -5,6 +5,7 @@ import * as chroma from "chroma-js";
 import proj4 from "proj4";
 import * as earcut from "earcut";
 import { CesiumGeomService } from "./cesiumGeom.service";
+import { DataService } from "./data.service";
 
 @Injectable()
 export class CityGMLService {
@@ -12,8 +13,10 @@ export class CityGMLService {
   private epsg: any;
   private currProps: object;
   private objCount: object;
+  private rules: any;
+  private keys: string[];
 
-  constructor(private cesiumGeomService: CesiumGeomService) {}
+  constructor(private cesiumGeomService: CesiumGeomService, private dataService: DataService) {}
  
   public sendMessage(message?: string) {
     this.subject.next({text: message});
@@ -29,7 +32,7 @@ export class CityGMLService {
      - looks up epsg.io if EPSG code is found
      - defaults to EPSG:3414 if undefined
 
-     ** TODO: read crs from file, currently always recieves undefined */
+     ** TODO: reads crs from citymodel envelope, need to confirm if this is intended behaviour */
   public setEPSG(crs): void {
     this.epsg = new Promise(function(resolve) {
       let val = "";
@@ -57,6 +60,10 @@ export class CityGMLService {
     });
   }
 
+  public clearEPSG(): void {
+    this.epsg = undefined;
+  }
+
   /* Projects input point to WGS84
      Params: Array of coordinates for 1 point as obtained from file
      Returns: Array of coordinates for point in WGS84 + height
@@ -79,15 +86,21 @@ export class CityGMLService {
      Uses: - nextElement
            - getCoords
            - cesiumGeomService.genSolidGrouped */
-  public genPoly(srf,surface_type): void {
-    const props = Object.assign({Surface_Type: surface_type}, this.currProps);
+  public genPoly(srf,props,srf_type): void {
+    while (srf !== null && srf.nodeName.split(":")[1] !== "surfaceMember") {
+      srf = this.nextElement(srf.firstChild);
+    }
     const solid = [];
     // loop through all surfaces in element
     while (srf !== null) {
       // get first Triangle or Polygon (depends on what the CityGML is using)
       let firstSrf = srf;
-      while ((firstSrf.nodeName.split(":")[1] !== "Triangle") && (firstSrf.nodeName.split(":")[1] !== "Polygon"))  {
+      while (firstSrf !== null && (firstSrf.nodeName.split(":")[1] !== "Triangle") && (firstSrf.nodeName.split(":")[1] !== "Polygon"))  {
         firstSrf = this.nextElement(firstSrf.firstChild);
+      }
+      if (firstSrf === null) {
+        srf = this.nextElement(srf.nextSibling);
+        break;
       }
       // if Triangle, step into first child (exterior linear ring) and get coords
       // loop through all other triangles in surface
@@ -106,7 +119,8 @@ export class CityGMLService {
       // extract and convert all coordinates for surface and push to solid
       srf = this.nextElement(srf.nextSibling);
     }
-    this.cesiumGeomService.genSolidGrouped(solid,undefined,props);
+    // console.log(solid);
+    this.cesiumGeomService.genSolidGrouped(solid,undefined,props,srf_type);
   }
 
   /* Obtains and prepares coordinates from the linear rings that make up ONE Triangle or Polygon
@@ -132,8 +146,15 @@ export class CityGMLService {
       coords = this.nextElement(coords.firstChild);
       // if positions are in posList, split and project to wgs84 in threes, then push to polygon
       if (coords.nodeName.split(":")[1] === "posList") {
-        dimension = coords.attributes[0].value;
+        // get dimension if present, else default to "3"
+        if (coords.getAttribute("srsDimension") !== null) {
+          dimension = coords.getAttribute("srsDimension");
+        } else {
+          dimension = "3";
+        }
         coordinates = coords.textContent;
+        // replace linebreaks with spaces if any
+        coordinates = coordinates.replace(/\n/g, " ");
         // split coordinates by " ", convert to number from string and project to wgs84
         coordsplit = coordinates.split(" ");
         const coord_arr: number[][] = [];
@@ -143,6 +164,12 @@ export class CityGMLService {
             coord_arr.push(arr);
           }
         }
+        // else if (dimension === "2") {
+        //   for (let i = 0 ; i < coordsplit.length ; i = i + 2) {
+        //     const arr = this.projectPtsToWGS84([(Number(coordsplit[i])),(Number(coordsplit[i+1])),0]);
+        //     coord_arr.push(arr);
+        //   }
+        // }
         polygon.push(coord_arr);
         // if positions are in pos, loop through, split and project each one to wgs84, then push to polygon
       } else if (coords.nodeName.split(":")[1] === "pos") {
@@ -181,67 +208,165 @@ export class CityGMLService {
     return node;
   }
 
-  /* Checks the type of element a node is and does the required steps to extract info to generate geom
-     - keeps track of current cityObjectMember/featureMember/Building/BuildingPart number for properties
-     Params: XML node to check
-     Uses: - nextElement
-           - getFirstSrf
-           - genPoly
+  /* Gets the name of the given node, excluding namespace prefix if any
+     Params: XML node to get name of
+     Returns: Name of node without prefix */
+  public getName(node): string {
+    const split = node.nodeName.split(":");
+    const nodename = split[split.length - 1];
+    return nodename;
+  }
 
-     ** TODO: convert to iterative */
-  public checkElement(node): void {
-    // break if node is null
-    if (node === null) {
-      return;
-    }
-    // Keep track of obj number for props
-    const name = node.nodeName.split(":")[1];
-    if (name === "cityObjectMember" ||
-        name === "featureMember" ||
-        name === "Building" ||
-        name === "BuildingPart" ||
-        name === "Storey") {
-      this.addObjCount(name);
-      this.currProps[name] = this.objCount[name];
-      // Loop through children
-      let child = this.nextElement(node.firstChild);
-      while (child !== null) {
-        this.checkElement(child);
-        child = this.nextElement(child.nextSibling);
+  // Checks the cityModel and extracts EPSG if any and excludes appearanceMember
+  public checkCityModel(node): any {
+    const nodes = [];
+    const citymodel_props = {};
+    const citymodel_ade = {};
+    while (node !== null) {
+      const nodename = this.getName(node);
+      // extract name
+      if (nodename === "name") {
+        const name = node.textContent;
+        citymodel_props[nodename] = name;
       }
+      // extract envelope
+      else if (nodename === "boundedBy") {
+        // extract crs
+        const envelope = this.nextElement(node.firstChild);
+        if (envelope != null) {
+          citymodel_props["srsName"] = envelope.getAttribute("srsName");
+          let srs : String[];
+          srs = (envelope.getAttribute("srsName")).split(",");
+          srs = srs[1].split(":");
+          const epsg = srs[srs.length-1];
+          this.setEPSG(epsg);
+        }
+        // extract pos - TODO
+      }
+      // extract list of cityobjectmember and featuremember
+      else if (nodename === "cityObjectMember" ||
+                 nodename === "featureMember") {
+        nodes.push(this.nextElement(node.firstChild));
+      }
+      // skip appearanceMember
+      else if (nodename === "appearanceMember"){}
+      // extract everything else
+      else {
+        this.addProperties(node,citymodel_ade);
+      }
+      node = this.nextElement(node.nextSibling);
     }
-    // If wall, extract polygons and check for openings
-    else if (name === "WallSurface") {
-      // console.log(name);
-      if (node.firstChild !== null) {
-        const srf = this.getFirstSrf(this.nextElement(node.firstChild));
-        this.genPoly(srf,name);
-        // openings
-        let child = this.nextElement(this.nextElement(node.firstChild).nextSibling);
-        while (child !== null) {
-          this.checkElement(child);
-          child = this.nextElement(child.nextSibling);
+    // console.log(nodes,citymodel_props,citymodel_ade);
+    return [nodes, {"cityModel properties":citymodel_props, "cityModel ADE properties":citymodel_ade}] ;
+  }
+
+  /* Checks each node in input array against arrays of node names (this.rules).
+     Updates properties and performs additional checks or generates geometry according to rules
+     Params: Array of nodes to check
+             Object containing properties objects accumulated so far
+
+      *** RECURSIVE *** */
+  public check(nodes, props): void {
+    let match = false;
+    for (let node of nodes) {
+      // create new variables
+      const check_nodes = [];
+      const gen_nodes = [];
+      const new_props = [];
+      const new_ade = [];
+      const node_name = this.getName(node);
+      let sibling_name = node_name;
+
+      if (node_name === "Building") {
+        this.objCount = {};
+      }
+
+      if (node_name === "Building" ||
+          node_name === "BuildingPart" ||
+          node_name === "Storey") {
+        this.addObjCount(node_name);
+        new_props[node_name] = this.objCount[node_name];
+      }
+
+      node = this.nextElement(node.firstChild);
+      while (node !== null) {
+        match = false;
+        // update sibling_name
+        sibling_name = this.getName(node);
+        // check
+        const action_arr = this.rules[sibling_name];
+        // console.log(sibling_name, action_arr);
+        if (action_arr !== undefined) {
+          for (let action of action_arr) {
+            if (action === "check") {
+              const child = this.nextElement(node.firstChild);
+              if (child !== null) {
+                check_nodes.push(child);
+              }
+              match = true;
+            }
+            if (action === "prop") {
+              this.addProperties(node,new_props);
+              match = true;
+            }
+            if (action === "geom") {
+              const child = this.nextElement(node.firstChild);
+              if (child !== null) {
+                new_props["Surface_Type"] = node_name;
+                gen_nodes.push(child);
+              }
+              match = true;
+            }
+            if (match === false) {
+              if (action === "skip") {
+                match = true;
+              }
+            }
+          }
+        }
+        // ADE
+        if (match === false) {
+          this.addProperties(node,new_ade);
+        }
+        node = this.nextElement(node.nextSibling);
+      }
+
+      // duplicate props and add properties from current node
+      let updated_props = Object.assign({}, props);
+      const add_props = {}
+      add_props[node_name + " properties"] = new_props;
+      add_props[node_name + " ADE properties"] = new_ade;
+      updated_props = Object.assign(updated_props, add_props);
+
+      // check and gengeom
+      if (check_nodes.length > 0) {
+        this.check(check_nodes, updated_props);
+      }
+      if (gen_nodes.length > 0) {
+        for (let srf of gen_nodes) {;
+          this.genPoly(srf,updated_props,node_name);
         }
       }
     }
-    // Else, check for these nodes and extract polygons
-    else if (name === "FloorSurface" ||
-             name === "Room" ||
-             name === "RoofSurface" ||
-             name === "Window" ||
-             name === "Door") {
-      if (node.firstChild !== null) {
-        const srf = this.getFirstSrf(this.nextElement(node.firstChild));
-        this.genPoly(srf,name);
-      }
+  }
+
+  /* Adds all leaf nodes of specified node as key:value pair in specified properties object
+     Params: Node to check and add to properties
+             Object to add key:value pairs to (alters input)
+
+     *** RECURSIVE *** */
+  public addProperties(node,prop): void {
+    if (node === null) {
+      return;
     }
-    // Else, just loop through children
-    else {
-      let child = this.nextElement(node.firstChild);
-      while (child !== null) {
-        this.checkElement(child);
-        child = this.nextElement(child.nextSibling);
-      }
+    const name = this.getName(node);
+    if (node.innerHTML === node.textContent) {
+      prop[name] = node.textContent;
+    }
+    let child = this.nextElement(node.firstChild);
+    while (child !== null) {
+      this.addProperties(child,prop);
+      child = this.nextElement(child.nextSibling);
     }
   }
 
@@ -259,35 +384,6 @@ export class CityGMLService {
     }
   }
 
-  /* Finds next node that is a "surfaceMember"
-     Params: XML node to check
-     Returns: XML node of first surface member, null if not found
-     Uses: - nextElement */
-  public getFirstSrf(node): any {
-    if (node.nodeName.split(":")[1] === "boundedBy") {
-      node = this.nextElement(node.nextSibling);
-    }
-    while (node !== null && node.nodeName.split(":")[1] !== "surfaceMember") {
-      node = this.nextElement(node.firstChild);
-    }
-    return node;
-  }
-
-  /* Reads file and loops through each cityObjectMember or featureMember
-     - Calls checkElement to process elements and generate geometry
-     Params: XML node to check
-     Returns: XML node of first surface member, null if not found
-     Uses: - nextElement */
-  public readFile(file): void {
-    // cityObjectMember or featureMember
-    let member = this.nextElement(file.firstChild);
-    while (member !== null) {
-      this.currProps = {};
-      this.objCount = {};
-      this.checkElement(member);
-      member = this.nextElement(member.nextSibling);
-    }
-  }
 
   /* Main function to read file and return datasource containing generated entities
      - Initialises, retrieves and clears data from cesiumGeomService
@@ -299,13 +395,29 @@ export class CityGMLService {
     if (file !== undefined) {
       // Initialise dataSource and surface type ID arrays
       this.cesiumGeomService.initialiseCesium();
-      // TODO proper crs, for now default
-      this.setEPSG(undefined);
+      this.objCount = {};
+      this.currProps = {};
+      this.rules = this.dataService.getRules();
+      // this.rules = {
+      //               "check": ["consistsOfBuildingPart","buildingSubdivision","outerBuildingInstallation","boundedBy","boundary","interiorRoom","opening"],
+      //               "property": ["name","creationDate","externalReference","function","measuredHeight","address"],
+      //               "geom": ["lod2MultiSurface","lod3MultiSurface","lod4MultiSurface","lod1Geometry","lod2Geometry","lod3Geometry","lod4Geometry","lod1Solid"],
+      //               "skip": []
+      //             };
+
+      // Get properties of CityModel
+      const member = this.nextElement(this.nextElement(file.firstChild).firstChild);
+      const nodes = this.checkCityModel(member);
+
+      if (this.epsg === undefined) {
+        this.setEPSG(undefined);
+      }
       const context = this;
       data = this.epsg.then((epsg) => {
         context.epsg = epsg;
-        context.readFile(file);
+        context.check(nodes[0],nodes[1]);
         context.cesiumGeomService.resumeDataSource();
+        context.clearEPSG();
         return context.cesiumGeomService.getDataSource();
       });
     }

@@ -9,6 +9,7 @@ import {DataService} from "./mobius-cesium/data/data.service";
 export class AppComponent {
   public gs_dummy_data: any=undefined;
   public mode: string;
+  public rules : any;
 
   constructor(private dataService: DataService) {
     // this.dataService.setGsModel(this.gs_dummy_data);
@@ -27,12 +28,11 @@ export class AppComponent {
       } else {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(text.target["result"],"application/xml");
-        // console.log(xmlDoc);
         self.gs_dummy_data = xmlDoc;
       }
-      // self.dataService.setGsModel(self.gs_dummy_data);
     };
     fr.readAsText(files[0]);
+    document.getElementById("overlay").style.display = "block";
+    document.getElementById("loader").style.display = "block";
   }
-  
 }

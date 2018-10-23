@@ -319,35 +319,36 @@ export class CityJSONService {
           }
 
           // Create property bag (with parent information if obj is building part)
-          const props = {Object_ID: city_object_keys[obj_index],
-                         Object_Type: cityobj_type,
-                         Geom_Type: geom_type,
-                         Surface_Type: surface_type[0],
-                         LOD: lod,
-                         Parent_ID: "None",
-                         Parent_Type: "None"
+          const props = { "Surface Properties" : {Object_ID: city_object_keys[obj_index],
+                                                  Object_Type: cityobj_type,
+                                                  Geom_Type: geom_type,
+                                                  Surface_Type: surface_type[0],
+                                                  LOD: lod
+                                                 },
+                          "Parent Properties" : {Parent_ID: "None",
+                                                 Parent_Type: "None"}
                         };
           if (geom_index >= parts_start) {
-            props.Object_ID = cityobj_parts_ID[parts_index];
-            props.Object_Type = cityobj_parts_type[parts_index];
-            props.Parent_ID = city_object_keys[obj_index];
-            props.Parent_Type = cityobj_type;
+            props["Surface Properties"].Object_ID = cityobj_parts_ID[parts_index];
+            props["Surface Properties"].Object_Type = cityobj_parts_type[parts_index];
+            props["Parent Properties"].Parent_ID = city_object_keys[obj_index];
+            props["Parent Properties"].Parent_Type = cityobj_type;
           }
-          if (props.Surface_Type === undefined) {
-            props.Surface_Type = "None"
+          if (props["Surface Properties"].Surface_Type === undefined) {
+            props["Surface Properties"].Surface_Type = "None"
           }
 
           // Add attributes from parent to properties
           if (cityobj_attrib !== undefined) {
             Object.keys(cityobj_attrib).forEach((name) => {
-              props[name] = cityobj_attrib[name];
+              props["Parent Properties"][name] = cityobj_attrib[name];
             });
           }
 
           // Add attributes from parent to properties
           if (cityobj_parts_attrib[parts_index] !== undefined) {
             Object.keys(cityobj_parts_attrib[parts_index]).forEach((name) => {
-              props[name] = cityobj_parts_attrib[parts_index][name];
+              props["Parent Properties"][name] = cityobj_parts_attrib[parts_index][name];
             });
           }
 ///////////////////////////////// Geom Generation, TODO: better geom_type management //////////////////////////////////////

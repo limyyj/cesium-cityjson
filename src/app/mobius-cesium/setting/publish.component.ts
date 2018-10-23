@@ -36,7 +36,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   }
   public ngOnInit() {
     this.mode = this.dataService.getmode();
-    this.dataArr = this.dataService.get_PuData();
+    // this.dataArr = this.dataService.get_PuData();
     if(this.dataArr !== undefined) {
       this.LoadData();
     }
@@ -44,8 +44,8 @@ export class PublishComponent extends DataSubscriber implements OnInit {
   public notify(message: string): void {
     if(message === "model_update" ) {
       try {
-        this.dataArr = this.dataService.get_PuData();
-        if(this.dataArr !== undefined) {this.LoadData();}
+        // this.dataArr = this.dataService.get_PuData();
+        // if(this.dataArr !== undefined) {this.LoadData();}
       }
       catch (ex) {
         console.log(ex);
@@ -105,7 +105,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
     }
     this.dataArr["Filter"] = this._Filter;
     this.dataArr["HideNum"] = this._HideNum;
-    this.dataService.set_PuData(this.dataArr);
+    // this.dataService.set_PuData(this.dataArr);
   }
   //change category in filter
   public ChangeCategory(categary,id,type) {
@@ -150,7 +150,7 @@ export class PublishComponent extends DataSubscriber implements OnInit {
       }
     });
     this.dataArr["ColorText"] = _Colortexts.sort();
-    this.dataService.set_PuData(this.dataArr);
+    // this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
   //change extrudeheight property in publish version
@@ -183,13 +183,13 @@ export class PublishComponent extends DataSubscriber implements OnInit {
       }
     });
     this.dataArr["ExtrudeText"] = _Heighttexts.sort();
-    this.dataService.set_PuData(this.dataArr);
+    // this.dataService.set_PuData(this.dataArr);
     this.LoadData();
   }
   //reset button to load again
   public reset() {
-    this.dataService.LoadJSONData();
-    this.dataArr = this.dataService.get_PuData();
+    // this.dataService.LoadJSONData();
+    // this.dataArr = this.dataService.get_PuData();
     if(this.dataArr !== undefined) {this.LoadData();}
   }
 }
