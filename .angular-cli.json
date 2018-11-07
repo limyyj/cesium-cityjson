@@ -8,7 +8,8 @@
       "outDir": "docs",
       "assets": [
         { "glob": "**/*", "input": "../node_modules/cesium/Build/Cesium", "output": "./assets/cesium" },
-        { "glob": "**/*", "input": "./assets/rules", "output": "./assets/rules" }
+        { "glob": "**/*", "input": "./assets/rules", "output": "./assets/rules" },
+        { "glob": "**/*", "input": "./assets/examples", "output": "./assets/examples" }
       ],
       "index": "index.html",
       "main": "main.ts",

@@ -1,6 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
+a:link {
+    color: #3498db;
+}
+a:visited {
+    color: #3498db;
+}
+a:hover {
+    color: #3498db;
+}
+a:active {
+    color: #3498db;
+}
+
 html, body, #cesiumContainer {  
     width: 100%;  
     height: 100%;  
