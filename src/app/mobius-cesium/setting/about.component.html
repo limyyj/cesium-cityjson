@@ -1,4 +1,24 @@
 <div id="about"  style="background-color: rgba(20,20,20,0.9);height: 100%;overflow-y:overlay;"  >
-	Version 0.2.1
+	<div>
+		<h3>cesium-viewer</h3>
+		<p>Version 0.2.2</p>
+		<p>This is a viewer for CityGML and CityJSON based on <a href="https://cesiumjs.org/">Ceisum</a>. This project was generated with <a href="https://github.com/angular/angular-cli">Angular CLI</a>.</p>
+		<p>It aims to open and view models with the ability to:</p>
+		<ul>
+			<li>View models on a map (if location is provided)</li>
+			<li>Select individual objects or surfaces and view attributes</li>
+			<li>Filter visible objects based on extracted attributes</li>
+		</ul>
+		<p>Github Repository can be found <a href="https://github.com/limyyj/cesium-cityjson">here</a>.</p>
+	</div>
+	<hr>
+	<div>
+		<h3>Examples</h3>
+		<p>You may load your own model by clicking on the file button in the top right corner. If not, some examples can be loaded from the selection below.</p>
+		<h4>Rotterdam</h4> <button id="rotterdam.json" (click)="handleExamples($event.target.id)">Load Model</button>
+		<p>CityJSON example file from the <a href="https://www.cityjson.org/en/0.8/datasets/">CityJSON example datasets</a>.</p>
+		<h4>Noise ADE</h4> <button id="noise.gml" (click)="handleExamples($event.target.id)">Load Model</button>
+		<p>CityGML example file containing sample data from the Noise ADE extension. Obtained from <a href="http://schemas.opengis.net/citygml/examples/2.0/ade/noise-ade/">OpenGIS Schema Repository</a></p>
+	</div>
 </div>
   

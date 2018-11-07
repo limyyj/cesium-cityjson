@@ -15,6 +15,7 @@ export class CityGMLService {
   private objCount: object;
   private rules: any;
   private keys: string[];
+  private crs = {id: undefined, anchor: [0,0,0], xyz: {x:1, y:1, z:1}};
 
   constructor(private cesiumGeomService: CesiumGeomService, private dataService: DataService) {}
  
@@ -38,7 +39,8 @@ export class CityGMLService {
       let val = "";
       if (crs === undefined) {
       // if undefined, default is EPSG 3414 sweats (WGS84 causes our models to go crazy, with EPSG 3414 they at least show up)
-        val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+        val = "+proj=tmerc +ellps=WGS84 +units=m +no_defs"
+        // val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
         resolve(val);
       } else {
         // search EPSG.io
@@ -62,6 +64,7 @@ export class CityGMLService {
 
   public clearEPSG(): void {
     this.epsg = undefined;
+    this.crs = {id: undefined, anchor: [0,0,0], xyz: {x:1, y:1, z:1}};
   }
 
   /* Projects input point to WGS84
@@ -70,11 +73,11 @@ export class CityGMLService {
 
      ** TODO: SG's height datum? */
   public projectPtsToWGS84(coords): number[] {
-    const projcoords = proj4(this.epsg,"WGS84",[coords[0],coords[1]]);
-    const newcoords = [(projcoords[0]),(projcoords[1]),(coords[2])];
-    if (this.epsg === "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs") {
-      // newcoords[2] -= 104;
-    }
+    const projcoords = proj4(this.epsg,"WGS84",[(coords[0]/this.crs["xyz"]["x"]),(coords[1]/this.crs["xyz"]["y"])]);
+    const newcoords = [(projcoords[0])+this.crs["anchor"][0],
+                       (projcoords[1])+this.crs["anchor"][1],
+                       (coords[2]/this.crs["xyz"]["z"])+this.crs["anchor"][2]
+                      ];
     return newcoords;
   }
 
@@ -217,11 +220,48 @@ export class CityGMLService {
     return nodename;
   }
 
+  public getEnginCRS(node): object {
+    const engincrs = {id: undefined, anchor: [0,0,0], xyz: {x:1, y:1, z:1}};
+    while (node!== null) {
+      const nodename = this.getName(node);
+      // find EngineeringCRS
+      if (nodename === "EngineeringCRS") {
+        engincrs["id"] = node.getAttributeNS("http://www.opengis.net/gml","id");
+        const axes = node.getElementsByTagNameNS("http://www.opengis.net/gml","CoordinateSystemAxis");
+        for (const axis of axes) {
+          const units = axis.getAttributeNS("http://www.opengis.net/gml","uom");
+          let val = 1;
+          if (units === "urn:ogc:def:uom:EPSG::9001") {
+            val = 1;
+          } else if (units === "urn:ogc:def:uom:EPSG::1033") {
+            val = 100;
+          } else if (units === "urn:ogc:def:uom:EPSG::1025") {
+            val = 1000;
+          }
+          const direction = axis.getElementsByTagNameNS("http://www.opengis.net/gml","axisDirection")[0].textContent;
+          if (direction === "X") {
+            engincrs["xyz"]["x"] = val;
+          } else if (direction === "Y") {
+            engincrs["xyz"]["y"] = val;
+          } else if (direction === "Z") {
+            engincrs["xyz"]["z"] = val;
+          }
+        }
+        const anchorPoint = node.getElementsByTagNameNS("http://www.opengis.net/gml","anchorPoint");
+        const pt = anchorPoint[0].textContent.split(" ");
+        engincrs["anchor"] = [Number(pt[1]),Number(pt[0]),Number(pt[2])];
+      }
+      node = this.nextElement(node.nextSibling);
+    }
+    return engincrs;
+  }
+
   // Checks the cityModel and extracts EPSG if any and excludes appearanceMember
   public checkCityModel(node): any {
     const nodes = [];
     const citymodel_props = {};
     const citymodel_ade = {};
+    const engincrs = {};
     while (node !== null) {
       const nodename = this.getName(node);
       // extract name
@@ -235,13 +275,18 @@ export class CityGMLService {
         const envelope = this.nextElement(node.firstChild);
         if (envelope != null) {
           citymodel_props["srsName"] = envelope.getAttribute("srsName");
-          let srs : String[];
-          srs = (envelope.getAttribute("srsName")).split(",");
-          srs = srs[1].split(":");
-          const epsg = srs[srs.length-1];
-          this.setEPSG(epsg);
+          if (citymodel_props["srsName"].includes("EPSG")) {
+            let srs : String[];
+            srs = (envelope.getAttribute("srsName")).split(",");
+            srs = srs[1].split(":");
+            const epsg = srs[srs.length-1];
+            this.setEPSG(epsg);
+          }
         }
-        // extract pos - TODO
+      }
+      else if (nodename === "metaDataProperty") {
+        const crs = this.getEnginCRS(this.nextElement(node.firstChild));
+        engincrs[crs["id"]] = crs;
       }
       // extract list of cityobjectmember and featuremember
       else if (nodename === "cityObjectMember" ||
@@ -255,6 +300,14 @@ export class CityGMLService {
         this.addProperties(node,citymodel_ade);
       }
       node = this.nextElement(node.nextSibling);
+    }
+
+    if (citymodel_props["srsName"]!== undefined && citymodel_props["srsName"].startsWith("#")) {
+      const srs = citymodel_props["srsName"].slice(1,citymodel_props["srsName"].length);
+      this.crs = engincrs[srs];
+      citymodel_props["Longtitude"] = this.crs["anchor"][0];
+      citymodel_props["Latitude"] = this.crs["anchor"][1];
+      citymodel_props["Elevation"] = this.crs["anchor"][2];
     }
     // console.log(nodes,citymodel_props,citymodel_ade);
     return [nodes, {"cityModel properties":citymodel_props, "cityModel ADE properties":citymodel_ade}] ;
@@ -294,34 +347,30 @@ export class CityGMLService {
         // update sibling_name
         sibling_name = this.getName(node);
         // check
-        const action_arr = this.rules[sibling_name];
+        const action = this.rules[sibling_name];
         // console.log(sibling_name, action_arr);
-        if (action_arr !== undefined) {
-          for (let action of action_arr) {
-            if (action === "check") {
-              const child = this.nextElement(node.firstChild);
-              if (child !== null) {
-                check_nodes.push(child);
-              }
-              match = true;
-            }
-            if (action === "prop") {
-              this.addProperties(node,new_props);
-              match = true;
-            }
-            if (action === "geom") {
-              const child = this.nextElement(node.firstChild);
-              if (child !== null) {
-                new_props["Surface_Type"] = node_name;
-                gen_nodes.push(child);
-              }
-              match = true;
-            }
-            if (match === false) {
-              if (action === "skip") {
-                match = true;
-              }
-            }
+        if (action === "check") {
+          const child = this.nextElement(node.firstChild);
+          if (child !== null) {
+            check_nodes.push(child);
+          }
+          match = true;
+        }
+        else if (action === "prop") {
+          this.addProperties(node,new_props);
+          match = true;
+        }
+        else if (action === "geom") {
+          const child = this.nextElement(node.firstChild);
+          if (child !== null) {
+            new_props["Surface_Type"] = node_name;
+            gen_nodes.push(child);
+          }
+          match = true;
+        }
+        else if (match === false) {
+          if (action === "skip") {
+            match = true;
           }
         }
         // ADE
@@ -333,7 +382,7 @@ export class CityGMLService {
 
       // duplicate props and add properties from current node
       let updated_props = Object.assign({}, props);
-      const add_props = {}
+      const add_props = {};
       add_props[node_name + " properties"] = new_props;
       add_props[node_name + " ADE properties"] = new_ade;
       updated_props = Object.assign(updated_props, add_props);

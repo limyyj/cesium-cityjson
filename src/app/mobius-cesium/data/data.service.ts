@@ -7,7 +7,7 @@ import * as earcut from "earcut";
 
 @Injectable()
 export class DataService {
-  private _jsonModel: JSON;
+  private _jsonModel: any;
   private subject = new Subject<any>();
   private viewer: any;
   private _SelectedEntity: any;
@@ -47,7 +47,8 @@ export class DataService {
           resolve(val);
         }
       };
-      xhttp.open("GET", "./assets/rules/testnames1.json", true);
+      // xhttp.open("GET", "./assets/rules/testnames4.json", true);
+      xhttp.open("GET", "./assets/rules/testnames3.json", true);
       xhttp.send();
     });
     const self = this;
@@ -69,7 +70,7 @@ export class DataService {
     this.mode = mode;
   }
   //set new json file
-  public setGsModel(model: JSON) {
+  public setGsModel(model: any) {
     delete this._jsonModel;
     const json = this._jsonModel;
     this._jsonModel = model;
