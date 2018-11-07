@@ -28,7 +28,12 @@ Using coordinates in the form of:
 * posList
 * pos
 
-CRS is not supported for CityGML yet.
+CRS and Local Engineering CRS are supported if defined in the Envelope of CityModel.
+* CRS supports EPSG lookup on [EPSG.io](http://epsg.io/)
+* Local Engineering CRS is currently assumed to be defined in WGS84
+
+Support for other native CityGML elements is in process.
+ADE support is in process and taken to be all information outside of currently supported native CityGML elements.
 
 ## Supported CityJSON Files
 
@@ -49,3 +54,4 @@ It supports:
 ## Test Build
 
 https://limyyj.github.io/cesium-cityjson/
+Built in examples available in the 'More' tab.
