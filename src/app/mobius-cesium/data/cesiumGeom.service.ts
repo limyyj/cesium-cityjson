@@ -205,13 +205,15 @@ export class CesiumGeomService {
      Uses: - timeIntervalColor */
   private determineColor(surface_type): object {
     let colour = undefined;
-    if (surface_type === "WallSurface") {
+    if (surface_type.includes("Wall")) {
       colour = this.timeIntervalColor(Cesium.Color.SILVER);
-    } else if (surface_type === "RoofSurface") {
+    } else if (surface_type.includes("Roof")) {
       colour = this.timeIntervalColor(Cesium.Color.RED);
-    } else if (surface_type === "Window") {
+    } else if (surface_type.includes("Room")) {
+      colour = this.timeIntervalColor(Cesium.Color.WHITE.withAlpha(0.3));
+    } else if (surface_type.includes("Window")) {
       colour = this.timeIntervalColor(Cesium.Color.LIGHTBLUE.withAlpha(0.5));
-    } else if (surface_type === "Door") {
+    } else if (surface_type.includes("Door")) {
       colour = this.timeIntervalColor(Cesium.Color.TAN);
     } else {
       colour = this.timeIntervalColor(Cesium.Color.WHITE);

@@ -15,7 +15,7 @@ export class CityGMLService {
   private objCount: object;
   private rules: any;
   private keys: string[];
-  private crs = {id: undefined, anchor: [0,0,0], xyz: {x:1, y:1, z:1}};
+  private crs = {id: undefined, anchor: [0,0,0], xyz: {x:1000, y:1000, z:1000}};
 
   constructor(private cesiumGeomService: CesiumGeomService, private dataService: DataService) {}
  
@@ -38,9 +38,9 @@ export class CityGMLService {
     this.epsg = new Promise(function(resolve) {
       let val = "";
       if (crs === undefined) {
-      // if undefined, default is EPSG 3414 sweats (WGS84 causes our models to go crazy, with EPSG 3414 they at least show up)
-        val = "+proj=tmerc +ellps=WGS84 +units=m +no_defs"
-        // val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
+      // if undefined, default is WGS84
+        // val = "+proj=tmerc +ellps=WGS84 +units=m +no_defs";
+        val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
         resolve(val);
       } else {
         // search EPSG.io
@@ -64,7 +64,7 @@ export class CityGMLService {
 
   public clearEPSG(): void {
     this.epsg = undefined;
-    this.crs = {id: undefined, anchor: [0,0,0], xyz: {x:1, y:1, z:1}};
+    this.crs = {id: undefined, anchor: [0,0,0], xyz: {x:1000, y:1000, z:1000}};
   }
 
   /* Projects input point to WGS84
@@ -126,6 +126,28 @@ export class CityGMLService {
     this.cesiumGeomService.genSolidGrouped(solid,undefined,props,srf_type);
   }
 
+    /* Generates surfaces from an element as a group
+     - Obtains coordinates and properties for all "Triangle" and "Polygon" surfaces in the element
+     - Calls cesiumGeomService to generate entities
+     Params: XML node for an element that contains surfaces to generate (eg. WallSurface / Room)
+             Name of node (to be used as surface type for properties)
+     Uses: - nextElement
+           - getCoords
+           - cesiumGeomService.genSolidGrouped */
+  public genSolid(srf,props,srf_type): void {
+    if (srf.nodeName.split(":")[1] == "CompositeSolid") {
+      while (srf !== null && srf.nodeName.split(":")[1] !== "solidMember") {
+        srf = this.nextElement(srf.firstChild);
+      }
+      while (srf !== null) {
+        this.genPoly(srf,props,srf_type);
+        srf = this.nextElement(srf.nextSibling);
+      }
+    } else {
+      this.genPoly(srf,props,srf_type);
+    }   
+  }
+
   /* Obtains and prepares coordinates from the linear rings that make up ONE Triangle or Polygon
      - Also handles holes in polygons
      - First linear ring is exterior ring, subsequent are holes
@@ -147,6 +169,7 @@ export class CityGMLService {
         coords = this.nextElement(coords.firstChild);
       }
       coords = this.nextElement(coords.firstChild);
+      // console.log(coords);
       // if positions are in posList, split and project to wgs84 in threes, then push to polygon
       if (coords.nodeName.split(":")[1] === "posList") {
         // get dimension if present, else default to "3"
@@ -162,8 +185,15 @@ export class CityGMLService {
         coordsplit = coordinates.split(" ");
         const coord_arr: number[][] = [];
         if (dimension === "3") {
-          for (let i = 0 ; i < coordsplit.length ; i = i + 3) {
-            const arr = this.projectPtsToWGS84([(Number(coordsplit[i])),(Number(coordsplit[i+1])),(Number(coordsplit[i+2]))]);
+          for (let i = 0 ; i < coordsplit.length - 2 ; i = i + 3) {
+            const n1 = coordsplit[i]
+            const n2 = coordsplit[i+1];
+            const n3 = coordsplit[i+2];
+            if (n1 == null || n1 === "" || n2 == null || n2 === "" || n3 == null || n3 === "") {
+              break;
+            }
+            // console.log([Number(n1),Number(n2),Number(n3)]);
+            const arr = this.projectPtsToWGS84([Number(n1),Number(n2),Number(n3)]);
             coord_arr.push(arr);
           }
         }
@@ -348,7 +378,7 @@ export class CityGMLService {
         sibling_name = this.getName(node);
         // check
         const action = this.rules[sibling_name];
-        // console.log(sibling_name, action_arr);
+        // console.log(sibling_name, action);
         if (action === "check") {
           const child = this.nextElement(node.firstChild);
           if (child !== null) {
@@ -363,7 +393,7 @@ export class CityGMLService {
         else if (action === "geom") {
           const child = this.nextElement(node.firstChild);
           if (child !== null) {
-            new_props["Surface_Type"] = node_name;
+            new_props["Type"] = node_name;
             gen_nodes.push(child);
           }
           match = true;
@@ -392,8 +422,12 @@ export class CityGMLService {
         this.check(check_nodes, updated_props);
       }
       if (gen_nodes.length > 0) {
-        for (let srf of gen_nodes) {;
-          this.genPoly(srf,updated_props,node_name);
+        for (let srf of gen_nodes) {
+          if (node_name == "BuildingConstructiveElement") {
+            this.genSolid(srf,updated_props,updated_props["BuildingConstructiveElement properties"]["class"]);
+          } else {
+            this.genSolid(srf,updated_props,node_name);
+          }
         }
       }
     }
@@ -409,8 +443,27 @@ export class CityGMLService {
       return;
     }
     const name = this.getName(node);
+    // if (name === "ifcProperty") {
+    //   prop[node.getAttribute("propertyName")] = node.getAttribute("propertyValue");
+    // }
     if (node.innerHTML === node.textContent) {
-      prop[name] = node.textContent;
+      const attribs = node.attributes;
+      if (attribs.length === 0) {
+        prop[name] = node.textContent;
+      } else if (attribs.length === 2) {
+        prop[attribs[0].textContent] = attribs[1].textContent;
+        if (node.textContent != "") {
+          prop[name] = node.textContent;
+        }
+      } else {
+        for (let i = 0; i < attribs.length; ++i) {
+          prop[name + " " + attribs[i].nodeName] = attribs[i].textContent;
+        }
+        if (node.textContent != "") {
+          prop[name] = node.textContent;
+        }
+      }
+      // prop[name] = node.textContent;
     }
     let child = this.nextElement(node.firstChild);
     while (child !== null) {

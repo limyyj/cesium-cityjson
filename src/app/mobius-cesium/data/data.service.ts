@@ -47,8 +47,9 @@ export class DataService {
           resolve(val);
         }
       };
-      // xhttp.open("GET", "./assets/rules/testnames4.json", true);
-      xhttp.open("GET", "./assets/rules/testnames3.json", true);
+      // xhttp.open("GET", "./assets/rules/citygml3.json", true);
+      // xhttp.open("GET", "./assets/rules/citygml2.json", true);
+      xhttp.open("GET", "./assets/rules/citygml3_update.json", true);
       xhttp.send();
     });
     const self = this;
