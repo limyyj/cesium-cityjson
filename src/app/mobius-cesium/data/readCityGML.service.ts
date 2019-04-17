@@ -10,12 +10,31 @@ import { DataService } from "./data.service";
 @Injectable()
 export class CityGMLService {
   private subject = new Subject<any>();
+  
+  /* Proj4 string (default or retrieved from EPSG.io) to be used for projecting coordinates to the right locations in WGS84 */
   private epsg: any;
-  private currProps: object;
+
+  /* Object count of certain elements at the moment
+     - Updated as elements in the CityGML file are processed
+     - Was used for tracking numbers of objects processed
+     - Also used for assigning numbers for buildings and storeys for selecting/filtering purposes earlier in the delevopment */
   private objCount: object;
+
+  /* JSON object containing rule values obtained from data service
+     - These rules are used to determine action applied to each CityGML object (process for geometry, process for properties or continue checking children)
+     - Generated based on the CityGML schema and can be regenerated for subsequent CityGML 3.0 schema updates using traverseXSD.js script
+     - Files are located in src/assets/rules
+     - File used is specified in DataService.readRules() */
   private rules: any;
-  private keys: string[];
-  private crs = {id: undefined, anchor: [0,0,0], xyz: {x:1000, y:1000, z:1000}};
+  
+  /* Values used to manipulate geometry coordinates to display properly on Cesium
+     - Originally used to accomodate custom engineering CRS
+     - Altered here to default to convert model from milimeters to meters
+
+     id: id of engineering CRS
+     anchor: origin (0,0,0) of engineering CRS
+     xyz: value used to scale the model */
+  private crs = {id: undefined, anchor: [0,0,0], xyz: {x: 1000, y: 1000, z: 1000}};
 
   constructor(private cesiumGeomService: CesiumGeomService, private dataService: DataService) {}
  
@@ -38,8 +57,8 @@ export class CityGMLService {
     this.epsg = new Promise(function(resolve) {
       let val = "";
       if (crs === undefined) {
-      // if undefined, default is WGS84
-        // val = "+proj=tmerc +ellps=WGS84 +units=m +no_defs";
+      // if undefined, default is EPSG:3414
+        // val = "+proj=tmerc +ellps=WGS84 +units=m +no_defs"; <-- WGS84
         val = "+proj=tmerc +lat_0=1.366666666666667 +lon_0=103.8333333333333 +k=1 +x_0=28001.642 +y_0=38744.572 +ellps=WGS84 +units=m +no_defs";
         resolve(val);
       } else {
@@ -62,9 +81,10 @@ export class CityGMLService {
     });
   }
 
+/* Resets epsg and crs values to default */
   public clearEPSG(): void {
     this.epsg = undefined;
-    this.crs = {id: undefined, anchor: [0,0,0], xyz: {x:1000, y:1000, z:1000}};
+    this.crs = {id: undefined, anchor: [0,0,0], xyz: {x: 1000, y: 1000, z: 1000}};
   }
 
   /* Projects input point to WGS84
@@ -76,7 +96,7 @@ export class CityGMLService {
     const projcoords = proj4(this.epsg,"WGS84",[(coords[0]/this.crs["xyz"]["x"]),(coords[1]/this.crs["xyz"]["y"])]);
     const newcoords = [(projcoords[0])+this.crs["anchor"][0],
                        (projcoords[1])+this.crs["anchor"][1],
-                       (coords[2]/this.crs["xyz"]["z"])+this.crs["anchor"][2]
+                       (coords[2]/this.crs["xyz"]["z"])+this.crs["anchor"][2];
                       ];
     return newcoords;
   }
@@ -378,7 +398,6 @@ export class CityGMLService {
         sibling_name = this.getName(node);
         // check
         const action = this.rules[sibling_name];
-        // console.log(sibling_name, action);
         if (action === "check") {
           const child = this.nextElement(node.firstChild);
           if (child !== null) {
@@ -423,6 +442,7 @@ export class CityGMLService {
       }
       if (gen_nodes.length > 0) {
         for (let srf of gen_nodes) {
+          // assigns class value as surface type if node is a BuildingConstructiveElement, else assigns node name
           if (node_name == "BuildingConstructiveElement") {
             this.genSolid(srf,updated_props,updated_props["BuildingConstructiveElement properties"]["class"]);
           } else {
@@ -434,6 +454,8 @@ export class CityGMLService {
   }
 
   /* Adds all leaf nodes of specified node as key:value pair in specified properties object
+     - Checks and adds attributes to properties object as well
+     - If node only contains 2 attributes and textContent is empty (eg. IfcProperty) use the first attribute value as the key and the second as the value
      Params: Node to check and add to properties
              Object to add key:value pairs to (alters input)
 
@@ -443,18 +465,12 @@ export class CityGMLService {
       return;
     }
     const name = this.getName(node);
-    // if (name === "ifcProperty") {
-    //   prop[node.getAttribute("propertyName")] = node.getAttribute("propertyValue");
-    // }
     if (node.innerHTML === node.textContent) {
       const attribs = node.attributes;
       if (attribs.length === 0) {
         prop[name] = node.textContent;
-      } else if (attribs.length === 2) {
+      } else if (attribs.length === 2 && node.textContent === "") {
         prop[attribs[0].textContent] = attribs[1].textContent;
-        if (node.textContent != "") {
-          prop[name] = node.textContent;
-        }
       } else {
         for (let i = 0; i < attribs.length; ++i) {
           prop[name + " " + attribs[i].nodeName] = attribs[i].textContent;
@@ -463,7 +479,6 @@ export class CityGMLService {
           prop[name] = node.textContent;
         }
       }
-      // prop[name] = node.textContent;
     }
     let child = this.nextElement(node.firstChild);
     while (child !== null) {
@@ -489,7 +504,7 @@ export class CityGMLService {
 
   /* Main function to read file and return datasource containing generated entities
      - Initialises, retrieves and clears data from cesiumGeomService
-     Called in viewer.component LoadData
+     - Called in viewer.component LoadData
      Params: CityGML file
      Returns: Cesium datasource containing entities generated from input file */
   public genGeom(file): any {
@@ -498,14 +513,7 @@ export class CityGMLService {
       // Initialise dataSource and surface type ID arrays
       this.cesiumGeomService.initialiseCesium();
       this.objCount = {};
-      this.currProps = {};
       this.rules = this.dataService.getRules();
-      // this.rules = {
-      //               "check": ["consistsOfBuildingPart","buildingSubdivision","outerBuildingInstallation","boundedBy","boundary","interiorRoom","opening"],
-      //               "property": ["name","creationDate","externalReference","function","measuredHeight","address"],
-      //               "geom": ["lod2MultiSurface","lod3MultiSurface","lod4MultiSurface","lod1Geometry","lod2Geometry","lod3Geometry","lod4Geometry","lod1Solid"],
-      //               "skip": []
-      //             };
 
       // Get properties of CityModel
       const member = this.nextElement(this.nextElement(file.firstChild).firstChild);
